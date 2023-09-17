@@ -127,6 +127,33 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section className="w-screen flex">
+        <div className="w-1/2">
+          <p className="p-12 text-[#840032]">
+            Your one-stop shop for affordable and elegant weddings. Simplify
+            planning with fixed-price stage decor, creative entry ideas, stylish
+            furniture rentals, and more. Where affordability meets creativity
+            for your special day.
+          </p>
+        </div>
+        <div className="w-1/2 bg-[#840032] p-16 flex justify-around items-center">
+          <ul className="text-white list-disc">
+            <li>STAGE</li>
+            <li>ENTTRANCE</li>
+            <li>MANDAP</li>
+            <li>PATHWAY</li>
+            <li>PHOTOBOOTH</li>
+            <li>NAMEBOARD</li>
+          </ul>
+          <span
+            className="text-white text-center text-6xl font-bold"
+            style={{ writingMode: "vertical-rl" }}
+          >
+            WEDDING
+            <br /> STORE
+          </span>
+        </div>
+      </section>
     </>
   );
 }
