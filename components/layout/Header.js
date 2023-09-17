@@ -1,15 +1,44 @@
 import { Dropdown, Navbar } from "flowbite-react";
 import { FaRegUserCircle } from "react-icons/fa";
+import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
 
-export default function Header({ variant }) {
+export default function Header({}) {
+  const [variant, setVariant] = useState("light");
+  useEffect(() => {
+    const myElement = document.getElementById("mainDiv");
+    const isElementVisible = () => {
+      if (!myElement) return false;
+      const rect = myElement.getBoundingClientRect();
+      return (
+        rect.bottom >= 0 &&
+        rect.right >= 0 &&
+        rect.top <=
+          (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.left <= (window.innerWidth || document.documentElement.clientWidth)
+      );
+    };
+    const checkVisibility = () => {
+      if (isElementVisible()) {
+        setVariant("dark");
+      } else {
+        setVariant("light");
+      }
+    };
+    checkVisibility();
+    window.addEventListener("scroll", checkVisibility);
+    return () => {
+      window.removeEventListener("scroll", checkVisibility);
+    };
+  }, []);
+
   return (
     <>
       <Navbar
         fluid
         className={`${
           variant === "dark" ? "bg-[#1B1B1B]" : "bg-[#FFFFFF]"
-        } md:px-12 [font-family:'Montserrat-Medium',Helvetica]`}
+        } md:px-12 [font-family:'Montserrat-Medium',Helvetica] sticky top-0 z-50 w-full`}
       >
         <Navbar.Toggle />
         <Navbar.Brand href="/">

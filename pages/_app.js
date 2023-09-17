@@ -4,8 +4,7 @@ import "@/styles/globals.css";
 export default function App({ Component, pageProps }) {
   return (
     <>
-      <Header variant={"dark"} />
-      {/* <Header variant={"light"} /> */}
+      <Header />
       <Component {...pageProps} />
     </>
   );

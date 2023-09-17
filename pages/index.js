@@ -3,7 +3,7 @@ export default function Home() {
   return (
     <>
       <main
-        className={`${styles.main__div} flex flex-col justify-around gap-12`}
+        className={`${styles.main__div} flex flex-col justify-around gap-12`} id="mainDiv"
       >
         <div className="strike">
           <span className="text-white text-6xl text-center font-normal">
