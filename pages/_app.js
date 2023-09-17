@@ -1,5 +1,12 @@
-import '@/styles/globals.css'
+import Header from "@/components/layout/Header";
+import "@/styles/globals.css";
 
 export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <>
+      <Header variant={"dark"} />
+      <Header variant={"light"} />
+      <Component {...pageProps} />
+    </>
+  );
 }
