@@ -5,7 +5,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Header variant={"dark"} />
-      <Header variant={"light"} />
+      {/* <Header variant={"light"} /> */}
       <Component {...pageProps} />
     </>
   );

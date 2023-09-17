@@ -1,0 +1,19 @@
+.main__div {
+  background-image: url("/assets/background/bg-image-1.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 100vh;
+  background-position-x: center;
+  /* height: calc(100vw * 847 / 1400); */
+}
+.main__div__2 {
+  background-image: linear-gradient(0deg, #fff 53.22%, rgba(0, 0, 0, 0) 153.22%),
+    url("/assets/background/bg-image-2.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 100vh;
+  background-position-x: center;
+  filter: blur(0px);
+}

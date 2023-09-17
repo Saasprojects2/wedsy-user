@@ -7,9 +7,9 @@ export default function Header({ variant }) {
     <>
       <Navbar
         fluid
-        className={`bg-[${
-          variant === "dark" ? "#1B1B1B" : "#FFFFFF"
-        }] md:px-12 [font-family:'Montserrat-Medium',Helvetica]`}
+        className={`${
+          variant === "dark" ? "bg-[#1B1B1B]" : "bg-[#FFFFFF]"
+        } md:px-12 [font-family:'Montserrat-Medium',Helvetica]`}
       >
         <Navbar.Toggle />
         <Navbar.Brand href="/">
