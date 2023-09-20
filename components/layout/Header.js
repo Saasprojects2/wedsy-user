@@ -74,7 +74,7 @@ export default function Header({}) {
         </div>
         <Navbar.Collapse className={`${styles.navbar__links}`}>
           <Navbar.Link
-            href="#"
+            href="/decor"
             className={`font-medium text-${
               variant === "dark" ? "white" : "black"
             }`}
