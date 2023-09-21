@@ -2,6 +2,7 @@ import { Dropdown, Navbar } from "flowbite-react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
+import Link from "next/link";
 
 export default function Header({}) {
   const [variant, setVariant] = useState("light");
@@ -67,9 +68,8 @@ export default function Header({}) {
             </Dropdown.Header>
             <Dropdown.Item>Dashboard</Dropdown.Item>
             <Dropdown.Item>Settings</Dropdown.Item>
-            <Dropdown.Item>Earnings</Dropdown.Item>
             <Dropdown.Divider />
-            <Dropdown.Item>Sign out</Dropdown.Item>
+            <Dropdown.Item href="/login">Login</Dropdown.Item>
           </Dropdown>
         </div>
         <Navbar.Collapse className={`${styles.navbar__links}`}>
