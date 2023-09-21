@@ -25,7 +25,7 @@ export default function Decor() {
             Our <span className="text-[#840032] font-medium">BESTSELLERS!</span>
           </h2>
           <Link
-            href="/decor-listing"
+            href="/decor/view"
             className="px-12 py-2 bg-[#840032] text-white rounded-lg mr-20"
           >
             View More
@@ -77,7 +77,7 @@ export default function Decor() {
             <span className="font-medium">POPULAR</span> searches
           </h2>
           <Link
-            href="/"
+            href="/decor/view"
             className="px-12 py-2 bg-[#840032] text-white rounded-lg mr-20"
           >
             View More
