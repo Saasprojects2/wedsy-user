@@ -82,7 +82,7 @@ export default function Header({}) {
             DECOR
           </Navbar.Link>
           <Navbar.Link
-            href="#"
+            href="/event"
             className={`font-medium text-${
               variant === "dark" ? "white" : "black"
             }`}
