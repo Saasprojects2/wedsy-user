@@ -1,4 +1,5 @@
 import styles from "@/styles/Home.module.css";
+import Image from "next/image";
 export default function Home() {
   return (
     <>
@@ -127,7 +128,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="w-screen flex">
+      {/* <section className="w-screen flex">
         <div className="w-1/2">
           <p className="p-12 text-[#840032]">
             Your one-stop shop for affordable and elegant weddings. Simplify
@@ -152,6 +153,91 @@ export default function Home() {
             WEDDING
             <br /> STORE
           </span>
+        </div>
+      </section> */}
+      <section className="w-screen mt-12">
+        <div className="relative overflow-y-hidden">
+          <p className="text-[#840032] font-semibold text-4xl text-center absolute w-full top-0 z-50">
+            WEDDING STORE
+          </p>
+          <p className="font-medium text-2xl text-center absolute w-full bottom-0 z-50">
+            Stage
+          </p>
+          <div className="absolute -top-14 bg-white z-10 h-28 w-full rounded-br-[100%] rounded-bl-[100%]" />
+          <div className="absolute -bottom-14 bg-white z-10 h-28 w-full rounded-tr-[100%] rounded-tl-[100%]" />
+          <div className="flex overflow-x-hidden overflow-y-hidden gap-3 flex-row relative items-center flex-nowrap">
+            {/* <div className="relative w-1/5">
+              <Image
+                src="/assets/images/pathway.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+              />
+            </div> */}
+            <div className="relative w-1/5">
+              <Image
+                src="/assets/images/entrance.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+              />
+            </div>
+            <div className="relative w-1/5">
+              <Image
+                src="/assets/images/stage.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+              />
+            </div>
+            <div className="relative w-1/5">
+              <Image
+                src="/assets/images/mandap.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+              />
+            </div>
+            <div className="relative w-1/5">
+              <Image
+                src="/assets/images/photobooth.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+              />
+            </div>
+            <div className="relative w-1/5">
+              <Image
+                src="/assets/images/nameboard.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="z-50 flex flex-row items-center justify-around px-12 py-8">
+          <p className="text-rose-900 w-2/3">
+            Your one-stop shop for affordable and elegant weddings. Simplify
+            planning with fixed-price stage decor, creative entry ideas, stylish
+            furniture rentals, and more. Where affordability meets creativity
+            for your special day.
+          </p>
+          <button className="bg-rose-900 rounded-full p-1 px-8 text-white w-max">
+            Explore Now
+          </button>
         </div>
       </section>
     </>
