@@ -17,6 +17,12 @@
   }
 }
 
+@layer base {
+  .font-outline-1 {
+    -webkit-text-stroke: 1px rgba(132, 0, 50, 0.3);
+  }
+}
+
 body {
   font-family: Montserrat;
   color: rgb(var(--foreground-rgb));

@@ -20,7 +20,7 @@ export default function Decor() {
         />
       </main>
       <section className="px-24 py-8 mt-8">
-        <div className="flex justify-between">
+        <div className="flex justify-between relative">
           <h2 className="font-medium text-4xl">
             Our <span className="text-[#840032] font-medium">BESTSELLERS!</span>
           </h2>
@@ -30,6 +30,9 @@ export default function Decor() {
           >
             View More
           </Link>
+          <div className="absolute -top-24 -right-24 leading-[200px] text-white text-opacity-0 text-[200px] font-normal font-['Maitree'] font-outline-1">
+            DECORE
+          </div>
         </div>
         <div className="flex flex-row gap-12 justify-center items-center my-6">
           <BsArrowLeftShort size={48} />
@@ -49,27 +52,78 @@ export default function Decor() {
         </div>
       </section>
       <section className="bg-[#840032] text-white font-semibold">
-        <div class="relative flex overflow-x-hidden">
-          <div class="py-4 animate-marquee whitespace-nowrap">
-            <span class="mx-4 text-xl">Marquee Item 1</span>
-            <span class="mx-4 text-xl">Marquee Item 2</span>
-            <span class="mx-4 text-xl">Marquee Item 3</span>
-            <span class="mx-4 text-xl">Marquee Item 4</span>
-            <span class="mx-4 text-xl">Marquee Item 5</span>
+        <div className="relative flex overflow-x-hidden">
+          <div className="py-4 animate-marquee whitespace-nowrap">
+            <span className="mx-4 text-xl">Marquee Item 1</span>
+            <span className="mx-4 text-xl">Marquee Item 2</span>
+            <span className="mx-4 text-xl">Marquee Item 3</span>
+            <span className="mx-4 text-xl">Marquee Item 4</span>
+            <span className="mx-4 text-xl">Marquee Item 5</span>
           </div>
-          <div class="absolute top-0 py-4 animate-marquee2 whitespace-nowrap">
-            <span class="mx-4 text-xl">Marquee Item 1</span>
-            <span class="mx-4 text-xl">Marquee Item 2</span>
-            <span class="mx-4 text-xl">Marquee Item 3</span>
-            <span class="mx-4 text-xl">Marquee Item 4</span>
-            <span class="mx-4 text-xl">Marquee Item 5</span>
+          <div className="absolute top-0 py-4 animate-marquee2 whitespace-nowrap">
+            <span className="mx-4 text-xl">Marquee Item 1</span>
+            <span className="mx-4 text-xl">Marquee Item 2</span>
+            <span className="mx-4 text-xl">Marquee Item 3</span>
+            <span className="mx-4 text-xl">Marquee Item 4</span>
+            <span className="mx-4 text-xl">Marquee Item 5</span>
           </div>
         </div>
       </section>
       <section className="px-24 py-12">
-        <p class="text-black text-2xl font-normal font-light leading-normal uppercase text-center mt-6">
+        <p className="text-black text-2xl font-normal font-light leading-normal uppercase text-center mt-6">
           {'"Decorating your love story, one beautiful detail at a time"'}
         </p>
+        <div className="grid grid-cols-2 m-6 mt-10 gap-8 bg-[#FBE2C8]">
+          <div className=" flex flex-col p-6 justify-between py-8">
+            <p className="text-3xl font-semibold">String Lights Photobooth</p>
+            <p>
+              A backdrop of string lights will not only bathe everyone in a
+              flattering radiance but will also add a whimsical aspect to the
+              scene.
+            </p>
+            <div className="flex flex-col">
+              <p className="font-medium text-2xl">Can be used for</p>
+              <p>Engagement</p>
+              <p>Wedding</p>
+              <p>Sangeet</p>
+            </div>
+            <div className="flex flex-col">
+              <p className="font-medium text-2xl">Props used</p>
+              <p>Halogen bulb</p>
+            </div>
+            <div className="flex flex-col">
+              <p className="font-medium text-2xl">Colour Theme</p>
+              <p>
+                <span class="flex items-center text-sm font-medium text-gray-900 dark:text-white">
+                  <span class="flex w-2.5 h-2.5 bg-black rounded-full mr-1.5 flex-shrink-0" />
+                  Black
+                </span>
+              </p>
+              <p>
+                <span class="flex items-center text-sm font-medium text-gray-900 dark:text-white">
+                  <span class="flex w-2.5 h-2.5 bg-yellow-500 rounded-full mr-1.5 flex-shrink-0" />
+                  Gold
+                </span>
+              </p>
+            </div>
+            <div className="flex flex-row justify-between">
+              <p className="text-3xl font-semibold">₹40000</p>
+              <button className="bg-black text-white py-2 px-8 rounded-lg">
+                Add to Event
+              </button>
+            </div>
+          </div>
+          <div className="relative">
+            <Image
+              src="/assets/temp/d3.png"
+              alt="Decor"
+              width={0}
+              height={0}
+              sizes="100%"
+              style={{ width: "100%", height: "auto" }}
+            />
+          </div>
+        </div>
       </section>
       <section className="px-24 py-8 mt-8">
         <div className="flex justify-between">
@@ -120,6 +174,89 @@ export default function Decor() {
             <FaInfinity />
           </span>
           <span className="font-semibold">HAPPY CUSTOMERS</span>
+        </div>
+      </div>
+      <div className="py-8">
+        <p className="mt-6 text-3xl font-semibold text-center">CATEGORIES</p>
+        <div className="flex overflow-x-hidden overflow-y-hidden mt-8 gap-3 flex-row relative">
+          <div className="relative w-1/5 rounded-lg hover:scale-[1.05] hover:z-50">
+            <Image
+              src="/assets/images/pathway.png"
+              alt="Decor"
+              width={0}
+              height={0}
+              sizes="100%"
+              style={{ width: "100%", height: "auto" }}
+            />
+            <div className="origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+              <p className="text-center">PATHWAY</p>
+            </div>
+          </div>
+          <div className="relative w-1/5 rounded-lg hover:scale-[1.05] hover:z-50">
+            <Image
+              src="/assets/images/entrance.png"
+              alt="Decor"
+              width={0}
+              height={0}
+              sizes="100%"
+              style={{ width: "100%", height: "auto" }}
+            />
+            <div className="origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+              <p className="text-center">ENTRANCE</p>
+            </div>
+          </div>
+          <div className="relative w-1/5 rounded-lg hover:scale-[1.05] hover:z-50">
+            <Image
+              src="/assets/images/stage.png"
+              alt="Decor"
+              width={0}
+              height={0}
+              sizes="100%"
+              style={{ width: "100%", height: "auto" }}
+            />
+            <div className="origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+              <p className="text-center">STAGE</p>
+            </div>
+          </div>
+          <div className="relative w-1/5 rounded-lg hover:scale-[1.05] hover:z-50">
+            <Image
+              src="/assets/images/mandap.png"
+              alt="Decor"
+              width={0}
+              height={0}
+              sizes="100%"
+              style={{ width: "100%", height: "auto" }}
+            />
+            <div className="origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+              <p className="text-center">MANDAP</p>
+            </div>
+          </div>
+          <div className="relative w-1/5 rounded-lg hover:scale-[1.05] hover:z-50">
+            <Image
+              src="/assets/images/photobooth.png"
+              alt="Decor"
+              width={0}
+              height={0}
+              sizes="100%"
+              style={{ width: "100%", height: "auto" }}
+            />
+            <div className="origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+              <p className="text-center">PHOTOBOOTH</p>
+            </div>
+          </div>
+          <div className="relative w-1/5 rounded-lg hover:scale-[1.05] hover:z-50">
+            <Image
+              src="/assets/images/nameboard.png"
+              alt="Decor"
+              width={0}
+              height={0}
+              sizes="100%"
+              style={{ width: "100%", height: "auto" }}
+            />
+            <div className="origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+              <p className="text-center">NAMEBOARD</p>
+            </div>
+          </div>
         </div>
       </div>
     </>
