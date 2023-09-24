@@ -26,7 +26,7 @@ export default function Decor() {
           </h2>
           <Link
             href="/decor/view"
-            className="px-12 py-2 bg-[#840032] text-white rounded-lg mr-20"
+            className="px-12 py-2 bg-[#840032] text-white rounded-lg mr-20 z-50"
           >
             View More
           </Link>
@@ -158,7 +158,7 @@ export default function Decor() {
         className="p-8 flex flex-row justify-around items-center px-48"
         style={{
           background:
-            "linear-gradient(180deg, rgba(245, 211, 215, 0.00) 0%, #EDA4AC 25%, #EDA4AC 75%, rgba(245, 211, 215, 0.00) 100%);",
+            "linear-gradient(180deg, rgba(245, 211, 215, 0.00) 0%, #EDA4AC 25%, #EDA4AC 75%, rgba(245, 211, 215, 0.00) 100%)",
         }}
       >
         <div className="flex flex-col items-center">
