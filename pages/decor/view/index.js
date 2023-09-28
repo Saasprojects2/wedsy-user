@@ -1,5 +1,4 @@
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import { LiaSearchSolid } from "react-icons/lia";
 import { Checkbox, Dropdown, Label, TextInput, Spinner } from "flowbite-react";
 import DecorCard from "@/components/cards/DecorCard";
 import { useState, useEffect, useRef } from "react";
@@ -74,8 +73,8 @@ export default function DecorListing() {
 
   return (
     <>
-      <div className="p-8 grid grid-cols-4 gap-8">
-        <div className="border-r border-black flex flex-col divide-y gap-4 divide-black pr-6">
+      <div className="md:p-8 grid md:grid-cols-4 gap-8 relative">
+        <div className="border-r border-black hidden md:flex flex-col divide-y gap-4 divide-black pr-6">
           <p className="text-xl font-medium">Filter by</p>
           <div className="flex flex-col pt-4">
             <p className="text-lg flex flex-row justify-between">
@@ -197,19 +196,29 @@ export default function DecorListing() {
             )}
           </div>
         </div>
-        <div className="col-span-3 py-6">
-          <div className="flex flex-row justify-between px-10 mb-8 items-center">
-            <div className="w-1/2">
+        <div className="col-span-3 md:py-6">
+          <div className="h-16 w-full bg-white top-0 fixed z-20"></div>
+          <div className="border-y border-black bg-white grid grid-cols-2 md:hidden divide-x-2 divide-black  sticky top-16 w-full z-20">
+            <span className="text-center py-2">Filter</span>
+            <span className="w-full flex flex-row justify-center">
+              <Dropdown inline label="Sort" className="">
+                <Dropdown.Item>Price: Low to High</Dropdown.Item>
+                <Dropdown.Item>Price: High to Low</Dropdown.Item>
+              </Dropdown>
+            </span>
+          </div>
+          <div className="flex flex-row justify-between px-6 py-6 md:py-0 md:px-10 md:mb-8 items-center">
+            <div className="w-full md:w-1/2">
               <SearchBar />
             </div>
-            <div>
+            <div className="hidden md:inline">
               <Dropdown inline label="Sort" className="max-w-max">
                 <Dropdown.Item>Price: Low to High</Dropdown.Item>
                 <Dropdown.Item>Price: High to Low</Dropdown.Item>
               </Dropdown>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-12 px-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-6 md:gap-12 md:px-10">
             {list.map((item, index) => (
               <DecorCard key={index} decor={item} />
             ))}

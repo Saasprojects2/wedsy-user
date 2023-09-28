@@ -10,14 +10,15 @@ import {
 } from "flowbite-react";
 import DecorCard from "@/components/cards/DecorCard";
 import Image from "next/image";
+import SearchBar from "@/components/searchBar/SearchBar";
 
 export default function DecorListing() {
   return (
     <>
-      <div className="p-8 grid grid-cols-4 gap-8">
-        <div className="border-r border-black flex flex-col divide-y gap-4 divide-black pr-6">
-          <p className="text-xl font-medium">Description</p>
-          <div className="flex flex-col pt-4">
+      <div className="md:p-8 grid grid-cols-1 md:grid-cols-4 md:gap-8">
+        <div className="order-last md:order-first border-t md:border-t-0 md:border-r border-black flex flex-col md:divide-y gap-4 md:divide-black md:pr-6">
+          <p className="text-xl font-medium hidden md:block">Description</p>
+          <div className="flex flex-col pt-4 px-4 md:px-0">
             <p className="text-lg flex flex-row justify-between">
               Can be used for
             </p>
@@ -33,43 +34,25 @@ export default function DecorListing() {
               </p>
             ))}
           </div>
-          <div className="flex flex-col pt-4">
+          <div className="flex flex-col pt-4 px-4 md:px-0">
             <p className="text-lg flex flex-row justify-between">
               Flowers used
             </p>
           </div>
-          <div className="flex flex-col pt-4">
+          <div className="flex flex-col pt-4 px-4 md:px-0">
             <p className="text-lg flex flex-row justify-between">
               Colour Theme
             </p>
           </div>
-          <div className="flex flex-col pt-4 border-b border-black">
+          <div className="flex flex-col pt-4 md:border-b md:border-black px-4 md:px-0">
             <p className="text-lg flex flex-row justify-between">Placement</p>
           </div>
         </div>
-        <div className="col-span-3 py-6">
-          <div className="flex flex-row justify-between px-10 mb-8 items-center">
-            <TextInput
-              id="search"
-              placeholder="I am looking for..."
-              rightIcon={() => (
-                <div className="bg-[#C84047] text-white h-full w-full p-4">
-                  <LiaSearchSolid />
-                </div>
-              )}
-              type="text"
-              className="w-1/2"
-            />
-            <div>
-              <Dropdown inline label="Sort" className="max-w-max">
-                <Dropdown.Item>Item 1</Dropdown.Item>
-                <Dropdown.Item>Item 2</Dropdown.Item>
-                <Dropdown.Item>Item 3</Dropdown.Item>
-                <Dropdown.Item>Item out</Dropdown.Item>
-              </Dropdown>
+        <div className="md:col-span-3 py-3 px-4 md:px-0 md:py-6">
+          <div className="md:px-10 relative">
+            <div className="w-full md:w-1/2 mb-4">
+              <SearchBar />
             </div>
-          </div>
-          <div className="px-10 relative">
             <div className="flex flex-row justify-between mb-6">
               <p className="font-semibold text-2xl">Classic White</p>
               <Rating size={"md"}>
@@ -89,8 +72,8 @@ export default function DecorListing() {
               style={{ width: "100%", height: "auto" }}
               className="rounded-xl"
             />
-            <div className="flex flex-row gap-4 items-center mt-3">
-              <p className="mr-auto font-semibold text-xl">₹ 40000</p>
+            <div className="flex flex-row flex-wrap gap-4 items-center mt-3">
+              <p className="mr-auto font-semibold text-xl ">₹ 40000</p>
               <Dropdown
                 inline
                 arrowIcon={false}
