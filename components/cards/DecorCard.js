@@ -1,11 +1,14 @@
 import Image from "next/image";
+import Link from "next/link";
 
-export default function DecorCard({ image, title, price }) {
+export default function DecorCard({ decor, className }) {
+  const { _id, thumbnail, name } = decor;
   return (
     <>
-      <div className="relative">
+      <Link href={`/decor/view/${_id}`} className={`relative ${className}`}>
         <Image
-          src={`/assets/temp/${image}`}
+          src={`/assets/temp/d1.png`}
+          // src={`${thumbnail}`}
           alt="Decor"
           width={0}
           height={0}
@@ -13,9 +16,9 @@ export default function DecorCard({ image, title, price }) {
           style={{ width: "100%", height: "auto" }}
           className="rounded-xl"
         />
-        <p className="mt-3 pl-2 font-semibold">{title}</p>
-        <p className="pl-2  font-semibold">₹ {price}</p>
-      </div>
+        <p className="mt-3 pl-2 font-semibold">{name}</p>
+        <p className="pl-2  font-semibold">₹ {decor.productInfo.costPrice}</p>
+      </Link>
     </>
   );
 }
