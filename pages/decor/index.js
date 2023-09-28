@@ -1,54 +1,80 @@
 import DecorCard from "@/components/cards/DecorCard";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaInfinity } from "react-icons/fa";
 
-export default function Decor() {
+function Decor({ bestSeller, popular }) {
+  const [bestSellerIndex, setBestSellerIndex] = useState([0, 1]);
+  const [popularIndex, setPopularIndex] = useState([0, 1]);
   return (
     <>
       <main className="relative" id="mainDiv">
         <Image
           src="/assets/images/decor-1.png"
           alt="Decor"
-          //   fill={true}
           width={0}
           height={0}
           sizes="100vw"
           style={{ width: "100%", height: "auto" }}
-          //   className="mx-auto my-8"
         />
       </main>
-      <section className="px-24 py-8 mt-8">
+      <section className="px-4 md:px-24 py-8 md:mt-8">
         <div className="flex justify-between relative">
-          <h2 className="font-medium text-4xl">
+          <h2 className="font-medium text-2xl md:text-4xl">
             Our <span className="text-[#840032] font-medium">BESTSELLERS!</span>
           </h2>
           <Link
             href="/decor/view"
-            className="px-12 py-2 bg-[#840032] text-white rounded-lg mr-20 z-50"
+            className="px-12 py-2 bg-[#840032] text-white rounded-lg hidden md:inline mr-20 z-50"
           >
             View More
           </Link>
-          <div className="absolute -top-24 -right-24 leading-[200px] text-white text-opacity-0 text-[200px] font-normal font-['Maitree'] font-outline-1">
+          <div className="hidden md:block absolute top-5 md:-top-24 right-0 md:-right-24 leading-[36px] md:leading-[200px] text-white text-opacity-0 text-[36px] md:text-[200px] font-normal font-['Maitree'] font-outline-1">
             DECORE
           </div>
         </div>
-        <div className="flex flex-row gap-12 justify-center items-center my-6">
-          <BsArrowLeftShort size={48} />
-          <div className="grid grid-cols-2 gap-12 ">
+        <div className="flex flex-row md:gap-12 justify-between items-center my-6">
+          <BsArrowLeftShort
+            size={48}
+            className="cursor-pointer scale-[0.5] md:scale-[1]"
+            onClick={() => {
+              let length = bestSeller.length;
+              let prev = bestSellerIndex[0];
+              let next = bestSellerIndex[1];
+              next = prev;
+              if (prev === 0) {
+                prev = length - 1;
+              } else {
+                prev--;
+              }
+              setBestSellerIndex([prev, next]);
+            }}
+          />
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 md:gap-12 grow">
+            <DecorCard decor={bestSeller[bestSellerIndex[0]]} />
             <DecorCard
-              image={"d1.png"}
-              title={"Classic White"}
-              price={"35000"}
-            />
-            <DecorCard
-              image={"d2.jpg"}
-              title={"Golden Lights"}
-              price={"40000"}
+              decor={bestSeller[bestSellerIndex[1]]}
+              className="hidden md:inline"
             />
           </div>
-          <BsArrowRightShort size={48} />
+          <BsArrowRightShort
+            size={48}
+            className="cursor-pointer scale-[0.5] md:scale-[1]"
+            onClick={() => {
+              let length = bestSeller.length;
+              let prev = bestSellerIndex[0];
+              let next = bestSellerIndex[1];
+              prev = next;
+              if (next === length - 1) {
+                next = 0;
+              } else {
+                next++;
+              }
+              setBestSellerIndex([prev, next]);
+            }}
+          />
         </div>
       </section>
       <section className="bg-[#840032] text-white font-semibold">
@@ -69,20 +95,22 @@ export default function Decor() {
           </div>
         </div>
       </section>
-      <section className="px-24 py-12">
-        <p className="text-black text-2xl font-normal font-light leading-normal uppercase text-center mt-6">
+      <section className="px-6 md:px-24 md:py-12">
+        <p className="text-black text-lg md:text-2xl font-normal font-light leading-normal uppercase text-center mt-6">
           {'"Decorating your love story, one beautiful detail at a time"'}
         </p>
-        <div className="grid grid-cols-2 m-6 mt-10 gap-8 bg-[#FBE2C8]">
-          <div className=" flex flex-col p-6 justify-between py-8">
-            <p className="text-3xl font-semibold">String Lights Photobooth</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 m-6 mt-10 md:gap-8 bg-[#FBE2C8]">
+          <div className=" flex flex-col p-6 justify-between md:py-8 order-last md:order-first gap-4 md:gap-0">
+            <p className="text-2xl md:text-3xl font-semibold">
+              String Lights Photobooth
+            </p>
             <p>
               A backdrop of string lights will not only bathe everyone in a
               flattering radiance but will also add a whimsical aspect to the
               scene.
             </p>
             <div className="flex flex-col">
-              <p className="font-medium text-2xl">Can be used for</p>
+              <p className="font-medium text-lg md:text-2xl">Can be used for</p>
               <p>Engagement</p>
               <p>Wedding</p>
               <p>Sangeet</p>
@@ -94,21 +122,21 @@ export default function Decor() {
             <div className="flex flex-col">
               <p className="font-medium text-2xl">Colour Theme</p>
               <p>
-                <span class="flex items-center text-sm font-medium text-gray-900 dark:text-white">
-                  <span class="flex w-2.5 h-2.5 bg-black rounded-full mr-1.5 flex-shrink-0" />
+                <span className="flex items-center text-sm font-medium text-gray-900 dark:text-white">
+                  <span className="flex w-2.5 h-2.5 bg-black rounded-full mr-1.5 flex-shrink-0" />
                   Black
                 </span>
               </p>
               <p>
-                <span class="flex items-center text-sm font-medium text-gray-900 dark:text-white">
-                  <span class="flex w-2.5 h-2.5 bg-yellow-500 rounded-full mr-1.5 flex-shrink-0" />
+                <span className="flex items-center text-sm font-medium text-gray-900 dark:text-white">
+                  <span className="flex w-2.5 h-2.5 bg-yellow-500 rounded-full mr-1.5 flex-shrink-0" />
                   Gold
                 </span>
               </p>
             </div>
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-col md:flex-row justify-between">
               <p className="text-3xl font-semibold">₹40000</p>
-              <button className="bg-black text-white py-2 px-8 rounded-lg">
+              <button className="mt-6 md:mt-0 bg-black text-white py-2 px-8 rounded-lg">
                 Add to Event
               </button>
             </div>
@@ -125,61 +153,91 @@ export default function Decor() {
           </div>
         </div>
       </section>
-      <section className="px-24 py-8 mt-8">
+      <section className="px-6 md:px-24 py-8 md:mt-8">
         <div className="flex justify-between">
-          <h2 className="font-light text-4xl">
+          <h2 className="font-light text-2xl md:text-4xl">
             <span className="font-medium">POPULAR</span> searches
           </h2>
           <Link
             href="/decor/view"
-            className="px-12 py-2 bg-[#840032] text-white rounded-lg mr-20"
+            className="hidden md:inline px-12 py-2 bg-[#840032] text-white rounded-lg mr-20"
           >
             View More
           </Link>
         </div>
-        <div className="flex flex-row gap-12 justify-center items-center my-6">
-          <BsArrowLeftShort size={48} />
-          <div className="grid grid-cols-2 gap-12 ">
+        <div className="flex flex-row md:gap-12 justify-between items-center my-6">
+          <BsArrowLeftShort
+            size={48}
+            className="cursor-pointer scale-[0.5] md:scale-[1]"
+            onClick={() => {
+              let length = popular.length;
+              let prev = popularIndex[0];
+              let next = popularIndex[1];
+              next = prev;
+              if (prev === 0) {
+                prev = length - 1;
+              } else {
+                prev--;
+              }
+              setPopularIndex([prev, next]);
+            }}
+          />
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-12 grow">
+            <DecorCard decor={popular[popularIndex[0]]} />
             <DecorCard
-              image={"d1.png"}
-              title={"Classic White"}
-              price={"35000"}
-            />
-            <DecorCard
-              image={"d2.jpg"}
-              title={"Golden Lights"}
-              price={"40000"}
+              decor={popular[popularIndex[1]]}
+              className="hidden md:inline"
             />
           </div>
-          <BsArrowRightShort size={48} />
+          <BsArrowRightShort
+            size={48}
+            className="cursor-pointer scale-[0.5] md:scale-[1]"
+            onClick={() => {
+              let length = popular.length;
+              let prev = popularIndex[0];
+              let next = popularIndex[1];
+              prev = next;
+              if (next === length - 1) {
+                next = 0;
+              } else {
+                next++;
+              }
+              setPopularIndex([prev, next]);
+            }}
+          />
         </div>
       </section>
       <div
-        className="p-8 flex flex-row justify-around items-center px-48"
+        className="p-8 flex flex-row justify-around items-center md:px-48"
         style={{
           background:
             "linear-gradient(180deg, rgba(245, 211, 215, 0.00) 0%, #EDA4AC 25%, #EDA4AC 75%, rgba(245, 211, 215, 0.00) 100%)",
         }}
       >
         <div className="flex flex-col items-center">
-          <span className="text-4xl font-bold">750+</span>
-          <span className="font-semibold">DESIGNS</span>
+          <span className="text-xl md:text-4xl font-bold">750+</span>
+          <span className="font-semibold text-sm md:text-lg">DESIGNS</span>
         </div>
         <div className="flex flex-col items-center">
-          <span className="text-4xl font-bold">1000+</span>
-          <span className="font-semibold">WEDDINGS</span>
+          <span className="text-xl md:text-4xl font-bold">1000+</span>
+          <span className="font-semibold text-sm md:text-lg">WEDDINGS</span>
         </div>
         <div className="flex flex-col items-center">
-          <span className="text-6xl font-bold">
+          <span className="text-2xl md:text-6xl font-bold">
             <FaInfinity />
           </span>
-          <span className="font-semibold">HAPPY CUSTOMERS</span>
+          <span className="font-semibold text-sm md:text-lg">
+            <span className="md:hidden">{"😁"}</span>
+            <span className="hidden md:inline">{"HAPPY"}</span> CUSTOMERS
+          </span>
         </div>
       </div>
       <div className="py-8">
-        <p className="mt-6 text-3xl font-semibold text-center">CATEGORIES</p>
-        <div className="flex overflow-x-hidden overflow-y-hidden mt-8 gap-3 flex-row relative">
-          <div className="relative w-1/5 rounded-lg hover:scale-[1.05] hover:z-50">
+        <p className="md:mt-6 text-2xl md:text-3xl font-semibold text-center">
+          CATEGORIES
+        </p>
+        <div className=" overflow-x-hidden overflow-y-hidden mt-8 md:gap-3 flex flex-row relative">
+          <div className="relative rounded-lg hover:scale-[1.05] hover:z-50 grow">
             <Image
               src="/assets/images/pathway.png"
               alt="Decor"
@@ -188,11 +246,11 @@ export default function Decor() {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
               <p className="text-center">PATHWAY</p>
             </div>
           </div>
-          <div className="relative w-1/5 rounded-lg hover:scale-[1.05] hover:z-50">
+          <div className="relative rounded-lg hover:scale-[1.05] hover:z-50 grow">
             <Image
               src="/assets/images/entrance.png"
               alt="Decor"
@@ -201,11 +259,11 @@ export default function Decor() {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
               <p className="text-center">ENTRANCE</p>
             </div>
           </div>
-          <div className="relative w-1/5 rounded-lg hover:scale-[1.05] hover:z-50">
+          <div className="relative rounded-lg hover:scale-[1.05] hover:z-50 grow">
             <Image
               src="/assets/images/stage.png"
               alt="Decor"
@@ -214,11 +272,11 @@ export default function Decor() {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
               <p className="text-center">STAGE</p>
             </div>
           </div>
-          <div className="relative w-1/5 rounded-lg hover:scale-[1.05] hover:z-50">
+          <div className="relative rounded-lg hover:scale-[1.05] hover:z-50 grow">
             <Image
               src="/assets/images/mandap.png"
               alt="Decor"
@@ -227,11 +285,11 @@ export default function Decor() {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
               <p className="text-center">MANDAP</p>
             </div>
           </div>
-          <div className="relative w-1/5 rounded-lg hover:scale-[1.05] hover:z-50">
+          <div className="relative rounded-lg hover:scale-[1.05] hover:z-50 grow">
             <Image
               src="/assets/images/photobooth.png"
               alt="Decor"
@@ -240,11 +298,11 @@ export default function Decor() {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
               <p className="text-center">PHOTOBOOTH</p>
             </div>
           </div>
-          <div className="relative w-1/5 rounded-lg hover:scale-[1.05] hover:z-50">
+          <div className="relative rounded-lg hover:scale-[1.05] hover:z-50 grow">
             <Image
               src="/assets/images/nameboard.png"
               alt="Decor"
@@ -253,7 +311,7 @@ export default function Decor() {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
               <p className="text-center">NAMEBOARD</p>
             </div>
           </div>
@@ -262,3 +320,27 @@ export default function Decor() {
     </>
   );
 }
+
+export async function getServerSideProps(context) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/decor`);
+    const data = await response.json();
+    return {
+      props: {
+        bestSeller: data,
+        popular: data,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+
+    return {
+      props: {
+        bestSeller: null,
+        popular: null,
+      },
+    };
+  }
+}
+
+export default Decor;
