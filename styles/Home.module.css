@@ -13,6 +13,11 @@
   background-position-y: bottom;
   /* height: calc(100vw * 847 / 1400); */
 }
+@media only screen and (max-width: 600px) {
+  .main__div {
+    height: auto !important ;
+  }
+}
 .main__div__2 {
   background-image: linear-gradient(0deg, #fff 53.22%, rgba(0, 0, 0, 0) 153.22%),
     url("/assets/background/bg-image-2.png");
@@ -23,6 +28,17 @@
   background-position-x: center;
   background-position-y: top;
   filter: blur(0px);
+}
+@media only screen and (max-width: 600px) {
+  .main__div__2 {
+    height: auto !important ;
+    background-image: linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.6) 0%,
+        rgba(255, 255, 255, 0.6) 100%
+      ),
+      url("/assets/background/bg-image-2.png");
+  }
 }
 .section__2 {
   background-image: linear-gradient(90deg, #fff 0%, rgba(255, 255, 255, 0) 80%),
