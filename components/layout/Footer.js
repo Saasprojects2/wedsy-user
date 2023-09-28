@@ -41,7 +41,7 @@ export default function FooterComponent() {
                 title="SUBSCRIBE NEWSLETTER"
                 className="text-[#b03138]"
               />
-              <input />
+              <input className="w-full"/>
               <Footer.Title title="GET IN TOUCH" className="text-[#b03138]" />
               <Footer.LinkGroup col>
                 <Footer.Link href="#">enquiry@wedsy.in</Footer.Link>
