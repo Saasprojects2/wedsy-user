@@ -97,7 +97,7 @@ export default function DecorListing() {
                 label={
                   <button
                     type="button"
-                    class="text-white bg-[#C84047] hover:bg-[#C84047] font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
+                    className="text-white bg-[#C84047] hover:bg-[#C84047] font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
                   >
                     Add to Event
                   </button>
@@ -141,7 +141,7 @@ export default function DecorListing() {
       <div className="border-y border-y-black p-8">
         <p className="text-2xl font-semibold px-12">Similar Stages</p>
         <div className="grid grid-cols-3 gap-8 px-12 mt-8">
-          <DecorCard
+          {/* <DecorCard
             image={Math.random() > 0.5 ? "d1.png" : "d2.jpg"}
             title={Math.random() > 0.5 ? "Classic White" : "Golden Lights"}
             price={Math.random() > 0.5 ? "35000" : "40000"}
@@ -155,7 +155,7 @@ export default function DecorListing() {
             image={Math.random() > 0.5 ? "d1.png" : "d2.jpg"}
             title={Math.random() > 0.5 ? "Classic White" : "Golden Lights"}
             price={Math.random() > 0.5 ? "35000" : "40000"}
-          />
+          /> */}
         </div>
       </div>
       <div className="p-8 px-20">
