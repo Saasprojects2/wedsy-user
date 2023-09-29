@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import RangeSlider from "@/components/slider/RangeSlider";
 import SearchBar from "@/components/searchBar/SearchBar";
 
-export default function DecorListing() {
+function DecorListing({ data }) {
   const [filters, setFilters] = useState({
     open: { occasion: true, colours: true, priceRange: true },
     priceRange: [3000, 115000],
@@ -24,8 +24,8 @@ export default function DecorListing() {
     priceRangeLimit: [0, 200000],
     coloursList: ["red"],
   });
-  const [list, setList] = useState([]);
-  const [page, setPage] = useState(1);
+  const [list, setList] = useState(data || []);
+  const [page, setPage] = useState(2);
   const [loading, setLoading] = useState(false);
   const containerRef = useRef(null);
   const fetchList = async () => {
@@ -35,9 +35,8 @@ export default function DecorListing() {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/decor?page=${page}`
       );
-      const data = await response.json();
-      setList([...list, ...data]);
-      console.log("Fetched Page >> " + page);
+      const tempData = await response.json();
+      setList([...list, ...tempData]);
       setPage(page + 1);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -46,9 +45,9 @@ export default function DecorListing() {
     }
   };
 
-  useEffect(() => {
-    fetchList();
-  }, []);
+  // useEffect(() => {
+  //   fetchList();
+  // }, []);
 
   useEffect(() => {
     const options = {
@@ -234,3 +233,25 @@ export default function DecorListing() {
     </>
   );
 }
+
+export async function getServerSideProps(context) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/decor`);
+    const data = await response.json();
+    return {
+      props: {
+        data,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+
+    return {
+      props: {
+        data: [],
+      },
+    };
+  }
+}
+
+export default DecorListing;
