@@ -11,8 +11,11 @@ import {
 import DecorCard from "@/components/cards/DecorCard";
 import Image from "next/image";
 import SearchBar from "@/components/searchBar/SearchBar";
+import { useState } from "react";
+import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 
-export default function DecorListing() {
+function DecorListing({ similarDecor, decor }) {
+  const [similarIndex, setSimilarIndex] = useState([0, 1, 2]);
   return (
     <>
       <div className="md:p-8 grid grid-cols-1 md:grid-cols-4 md:gap-8">
@@ -54,7 +57,7 @@ export default function DecorListing() {
               <SearchBar />
             </div>
             <div className="flex flex-row justify-between mb-6">
-              <p className="font-semibold text-2xl">Classic White</p>
+              <p className="font-semibold text-2xl">{decor.name}</p>
               <Rating size={"md"}>
                 <Rating.Star />
                 <Rating.Star />
@@ -73,7 +76,9 @@ export default function DecorListing() {
               className="rounded-xl"
             />
             <div className="flex flex-row flex-wrap gap-4 items-center mt-3">
-              <p className="mr-auto font-semibold text-xl ">₹ 40000</p>
+              <p className="mr-auto font-semibold text-xl ">
+                ₹ {decor.productInfo.costPrice}
+              </p>
               <Dropdown
                 inline
                 arrowIcon={false}
@@ -114,48 +119,114 @@ export default function DecorListing() {
                 <AiFillHeart size={20} />
               </Button>
             </div>
-            <p className="mt-3">
-              A well decorated elegant stage that is perfect for a night event
-              with soothened candle lamps all throughout the decor.
-            </p>
+            <p className="mt-3">{decor.description}</p>
           </div>
         </div>
       </div>
       <div className="border-y border-y-black p-8">
         <p className="text-2xl font-semibold px-12">Similar Stages</p>
-        <div className="grid grid-cols-3 gap-8 px-12 mt-8">
-          {/* <DecorCard
-            image={Math.random() > 0.5 ? "d1.png" : "d2.jpg"}
-            title={Math.random() > 0.5 ? "Classic White" : "Golden Lights"}
-            price={Math.random() > 0.5 ? "35000" : "40000"}
+        <div className="flex flex-row md:gap-12 justify-between items-center my-6">
+          <BsArrowLeftShort
+            size={48}
+            className="cursor-pointer scale-[0.5] md:scale-[1]"
+            onClick={() => {
+              let length = similarDecor.length;
+              let prev = similarIndex[0];
+              let mid = similarIndex[1];
+              let next = similarIndex[2];
+              next = mid;
+              mid = prev;
+              if (prev === 0) {
+                prev = length - 1;
+              } else {
+                prev--;
+              }
+              setSimilarIndex([prev, mid, next]);
+            }}
           />
-          <DecorCard
-            image={Math.random() > 0.5 ? "d1.png" : "d2.jpg"}
-            title={Math.random() > 0.5 ? "Classic White" : "Golden Lights"}
-            price={Math.random() > 0.5 ? "35000" : "40000"}
+          <div className="grid sm:grid-cols-1 md:grid-cols-3 md:gap-12 grow">
+            <DecorCard decor={similarDecor[similarIndex[0]]} />
+            <DecorCard
+              decor={similarDecor[similarIndex[1]]}
+              className="hidden md:inline"
+            />
+            <DecorCard
+              decor={similarDecor[similarIndex[2]]}
+              className="hidden md:inline"
+            />
+          </div>
+          <BsArrowRightShort
+            size={48}
+            className="cursor-pointer scale-[0.5] md:scale-[1]"
+            onClick={() => {
+              let length = similarDecor.length;
+              let prev = similarIndex[0];
+              let mid = similarIndex[1];
+              let next = similarIndex[2];
+              prev = mid;
+              mid = next;
+              if (next === length - 1) {
+                next = 0;
+              } else {
+                next++;
+              }
+              setSimilarIndex([prev, mid, next]);
+            }}
           />
-          <DecorCard
-            image={Math.random() > 0.5 ? "d1.png" : "d2.jpg"}
-            title={Math.random() > 0.5 ? "Classic White" : "Golden Lights"}
-            price={Math.random() > 0.5 ? "35000" : "40000"}
-          /> */}
         </div>
       </div>
       <div className="p-8 px-20">
-        <p className="text-2xl font-semibold">Cutomer Reviews</p>
-        <div className="mt-4">
-          <Rating size={"md"}>
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star filled={false} />
-            <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
-              4.95 out of 5
-            </p>
-          </Rating>
+        <div className="flex flex-row justify-between">
+          <p className="text-2xl font-semibold">Cutomer Reviews</p>
+          <div className="">
+            <Rating size={"md"}>
+              <Rating.Star />
+              <Rating.Star />
+              <Rating.Star />
+              <Rating.Star />
+              <Rating.Star filled={false} />
+              <p className="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                4.95 out of 5
+              </p>
+            </Rating>
+          </div>
         </div>
       </div>
     </>
   );
 }
+
+export async function getServerSideProps(context) {
+  try {
+    const { decor_id } = context.params;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/decor`);
+    const similarDecor = await response.json();
+    const decorResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/decor/${decor_id}`
+    );
+    const decor = await decorResponse.json();
+    if (!decor || decorResponse.status !== 200) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/decor/view",
+        },
+      };
+    }
+    return {
+      props: {
+        similarDecor,
+        decor,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return {
+      props: {
+        similarDecor: [],
+      },
+    };
+  }
+}
+
+export default DecorListing;
