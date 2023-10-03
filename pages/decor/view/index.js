@@ -45,10 +45,6 @@ function DecorListing({ data }) {
     }
   };
 
-  // useEffect(() => {
-  //   fetchList();
-  // }, []);
-
   useEffect(() => {
     const options = {
       root: null,
@@ -87,6 +83,7 @@ function DecorListing({ data }) {
                       open: { ...filters.open, occasion: false },
                     })
                   }
+                  className="cursor-pointer"
                 />
               ) : (
                 <AiOutlinePlus
@@ -97,6 +94,7 @@ function DecorListing({ data }) {
                       open: { ...filters.open, occasion: true },
                     })
                   }
+                  className="cursor-pointer"
                 />
               )}
             </p>
@@ -140,6 +138,7 @@ function DecorListing({ data }) {
                       open: { ...filters.open, colours: false },
                     })
                   }
+                  className="cursor-pointer"
                 />
               ) : (
                 <AiOutlinePlus
@@ -150,6 +149,7 @@ function DecorListing({ data }) {
                       open: { ...filters.open, colours: true },
                     })
                   }
+                  className="cursor-pointer"
                 />
               )}
             </p>
@@ -166,6 +166,7 @@ function DecorListing({ data }) {
                       open: { ...filters.open, priceRange: false },
                     })
                   }
+                  className="cursor-pointer"
                 />
               ) : (
                 <AiOutlinePlus
@@ -176,6 +177,7 @@ function DecorListing({ data }) {
                       open: { ...filters.open, priceRange: true },
                     })
                   }
+                  className="cursor-pointer"
                 />
               )}
             </p>
