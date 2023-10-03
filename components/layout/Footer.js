@@ -14,7 +14,7 @@ export default function FooterComponent() {
     <>
       <Footer container className="bg-[#f2eae7]">
         <div className="w-full">
-          <div className="grid w-full grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4">
+          <div className="grid w-full grid-cols-1 gap-8 px-6 py-8 md:grid-cols-4">
             <div>
               <Footer.Title title="WEDDING IDEAS" className="text-[#b03138]" />
               <Footer.LinkGroup col className="space-y-2 list-disc">
