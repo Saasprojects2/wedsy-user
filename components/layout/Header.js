@@ -3,8 +3,11 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
 import Link from "next/link";
+import { BiLogIn, BiLogOut, BiLogout } from "react-icons/bi";
+import { useRouter } from "next/router";
 
-export default function Header({}) {
+export default function Header({ userLoggedIn, user, Logout }) {
+  const router = useRouter();
   const [variant, setVariant] = useState("light");
   useEffect(() => {
     const myElement = document.getElementById("mainDiv");
@@ -60,16 +63,30 @@ export default function Header({}) {
             }
             arrowIcon={false}
           >
-            <Dropdown.Header>
-              <span className="block text-sm">Bonnie Green</span>
-              <span className="block truncate text-sm font-medium">
-                name@flowbite.com
-              </span>
-            </Dropdown.Header>
-            <Dropdown.Item>Dashboard</Dropdown.Item>
-            <Dropdown.Item>Settings</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item href="/login">Login</Dropdown.Item>
+            {userLoggedIn ? (
+              <>
+                <Dropdown.Header>
+                  <span className="block text-sm">{user.name}</span>
+                </Dropdown.Header>
+                <Dropdown.Item>Profile</Dropdown.Item>
+                <Dropdown.Item>My Bookings</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  className="flex gap-2"
+                  onClick={() => {
+                    Logout();
+                  }}
+                >
+                  <BiLogOut />
+                  Logout
+                </Dropdown.Item>
+              </>
+            ) : (
+              <Dropdown.Item href="/login" className="flex gap-2">
+                <BiLogIn />
+                Login
+              </Dropdown.Item>
+            )}
           </Dropdown>
         </div>
         <Navbar.Collapse className={`${styles.navbar__links}`}>
@@ -98,7 +115,7 @@ export default function Header({}) {
             VENUES
           </Navbar.Link>
           <Navbar.Link
-            href="#"
+            href="/wishlist"
             className={`font-medium text-${
               variant === "dark" ? "white" : "black"
             }`}
