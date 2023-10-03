@@ -1,6 +1,137 @@
 import styles from "@/styles/Home.module.css";
+import { Spinner } from "flowbite-react";
 import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+
 export default function Home() {
+  const [data, setData] = useState({
+    main: { phone: "", name: "", loading: false, success: false },
+    secondary: {
+      phone: "",
+      name: "",
+      loading: false,
+      success: false,
+      otpSent: false,
+      Otp: "",
+      ReferenceId: "",
+      message: "",
+    },
+  });
+  const handleMainEnquiry = () => {
+    setData({
+      ...data,
+      main: { ...data.main, loading: true },
+    });
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/enquiry`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: data.main.name,
+        phone: `+91${data.main.phone}`,
+        verified: false,
+        source: "Landing Screen",
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          setData({
+            ...data,
+            main: { phone: "", name: "", loading: false, success: true },
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
+  const handleSecondaryEnquiry = () => {
+    setData({
+      ...data,
+      secondary: { ...data.secondary, loading: true },
+    });
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/enquiry`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: data.secondary.name,
+        phone: `+91${data.secondary.phone}`,
+        verified: true,
+        source: "Landing Page | Speak to Expert",
+        Otp: data.secondary.Otp,
+        ReferenceId: data.secondary.ReferenceId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (
+          response.message === "Enquiry Added Successfully" &&
+          response.token
+        ) {
+          setData({
+            ...data,
+            secondary: {
+              phone: "",
+              name: "",
+              loading: false,
+              success: true,
+              otpSent: false,
+              Otp: "",
+              ReferenceId: "",
+              message: "",
+            },
+          });
+          localStorage.setItem("token", response.token);
+        } else {
+          setData({
+            ...data,
+            secondary: {
+              ...data.secondary,
+              loading: false,
+              Otp: "",
+              message: response.message,
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
+  const SendOTP = () => {
+    setData({
+      ...data,
+      secondary: { ...data.secondary, loading: true },
+    });
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        phone: `+91${data.secondary.phone}`,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setData({
+          ...data,
+          secondary: {
+            ...data.secondary,
+            loading: false,
+            otpSent: true,
+            ReferenceId: response.ReferenceId,
+          },
+        });
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   return (
     <>
       <main
@@ -19,22 +150,61 @@ export default function Home() {
           </div>
           <div className="hidden md:flex flex-col w-1/3 text-center gap-6">
             <span className="text-3xl">YOUR WEDDING VISION, OUR EXPERTISE</span>
-            <input
-              type="text"
-              placeholder="NAME"
-              className="text-white text-center bg-transparent border-0 border-b border-b-white outline-0 outline-0 placeholder:text-white"
-            />
-            <input
-              type="text"
-              placeholder="PHONE NO."
-              className="text-white text-center bg-transparent border-0 border-b border-b-white outline-0 outline-0 placeholder:text-white"
-            />
-            <button
-              type="submit"
-              className="rounded-full bg-white text-black py-2"
-            >
-              ENTER WITH WEDSY
-            </button>
+            {data.main.success ? (
+              <p>
+                Your Wedsy Wedding Manager will contact you and assist you in
+                choosing the best!
+              </p>
+            ) : (
+              <>
+                <input
+                  type="text"
+                  placeholder="NAME"
+                  value={data.main.name}
+                  onChange={(e) =>
+                    setData({
+                      ...data,
+                      main: { ...data.main, name: e.target.value },
+                    })
+                  }
+                  name="name"
+                  className="text-white text-center bg-transparent border-0 border-b-white outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-white focus:ring-0 placeholder:text-white"
+                />
+                <input
+                  type="text"
+                  placeholder="PHONE NO. (10 Digits Only)"
+                  value={data.main.phone}
+                  onChange={(e) =>
+                    setData({
+                      ...data,
+                      main: { ...data.main, phone: e.target.value },
+                    })
+                  }
+                  name="phone"
+                  className="text-white text-center bg-transparent border-0 border-b-white outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-white focus:ring-0 placeholder:text-white"
+                />
+                <button
+                  type="submit"
+                  className="rounded-full bg-white disabled:bg-white/50 text-black py-2"
+                  disabled={
+                    !data.main.name ||
+                    !data.main.phone ||
+                    !/^\d{10}$/.test(data.main.phone) ||
+                    data.main.loading
+                  }
+                  onClick={handleMainEnquiry}
+                >
+                  {data.main.loading ? (
+                    <>
+                      <Spinner size="sm" />
+                      <span className="pl-3">Loading...</span>
+                    </>
+                  ) : (
+                    <>ENTER WITH WEDSY</>
+                  )}
+                </button>
+              </>
+            )}
           </div>
         </div>
       </main>
@@ -78,27 +248,82 @@ export default function Home() {
           a free consultation and say goodbye to wedding planning stress and
           hello to seamless perfection.{" "}
         </p>
-        <input
-          type="text"
-          placeholder="NAME"
-          className="w-1/4 text-black bg-transparent border-0 border-b border-b-black outline-0 outline-0 placeholder:text-black"
-        />
-        <input
-          type="text"
-          placeholder="PHONE NO."
-          className="w-1/4 text-black bg-transparent border-0 border-b border-b-black outline-0 outline-0 placeholder:text-black"
-        />
-        <input
-          type="text"
-          placeholder="OTP"
-          className="w-1/4 text-black bg-transparent border-0 border-b border-b-black outline-0 outline-0 placeholder:text-black"
-        />
-        <button
-          type="submit"
-          className="w-1/4 rounded-full bg-black text-white py-2"
-        >
-          SUBMIT
-        </button>
+        {data.secondary.success ? (
+          <p className="w-1/3">
+            Your Wedsy Wedding Manager will contact you and assist you in
+            choosing the best!
+          </p>
+        ) : (
+          <>
+            <input
+              type="text"
+              placeholder="NAME"
+              value={data.secondary.name}
+              onChange={(e) =>
+                setData({
+                  ...data,
+                  secondary: { ...data.secondary, name: e.target.value },
+                })
+              }
+              name="name"
+              className="w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
+            />
+            <input
+              type="text"
+              placeholder="PHONE NO."
+              value={data.secondary.phone}
+              onChange={(e) =>
+                setData({
+                  ...data,
+                  secondary: { ...data.secondary, phone: e.target.value },
+                })
+              }
+              name="phone"
+              className="w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
+            />
+            {data.secondary.otpSent && (
+              <input
+                type="text"
+                placeholder="OTP"
+                value={data.secondary.Otp}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    secondary: { ...data.secondary, Otp: e.target.value },
+                  })
+                }
+                name="otp"
+                className="w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
+              />
+            )}
+            {data.secondary.message && (
+              <p className="text-red-500 w-1/4">{data.secondary.message}</p>
+            )}
+            <button
+              type="submit"
+              className="w-1/4 rounded-full bg-black text-white py-2 disabled:bg-black/50"
+              disabled={
+                !data.secondary.name ||
+                !data.secondary.phone ||
+                !/^\d{10}$/.test(data.secondary.phone) ||
+                data.secondary.loading ||
+                (data.secondary.otpSent ? !data.secondary.Otp : false)
+              }
+              onClick={() => {
+                data.secondary.otpSent ? handleSecondaryEnquiry() : SendOTP();
+              }}
+            >
+              {data.secondary.loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-3">Loading...</span>
+                </>
+              ) : (
+                <>SUBMIT</>
+              )}
+            </button>
+          </>
+        )}
       </section>
       <section className="flex flex-col gap-12 py-16 px-24">
         <p className="text-[#D33467] flex font-medium gap-2">
@@ -138,33 +363,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      {/* <section className="w-screen flex">
-        <div className="w-1/2">
-          <p className="p-12 text-[#840032]">
-            Your one-stop shop for affordable and elegant weddings. Simplify
-            planning with fixed-price stage decor, creative entry ideas, stylish
-            furniture rentals, and more. Where affordability meets creativity
-            for your special day.
-          </p>
-        </div>
-        <div className="w-1/2 bg-[#840032] p-16 flex justify-around items-center">
-          <ul className="text-white list-disc">
-            <li>STAGE</li>
-            <li>ENTTRANCE</li>
-            <li>MANDAP</li>
-            <li>PATHWAY</li>
-            <li>PHOTOBOOTH</li>
-            <li>NAMEBOARD</li>
-          </ul>
-          <span
-            className="text-white text-center text-6xl font-bold"
-            style={{ writingMode: "vertical-rl" }}
-          >
-            WEDDING
-            <br /> STORE
-          </span>
-        </div>
-      </section> */}
       <section className="w-screen mt-12">
         <div className="relative overflow-y-hidden">
           <p className="text-[#840032] font-semibold text-4xl text-center absolute w-full top-0 z-50">
@@ -238,16 +436,19 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="z-50 flex flex-row items-center justify-around px-12 py-8">
+        <div className="z-20 flex flex-row items-center justify-around px-12 py-8">
           <p className="text-rose-900 w-2/3">
             Your one-stop shop for affordable and elegant weddings. Simplify
             planning with fixed-price stage decor, creative entry ideas, stylish
             furniture rentals, and more. Where affordability meets creativity
             for your special day.
           </p>
-          <button className="bg-rose-900 rounded-full p-1 px-8 text-white w-max">
+          <Link
+            href={"/decor"}
+            className="bg-rose-900 rounded-full p-1 px-8 text-white w-max"
+          >
             Explore Now
-          </button>
+          </Link>
         </div>
       </section>
     </>
