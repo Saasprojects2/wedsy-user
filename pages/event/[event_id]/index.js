@@ -7,17 +7,16 @@ import { useRouter } from "next/router";
 
 export default function EventTool() {
   const router = useRouter();
-  const [events, setEvents] = useState([]);
+  const [event, setEvent] = useState({});
   const [data, setData] = useState({
     name: "",
-    community: "",
-    eventDay: "",
     time: "",
     date: "",
     venue: "",
   });
-  const fetchEvents = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/event`, {
+  const { event_id } = router.query;
+  const fetchEvent = () => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -26,14 +25,19 @@ export default function EventTool() {
     })
       .then((response) => response.json())
       .then((response) => {
-        setEvents(response);
+        if (response.message !== "error") {
+          setEvent(response);
+        } else {
+          router.push("/event");
+        }
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
+        router.push("/event");
       });
   };
-  const handleCreateEvent = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/event`, {
+  const handleCreateEventDay = () => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,20 +47,21 @@ export default function EventTool() {
     })
       .then((response) => response.json())
       .then((response) => {
-        router.push(`/event/${response._id}`);
+        fetchEvent();
+        setData({ name: "", time: "", date: "", venue: "" });
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
       });
   };
   useEffect(() => {
-    fetchEvents();
+    fetchEvent();
   }, []);
   return (
     <div className="">
       <div className="flex flex-row relative gap-12">
         <div className="pl-32 flex flex-col gap-8 pt-24">
-          <div className="text-black text-6xl font-medium">MY EVENTS</div>
+          <div className="text-black text-6xl font-medium">{event.name}</div>
           <div className="text-xl">
             Explore the ease of planning with our event tool at Wedsy.
           </div>
@@ -93,7 +98,7 @@ export default function EventTool() {
             <BsArrowRight sizes={24} />
           </div>
           <div className="flex flex-col gap-2 ">
-            {events.map((item, index) => (
+            {event?.eventDays?.map((item, index) => (
               <div className="flex flex-row justify-between" key={index}>
                 <Link href={`/event/${item._id}`}>
                   {index + 1}. {item.name}
@@ -101,33 +106,26 @@ export default function EventTool() {
                 <BiSolidEditAlt size={24} />
               </div>
             ))}
+            <div className="flex flex-row justify-between text-black/50">
+              <span>{event?.eventDays?.length + 1}. ADD ONE MORE DAY</span>
+            </div>
           </div>
+          <Link
+            href={`/event/${event_id}/planner`}
+            className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max"
+          >
+            Next
+          </Link>
         </div>
         <div className="relative bg-red-200 bg-opacity-40 rounded-3xl flex flex-col gap-6 p-8 py-12">
           <div className="text-center text-3xl">TELL US ABOUT YOUR EVENT</div>
           <input
             type="text"
             className="rounded-full p-2 text-center"
-            placeholder="NAME YOUR EVENT (eg: Rahul x Kiara)"
+            placeholder="EVENT DAY (eg: Reception)"
             name="name"
             value={data.name}
             onChange={(e) => setData({ ...data, name: e.target.value })}
-          />
-          <input
-            type="text"
-            className="rounded-full p-2 text-center"
-            placeholder="EVENT DAY (eg: Reception)"
-            name="eventDay"
-            value={data.eventDay}
-            onChange={(e) => setData({ ...data, eventDay: e.target.value })}
-          />
-          <input
-            type="text"
-            className="rounded-full p-2 text-center"
-            placeholder="COMMUNITY"
-            name="community"
-            value={data.community}
-            onChange={(e) => setData({ ...data, community: e.target.value })}
           />
           <div className="grid grid-cols-2 gap-8 w-full">
             <input
@@ -157,15 +155,8 @@ export default function EventTool() {
           />
           <button
             className="bg-black disabled:bg-neutral-700 rounded-full p-2 px-12 text-white w-max mx-auto"
-            disabled={
-              !data.name ||
-              !data.community ||
-              !data.eventDay ||
-              !data.time ||
-              !data.date ||
-              !data.venue
-            }
-            onClick={handleCreateEvent}
+            disabled={!data.name || !data.time || !data.date || !data.venue}
+            onClick={handleCreateEventDay}
           >
             SUBMIT
           </button>
