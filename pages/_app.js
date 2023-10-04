@@ -74,7 +74,7 @@ function App({ Component, pageProps }) {
   ) : (
     <>
       <Header userLoggedIn={!logIn} user={user} Logout={Logout} />
-      <Component {...pageProps} />
+      <Component {...pageProps} userLoggedIn={!logIn} user={user} />
       <Footer />
     </>
   );
