@@ -1,21 +1,78 @@
-import { LiaSearchSolid } from "react-icons/lia";
 import { AiFillHeart } from "react-icons/ai";
-import {
-  Button,
-  Checkbox,
-  Dropdown,
-  Label,
-  Rating,
-  TextInput,
-} from "flowbite-react";
+import { Checkbox, Dropdown, Label, Rating } from "flowbite-react";
 import DecorCard from "@/components/cards/DecorCard";
 import Image from "next/image";
 import SearchBar from "@/components/searchBar/SearchBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
+import { useRouter } from "next/router";
 
-function DecorListing({ similarDecor, decor }) {
+function DecorListing({ similarDecor, decor, userLoggedIn }) {
+  const router = useRouter();
   const [similarIndex, setSimilarIndex] = useState([0, 1, 2]);
+  const [isAddedToWishlist, setIsAddedToWishlist] = useState(false);
+  const { decor_id } = router.query;
+  useEffect(() => {
+    if (decor_id && userLoggedIn) {
+      fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/is-added-to-wishlist?product=decor&_id=${decor_id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+        .then((response) => (response.ok ? response.json() : null))
+        .then((response) => {
+          if (response) {
+            setIsAddedToWishlist(response.wishlist);
+          }
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    }
+  }, [decor_id, userLoggedIn]);
+  const AddToWishlist = () => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/wishlist/decor`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ _id: decor_id }),
+    })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((response) => {
+        if (response.message === "success") {
+          setIsAddedToWishlist(true);
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
+  const RemoveFromWishList = () => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/wishlist/decor`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ _id: decor_id }),
+    })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((response) => {
+        if (response.message === "success") {
+          setIsAddedToWishlist(false);
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   return (
     <>
       <div className="md:p-8 grid grid-cols-1 md:grid-cols-4 md:gap-8">
@@ -115,9 +172,22 @@ function DecorListing({ similarDecor, decor }) {
                   <Label className="flex">Muharattam</Label>
                 </Dropdown.Item>
               </Dropdown>
-              <Button className="bg-[#C84047] text-white">
+              <button
+                className={`${
+                  isAddedToWishlist
+                    ? "text-[#C84047] bg-white hover-white"
+                    : "text-white bg-[#C84047] hover:bg-[#C84047]"
+                } cursor-pointer px-5 py-2.5 focus:outline-none rounded-lg border-[#C84047] border `}
+                onClick={() => {
+                  if (userLoggedIn) {
+                    isAddedToWishlist ? RemoveFromWishList() : AddToWishlist();
+                  } else {
+                    router.push("/login");
+                  }
+                }}
+              >
                 <AiFillHeart size={20} />
-              </Button>
+              </button>
             </div>
             <p className="mt-3">{decor.description}</p>
           </div>
