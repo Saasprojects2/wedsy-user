@@ -2,6 +2,7 @@ import DecorCard from "@/components/cards/DecorCard";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaInfinity } from "react-icons/fa";
 
@@ -27,7 +28,7 @@ function Decor({ bestSeller, popular }) {
           </h2>
           <Link
             href="/decor/view"
-            className="px-12 py-2 bg-[#840032] text-white rounded-lg hidden md:inline mr-20 z-50"
+            className="px-12 py-2 bg-[#840032] text-white rounded-lg hidden md:inline mr-20 z-40"
           >
             View More
           </Link>
@@ -237,7 +238,7 @@ function Decor({ bestSeller, popular }) {
           CATEGORIES
         </p>
         <div className=" overflow-x-hidden overflow-y-hidden mt-8 md:gap-3 flex flex-row relative">
-          <div className="relative rounded-lg hover:scale-[1.05] hover:z-50 grow">
+          <div className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow">
             <Image
               src="/assets/images/pathway.png"
               alt="Decor"
@@ -250,7 +251,7 @@ function Decor({ bestSeller, popular }) {
               <p className="text-center">PATHWAY</p>
             </div>
           </div>
-          <div className="relative rounded-lg hover:scale-[1.05] hover:z-50 grow">
+          <div className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow">
             <Image
               src="/assets/images/entrance.png"
               alt="Decor"
@@ -263,7 +264,7 @@ function Decor({ bestSeller, popular }) {
               <p className="text-center">ENTRANCE</p>
             </div>
           </div>
-          <div className="relative rounded-lg hover:scale-[1.05] hover:z-50 grow">
+          <div className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow">
             <Image
               src="/assets/images/stage.png"
               alt="Decor"
@@ -276,7 +277,7 @@ function Decor({ bestSeller, popular }) {
               <p className="text-center">STAGE</p>
             </div>
           </div>
-          <div className="relative rounded-lg hover:scale-[1.05] hover:z-50 grow">
+          <div className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow">
             <Image
               src="/assets/images/mandap.png"
               alt="Decor"
@@ -289,7 +290,7 @@ function Decor({ bestSeller, popular }) {
               <p className="text-center">MANDAP</p>
             </div>
           </div>
-          <div className="relative rounded-lg hover:scale-[1.05] hover:z-50 grow">
+          <div className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow">
             <Image
               src="/assets/images/photobooth.png"
               alt="Decor"
@@ -302,7 +303,7 @@ function Decor({ bestSeller, popular }) {
               <p className="text-center">PHOTOBOOTH</p>
             </div>
           </div>
-          <div className="relative rounded-lg hover:scale-[1.05] hover:z-50 grow">
+          <div className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow">
             <Image
               src="/assets/images/nameboard.png"
               alt="Decor"
@@ -317,6 +318,105 @@ function Decor({ bestSeller, popular }) {
           </div>
         </div>
       </div>
+      <div className="py-16 px-24 bg-gradient-to-b from-amber-100/0 via-amber-100/100 to-amber-100/100">
+        <p className="md:mt-6 text-2xl md:text-3xl font-semibold mb-8">
+          PACKAGES
+        </p>
+        <div className="relative">
+          <Image
+            src="/assets/temp/package.png"
+            alt="Decor"
+            width={0}
+            height={0}
+            sizes="100%"
+            style={{ width: "100%", height: "auto" }}
+          />
+        </div>
+        <div className="flex flex-row justify-center gap-16 mt-6 items-center">
+          <BsArrowLeftShort
+            size={24}
+            className="cursor-pointer rounded-full bg-white"
+          />
+          <div className="flex flex-col text-center">
+            <p className="font-medium">ALL FOR</p>
+            <p className="font-semibold text-xl">₹2,00,000</p>
+          </div>
+          <BsArrowRightShort
+            size={24}
+            className="cursor-pointer rounded-full bg-white"
+          />
+        </div>
+        <p className="md:mt-6 text-2xl md:text-3xl font-medium mb-8">
+          Have a decor in mind? Get an instant quote!
+        </p>
+        <div className="grid grid-cols-3">
+          <div className="col-span-2">
+            <p className="w-2/3 text-lg">
+              {
+                "Have a decor picture with you but you still don’t know how much it’s gonna cost? Upload your decor picture and Wedsy will revert back to you in 24 hours with a quote"
+              }
+            </p>
+            <div className="mt-8 flex flex-row gap-8 justify-center w-2/3">
+              <input
+                type="text"
+                placeholder="CITY"
+                name="city"
+                className="flex-grow pb-0 text-center bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0 placeholder:text-gray-500 placeholder:font-medium"
+              />
+              <input
+                type="text"
+                placeholder="ADDITIONAL COMMENTS"
+                name="comments"
+                className="flex-grow pb-0 text-center bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0 placeholder:text-gray-500 placeholder:font-medium"
+              />
+            </div>
+          </div>
+          <div className="bg-[#57575799] mx-4 rounded-xl flex flex-col items-center justify-center gap-4">
+            <input
+              type="file"
+              id="fileInput"
+              className="hidden"
+              accept="image/*"
+            />
+            <label for="fileInput" className="bg-white p-2 rounded-full ">
+              <AiOutlinePlus size={24} />
+            </label>
+            <span id="fileName" className="text-sm">
+              UPLOAD HERE
+            </span>
+          </div>
+        </div>
+      </div>
+      <section className="w-full px-16 py-12 ">
+        <p className="font-semibold text-4xl mb-12">
+          PLAN YOUR EVENT NOW WITH OUR NEW EVENT TOOL!
+        </p>
+        <div className="flex gap-6 relative">
+          <div className="flex flex-col gap-8 ">
+            <p className="text-xl w-2/3">
+              Explore the ease of planning with our event tool at Wedsy.
+            </p>
+            <p className="text-xl w-2/3">
+              Utilize the tool to shortlist and choose your decorations
+              effortlessly - all in one place, at Wedsy.
+            </p>
+            <Link
+              href={`/event`}
+              className="bg-rose-900 rounded-full p-1 px-16 text-white w-max mx-auto mt-auto mb-12"
+            >
+              Try Now!
+            </Link>
+          </div>
+          <Image
+            src="/assets/images/event-tool.png"
+            alt="Decor"
+            width={0}
+            height={0}
+            sizes="20%"
+            style={{ width: "20%", height: "auto", marginLeft: "auto" }}
+          />
+        </div>
+      </section>
     </>
   );
 }
