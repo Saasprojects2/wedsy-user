@@ -7,8 +7,8 @@ export default function DecorCard({ decor, className }) {
     <>
       <Link href={`/decor/view/${_id}`} className={`relative ${className}`}>
         <Image
-          src={`/assets/temp/d1.png`}
-          // src={`${thumbnail}`}
+          // src={`/assets/temp/d1.png`}
+          src={`${thumbnail.trim()}`}
           alt="Decor"
           width={0}
           height={0}
