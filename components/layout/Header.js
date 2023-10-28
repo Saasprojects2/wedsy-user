@@ -42,7 +42,7 @@ export default function Header({ userLoggedIn, user, Logout }) {
         fluid
         className={`${
           variant === "dark" ? "bg-[#1B1B1B]" : "bg-[#FFFFFF]"
-        } md:px-12 [font-family:'Montserrat-Medium',Helvetica] sticky top-0 z-50 w-full`}
+        } md:px-12 [font-family:'Montserrat-Medium',Helvetica] sticky top-0 z-50 w-full shadow-md`}
       >
         <Navbar.Toggle />
         <Navbar.Brand href="/">
