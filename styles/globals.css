@@ -25,7 +25,8 @@
 
 body {
   font-family: Montserrat;
-  color: rgb(var(--foreground-rgb));
+  /* color: rgb(var(--foreground-rgb)); */
+  color: rgb(0, 0, 0);
   background: white;
 }
 
