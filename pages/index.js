@@ -1,10 +1,53 @@
 import styles from "@/styles/Home.module.css";
-import { Spinner } from "flowbite-react";
+import { Rating, Spinner } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  BsArrowLeftShort,
+  BsArrowRightShort,
+  BsFillBalloonHeartFill,
+} from "react-icons/bs";
+import { FcGoogle } from "react-icons/fc";
+import pinkBgGif from "@/public/assets/gif/pink-bg.gif";
+import heartGif from "@/public/assets/gif/heart.gif";
+import tickGif from "@/public/assets/gif/tick.gif";
 
 export default function Home() {
+  const decorList = [
+    {
+      id: "Stage",
+      text: "Your one-stop shop for affordable and elegant weddings. Simplify planning with fixed-price stage decor, creative entry ideas, stylish furniture rentals, and more. Where affordability meets creativity for your special day.",
+      image: "/assets/images/stage.png",
+    },
+    {
+      id: "Pathway",
+      text: "Your one-stop shop for affordable and elegant weddings. Simplify planning with fixed-price stage decor, creative entry ideas, stylish furniture rentals, and more. Where affordability meets creativity for your special day.",
+      image: "/assets/images/pathway.png",
+    },
+    {
+      id: "Entrance",
+      text: "Your one-stop shop for affordable and elegant weddings. Simplify planning with fixed-price stage decor, creative entry ideas, stylish furniture rentals, and more. Where affordability meets creativity for your special day.",
+      image: "/assets/images/entrance.png",
+    },
+    {
+      id: "Photobooth",
+      text: "Your one-stop shop for affordable and elegant weddings. Simplify planning with fixed-price stage decor, creative entry ideas, stylish furniture rentals, and more. Where affordability meets creativity for your special day.",
+      image: "/assets/images/photobooth.png",
+    },
+    {
+      id: "Mandap",
+      text: "Your one-stop shop for affordable and elegant weddings. Simplify planning with fixed-price stage decor, creative entry ideas, stylish furniture rentals, and more. Where affordability meets creativity for your special day.",
+      image: "/assets/images/mandap.png",
+    },
+    {
+      id: "Nameboard",
+      text: "Your one-stop shop for affordable and elegant weddings. Simplify planning with fixed-price stage decor, creative entry ideas, stylish furniture rentals, and more. Where affordability meets creativity for your special day.",
+      image: "/assets/images/nameboard.png",
+    },
+  ];
+  const [tempDecorList, setTempDecorList] = useState([]);
+  const [decorIndex, setDecorIndex] = useState(0);
   const [data, setData] = useState({
     main: { phone: "", name: "", loading: false, success: false },
     secondary: {
@@ -18,6 +61,13 @@ export default function Home() {
       message: "",
     },
   });
+  const [isHovered, setIsHovered] = useState(false);
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   const handleMainEnquiry = () => {
     setData({
       ...data,
@@ -132,21 +182,54 @@ export default function Home() {
         console.error("There was a problem with the fetch operation:", error);
       });
   };
+  useEffect(() => {
+    let length = decorList.length;
+    let array = [1, 2, 3, 4, 5];
+    let diff = decorIndex - array[2];
+    array = array.map((i) => {
+      let a1 = i + diff;
+      if (a1 < 0) {
+        a1 += length;
+      } else if (a1 > length - 1) {
+        a1 -= length;
+      }
+      return a1;
+    });
+    let list = array.map((i) => decorList[i]);
+    setTempDecorList(list);
+  }, [decorIndex]);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (!isHovered) {
+        let length = decorList.length;
+        let item = decorIndex;
+        if (item === length - 1) {
+          item = 0;
+        } else {
+          item++;
+        }
+        setDecorIndex(item);
+      }
+    }, 2000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [decorIndex, isHovered]);
   return (
     <>
       <main
         className={`${styles.main__div} flex flex-col py-8 md:p-0justify-around gap-6 md:gap-12`}
         id="mainDiv"
       >
-        <div className="strike">
-          <span className="text-white text-2xl md:text-6xl text-center font-normal">
+        <div className="strike mt-6">
+          <span className="text-white text-2xl md:text-5xl text-center font-normal">
             WEDDINGS MADE EASY
           </span>
         </div>
         <div className="px-16 flex flex-row justify-between mb-16 text-white">
-          <div className="w-1/3 text-4xl md:text-6xl ">
+          <div className="w-1/3 text-4xl md:text-7xl ">
             YOUR WEDDING{" "}
-            <span className="text-6xl md:text-8xl font-medium">MEGA</span> STORE
+            <span className="text-6xl md:text-9xl font-medium">MEGA</span> STORE
           </div>
           <div className="hidden md:flex flex-col w-1/3 text-center gap-6">
             <span className="text-3xl">YOUR WEDDING VISION, OUR EXPERTISE</span>
@@ -209,47 +292,66 @@ export default function Home() {
         </div>
       </main>
       <main className={`${styles.main__div__2}`}>
-        <img
-          src="/assets/images/flowers-1.png"
-          className="hidden md:inline float-left"
-        />
-        <img
-          src="/assets/images/flowers-2.png"
-          className="hidden md:inline float-right"
-        />
-        <div className="text-center flex flex-col h-full">
-          <span className="text-[#622400] text-2xl md:text-4xl py-6 md:py-0 md:mt-[15%]">
+        <div className="text-center flex flex-col h-full relative">
+          <span className="text-[#622400] text-4xl md:text-6xl font-medium py-3 md:py-0 mt-auto">
             DISCOVER WEDSY&#39;S MAGIC
-          </span>
-          <span className="hidden md:block text-[#622400] md:text-8xl">
-            MAGIC
           </span>
           <span className="hidden md:block ">
             MEMORIES MADE EASY, NO HASSLES TO SEE
           </span>
-          <span className="hidden md:block mt-16 text-left ml-8">
-            Share Your Desires - Where wedding dreams catch fire.
-          </span>
-          <span className="hidden md:block text-sm mt-auto mb-4 ml-auto">
-            Let us bring your wedding vision to life. Your dream wedding, along
-            with a free consultation, is just a click away! 🌟
-          </span>
+          <Image
+            src="/assets/images/discover.png"
+            alt="Decor"
+            width={0}
+            height={0}
+            sizes="60vh"
+            className="mx-auto hidden md:block"
+            style={{ height: "80vh", width: "auto" }}
+          />
+          <Image
+            src="/assets/images/discover-mobile.png"
+            alt="Decor"
+            width={0}
+            height={0}
+            sizes="60vh"
+            className="mx-auto block md:hidden"
+            style={{ height: "80vh", width: "auto" }}
+          />
         </div>
       </main>
-      <section className={`${styles.section__2} flex flex-col py-16 gap-6`}>
-        <span className="text-4xl">
-          Say <span className="text-[#D33467]">I DO</span>
-          <br />
+      <section className={`${styles.section__1} flex flex-col md:py-16 gap-6`}>
+        <Image
+          src="/assets/background/bg-section-1-mobile.png"
+          alt="Decor"
+          width={0}
+          height={0}
+          sizes="100%"
+          style={{ width: "100%", height: "auto" }}
+          className="md:hidden"
+        />
+        <span className="text-2xl md:text-4xl -mt-16 md:mt-0 bg-white md:bg-transparent relative">
+          <span className="flex gap-2">
+            Say <span className="text-[#D33467] flex">I DO </span>
+            <Image
+              src={tickGif}
+              alt="Decor"
+              width={0}
+              height={0}
+              sizes="100%"
+              style={{ width: "1em", height: "auto" }}
+            />
+          </span>
+          {/* <br /> */}
           To Expert Wedding Planning!
         </span>
-        <p className="w-1/3">
+        <p className="md:w-1/3 bg-white md:bg-transparent">
           Are you ready to say ‘I Do’ to a wedding that exceeds your wildest
           dreams? Our certified wedding planners are here to make it happen. Get
           a free consultation and say goodbye to wedding planning stress and
           hello to seamless perfection.{" "}
         </p>
         {data.secondary.success ? (
-          <p className="w-1/3">
+          <p className="md:w-1/3">
             Your Wedsy Wedding Manager will contact you and assist you in
             choosing the best!
           </p>
@@ -266,7 +368,7 @@ export default function Home() {
                 })
               }
               name="name"
-              className="w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
+              className="md:w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
             />
             <input
               type="text"
@@ -279,7 +381,7 @@ export default function Home() {
                 })
               }
               name="phone"
-              className="w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
+              className="md:w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
             />
             {data.secondary.otpSent && (
               <input
@@ -293,7 +395,7 @@ export default function Home() {
                   })
                 }
                 name="otp"
-                className="w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
+                className="md:w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
               />
             )}
             {data.secondary.message && (
@@ -301,7 +403,7 @@ export default function Home() {
             )}
             <button
               type="submit"
-              className="w-1/4 rounded-full bg-black text-white py-2 disabled:bg-black/50"
+              className="md:w-1/4 rounded-full bg-black text-white py-2 disabled:bg-black/50"
               disabled={
                 !data.secondary.name ||
                 !data.secondary.phone ||
@@ -325,7 +427,9 @@ export default function Home() {
           </>
         )}
       </section>
-      <section className="flex flex-col gap-12 py-16 px-24">
+      <section
+        className={`${styles.section__2} flex flex-col gap-12 py-16 px-24`}
+      >
         <p className="text-[#D33467] flex font-medium gap-2">
           <span className="text-6xl">THE BEST</span>
           <span className="text-xl flex flex-col">
@@ -363,92 +467,232 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="w-screen mt-12">
+      <section className="w-full mt-12">
         <div className="relative overflow-y-hidden">
-          <p className="text-[#840032] font-semibold text-4xl text-center absolute w-full top-0 z-50">
+          <BsArrowLeftShort
+            size={48}
+            className="cursor-pointer scale-[0.5] md:scale-[1] absolute top-1/2 -translate-y-1/2 z-40 rounded-full bg-white left-6"
+            onClick={() => {
+              let length = decorList.length;
+              let item = decorIndex;
+              if (item === 0) {
+                item = length - 1;
+              } else {
+                item--;
+              }
+              setDecorIndex(item);
+            }}
+          />
+          <BsArrowRightShort
+            size={48}
+            className="cursor-pointer scale-[0.5] md:scale-[1] absolute top-1/2 -translate-y-1/2 z-40 rounded-full bg-white right-6"
+            onClick={() => {
+              let length = decorList.length;
+              let item = decorIndex;
+              if (item === length - 1) {
+                item = 0;
+              } else {
+                item++;
+              }
+              setDecorIndex(item);
+            }}
+          />
+          <p className="text-[#840032] font-semibold text-5xl text-center absolute w-full top-0 z-40">
             WEDDING STORE
           </p>
-          <p className="font-medium text-2xl text-center absolute w-full bottom-0 z-50">
-            Stage
+          <p className="font-medium text-2xl text-center absolute w-full bottom-0 z-40">
+            {decorList[decorIndex].id}
           </p>
           <div className="absolute -top-14 bg-white z-10 h-28 w-full rounded-br-[100%] rounded-bl-[100%]" />
           <div className="absolute -bottom-14 bg-white z-10 h-28 w-full rounded-tr-[100%] rounded-tl-[100%]" />
-          <div className="flex overflow-x-hidden overflow-y-hidden gap-3 flex-row relative items-center flex-nowrap">
-            {/* <div className="relative w-1/5">
-              <Image
-                src="/assets/images/pathway.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-              />
-            </div> */}
-            <div className="relative w-1/5">
-              <Image
-                src="/assets/images/entrance.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-              />
-            </div>
-            <div className="relative w-1/5">
-              <Image
-                src="/assets/images/stage.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-              />
-            </div>
-            <div className="relative w-1/5">
-              <Image
-                src="/assets/images/mandap.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-              />
-            </div>
-            <div className="relative w-1/5">
-              <Image
-                src="/assets/images/photobooth.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-              />
-            </div>
-            <div className="relative w-1/5">
-              <Image
-                src="/assets/images/nameboard.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-              />
-            </div>
+          <div
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            className="hidden md:flex overflow-x-hidden overflow-y-hidden gap-3 flex-row relative items-center flex-nowrap"
+          >
+            {tempDecorList.map((item, index) => (
+              <Link
+                href={`/decor/view?category=${decorList[decorIndex].id}`}
+                className={`relative w-1/5`}
+                key={item.id}
+              >
+                <Image
+                  src={item.image}
+                  alt="Decor"
+                  width={0}
+                  height={0}
+                  sizes="100%"
+                  style={{ width: "100%", height: "auto" }}
+                  className=""
+                />
+              </Link>
+            ))}
+          </div>
+          <div className="flex md:hidden overflow-x-hidden overflow-y-hidden gap-3 flex-row relative items-center flex-nowrap">
+            {tempDecorList
+              .filter((item, index) => index !== 0 && index !== 4)
+              .map((item, index) => (
+                <Link
+                  href={`/decor/view?category=${decorList[decorIndex].id}`}
+                  className={`relative w-1/3`}
+                  key={item.id}
+                >
+                  <Image
+                    src={item.image}
+                    alt="Decor"
+                    width={0}
+                    height={0}
+                    sizes="100%"
+                    style={{ width: "100%", height: "auto" }}
+                  />
+                </Link>
+              ))}
           </div>
         </div>
-        <div className="z-20 flex flex-row items-center justify-around px-12 py-8">
-          <p className="text-rose-900 w-2/3">
-            Your one-stop shop for affordable and elegant weddings. Simplify
-            planning with fixed-price stage decor, creative entry ideas, stylish
-            furniture rentals, and more. Where affordability meets creativity
-            for your special day.
-          </p>
+        <div className="z-20 flex flex-col md:flex-row items-center justify-around px-12 py-8">
+          <p className="text-rose-900 w-2/3">{decorList[decorIndex].text}</p>
           <Link
-            href={"/decor"}
-            className="bg-rose-900 rounded-full p-1 px-8 text-white w-max"
+            href={`/decor/view?category=${decorList[decorIndex].id}`}
+            className="bg-rose-900 rounded-full p-1 px-8 text-white w-max uppercase"
           >
             Explore Now
           </Link>
+        </div>
+      </section>
+      <section className="w-full px-16 py-12 ">
+        <p className="font-semibold text-4xl mb-12">
+          PLAN YOUR EVENT NOW WITH OUR NEW EVENT TOOL!
+        </p>
+        <div className="flex gap-6 relative">
+          <div className="flex flex-col gap-8 ">
+            <p className="text-xl w-2/3">
+              Explore the ease of planning with our event tool at Wedsy.
+            </p>
+            <p className="text-xl w-2/3">
+              Utilize the tool to shortlist and choose your decorations
+              effortlessly - all in one place, at Wedsy.
+            </p>
+            <Link
+              href={`/event`}
+              className="bg-rose-900 rounded-full p-1 px-16 text-white w-max mx-auto mt-auto mb-12"
+            >
+              Try Now!
+            </Link>
+          </div>
+          <Image
+            src="/assets/images/event-tool.png"
+            alt="Decor"
+            width={0}
+            height={0}
+            sizes="20%"
+            style={{ width: "20%", height: "auto", marginLeft: "auto" }}
+          />
+        </div>
+      </section>
+      <section className="w-full relative">
+        <Image
+          src={pinkBgGif}
+          alt="Decor"
+          width={0}
+          height={0}
+          sizes="100%"
+          style={{ width: "100%", height: "auto" }}
+          className="absolute top-0 -z-10"
+        />
+        <div className="flex p-4 md:py-16 md:px-24 flex-row items-center">
+          <div className="p-4 w-2/3 self-stretch flex flex-col gap-4">
+            <p className="font-semibold md:text-4xl relative flex flex-row gap-2 relative">
+              Customers{" "}
+              <Image
+                src={heartGif}
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "1em", height: "auto" }}
+              />{" "}
+              Wedsy
+            </p>
+            <Rating>
+              <p className="ml-2 text-lg font-bold">4.8</p>
+              <Rating size="md">
+                <Rating.Star />
+                <Rating.Star />
+                <Rating.Star />
+                <Rating.Star />
+                <Rating.Star filled={true} />
+              </Rating>
+              <FcGoogle size={24} className="ml-2" />
+            </Rating>
+            <p className="">
+              Customers love Wedsy for its seamless wedding planning experience,
+              offering a curated selection of wewdding exxentials and
+              personalised services that simplfy the process and make their
+              special day truly memorable
+            </p>
+            <div className="mt-auto mb-4 w-2/3 mx-auto">
+              <p>
+                {
+                  "“Very reliable and systematic team that brings your vision to life and require no repeated follow up. so happy to have had them do the decor for my engagement. All the best to the team. “"
+                }
+              </p>
+              <p className="text-right">-Anju alex</p>
+            </div>
+          </div>
+          <div className="w-1/3 relative">
+            <Image
+              src="/assets/images/testimonial.png"
+              alt="Decor"
+              width={0}
+              height={0}
+              sizes="100%"
+              style={{ width: "80%", height: "auto" }}
+              className="mx-auto"
+            />
+          </div>
+        </div>
+      </section>
+      <section className="px-16 py-12">
+        <p className="text-center text-rose-900 text-2xl font-semibold tracking-wider uppercase">
+          {
+            "“ A wedding is not just a day, it's a journey, a story, and a promise of a lifetime “"
+          }
+        </p>
+      </section>
+      <section className="mt-8 mb-8">
+        <div className="w-full py-12 relative">
+          <Image
+            src="/assets/images/couple.png"
+            alt="flower"
+            width={0}
+            height={0}
+            sizes="100%"
+            className="absolute bottom-0 right-12"
+            style={{ height: "20em", width: "auto" }}
+          />
+          <div className="w-1/2 bg-gradient-to-t from-rose-900 to-transparent rounded-bl-3xl p-6 px-8 translate-x-full relative">
+            <Image
+              src="/assets/images/flowers-1.png"
+              alt="flower"
+              width={0}
+              height={0}
+              sizes="100%"
+              className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2"
+              style={{ height: "8em", width: "auto" }}
+            />
+            <div className="flex flex-col items-end max-w-max">
+              <span className="font-medium text-2xl text-rose-900 tracking-[0.4em]">
+                JOIN NOW
+              </span>
+              <Link href={"/login"}>
+                <BsArrowRightShort
+                  size={48}
+                  className="cursor-pointer scale-[0.5] md:scale-[1] rounded-full bg-gradient-to-b from-rose-900/0 to-rose-900"
+                  color="white"
+                />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </>
