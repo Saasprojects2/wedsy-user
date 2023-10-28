@@ -1,7 +1,6 @@
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import "@/styles/globals.css";
-import "react-multi-carousel/lib/styles.css";
 import { Spinner } from "flowbite-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
