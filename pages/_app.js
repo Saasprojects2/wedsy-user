@@ -1,9 +1,11 @@
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import "@/styles/globals.css";
+import "react-multi-carousel/lib/styles.css";
 import { Spinner } from "flowbite-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import Script from "next/script";
 
 function App({ Component, pageProps }) {
   const router = useRouter();
@@ -73,6 +75,12 @@ function App({ Component, pageProps }) {
     </div>
   ) : (
     <>
+      <Script
+        type="text/javascript"
+        src="https://d3mkw6s8thqya7.cloudfront.net/integration-plugin.js"
+        id="aisensy-wa-widget"
+        widget-id="1GL46l"
+      />
       <Header userLoggedIn={!logIn} user={user} Logout={Logout} />
       <Component {...pageProps} userLoggedIn={!logIn} user={user} />
       <Footer />
