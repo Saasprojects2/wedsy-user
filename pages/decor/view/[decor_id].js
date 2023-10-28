@@ -76,7 +76,7 @@ function DecorListing({ similarDecor, decor, userLoggedIn }) {
   return (
     <>
       <div className="md:p-8 grid grid-cols-1 md:grid-cols-4 md:gap-8">
-        <div className="order-last md:order-first border-t md:border-t-0 md:border-r border-black flex flex-col md:divide-y gap-4 md:divide-black md:pr-6">
+        <div className="order-last md:order-first border-t md:border-t-0 md:border-r-0 border-black flex flex-col md:divide-y gap-4 md:divide-black md:pr-6">
           <p className="text-xl font-medium hidden md:block">Description</p>
           <div className="flex flex-col pt-4 px-4 md:px-0">
             <p className="text-lg flex flex-row justify-between">
@@ -113,7 +113,7 @@ function DecorListing({ similarDecor, decor, userLoggedIn }) {
             <div className="w-full md:w-1/2 mb-4">
               <SearchBar />
             </div>
-            <div className="flex flex-row justify-between mb-6">
+            <div className="flex flex-row justify-between mt-8 mb-6">
               <p className="font-semibold text-2xl">{decor.name}</p>
               <Rating size={"md"}>
                 <Rating.Star />
@@ -124,7 +124,7 @@ function DecorListing({ similarDecor, decor, userLoggedIn }) {
               </Rating>
             </div>
             <Image
-              src={`/assets/temp/d1.png`}
+              src={decor.image}
               alt="Decor"
               width={0}
               height={0}

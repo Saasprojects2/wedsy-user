@@ -93,7 +93,7 @@ export default function EventTool() {
             <BsArrowRight sizes={24} />
           </div>
           <div className="flex flex-col gap-2 ">
-            {events.map((item, index) => (
+            {events?.map((item, index) => (
               <div className="flex flex-row justify-between" key={index}>
                 <Link href={`/event/${item._id}`}>
                   {index + 1}. {item.name}

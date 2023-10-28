@@ -4,8 +4,10 @@ import DecorCard from "@/components/cards/DecorCard";
 import { useState, useEffect, useRef } from "react";
 import RangeSlider from "@/components/slider/RangeSlider";
 import SearchBar from "@/components/searchBar/SearchBar";
+import { useRouter } from "next/router";
 
 function DecorListing({ data }) {
+  const router = useRouter();
   const [filters, setFilters] = useState({
     open: { occasion: true, colours: true, priceRange: true },
     priceRange: [3000, 115000],
@@ -14,12 +16,11 @@ function DecorListing({ data }) {
     occasionList: [
       "Reception",
       "Engagement",
+      "Sangeet",
       "Wedding",
-      "Muhurtham",
       "Haldi",
       "Mehendi",
-      "Sangeet",
-      "Anniversaries",
+      "Muhurtham",
     ],
     priceRangeLimit: [0, 200000],
     coloursList: ["red"],
@@ -32,8 +33,19 @@ function DecorListing({ data }) {
     if (loading) return;
     setLoading(true);
     try {
+      console.log(router.query.category, router.query);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/decor?page=${page}`
+        `${process.env.NEXT_PUBLIC_API_URL}/decor?page=${page}${
+          router.query.category ? `&category=${router.query.category}` : ""
+        }${
+          filters.occasion.length > 0
+            ? `&occassion=${filters.occasion.join("|")}`
+            : ""
+        }${
+          filters.colours.length > 0
+            ? `&color=${filters.colours.join("|")}`
+            : ""
+        }`
       );
       const tempData = await response.json();
       setList([...list, ...tempData]);
@@ -44,6 +56,10 @@ function DecorListing({ data }) {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    setPage(1);
+    setList([]);
+  }, [filters.colours, filters.occasion, filters.priceRange, router.query]);
 
   useEffect(() => {
     const options = {
@@ -238,7 +254,12 @@ function DecorListing({ data }) {
 
 export async function getServerSideProps(context) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/decor`);
+    let { query } = context;
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/decor${
+        query.category ? `?category=${query.category}` : ""
+      }`
+    );
     const data = await response.json();
     return {
       props: {

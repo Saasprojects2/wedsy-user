@@ -32,7 +32,7 @@ function Decor({ bestSeller, popular }) {
           >
             View More
           </Link>
-          <div className="hidden md:block absolute top-5 md:-top-24 right-0 md:-right-24 leading-[36px] md:leading-[200px] text-white text-opacity-0 text-[36px] md:text-[200px] font-normal font-['Maitree'] font-outline-1">
+          <div className="hidden md:block absolute top-5 md:-top-16 right-0 md:-right-20 leading-[36px] md:leading-[160px] text-white text-opacity-0 text-[36px] md:text-[160px] font-normal font-['Maitree'] font-outline-1">
             DECORE
           </div>
         </div>
@@ -247,7 +247,7 @@ function Decor({ bestSeller, popular }) {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">PATHWAY</p>
             </div>
           </div>
@@ -260,7 +260,7 @@ function Decor({ bestSeller, popular }) {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">ENTRANCE</p>
             </div>
           </div>
@@ -273,7 +273,7 @@ function Decor({ bestSeller, popular }) {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">STAGE</p>
             </div>
           </div>
@@ -286,7 +286,7 @@ function Decor({ bestSeller, popular }) {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">MANDAP</p>
             </div>
           </div>
@@ -299,7 +299,7 @@ function Decor({ bestSeller, popular }) {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">PHOTOBOOTH</p>
             </div>
           </div>
@@ -312,7 +312,7 @@ function Decor({ bestSeller, popular }) {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-transparent via-white/60 via-50% absolute bottom-0 py-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">NAMEBOARD</p>
             </div>
           </div>
