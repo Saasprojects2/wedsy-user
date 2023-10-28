@@ -5,17 +5,23 @@ export default function DecorCard({ decor, className }) {
   const { _id, thumbnail, name } = decor;
   return (
     <>
-      <Link href={`/decor/view/${_id}`} className={`relative ${className}`}>
-        <Image
-          // src={`/assets/temp/d1.png`}
-          src={`${thumbnail.trim()}`}
-          alt="Decor"
-          width={0}
-          height={0}
-          sizes="100%"
-          style={{ width: "100%", height: "auto" }}
-          className="rounded-xl"
-        />
+      <Link
+        href={`/decor/view/${_id}`}
+        className={`${className}`}
+      >
+        <div className={`relative pt-[56.25%]`}>
+          <Image
+            src={`${thumbnail}`}
+            alt="Decor"
+            // width={0}
+            // height={0}
+            sizes="100%"
+            layout={"fill"}
+            objectFit="cover"
+            // style={{ width: "100%", height: "auto" }}
+            className="rounded-xl"
+          />
+        </div>
         <p className="mt-3 pl-2 font-semibold">{name}</p>
         <p className="pl-2  font-semibold">₹ {decor.productInfo.costPrice}</p>
       </Link>
