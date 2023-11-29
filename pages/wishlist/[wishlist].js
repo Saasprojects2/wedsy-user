@@ -38,10 +38,10 @@ function Wishlist() {
             />
             <p className="font-medium text-center">VENUES</p>
           </Link>
-          {/* <div className="bg-white rounded-lg shadow-xl p-3 cursor-pointer">
+          <div className="bg-white rounded-lg shadow-xl p-3 cursor-pointer">
             <AiOutlinePlusSquare size={96} className="mx-auto my-12 " />
             <p className="font-medium text-center">+ CREATE A NEW COLLECTION</p>
-          </div> */}
+          </div>
         </div>
       </div>
     </>
