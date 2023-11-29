@@ -65,11 +65,14 @@ export default function Header({ userLoggedIn, user, Logout }) {
           >
             {userLoggedIn ? (
               <>
-                <Dropdown.Header>
+                <Dropdown.Header as={Link} href={"/my-account"}>
                   <span className="block text-sm">{user.name}</span>
                 </Dropdown.Header>
-                <Dropdown.Item>Profile</Dropdown.Item>
-                <Dropdown.Item>My Bookings</Dropdown.Item>
+                <Dropdown.Item as={Link} href={"/my-account"}>
+                  My Account
+                </Dropdown.Item>
+                <Dropdown.Item>Orders</Dropdown.Item>
+                <Dropdown.Item>Events</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
                   className="flex gap-2"

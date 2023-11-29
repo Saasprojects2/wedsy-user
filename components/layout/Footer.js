@@ -21,8 +21,10 @@ export default function FooterComponent() {
                 col
                 className="text-white uppercase font-medium space-y-2 md:space-y-6"
               >
-                <Footer.Link href="#">TERMS & CONDITIONS</Footer.Link>
-                <Footer.Link href="#">PRIVACY POLICY</Footer.Link>
+                <Footer.Link href="/terms-and-conditions">
+                  TERMS & CONDITIONS
+                </Footer.Link>
+                <Footer.Link href="/privacy-policy">PRIVACY POLICY</Footer.Link>
                 <Footer.Link href="tel:+916364849760">
                   CALL US AT +91 6364849760
                 </Footer.Link>
