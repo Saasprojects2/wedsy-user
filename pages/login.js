@@ -2,6 +2,7 @@ import { Spinner } from "flowbite-react";
 import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { processMobileNumber } from "@/utils/phoneNumber";
 
 export default function Login() {
   let router = useRouter();
@@ -26,7 +27,7 @@ export default function Login() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        phone: `+91${data.phone}`,
+        phone: processMobileNumber(data.phone),
       }),
     })
       .then((response) => response.json())
@@ -54,7 +55,7 @@ export default function Login() {
       },
       body: JSON.stringify({
         name: data.name,
-        phone: `+91${data.phone}`,
+        phone: processMobileNumber(data.phone),
         Otp: data.Otp,
         ReferenceId: data.ReferenceId,
       }),
@@ -74,7 +75,7 @@ export default function Login() {
             message: "",
           });
           localStorage.setItem("token", response.token);
-          router.push("/profile");
+          router.push("/my-account");
         } else {
           setData({
             ...data,
@@ -160,7 +161,8 @@ export default function Login() {
             disabled={
               !data.name ||
               !data.phone ||
-              !/^\d{10}$/.test(data.phone) ||
+              // !/^\d{10}$/.test(data.phone) ||
+              !processMobileNumber(data.phone) ||
               data.loading ||
               (data.otpSent ? !data.Otp : false)
             }
