@@ -5,10 +5,7 @@ export default function DecorCard({ decor, className }) {
   const { _id, thumbnail, name } = decor;
   return (
     <>
-      <Link
-        href={`/decor/view/${_id}`}
-        className={`${className}`}
-      >
+      <Link href={`/decor/view/${_id}`} className={`${className}`}>
         <div className={`relative pt-[56.25%]`}>
           <Image
             src={`${thumbnail}`}
@@ -23,7 +20,12 @@ export default function DecorCard({ decor, className }) {
           />
         </div>
         <p className="mt-3 pl-2 font-semibold">{name}</p>
-        <p className="pl-2  font-semibold">₹ {decor.productInfo.costPrice}</p>
+        <p className="pl-2  font-semibold">
+          ₹{" "}
+          {decor.productInfo.variant.artificialFlowers.sellingPrice ||
+            decor.productInfo.variant.mixedFlowers.sellingPrice ||
+            decor.productInfo.variant.naturalFlowers.sellingPrice}
+        </p>
       </Link>
     </>
   );
