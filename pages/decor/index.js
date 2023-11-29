@@ -32,7 +32,7 @@ function Decor({ bestSeller, popular }) {
           >
             View More
           </Link>
-          <div className="hidden md:block absolute top-5 md:-top-16 right-0 md:-right-20 leading-[36px] md:leading-[160px] text-white text-opacity-0 text-[36px] md:text-[160px] font-normal font-['Maitree'] font-outline-1">
+          <div className="hidden md:block absolute top-5 md:-top-12 right-0 md:-right-12 leading-[36px] md:leading-[120px] text-white text-opacity-0 text-[36px] md:text-[120px] font-normal font-['Maitree'] font-outline-1">
             DECORE
           </div>
         </div>
@@ -81,18 +81,20 @@ function Decor({ bestSeller, popular }) {
       <section className="bg-[#840032] text-white font-semibold">
         <div className="relative flex overflow-x-hidden">
           <div className="py-4 animate-marquee whitespace-nowrap">
-            <span className="mx-4 text-xl">Marquee Item 1</span>
-            <span className="mx-4 text-xl">Marquee Item 2</span>
-            <span className="mx-4 text-xl">Marquee Item 3</span>
-            <span className="mx-4 text-xl">Marquee Item 4</span>
-            <span className="mx-4 text-xl">Marquee Item 5</span>
+            <span className="mx-4 text-xl text-white">WEDDINGS MADE EASY</span>
+            <span className="mx-4 text-xl text-black">WEDDINGS MADE EASY</span>
+            <span className="mx-4 text-xl text-white">WEDDINGS MADE EASY</span>
+            <span className="mx-4 text-xl text-black">WEDDINGS MADE EASY</span>
+            <span className="mx-4 text-xl text-white">WEDDINGS MADE EASY</span>
+            <span className="mx-4 text-xl text-black">WEDDINGS MADE EASY</span>
           </div>
           <div className="absolute top-0 py-4 animate-marquee2 whitespace-nowrap">
-            <span className="mx-4 text-xl">Marquee Item 1</span>
-            <span className="mx-4 text-xl">Marquee Item 2</span>
-            <span className="mx-4 text-xl">Marquee Item 3</span>
-            <span className="mx-4 text-xl">Marquee Item 4</span>
-            <span className="mx-4 text-xl">Marquee Item 5</span>
+            <span className="mx-4 text-xl text-white">WEDDINGS MADE EASY</span>
+            <span className="mx-4 text-xl text-black">WEDDINGS MADE EASY</span>
+            <span className="mx-4 text-xl text-white">WEDDINGS MADE EASY</span>
+            <span className="mx-4 text-xl text-black">WEDDINGS MADE EASY</span>
+            <span className="mx-4 text-xl text-white">WEDDINGS MADE EASY</span>
+            <span className="mx-4 text-xl text-black">WEDDINGS MADE EASY</span>
           </div>
         </div>
       </section>
@@ -238,7 +240,10 @@ function Decor({ bestSeller, popular }) {
           CATEGORIES
         </p>
         <div className=" overflow-x-hidden overflow-y-hidden mt-8 md:gap-3 flex flex-row relative">
-          <div className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow">
+          <Link
+            href={`/decor/view?category=Pathway`}
+            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+          >
             <Image
               src="/assets/images/pathway.png"
               alt="Decor"
@@ -250,8 +255,11 @@ function Decor({ bestSeller, popular }) {
             <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">PATHWAY</p>
             </div>
-          </div>
-          <div className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow">
+          </Link>
+          <Link
+            href={`/decor/view?category=Entrance`}
+            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+          >
             <Image
               src="/assets/images/entrance.png"
               alt="Decor"
@@ -263,8 +271,11 @@ function Decor({ bestSeller, popular }) {
             <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">ENTRANCE</p>
             </div>
-          </div>
-          <div className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow">
+          </Link>
+          <Link
+            href={`/decor/view?category=Stage`}
+            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+          >
             <Image
               src="/assets/images/stage.png"
               alt="Decor"
@@ -276,8 +287,11 @@ function Decor({ bestSeller, popular }) {
             <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">STAGE</p>
             </div>
-          </div>
-          <div className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow">
+          </Link>
+          <Link
+            href={`/decor/view?category=Mandap`}
+            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+          >
             <Image
               src="/assets/images/mandap.png"
               alt="Decor"
@@ -289,8 +303,11 @@ function Decor({ bestSeller, popular }) {
             <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">MANDAP</p>
             </div>
-          </div>
-          <div className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow">
+          </Link>
+          <Link
+            href={`/decor/view?category=Photobooth`}
+            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+          >
             <Image
               src="/assets/images/photobooth.png"
               alt="Decor"
@@ -302,8 +319,11 @@ function Decor({ bestSeller, popular }) {
             <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">PHOTOBOOTH</p>
             </div>
-          </div>
-          <div className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow">
+          </Link>
+          <Link
+            href={`/decor/view?category=Nameboard`}
+            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+          >
             <Image
               src="/assets/images/nameboard.png"
               alt="Decor"
@@ -315,7 +335,7 @@ function Decor({ bestSeller, popular }) {
             <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">NAMEBOARD</p>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
       <div className="py-16 px-24 bg-gradient-to-b from-amber-100/0 via-amber-100/100 to-amber-100/100">
@@ -346,7 +366,7 @@ function Decor({ bestSeller, popular }) {
             className="cursor-pointer rounded-full bg-white"
           />
         </div>
-        <p className="md:mt-6 text-2xl md:text-3xl font-medium mb-8">
+        <p className="md:mt-24 text-2xl md:text-3xl font-medium mb-8">
           Have a decor in mind? Get an instant quote!
         </p>
         <div className="grid grid-cols-3">
@@ -427,8 +447,8 @@ export async function getServerSideProps(context) {
     const data = await response.json();
     return {
       props: {
-        bestSeller: data,
-        popular: data,
+        bestSeller: data.list,
+        popular: data.list,
       },
     };
   } catch (error) {
