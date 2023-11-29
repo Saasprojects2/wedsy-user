@@ -5,13 +5,15 @@ import { Spinner } from "flowbite-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Script from "next/script";
+import LoginModal from "@/components/layout/LoginModal";
 
 function App({ Component, pageProps }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [logIn, setLogIn] = useState(false);
   const [user, setUser] = useState({});
-  const restrictedPaths = ["/wishlist", "/profile", "/event"];
+  const [openLoginModal, setOpenLoginModal] = useState(false);
+  const restrictedPaths = ["/wishlist", "/my-account", "/event"];
   const isPathRestricted = () => {
     return (
       restrictedPaths.includes(router.pathname) ||
@@ -78,10 +80,23 @@ function App({ Component, pageProps }) {
         type="text/javascript"
         src="https://d3mkw6s8thqya7.cloudfront.net/integration-plugin.js"
         id="aisensy-wa-widget"
-        widget-id="1GL46l"
+        widget-id="I7ZLEV"
       />
       <Header userLoggedIn={!logIn} user={user} Logout={Logout} />
-      <Component {...pageProps} userLoggedIn={!logIn} user={user} />
+      <LoginModal
+        openLoginModal={openLoginModal}
+        setOpenLoginModal={setOpenLoginModal}
+        user={user}
+        logIn={logIn}
+        setLogIn={setLogIn}
+        CheckLogin={CheckLogin}
+      />
+      <Component
+        {...pageProps}
+        userLoggedIn={!logIn}
+        user={user}
+        setOpenLoginModal={setOpenLoginModal}
+      />
       <Footer />
     </>
   );

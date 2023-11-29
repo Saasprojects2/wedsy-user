@@ -12,6 +12,7 @@ import { FcGoogle } from "react-icons/fc";
 import pinkBgGif from "@/public/assets/gif/pink-bg.gif";
 import heartGif from "@/public/assets/gif/heart.gif";
 import tickGif from "@/public/assets/gif/tick.gif";
+import { processMobileNumber } from "@/utils/phoneNumber";
 
 export default function Home() {
   const decorList = [
@@ -80,7 +81,7 @@ export default function Home() {
       },
       body: JSON.stringify({
         name: data.main.name,
-        phone: `+91${data.main.phone}`,
+        phone: processMobileNumber(data.main.phone),
         verified: false,
         source: "Landing Screen",
       }),
@@ -109,7 +110,7 @@ export default function Home() {
       },
       body: JSON.stringify({
         name: data.secondary.name,
-        phone: `+91${data.secondary.phone}`,
+        phone: processMobileNumber(data.secondary.phone),
         verified: true,
         source: "Landing Page | Speak to Expert",
         Otp: data.secondary.Otp,
@@ -163,7 +164,7 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        phone: `+91${data.secondary.phone}`,
+        phone: processMobileNumber(data.secondary.phone),
       }),
     })
       .then((response) => response.json())
@@ -272,7 +273,8 @@ export default function Home() {
                   disabled={
                     !data.main.name ||
                     !data.main.phone ||
-                    !/^\d{10}$/.test(data.main.phone) ||
+                    // !/^\d{10}$/.test(data.main.phone) ||
+                    !processMobileNumber(data.main.phone) ||
                     data.main.loading
                   }
                   onClick={handleMainEnquiry}
@@ -319,154 +321,6 @@ export default function Home() {
           />
         </div>
       </main>
-      <section className={`${styles.section__1} flex flex-col md:py-16 gap-6`}>
-        <Image
-          src="/assets/background/bg-section-1-mobile.png"
-          alt="Decor"
-          width={0}
-          height={0}
-          sizes="100%"
-          style={{ width: "100%", height: "auto" }}
-          className="md:hidden"
-        />
-        <span className="text-2xl md:text-4xl -mt-16 md:mt-0 bg-white md:bg-transparent relative">
-          <span className="flex gap-2">
-            Say <span className="text-[#D33467] flex">I DO </span>
-            <Image
-              src={tickGif}
-              alt="Decor"
-              width={0}
-              height={0}
-              sizes="100%"
-              style={{ width: "1em", height: "auto" }}
-            />
-          </span>
-          {/* <br /> */}
-          To Expert Wedding Planning!
-        </span>
-        <p className="md:w-1/3 bg-white md:bg-transparent">
-          Are you ready to say ‘I Do’ to a wedding that exceeds your wildest
-          dreams? Our certified wedding planners are here to make it happen. Get
-          a free consultation and say goodbye to wedding planning stress and
-          hello to seamless perfection.{" "}
-        </p>
-        {data.secondary.success ? (
-          <p className="md:w-1/3">
-            Your Wedsy Wedding Manager will contact you and assist you in
-            choosing the best!
-          </p>
-        ) : (
-          <>
-            <input
-              type="text"
-              placeholder="NAME"
-              value={data.secondary.name}
-              onChange={(e) =>
-                setData({
-                  ...data,
-                  secondary: { ...data.secondary, name: e.target.value },
-                })
-              }
-              name="name"
-              className="md:w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
-            />
-            <input
-              type="text"
-              placeholder="PHONE NO."
-              value={data.secondary.phone}
-              onChange={(e) =>
-                setData({
-                  ...data,
-                  secondary: { ...data.secondary, phone: e.target.value },
-                })
-              }
-              name="phone"
-              className="md:w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
-            />
-            {data.secondary.otpSent && (
-              <input
-                type="text"
-                placeholder="OTP"
-                value={data.secondary.Otp}
-                onChange={(e) =>
-                  setData({
-                    ...data,
-                    secondary: { ...data.secondary, Otp: e.target.value },
-                  })
-                }
-                name="otp"
-                className="md:w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
-              />
-            )}
-            {data.secondary.message && (
-              <p className="text-red-500 w-1/4">{data.secondary.message}</p>
-            )}
-            <button
-              type="submit"
-              className="md:w-1/4 rounded-full bg-black text-white py-2 disabled:bg-black/50"
-              disabled={
-                !data.secondary.name ||
-                !data.secondary.phone ||
-                !/^\d{10}$/.test(data.secondary.phone) ||
-                data.secondary.loading ||
-                (data.secondary.otpSent ? !data.secondary.Otp : false)
-              }
-              onClick={() => {
-                data.secondary.otpSent ? handleSecondaryEnquiry() : SendOTP();
-              }}
-            >
-              {data.secondary.loading ? (
-                <>
-                  <Spinner size="sm" />
-                  <span className="pl-3">Loading...</span>
-                </>
-              ) : (
-                <>SUBMIT</>
-              )}
-            </button>
-          </>
-        )}
-      </section>
-      <section
-        className={`${styles.section__2} flex flex-col gap-12 py-16 px-24`}
-      >
-        <p className="text-[#D33467] flex font-medium gap-2">
-          <span className="text-6xl">THE BEST</span>
-          <span className="text-xl flex flex-col">
-            <span>IN</span>
-
-            <span>TOWN</span>
-          </span>
-          <span className="text-6xl">!</span>
-        </p>
-        <p className="text-center text-3xl">What Makes Wedsy Stand Out?</p>
-        <div className="flex flex-col md:flex-row gap-12 mx-auto">
-          <div className="text-center flex flex-col items-center gap-3">
-            <div className="bg-[#FFB8C0] flex justify-center rounded-3xl w-32 h-32">
-              <img className="m-auto" src="/assets/icons/easy.png" />
-            </div>
-            <span>Easy</span>
-          </div>
-          <div className="text-center flex flex-col items-center gap-3">
-            <div className="bg-[#D6FF79] flex justify-center rounded-3xl w-32 h-32">
-              <img className="m-auto" src="/assets/icons/price.png" />
-            </div>
-            <span>Unbeatable Pricing</span>
-          </div>
-          <div className="text-center flex flex-col items-center gap-3">
-            <div className="bg-[#F19A3E] flex justify-center rounded-3xl w-32 h-32">
-              <img className="m-auto" src="/assets/icons/quality.png" />
-            </div>
-            <span>Superior Quality</span>
-          </div>
-          <div className="text-center flex flex-col items-center gap-3">
-            <div className="bg-[#70D6FF] flex justify-center rounded-3xl w-32 h-32">
-              <img className="m-auto" src="/assets/icons/solutions.png" />
-            </div>
-            <span>Innovative Solutions</span>
-          </div>
-        </div>
-      </section>
       <section className="w-full mt-12">
         <div className="relative overflow-y-hidden">
           <BsArrowLeftShort
@@ -559,6 +413,156 @@ export default function Home() {
           </Link>
         </div>
       </section>
+      <section className={`${styles.section__1} flex flex-col md:py-16 gap-6`}>
+        <Image
+          src="/assets/background/bg-section-1-mobile.png"
+          alt="Decor"
+          width={0}
+          height={0}
+          sizes="100%"
+          style={{ width: "100%", height: "auto" }}
+          className="md:hidden"
+        />
+        <span className="text-2xl md:text-4xl -mt-16 md:mt-0 bg-white md:bg-transparent relative">
+          <span className="flex gap-2">
+            Say <span className="text-[#D33467] flex">I DO </span>
+            <Image
+              src={tickGif}
+              alt="Decor"
+              width={0}
+              height={0}
+              sizes="100%"
+              style={{ width: "1em", height: "auto" }}
+            />
+          </span>
+          {/* <br /> */}
+          To Expert Wedding Planning!
+        </span>
+        <p className="md:w-1/3 bg-white md:bg-transparent">
+          Are you ready to say ‘I Do’ to a wedding that exceeds your wildest
+          dreams? Our certified wedding planners are here to make it happen. Get
+          a free consultation and say goodbye to wedding planning stress and
+          hello to seamless perfection.{" "}
+        </p>
+        {data.secondary.success ? (
+          <p className="md:w-1/3">
+            Your Wedsy Wedding Manager will contact you and assist you in
+            choosing the best!
+          </p>
+        ) : (
+          <>
+            <input
+              type="text"
+              placeholder="NAME"
+              value={data.secondary.name}
+              onChange={(e) =>
+                setData({
+                  ...data,
+                  secondary: { ...data.secondary, name: e.target.value },
+                })
+              }
+              name="name"
+              className="md:w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
+            />
+            <input
+              type="text"
+              placeholder="PHONE NO."
+              value={data.secondary.phone}
+              onChange={(e) =>
+                setData({
+                  ...data,
+                  secondary: { ...data.secondary, phone: e.target.value },
+                })
+              }
+              name="phone"
+              className="md:w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
+            />
+            {data.secondary.otpSent && (
+              <input
+                type="text"
+                placeholder="OTP"
+                value={data.secondary.Otp}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    secondary: { ...data.secondary, Otp: e.target.value },
+                  })
+                }
+                name="otp"
+                className="md:w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
+              />
+            )}
+            {data.secondary.message && (
+              <p className="text-red-500 w-1/4">{data.secondary.message}</p>
+            )}
+            <button
+              type="submit"
+              className="md:w-1/4 rounded-full bg-black text-white py-2 disabled:bg-black/50"
+              disabled={
+                !data.secondary.name ||
+                !data.secondary.phone ||
+                // !/^\d{10}$/.test(data.secondary.phone) ||
+                processMobileNumber(data.secondary.phone) ||
+                data.secondary.loading ||
+                (data.secondary.otpSent ? !data.secondary.Otp : false)
+              }
+              onClick={() => {
+                data.secondary.otpSent ? handleSecondaryEnquiry() : SendOTP();
+              }}
+            >
+              {data.secondary.loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-3">Loading...</span>
+                </>
+              ) : (
+                <>SUBMIT</>
+              )}
+            </button>
+          </>
+        )}
+      </section>
+      <section
+        className={`${styles.section__2} flex flex-col gap-12 py-16 px-24`}
+      >
+        <p className="text-[#D33467] flex font-medium gap-2">
+          <span className="text-6xl">THE BEST</span>
+          <span className="text-xl flex flex-col">
+            <span>IN</span>
+
+            <span>TOWN</span>
+          </span>
+          <span className="text-6xl">!</span>
+        </p>
+        <p className="text-center text-3xl">What Makes Wedsy Stand Out?</p>
+        <div className="flex flex-col md:flex-row gap-12 mx-auto">
+          <div className="text-center flex flex-col items-center gap-3">
+            <div className="bg-[#FFB8C0] flex justify-center rounded-3xl w-32 h-32">
+              <img className="m-auto" src="/assets/icons/easy.png" />
+            </div>
+            <span>Easy</span>
+          </div>
+          <div className="text-center flex flex-col items-center gap-3">
+            <div className="bg-[#D6FF79] flex justify-center rounded-3xl w-32 h-32">
+              <img className="m-auto" src="/assets/icons/price.png" />
+            </div>
+            <span>Unbeatable Pricing</span>
+          </div>
+          <div className="text-center flex flex-col items-center gap-3">
+            <div className="bg-[#F19A3E] flex justify-center rounded-3xl w-32 h-32">
+              <img className="m-auto" src="/assets/icons/quality.png" />
+            </div>
+            <span>Superior Quality</span>
+          </div>
+          <div className="text-center flex flex-col items-center gap-3">
+            <div className="bg-[#70D6FF] flex justify-center rounded-3xl w-32 h-32">
+              <img className="m-auto" src="/assets/icons/solutions.png" />
+            </div>
+            <span>Innovative Solutions</span>
+          </div>
+        </div>
+      </section>
+
       <section className="w-full px-16 py-12 ">
         <p className="font-semibold text-4xl mb-12">
           PLAN YOUR EVENT NOW WITH OUR NEW EVENT TOOL!
@@ -596,7 +600,7 @@ export default function Home() {
           width={0}
           height={0}
           sizes="100%"
-          style={{ width: "100%", height: "auto" }}
+          style={{ width: "100%", height: "50%" }}
           className="absolute top-0 -z-10"
         />
         <div className="flex p-4 md:py-16 md:px-24 flex-row items-center">
@@ -652,15 +656,13 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="px-16 py-12">
-        <p className="text-center text-rose-900 text-2xl font-semibold tracking-wider uppercase">
-          {
-            "“ A wedding is not just a day, it's a journey, a story, and a promise of a lifetime “"
-          }
-        </p>
-      </section>
       <section className="mt-8 mb-8">
         <div className="w-full py-12 relative">
+          <p className="text-center text-rose-900 text-xl font-semibold tracking-wider uppercase px-16 w-1/2 translate-y-full">
+            {
+              "“ A wedding is not just a day, it's a journey, a story, and a promise of a lifetime “"
+            }
+          </p>
           <Image
             src="/assets/images/couple.png"
             alt="flower"
