@@ -272,7 +272,10 @@ export default function EventTool() {
                       {event.eventDays
                         ?.filter((item) => item._id === eventDay)[0]
                         ?.decorItems.map((item, index) => (
-                          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                          <Table.Row
+                            className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                            key={index}
+                          >
                             <Table.Cell>{index + 1}</Table.Cell>
                             <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                               [{item.decor.category}] {item.decor.name}
@@ -317,13 +320,15 @@ export default function EventTool() {
                         to payment once approved by your designated planner!
                       </p>
                       <p className="text-sm">
-                        (You'll be notified on your email and phone number)
+                        {"(You'll be notified on your email and phone number)"}
                       </p>
                     </div>
                   )
                 ) : (
                   <button
-                    onClick={()=>{finalizeEventDay({ eventDay });}}
+                    onClick={() => {
+                      finalizeEventDay({ eventDay });
+                    }}
                     className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
                   >
                     Finalize
