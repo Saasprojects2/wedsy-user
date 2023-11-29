@@ -62,3 +62,43 @@ body {
   left: 100%;
   margin-left: 15px;
 }
+
+#sidebar div {
+  background-color: #840032 !important;
+}
+
+/* Scrollbar CSS */
+/* Width and color of the scrollbar track */
+::-webkit-scrollbar {
+  width: 8px; /* You can adjust the width */
+}
+
+/* Background of the scrollbar track */
+::-webkit-scrollbar-track {
+  background: #dedede; /* Change the background color */
+}
+
+/* Color and radius of the scrollbar handle */
+::-webkit-scrollbar-thumb {
+  background: #840032; /* Change the handle color */
+  border-radius: 5px; /* Adjust the handle's border radius */
+}
+
+/* Display on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #840032; /* Change the handle color on hover */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0;
+}
+.hide-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.hide-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 0;
+}
+.hide-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: transparent;
+}
