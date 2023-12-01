@@ -8,7 +8,7 @@ import { BiEditAlt } from "react-icons/bi";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 
-export default function EventTool() {
+export default function EventTool({ user }) {
   const router = useRouter();
   const [event, setEvent] = useState({});
   const [eventDay, setEventDay] = useState("");
@@ -58,6 +58,95 @@ export default function EventTool() {
         if (response.message === "success") {
           fetchEvent();
           alert("Finalized the event!");
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
+  const initializeRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+
+      document.body.appendChild(script);
+    });
+  };
+  const makePayment = async ({ order_id, amount }) => {
+    const res = await initializeRazorpay();
+    if (!res) {
+      alert("Razorpay SDK Failed to load");
+      return;
+    }
+    var options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
+      name: "Wedsy",
+      currency: "INR",
+      amount: amount,
+      order_id: order_id,
+      description: "Your Event Payment",
+      // image: "https://manuarora.in/logo.png",
+      handler: function (response) {
+        // Validate payment at server - using webhooks is a better idea.
+        // console.log(response);
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature);
+        UpdatePayment({ order_id, response });
+      },
+      prefill: {
+        name: user.name,
+        email: user.email,
+        contact: user.phone,
+      },
+    };
+
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  };
+  const CreatePayment = ({ eventDay }) => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ eventId: event_id, eventDayId: eventDay }),
+    })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((response) => {
+        if (response.message === "success") {
+          makePayment({ order_id: response.order_id, amount: response.amount });
+          // fetchEvent();
+          // alert("Finalized the event!");
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
+  const UpdatePayment = ({ response, order_id }) => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/${order_id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ response }),
+    })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((response) => {
+        if (response.message === "success") {
+          // makePayment({ order_id: response.order_id, amount: response.amount });
+          // fetchEvent();
+          // alert("Finalized the event!");
         }
       })
       .catch((error) => {
@@ -308,9 +397,22 @@ export default function EventTool() {
                       <p className="text-lg font-medium">
                         Your design has been approved!
                       </p>
-                      <button className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12">
-                        Proceed with Payment
-                      </button>
+                      {event.eventDays?.filter(
+                        (item) => item._id === eventDay
+                      )[0]?.status.paymentDone ? (
+                        <p className="text-lg font-medium">
+                          Your payment is done!
+                        </p>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            CreatePayment({ eventDay });
+                          }}
+                          className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
+                        >
+                          Proceed with Payment
+                        </button>
+                      )}
                     </div>
                   ) : (
                     <div className="text-center py-8 flex flex-col gap-2">
