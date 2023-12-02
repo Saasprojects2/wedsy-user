@@ -153,7 +153,7 @@ export default function Payments({ user }) {
                 (rec) => rec._id === item.eventDay
               );
               return (
-                <div className="border-2 rounded-2xl p-4 relative">
+                <div className="border-2 rounded-2xl p-4 relative" key={index}>
                   <p className="text-xl">
                     {item.event.name}
                     {" | "}
