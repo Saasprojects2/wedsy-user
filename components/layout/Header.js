@@ -71,8 +71,8 @@ export default function Header({ userLoggedIn, user, Logout }) {
                 <Dropdown.Item as={Link} href={"/my-account"}>
                   My Account
                 </Dropdown.Item>
-                <Dropdown.Item>Orders</Dropdown.Item>
-                <Dropdown.Item>Events</Dropdown.Item>
+                <Dropdown.Item href={"/my-orders"}>Orders</Dropdown.Item>
+                <Dropdown.Item href={"/event"}>Events</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
                   className="flex gap-2"
