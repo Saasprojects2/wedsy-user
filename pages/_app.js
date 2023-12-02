@@ -13,7 +13,13 @@ function App({ Component, pageProps }) {
   const [logIn, setLogIn] = useState(false);
   const [user, setUser] = useState({});
   const [openLoginModal, setOpenLoginModal] = useState(false);
-  const restrictedPaths = ["/wishlist", "/my-account", "/event"];
+  const restrictedPaths = [
+    "/wishlist",
+    "/my-account",
+    "/event",
+    "/payments",
+    "/my-orders",
+  ];
   const isPathRestricted = () => {
     return (
       restrictedPaths.includes(router.pathname) ||
