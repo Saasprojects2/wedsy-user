@@ -22,6 +22,7 @@ import {
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { toProperCase } from "@/utils/text";
+import Head from "next/head";
 
 function DecorListing({
   similarDecor,
@@ -207,6 +208,13 @@ function DecorListing({
   };
   return (
     <>
+      <Head>
+        <title>{decor.name} | Wedsy</title>
+        <meta name="description" content={decor?.seoTags?.description} />
+        <meta property="og:title" content={decor.name} />
+        <meta property="og:description" content={decor?.seoTags?.description} />
+        <meta property="og:image" content={decor?.seoTags?.image} />
+      </Head>
       <Modal
         show={quantity.open}
         size="lg"
@@ -259,8 +267,8 @@ function DecorListing({
                     height: 0,
                   },
                   price:
-                    quantity.quantity * decor.productInfo.variant[variant]
-                      .sellingPrice,
+                    quantity.quantity *
+                    decor.productInfo.variant[variant].sellingPrice,
                 });
               }}
             >
