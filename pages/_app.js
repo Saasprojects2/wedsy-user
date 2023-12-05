@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Script from "next/script";
 import LoginModal from "@/components/layout/LoginModal";
+import Head from "next/head";
 
 function App({ Component, pageProps }) {
   const router = useRouter();
@@ -82,12 +83,36 @@ function App({ Component, pageProps }) {
     </div>
   ) : (
     <>
+      {/* Whatsapp Chatbot Script */}
       <Script
         type="text/javascript"
         src="https://d3mkw6s8thqya7.cloudfront.net/integration-plugin.js"
         id="aisensy-wa-widget"
         widget-id="I7ZLEV"
       />
+      {/* Metatags(SEO) */}
+      <Head>
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.ico" />
+        {/* Title Tag */}
+        <title>Wedsy</title>
+        {/* Meta Description Tag */}
+        <meta name="description" content="Wedsy" />
+        {/* Canonical Tag */}
+        <link rel="canonical" href="https://www.wedsy.in/" />
+        {/* Viewport Meta Tag */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {/* Open Graph Tags */}
+        <meta property="og:title" content="Wedsy" />
+        <meta property="og:description" content="Wedsy" />
+        <meta property="og:image" content="/logo-black.png" />
+        <meta property="og:url" content="https://www.wedsy.in/" />
+        <meta property="og:type" content="website" />
+        {/* Robots Meta Tag */}
+        <meta name="robots" content="index, follow" />
+        {/* Language Meta Tag */}
+        <meta http-equiv="content-language" content="en" />
+      </Head>
       <Header userLoggedIn={!logIn} user={user} Logout={Logout} />
       <LoginModal
         openLoginModal={openLoginModal}
