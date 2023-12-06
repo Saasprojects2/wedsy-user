@@ -481,9 +481,322 @@ function DecorListing({ data }) {
           </div>
         </div>
         <div className="hide-scrollbar col-span-3 md:py-6 overflow-y-auto">
-          <div className="h-16 w-full bg-white top-0 fixed z-20"></div>
-          <div className="border-y border-black bg-white grid grid-cols-2 md:hidden divide-x-2 divide-black  sticky top-16 w-full z-20">
-            <span className="text-center py-2">Filter</span>
+          <div className="py-2 border-y border-black bg-white grid grid-cols-2 md:hidden divide-x-2 divide-black  sticky top-0 w-full z-20">
+            <span className="w-full flex flex-row justify-center">
+              <Dropdown
+                inline
+                label="Filter"
+                className=""
+                dismissOnClick={false}
+              >
+                <div className="flex flex-col p-4">
+                  <p className="text-lg flex flex-row justify-between">
+                    Occasion{" "}
+                    {filters.open.occasion ? (
+                      <AiOutlineMinus
+                        size={24}
+                        onClick={() =>
+                          setFilters({
+                            ...filters,
+                            open: { ...filters.open, occasion: false },
+                          })
+                        }
+                        className="cursor-pointer"
+                      />
+                    ) : (
+                      <AiOutlinePlus
+                        size={24}
+                        onClick={() =>
+                          setFilters({
+                            ...filters,
+                            open: { ...filters.open, occasion: true },
+                          })
+                        }
+                        className="cursor-pointer"
+                      />
+                    )}
+                  </p>
+                  {filters.open.occasion &&
+                    filters.occasionList.map((item, index) => (
+                      <div className="flex items-center gap-2 mt-2" key={index}>
+                        <Checkbox
+                          id={`ocassion-${item}`}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              if (!filters.occasion.includes(item)) {
+                                setFilters({
+                                  ...filters,
+                                  occasion: [...filters.occasion, item],
+                                });
+                              }
+                            } else {
+                              setFilters({
+                                ...filters,
+                                occasion: filters.occasion.filter(
+                                  (i) => i !== item
+                                ),
+                              });
+                            }
+                          }}
+                          checked={filters.occasion.includes(item)}
+                        />
+                        <Label className="flex" htmlFor={`ocassion-${item}`}>
+                          {item}
+                        </Label>
+                      </div>
+                    ))}
+                </div>
+                <div className="flex flex-col p-4 border-t border-black">
+                  <p className="text-lg flex flex-row justify-between">
+                    Colours{" "}
+                    {filters.open.colours ? (
+                      <AiOutlineMinus
+                        size={24}
+                        onClick={() =>
+                          setFilters({
+                            ...filters,
+                            open: { ...filters.open, colours: false },
+                          })
+                        }
+                        className="cursor-pointer"
+                      />
+                    ) : (
+                      <AiOutlinePlus
+                        size={24}
+                        onClick={() =>
+                          setFilters({
+                            ...filters,
+                            open: { ...filters.open, colours: true },
+                          })
+                        }
+                        className="cursor-pointer"
+                      />
+                    )}
+                  </p>
+                  {filters.open.colours &&
+                    Object.keys(filters.coloursList).map((item, index) => (
+                      <div className="flex items-center gap-2 mt-2" key={index}>
+                        <Checkbox
+                          id={`colour-${item}`}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              if (!filters.colours.includes(item)) {
+                                setFilters({
+                                  ...filters,
+                                  colours: [...filters.colours, item],
+                                });
+                              }
+                            } else {
+                              setFilters({
+                                ...filters,
+                                colours: filters.colours.filter(
+                                  (i) => i !== item
+                                ),
+                              });
+                            }
+                          }}
+                          checked={filters.colours.includes(item)}
+                        />
+                        <div
+                          className={`h-4 w-4 rounded-full `}
+                          style={{
+                            background: filters.coloursList[item],
+                          }}
+                        />
+                        <Label className="flex" htmlFor={`colour-${item}`}>
+                          {item}
+                        </Label>
+                      </div>
+                    ))}
+                </div>
+                <div className="flex flex-col p-4 border-t border-black">
+                  <p className="text-lg flex flex-row justify-between">
+                    Style{" "}
+                    {filters.open.style ? (
+                      <AiOutlineMinus
+                        size={24}
+                        onClick={() =>
+                          setFilters({
+                            ...filters,
+                            open: { ...filters.open, style: false },
+                          })
+                        }
+                        className="cursor-pointer"
+                      />
+                    ) : (
+                      <AiOutlinePlus
+                        size={24}
+                        onClick={() =>
+                          setFilters({
+                            ...filters,
+                            open: { ...filters.open, style: true },
+                          })
+                        }
+                        className="cursor-pointer"
+                      />
+                    )}
+                  </p>
+                  {filters.open.style &&
+                    filters.styleList.map((item, index) => (
+                      <div className="flex items-center gap-2 mt-2" key={index}>
+                        <Radio
+                          name="style"
+                          id={`style-${item}`}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              if (!filters.style.includes(item)) {
+                                setFilters({
+                                  ...filters,
+                                  style: [item],
+                                });
+                              }
+                            } else {
+                              setFilters({
+                                ...filters,
+                                style: filters.style.filter((i) => i !== item),
+                              });
+                            }
+                          }}
+                          checked={filters.style.includes(item)}
+                        />
+                        <Label className="flex" htmlFor={`style-${item}`}>
+                          {item}
+                        </Label>
+                      </div>
+                    ))}
+                </div>
+                <div className="flex flex-col p-4 border-t border-black">
+                  <p className="text-lg flex flex-row justify-between">
+                    Stage Size (in sqft.){" "}
+                    {filters.open.stageSize ? (
+                      <AiOutlineMinus
+                        size={24}
+                        onClick={() =>
+                          setFilters({
+                            ...filters,
+                            open: { ...filters.open, stageSize: false },
+                          })
+                        }
+                        className="cursor-pointer"
+                      />
+                    ) : (
+                      <AiOutlinePlus
+                        size={24}
+                        onClick={() =>
+                          setFilters({
+                            ...filters,
+                            open: { ...filters.open, stageSize: true },
+                          })
+                        }
+                        className="cursor-pointer"
+                      />
+                    )}
+                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Checkbox
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setFilters({
+                            ...filters,
+                            applySizeFilter: true,
+                          });
+                        } else {
+                          setFilters({
+                            ...filters,
+                            applySizeFilter: false,
+                          });
+                        }
+                      }}
+                      checked={filters.applySizeFilter}
+                      id="size-filter"
+                    />
+
+                    <Label className="flex" htmlFor="size-filter">
+                      Apply Size filter
+                    </Label>
+                  </div>
+                  {filters.open.stageSize && (
+                    <div>
+                      <RangeSlider
+                        range={filters.stageSizeRange}
+                        setRange={(range) => {
+                          setFilters({
+                            ...filters,
+                            stageSizeRange: range,
+                          });
+                        }}
+                        factor={20}
+                      />
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col p-4 border-t border-black">
+                  <p className="text-lg flex flex-row justify-between">
+                    Price Range{" "}
+                    {filters.open.priceRange ? (
+                      <AiOutlineMinus
+                        size={24}
+                        onClick={() =>
+                          setFilters({
+                            ...filters,
+                            open: { ...filters.open, priceRange: false },
+                          })
+                        }
+                        className="cursor-pointer"
+                      />
+                    ) : (
+                      <AiOutlinePlus
+                        size={24}
+                        onClick={() =>
+                          setFilters({
+                            ...filters,
+                            open: { ...filters.open, priceRange: true },
+                          })
+                        }
+                        className="cursor-pointer"
+                      />
+                    )}
+                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Checkbox
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setFilters({
+                            ...filters,
+                            applyPriceFilter: true,
+                          });
+                        } else {
+                          setFilters({
+                            ...filters,
+                            applyPriceFilter: false,
+                          });
+                        }
+                      }}
+                      checked={filters.applyPriceFilter}
+                      id="price-filter"
+                    />
+
+                    <Label className="flex" htmlFor="price-filter">
+                      Apply Price filter
+                    </Label>
+                  </div>
+                  {filters.open.priceRange && (
+                    <div>
+                      <RangeSlider
+                        range={filters.priceRange}
+                        setRange={(range) => {
+                          setFilters({
+                            ...filters,
+                            priceRange: range,
+                          });
+                        }}
+                        factor={2000}
+                      />
+                    </div>
+                  )}
+                </div>
+              </Dropdown>
+            </span>
             <span className="w-full flex flex-row justify-center">
               <Dropdown
                 inline
