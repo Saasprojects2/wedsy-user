@@ -321,7 +321,7 @@ export default function Home() {
           />
         </div>
       </main>
-      <section className="w-full mt-12">
+      <section className="w-full mt-20 md:mt-12">
         <div className="relative overflow-y-hidden">
           <BsArrowLeftShort
             size={48}
@@ -351,14 +351,14 @@ export default function Home() {
               setDecorIndex(item);
             }}
           />
-          <p className="text-[#840032] font-semibold text-5xl text-center absolute w-full top-0 z-40">
+          <p className="text-[#840032] font-semibold text-3xl md:text-5xl text-center absolute w-full top-0 z-40">
             WEDDING STORE
           </p>
           <p className="font-medium text-2xl text-center absolute w-full bottom-0 z-40">
             {decorList[decorIndex].id}
           </p>
-          <div className="absolute -top-14 bg-white z-10 h-28 w-full rounded-br-[100%] rounded-bl-[100%]" />
-          <div className="absolute -bottom-14 bg-white z-10 h-28 w-full rounded-tr-[100%] rounded-tl-[100%]" />
+          <div className="absolute -top-14 bg-white z-10 h-28 w-full rounded-br-[25%] rounded-bl-[25%] md:rounded-br-[100%] md:rounded-bl-[100%]" />
+          <div className="absolute -bottom-14 bg-white z-10 h-28 w-full rounded-tr-[25%] rounded-tl-[25%] md:rounded-tr-[100%] md:rounded-tl-[100%]" />
           <div
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
@@ -403,11 +403,11 @@ export default function Home() {
               ))}
           </div>
         </div>
-        <div className="z-20 flex flex-col md:flex-row items-center justify-around px-12 py-8">
-          <p className="text-rose-900 w-2/3">{decorList[decorIndex].text}</p>
+        <div className="z-20 flex flex-col md:flex-row gap-2 items-center justify-around p-6 md:px-12 md:py-8">
+          <p className="text-rose-900 md:w-2/3">{decorList[decorIndex].text}</p>
           <Link
             href={`/decor/view?category=${decorList[decorIndex].id}`}
-            className="bg-rose-900 rounded-full p-1 px-8 text-white w-max uppercase"
+            className="bg-rose-900 rounded-full p-1 px-8 text-white w-max ml-auto md:ml-0 uppercase"
           >
             Explore Now
           </Link>
@@ -523,19 +523,21 @@ export default function Home() {
         )}
       </section>
       <section
-        className={`${styles.section__2} flex flex-col gap-12 py-16 px-24`}
+        className={`${styles.section__2} flex flex-col gap-12 p-6 md:py-16 md:px-24`}
       >
         <p className="text-[#D33467] flex font-medium gap-2">
-          <span className="text-6xl">THE BEST</span>
-          <span className="text-xl flex flex-col">
+          <span className="text-4xl md:text-6xl">THE BEST</span>
+          <span className="text-sm md:text-xl flex flex-col">
             <span>IN</span>
 
             <span>TOWN</span>
           </span>
-          <span className="text-6xl">!</span>
+          <span className="text-4xl md:text-6xl">!</span>
         </p>
-        <p className="text-center text-3xl">What Makes Wedsy Stand Out?</p>
-        <div className="flex flex-col md:flex-row gap-12 mx-auto">
+        <p className="text-center text-2xl md:text-3xl">
+          What Makes Wedsy Stand Out?
+        </p>
+        <div className="grid grid-cols-2 md:flex md:flex-row gap-4 md:gap-12 mx-auto">
           <div className="text-center flex flex-col items-center gap-3">
             <div className="bg-[#FFB8C0] flex justify-center rounded-3xl w-32 h-32">
               <img className="m-auto" src="/assets/icons/easy.png" />
@@ -562,8 +564,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <section className="w-full px-16 py-12 ">
+      <section className="w-full p-6 md:px-16 md:py-12 ">
         <p className="font-semibold text-4xl mb-12">
           PLAN YOUR EVENT NOW WITH OUR NEW EVENT TOOL!
         </p>
@@ -658,7 +659,7 @@ export default function Home() {
       </section>
       <section className="mt-8 mb-8">
         <div className="w-full py-12 relative">
-          <p className="text-center text-rose-900 text-xl font-semibold tracking-wider uppercase px-16 w-1/2 translate-y-full">
+          <p className="mb-32 md:mb-0 text-center text-rose-900 text-xl font-semibold tracking-wider uppercase px-6 md:px-16 md:w-1/2 md:translate-y-full">
             {
               "“ A wedding is not just a day, it's a journey, a story, and a promise of a lifetime “"
             }
@@ -672,7 +673,7 @@ export default function Home() {
             className="absolute bottom-0 right-12"
             style={{ height: "20em", width: "auto" }}
           />
-          <div className="w-1/2 bg-gradient-to-t from-rose-900 to-transparent rounded-bl-3xl p-6 px-8 translate-x-full relative">
+          <div className="w-full md:w-1/2 bg-gradient-to-t from-rose-900 to-transparent rounded-bl-3xl p-6 px-8 md:translate-x-full relative">
             <Image
               src="/assets/images/flowers-1.png"
               alt="flower"
