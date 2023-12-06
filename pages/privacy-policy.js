@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="py-16 px-24">
+    <div className="p-6 md:py-16 md:px-24">
       <h2 className="text-rose-900 font-semibold text-2xl">PRIVACY POLICY</h2>
       <p className="pt-8">
         Welcome to WEDSY! This Privacy Policy explains how we collect, use,
