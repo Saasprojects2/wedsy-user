@@ -77,19 +77,8 @@ function App({ Component, pageProps }) {
       CheckLogin();
     }
   }, []);
-  return loading ? (
-    <div className="grid place-content-center h-screen ">
-      <Spinner size="xl" />
-    </div>
-  ) : (
+  return (
     <>
-      {/* Whatsapp Chatbot Script */}
-      <Script
-        type="text/javascript"
-        src="https://d3mkw6s8thqya7.cloudfront.net/integration-plugin.js"
-        id="aisensy-wa-widget"
-        widget-id="I7ZLEV"
-      />
       {/* Metatags(SEO) */}
       <Head>
         {/* Favicon */}
@@ -111,24 +100,39 @@ function App({ Component, pageProps }) {
         {/* Robots Meta Tag */}
         <meta name="robots" content="index, follow" />
         {/* Language Meta Tag */}
-        <meta http-equiv="content-language" content="en" />
+        <meta httpEquiv="content-language" content="en" />
       </Head>
-      <Header userLoggedIn={!logIn} user={user} Logout={Logout} />
-      <LoginModal
-        openLoginModal={openLoginModal}
-        setOpenLoginModal={setOpenLoginModal}
-        user={user}
-        logIn={logIn}
-        setLogIn={setLogIn}
-        CheckLogin={CheckLogin}
-      />
-      <Component
-        {...pageProps}
-        userLoggedIn={!logIn}
-        user={user}
-        setOpenLoginModal={setOpenLoginModal}
-      />
-      <Footer />
+      {loading ? (
+        <div className="grid place-content-center h-screen ">
+          <Spinner size="xl" />
+        </div>
+      ) : (
+        <>
+          {/* Whatsapp Chatbot Script */}
+          <Script
+            type="text/javascript"
+            src="https://d3mkw6s8thqya7.cloudfront.net/integration-plugin.js"
+            id="aisensy-wa-widget"
+            widget-id="I7ZLEV"
+          />
+          <Header userLoggedIn={!logIn} user={user} Logout={Logout} />
+          <LoginModal
+            openLoginModal={openLoginModal}
+            setOpenLoginModal={setOpenLoginModal}
+            user={user}
+            logIn={logIn}
+            setLogIn={setLogIn}
+            CheckLogin={CheckLogin}
+          />
+          <Component
+            {...pageProps}
+            userLoggedIn={!logIn}
+            user={user}
+            setOpenLoginModal={setOpenLoginModal}
+          />
+          <Footer />
+        </>
+      )}
     </>
   );
 }
