@@ -682,7 +682,7 @@ function DecorListing({
               </p>
             ))}
           </div>
-          <div className="flex flex-col pt-4 px-4 md:px-0">
+          {/* <div className="flex flex-col pt-4 px-4 md:px-0">
             <p className="text-lg flex flex-row justify-between">
               Colour Theme
             </p>
@@ -701,7 +701,7 @@ function DecorListing({
                 </p>
               ))}
             </div>
-          )}
+          )} */}
           {decor.productVariation.fabric.length > 0 && (
             <div className="flex flex-col pt-4 px-4 md:px-0">
               <p className="text-lg flex flex-row justify-between">Fabric</p>
