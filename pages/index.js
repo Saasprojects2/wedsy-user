@@ -13,6 +13,8 @@ import pinkBgGif from "@/public/assets/gif/pink-bg.gif";
 import heartGif from "@/public/assets/gif/heart.gif";
 import tickGif from "@/public/assets/gif/tick.gif";
 import { processMobileNumber } from "@/utils/phoneNumber";
+import { FaHeart } from "react-icons/fa";
+import PlanYourEvent from "@/components/screens/PlanYourEvent";
 
 export default function Home() {
   const decorList = [
@@ -223,16 +225,18 @@ export default function Home() {
         id="mainDiv"
       >
         <div className="strike mt-6">
-          <span className="text-white text-2xl md:text-5xl text-center font-normal">
+          <span className="text-white text-2xl md:text-4xl text-center font-normal">
             WEDDINGS MADE EASY
           </span>
         </div>
-        <div className="px-16 flex flex-row justify-between mb-16 text-white">
-          <div className="w-1/3 text-4xl md:text-7xl ">
-            YOUR WEDDING{" "}
-            <span className="text-6xl md:text-9xl font-medium">MEGA</span> STORE
+        <div className="px-16 flex flex-row justify-between mt-6 mb-16 text-white">
+          <div className="w-1/3 text-4xl md:text-7xl flex flex-col gap-2">
+            <span className="mb-4">YOUR</span>{" "}
+            <span className="mb-2">WEDDING</span>{" "}
+            <span className="text-6xl md:text-9xl font-medium mb-2">MEGA</span>{" "}
+            <span>STORE</span>
           </div>
-          <div className="hidden md:flex flex-col w-1/3 text-center gap-6">
+          <div className="hidden md:flex flex-col w-1/3 text-center gap-6 justify-center">
             <span className="text-3xl">YOUR WEDDING VISION, OUR EXPERTISE</span>
             {data.main.success ? (
               <p>
@@ -321,7 +325,10 @@ export default function Home() {
           />
         </div>
       </main>
-      <section className="w-full mt-20 md:mt-12">
+      <section className="relative w-full mt-20 md:mt-20">
+        <p className="text-[#840032] font-semibold text-3xl md:text-5xl text-center absolute w-full top-0 md:-top-8 z-40">
+          THE WEDDING STORE
+        </p>
         <div className="relative overflow-y-hidden">
           <BsArrowLeftShort
             size={48}
@@ -351,9 +358,7 @@ export default function Home() {
               setDecorIndex(item);
             }}
           />
-          <p className="text-[#840032] font-semibold text-3xl md:text-5xl text-center absolute w-full top-0 z-40">
-            WEDDING STORE
-          </p>
+
           <p className="font-medium text-2xl text-center absolute w-full bottom-0 z-40">
             {decorList[decorIndex].id}
           </p>
@@ -564,36 +569,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="w-full p-6 md:px-16 md:py-12 ">
-        <p className="font-semibold text-4xl mb-12">
-          PLAN YOUR EVENT NOW WITH OUR NEW EVENT TOOL!
-        </p>
-        <div className="flex gap-6 relative">
-          <div className="flex flex-col gap-8 ">
-            <p className="text-xl w-2/3">
-              Explore the ease of planning with our event tool at Wedsy.
-            </p>
-            <p className="text-xl w-2/3">
-              Utilize the tool to shortlist and choose your decorations
-              effortlessly - all in one place, at Wedsy.
-            </p>
-            <Link
-              href={`/event`}
-              className="bg-rose-900 rounded-full p-1 px-16 text-white w-max mx-auto mt-auto mb-12"
-            >
-              Try Now!
-            </Link>
-          </div>
-          <Image
-            src="/assets/images/event-tool.png"
-            alt="Decor"
-            width={0}
-            height={0}
-            sizes="20%"
-            style={{ width: "20%", height: "auto", marginLeft: "auto" }}
-          />
-        </div>
-      </section>
+      <PlanYourEvent />
       <section className="w-full relative">
         <Image
           src={pinkBgGif}
@@ -608,14 +584,15 @@ export default function Home() {
           <div className="p-4 w-2/3 self-stretch flex flex-col gap-4">
             <p className="font-semibold md:text-4xl relative flex flex-row gap-2 relative">
               Customers{" "}
-              <Image
+              {/* <Image
                 src={heartGif}
                 alt="Decor"
                 width={0}
                 height={0}
                 sizes="100%"
                 style={{ width: "1em", height: "auto" }}
-              />{" "}
+              />{" "} */}
+              <FaHeart />
               Wedsy
             </p>
             <Rating>
