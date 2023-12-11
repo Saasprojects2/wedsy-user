@@ -94,7 +94,7 @@ export default function Login() {
       <div
         className="relative h-[max-content] grid grid-cols-1 md:grid-cols-3"
         style={{
-          backgroundImage: 'url("/assets/images/login-image.png")',
+          backgroundImage: 'url("/assets/images/login-mobile.png")',
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
         }}
@@ -109,7 +109,7 @@ export default function Login() {
             style={{ width: "100%", height: "auto" }}
           />
         </div>
-        <div className="m-6 md:m-0 bg-white/80 md:bg-[#ABBBC7] flex flex-col p-8 md:p-0 rounded-2xl md:rounded-none gap-6 md:gap-16 md:px-8 md:pb-32 items-center justify-center">
+        <div className="h-[189vw] md:h-auto m-6 md:m-0 bg-white/80 md:bg-gradient-to-t md:to-[#ABBBC7] md:from-white flex flex-col p-8 md:p-0 rounded-2xl md:rounded-none gap-6 md:gap-16 md:px-8 md:pb-32 items-center justify-center">
           <p className="font-semibold text-lg text-center mb-12 md:mb-0">{`"Together is a beautiful place to be. Join us as we say 'I do'!"`}</p>
           <div className=" gap-6 flex flex-col w-3/4">
             <input
