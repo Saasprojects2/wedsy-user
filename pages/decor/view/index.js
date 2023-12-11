@@ -293,7 +293,8 @@ function DecorListing({ data }) {
                 </div>
               ))}
           </div>
-          <div className="flex flex-col pt-4">
+          {/* Style Filter */}
+          {/* <div className="flex flex-col pt-4">
             <p className="text-lg flex flex-row justify-between">
               Style{" "}
               {filters.open.style ? (
@@ -348,7 +349,7 @@ function DecorListing({ data }) {
                   </Label>
                 </div>
               ))}
-          </div>
+          </div> */}
           <div className="flex flex-col pt-4 border-b border-black">
             <p className="text-lg flex flex-row justify-between">
               Stage Size (in sqft.){" "}
@@ -376,29 +377,31 @@ function DecorListing({ data }) {
                 />
               )}
             </p>
-            <div className="flex items-center gap-2 mt-2">
-              <Checkbox
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setFilters({
-                      ...filters,
-                      applySizeFilter: true,
-                    });
-                  } else {
-                    setFilters({
-                      ...filters,
-                      applySizeFilter: false,
-                    });
-                  }
-                }}
-                checked={filters.applySizeFilter}
-                id="size-filter"
-              />
+            {filters.open.stageSize && (
+              <div className="flex items-center gap-2 mt-2">
+                <Checkbox
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setFilters({
+                        ...filters,
+                        applySizeFilter: true,
+                      });
+                    } else {
+                      setFilters({
+                        ...filters,
+                        applySizeFilter: false,
+                      });
+                    }
+                  }}
+                  checked={filters.applySizeFilter}
+                  id="size-filter"
+                />
 
-              <Label className="flex" htmlFor="size-filter">
-                Apply Size filter
-              </Label>
-            </div>
+                <Label className="flex" htmlFor="size-filter">
+                  Apply Size filter
+                </Label>
+              </div>
+            )}
             {filters.open.stageSize && (
               <div>
                 <RangeSlider
@@ -441,29 +444,31 @@ function DecorListing({ data }) {
                 />
               )}
             </p>
-            <div className="flex items-center gap-2 mt-2">
-              <Checkbox
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    setFilters({
-                      ...filters,
-                      applyPriceFilter: true,
-                    });
-                  } else {
-                    setFilters({
-                      ...filters,
-                      applyPriceFilter: false,
-                    });
-                  }
-                }}
-                checked={filters.applyPriceFilter}
-                id="price-filter"
-              />
+            {filters.open.priceRange && (
+              <div className="flex items-center gap-2 mt-2">
+                <Checkbox
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setFilters({
+                        ...filters,
+                        applyPriceFilter: true,
+                      });
+                    } else {
+                      setFilters({
+                        ...filters,
+                        applyPriceFilter: false,
+                      });
+                    }
+                  }}
+                  checked={filters.applyPriceFilter}
+                  id="price-filter"
+                />
 
-              <Label className="flex" htmlFor="price-filter">
-                Apply Price filter
-              </Label>
-            </div>
+                <Label className="flex" htmlFor="price-filter">
+                  Apply Price filter
+                </Label>
+              </div>
+            )}
             {filters.open.priceRange && (
               <div>
                 <RangeSlider
@@ -609,7 +614,8 @@ function DecorListing({ data }) {
                       </div>
                     ))}
                 </div>
-                <div className="flex flex-col p-4 border-t border-black">
+                {/* Style Filter */}
+                {/* <div className="flex flex-col p-4 border-t border-black">
                   <p className="text-lg flex flex-row justify-between">
                     Style{" "}
                     {filters.open.style ? (
@@ -664,7 +670,7 @@ function DecorListing({ data }) {
                         </Label>
                       </div>
                     ))}
-                </div>
+                </div> */}
                 <div className="flex flex-col p-4 border-t border-black">
                   <p className="text-lg flex flex-row justify-between">
                     Stage Size (in sqft.){" "}
@@ -692,29 +698,31 @@ function DecorListing({ data }) {
                       />
                     )}
                   </p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <Checkbox
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setFilters({
-                            ...filters,
-                            applySizeFilter: true,
-                          });
-                        } else {
-                          setFilters({
-                            ...filters,
-                            applySizeFilter: false,
-                          });
-                        }
-                      }}
-                      checked={filters.applySizeFilter}
-                      id="size-filter"
-                    />
+                  {filters.open.stageSize && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <Checkbox
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setFilters({
+                              ...filters,
+                              applySizeFilter: true,
+                            });
+                          } else {
+                            setFilters({
+                              ...filters,
+                              applySizeFilter: false,
+                            });
+                          }
+                        }}
+                        checked={filters.applySizeFilter}
+                        id="size-filter"
+                      />
 
-                    <Label className="flex" htmlFor="size-filter">
-                      Apply Size filter
-                    </Label>
-                  </div>
+                      <Label className="flex" htmlFor="size-filter">
+                        Apply Size filter
+                      </Label>
+                    </div>
+                  )}
                   {filters.open.stageSize && (
                     <div>
                       <RangeSlider
@@ -757,29 +765,31 @@ function DecorListing({ data }) {
                       />
                     )}
                   </p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <Checkbox
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setFilters({
-                            ...filters,
-                            applyPriceFilter: true,
-                          });
-                        } else {
-                          setFilters({
-                            ...filters,
-                            applyPriceFilter: false,
-                          });
-                        }
-                      }}
-                      checked={filters.applyPriceFilter}
-                      id="price-filter"
-                    />
+                  {filters.open.priceRange && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <Checkbox
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setFilters({
+                              ...filters,
+                              applyPriceFilter: true,
+                            });
+                          } else {
+                            setFilters({
+                              ...filters,
+                              applyPriceFilter: false,
+                            });
+                          }
+                        }}
+                        checked={filters.applyPriceFilter}
+                        id="price-filter"
+                      />
 
-                    <Label className="flex" htmlFor="price-filter">
-                      Apply Price filter
-                    </Label>
-                  </div>
+                      <Label className="flex" htmlFor="price-filter">
+                        Apply Price filter
+                      </Label>
+                    </div>
+                  )}
                   {filters.open.priceRange && (
                     <div>
                       <RangeSlider
