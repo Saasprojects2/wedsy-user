@@ -1,4 +1,5 @@
 import DecorCard from "@/components/cards/DecorCard";
+import PlanYourEvent from "@/components/screens/PlanYourEvent";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -19,6 +20,16 @@ function Decor({ bestSeller, popular }) {
           height={0}
           sizes="100vw"
           style={{ width: "100%", height: "auto" }}
+          className="hidden md:block"
+        />
+        <Image
+          src="/assets/images/decor-1-mobile.png"
+          alt="Decor"
+          width={0}
+          height={0}
+          sizes="100vw"
+          style={{ width: "100%", height: "auto" }}
+          className="md:hidden"
         />
       </main>
       <section className="px-4 md:px-24 py-8 md:mt-8">
@@ -78,23 +89,36 @@ function Decor({ bestSeller, popular }) {
           />
         </div>
       </section>
+      {/* MARQUEE FOR CATEGORIES */}
       <section className="bg-[#840032] text-white font-semibold">
         <div className="relative flex overflow-x-hidden">
           <div className="py-4 animate-marquee whitespace-nowrap">
-            <span className="mx-4 text-xl text-white">WEDDINGS MADE EASY</span>
-            <span className="mx-4 text-xl text-black">WEDDINGS MADE EASY</span>
-            <span className="mx-4 text-xl text-white">WEDDINGS MADE EASY</span>
-            <span className="mx-4 text-xl text-black">WEDDINGS MADE EASY</span>
-            <span className="mx-4 text-xl text-white">WEDDINGS MADE EASY</span>
-            <span className="mx-4 text-xl text-black">WEDDINGS MADE EASY</span>
+            <span className="mx-8 text-xl text-white">PATHWAY</span>
+            <span className="mx-8 text-xl text-black">ENTRANCE</span>
+            <span className="mx-8 text-xl text-white">STAGE</span>
+            <span className="mx-8 text-xl text-black">MANDAP</span>
+            <span className="mx-8 text-xl text-white">PHOTOBOOTH</span>
+            <span className="mx-8 text-xl text-black">NAMEBOARD</span>
+            <span className="mx-8 text-xl text-white">ENTRANCE</span>
+            <span className="mx-8 text-xl text-black">PATHWAY</span>
+            <span className="mx-8 text-xl text-white">MANDAP</span>
+            <span className="mx-8 text-xl text-black">STAGE</span>
+            <span className="mx-8 text-xl text-white">NAMEBOARD</span>
+            <span className="mx-8 text-xl text-black">PHOTOBOOTH</span>
           </div>
           <div className="absolute top-0 py-4 animate-marquee2 whitespace-nowrap">
-            <span className="mx-4 text-xl text-white">WEDDINGS MADE EASY</span>
-            <span className="mx-4 text-xl text-black">WEDDINGS MADE EASY</span>
-            <span className="mx-4 text-xl text-white">WEDDINGS MADE EASY</span>
-            <span className="mx-4 text-xl text-black">WEDDINGS MADE EASY</span>
-            <span className="mx-4 text-xl text-white">WEDDINGS MADE EASY</span>
-            <span className="mx-4 text-xl text-black">WEDDINGS MADE EASY</span>
+            <span className="mx-8 text-xl text-white">PATHWAY</span>
+            <span className="mx-8 text-xl text-black">ENTRANCE</span>
+            <span className="mx-8 text-xl text-white">STAGE</span>
+            <span className="mx-8 text-xl text-black">MANDAP</span>
+            <span className="mx-8 text-xl text-white">PHOTOBOOTH</span>
+            <span className="mx-8 text-xl text-black">NAMEBOARD</span>
+            <span className="mx-8 text-xl text-white">ENTRANCE</span>
+            <span className="mx-8 text-xl text-black">PATHWAY</span>
+            <span className="mx-8 text-xl text-white">MANDAP</span>
+            <span className="mx-8 text-xl text-black">STAGE</span>
+            <span className="mx-8 text-xl text-white">NAMEBOARD</span>
+            <span className="mx-8 text-xl text-black">PHOTOBOOTH</span>
           </div>
         </div>
       </section>
@@ -235,14 +259,15 @@ function Decor({ bestSeller, popular }) {
           </span>
         </div>
       </div>
+      {/* Categories */}
       <div className="py-8">
         <p className="md:mt-6 text-2xl md:text-3xl font-semibold text-center">
           CATEGORIES
         </p>
-        <div className=" overflow-x-hidden overflow-y-hidden mt-8 md:gap-3 flex flex-row relative">
+        <div className="hidden overflow-x-hidden overflow-y-hidden mt-8 md:gap-3 md:flex flex-row relative">
           <Link
             href={`/decor/view?category=Pathway`}
-            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow transition-all"
           >
             <Image
               src="/assets/images/pathway.png"
@@ -252,13 +277,13 @@ function Decor({ bestSeller, popular }) {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">PATHWAY</p>
             </div>
           </Link>
           <Link
             href={`/decor/view?category=Entrance`}
-            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow transition-all"
           >
             <Image
               src="/assets/images/entrance.png"
@@ -268,13 +293,13 @@ function Decor({ bestSeller, popular }) {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">ENTRANCE</p>
             </div>
           </Link>
           <Link
             href={`/decor/view?category=Stage`}
-            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow transition-all"
           >
             <Image
               src="/assets/images/stage.png"
@@ -284,13 +309,13 @@ function Decor({ bestSeller, popular }) {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">STAGE</p>
             </div>
           </Link>
           <Link
             href={`/decor/view?category=Mandap`}
-            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow transition-all"
           >
             <Image
               src="/assets/images/mandap.png"
@@ -300,13 +325,13 @@ function Decor({ bestSeller, popular }) {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">MANDAP</p>
             </div>
           </Link>
           <Link
             href={`/decor/view?category=Photobooth`}
-            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow transition-all"
           >
             <Image
               src="/assets/images/photobooth.png"
@@ -316,13 +341,13 @@ function Decor({ bestSeller, popular }) {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">PHOTOBOOTH</p>
             </div>
           </Link>
           <Link
             href={`/decor/view?category=Nameboard`}
-            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow transition-all"
           >
             <Image
               src="/assets/images/nameboard.png"
@@ -332,10 +357,184 @@ function Decor({ bestSeller, popular }) {
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
             />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/40 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">NAMEBOARD</p>
             </div>
           </Link>
+        </div>
+        <div className="relative flex md:hidden overflow-x-hidden overflow-y-hidden mt-8 md:gap-4 flex-row">
+          <div className="animate-marquee whitespace-nowrap flex flex-row">
+            <Link
+              href={`/decor/view?category=Pathway`}
+              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            >
+              <Image
+                src="/assets/images/pathway-mobile.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100vw", height: "auto" }}
+                className="!w-[30vw] max-w-[30vw]"
+              />
+            </Link>
+            <Link
+              href={`/decor/view?category=Entrance`}
+              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            >
+              <Image
+                src="/assets/images/entrance-mobile.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100vw", height: "auto" }}
+                className="!w-[30vw] max-w-[30vw]"
+              />
+            </Link>
+            <Link
+              href={`/decor/view?category=Stage`}
+              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            >
+              <Image
+                src="/assets/images/stage-mobile.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100vw", height: "auto" }}
+                className="!w-[30vw] max-w-[30vw]"
+              />
+            </Link>
+            <Link
+              href={`/decor/view?category=Mandap`}
+              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            >
+              <Image
+                src="/assets/images/mandap-mobile.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100vw", height: "auto" }}
+                className="!w-[30vw] max-w-[30vw]"
+              />
+            </Link>
+            <Link
+              href={`/decor/view?category=Photobooth`}
+              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            >
+              <Image
+                src="/assets/images/photobooth-mobile.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100vw", height: "auto" }}
+                className="!w-[30vw] max-w-[30vw]"
+              />
+            </Link>
+            <Link
+              href={`/decor/view?category=Nameboard`}
+              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            >
+              <Image
+                src="/assets/images/nameboard-mobile.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100vw", height: "auto" }}
+                className="!w-[30vw] max-w-[30vw]"
+              />
+            </Link>
+          </div>
+          <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex flex-row">
+            <Link
+              href={`/decor/view?category=Pathway`}
+              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            >
+              <Image
+                src="/assets/images/pathway-mobile.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100vw", height: "auto" }}
+                className="!w-[30vw] max-w-[30vw]"
+              />
+            </Link>
+            <Link
+              href={`/decor/view?category=Entrance`}
+              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            >
+              <Image
+                src="/assets/images/entrance-mobile.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100vw", height: "auto" }}
+                className="!w-[30vw] max-w-[30vw]"
+              />
+            </Link>
+            <Link
+              href={`/decor/view?category=Stage`}
+              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            >
+              <Image
+                src="/assets/images/stage-mobile.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100vw", height: "auto" }}
+                className="!w-[30vw] max-w-[30vw]"
+              />
+            </Link>
+            <Link
+              href={`/decor/view?category=Mandap`}
+              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            >
+              <Image
+                src="/assets/images/mandap-mobile.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100vw", height: "auto" }}
+                className="!w-[30vw] max-w-[30vw]"
+              />
+            </Link>
+            <Link
+              href={`/decor/view?category=Photobooth`}
+              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            >
+              <Image
+                src="/assets/images/photobooth-mobile.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100vw", height: "auto" }}
+                className="!w-[30vw] max-w-[30vw]"
+              />
+            </Link>
+            <Link
+              href={`/decor/view?category=Nameboard`}
+              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
+            >
+              <Image
+                src="/assets/images/nameboard-mobile.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100vw", height: "auto" }}
+                className="!w-[30vw] max-w-[30vw]"
+              />
+            </Link>
+          </div>
         </div>
       </div>
       <div className="py-16 px-24 bg-gradient-to-b from-amber-100/0 via-amber-100/100 to-amber-100/100">
@@ -407,36 +606,7 @@ function Decor({ bestSeller, popular }) {
           </div>
         </div>
       </div>
-      <section className="w-full px-16 py-12 ">
-        <p className="font-semibold text-4xl mb-12">
-          PLAN YOUR EVENT NOW WITH OUR NEW EVENT TOOL!
-        </p>
-        <div className="flex gap-6 relative">
-          <div className="flex flex-col gap-8 ">
-            <p className="text-xl w-2/3">
-              Explore the ease of planning with our event tool at Wedsy.
-            </p>
-            <p className="text-xl w-2/3">
-              Utilize the tool to shortlist and choose your decorations
-              effortlessly - all in one place, at Wedsy.
-            </p>
-            <Link
-              href={`/event`}
-              className="bg-rose-900 rounded-full p-1 px-16 text-white w-max mx-auto mt-auto mb-12"
-            >
-              Try Now!
-            </Link>
-          </div>
-          <Image
-            src="/assets/images/event-tool.png"
-            alt="Decor"
-            width={0}
-            height={0}
-            sizes="20%"
-            style={{ width: "20%", height: "auto", marginLeft: "auto" }}
-          />
-        </div>
-      </section>
+      <PlanYourEvent />
     </>
   );
 }
