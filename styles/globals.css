@@ -30,6 +30,12 @@ body {
   background: white;
 }
 
+/* Backround Image */
+.decor-bg-image {
+  background-repeat: repeat;
+  background-image: url("../public/assets/background/bg.jpg");
+}
+
 /* Strike */
 .strike {
   display: block;
