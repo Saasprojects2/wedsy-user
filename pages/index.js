@@ -229,7 +229,7 @@ export default function Home() {
             WEDDINGS MADE EASY
           </span>
         </div>
-        <div className="px-16 flex flex-row justify-between mt-6 mb-16 text-white">
+        <div className="p-6 md:px-16 flex flex-row justify-between mt-6 mb-16 text-white">
           <div className="w-1/3 text-4xl md:text-7xl flex flex-col gap-2">
             <span className="mb-4">YOUR</span>{" "}
             <span className="mb-2">WEDDING</span>{" "}
@@ -299,7 +299,7 @@ export default function Home() {
       </main>
       <main className={`${styles.main__div__2}`}>
         <div className="text-center flex flex-col h-full relative">
-          <span className="text-[#622400] text-4xl md:text-6xl font-medium py-3 md:py-0 mt-auto">
+          <span className="text-[#622400] text-2xl md:text-6xl font-medium py-3 md:py-0 mt-auto">
             DISCOVER WEDSY&#39;S MAGIC
           </span>
           <span className="hidden md:block ">
@@ -429,7 +429,7 @@ export default function Home() {
           className="md:hidden"
         />
         <span className="text-2xl md:text-4xl -mt-16 md:mt-0 bg-white md:bg-transparent relative">
-          <span className="flex gap-2">
+          <span className="flex gap-2 mb-2 md:mb-0">
             Say <span className="text-[#D33467] flex">I DO </span>
             <Image
               src={tickGif}
@@ -467,7 +467,7 @@ export default function Home() {
                 })
               }
               name="name"
-              className="md:w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
+              className="md:w-1/4 text-black bg-transparent border-0 border-b-gray-500 outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
             />
             <input
               type="text"
@@ -480,7 +480,7 @@ export default function Home() {
                 })
               }
               name="phone"
-              className="md:w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
+              className="md:w-1/4 text-black bg-transparent border-0 border-b-gray-500 outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
             />
             {data.secondary.otpSent && (
               <input
@@ -494,7 +494,7 @@ export default function Home() {
                   })
                 }
                 name="otp"
-                className="md:w-1/4 text-black bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
+                className="md:w-1/4 text-black bg-transparent border-0 border-b-gray-500 outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
               />
             )}
             {data.secondary.message && (
@@ -647,21 +647,30 @@ export default function Home() {
             width={0}
             height={0}
             sizes="100%"
-            className="absolute bottom-0 right-12"
+            className="absolute bottom-0 right-12 hidden md:inline"
             style={{ height: "20em", width: "auto" }}
           />
-          <div className="w-full md:w-1/2 bg-gradient-to-t from-rose-900 to-transparent rounded-bl-3xl p-6 px-8 md:translate-x-full relative">
+          <Image
+            src="/assets/images/couple.png"
+            alt="flower"
+            width={0}
+            height={0}
+            sizes="100%"
+            className="absolute bottom-0 right-6 inline md:hidden"
+            style={{ height: "15em", width: "auto" }}
+          />
+          <div className="w-2/3 md:w-1/2 bg-gradient-to-t from-rose-900 to-transparent rounded-bl-3xl p-6 px-8 ml-auto md:ml-0 md:translate-x-full relative">
             <Image
               src="/assets/images/flowers-1.png"
               alt="flower"
               width={0}
               height={0}
               sizes="100%"
-              className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2"
+              className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 hidden md:inline"
               style={{ height: "8em", width: "auto" }}
             />
             <div className="flex flex-col items-end max-w-max">
-              <span className="font-medium text-2xl text-rose-900 tracking-[0.4em]">
+              <span className="font-medium text-2xl text-rose-900 md:tracking-[0.4em]">
                 JOIN NOW
               </span>
               <Link href={"/login"}>
