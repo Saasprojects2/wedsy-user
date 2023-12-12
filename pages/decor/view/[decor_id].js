@@ -669,7 +669,7 @@ function DecorListing({
           </div>
         </Modal.Body>
       </Modal>
-      <div className="md:p-8 grid grid-cols-1 md:grid-cols-4 md:gap-8">
+      <div className="md:p-8 grid grid-cols-1 md:grid-cols-4 md:gap-8 decor-bg-image">
         <div className="order-last md:order-first border-t md:border-t-0 md:border-r-0 border-black flex flex-col md:divide-y gap-4 md:divide-black md:pr-6">
           <p className="text-xl font-medium hidden md:block">Description</p>
           <div className="flex flex-col pt-4 px-4 md:px-0">
@@ -954,7 +954,7 @@ function DecorListing({
           </div>
         </div>
       </div>
-      <div className="border-y border-y-black p-8">
+      <div className="border-y border-y-black p-8 decor-bg-image">
         <p className="text-2xl font-semibold px-12">Similar Stages</p>
         <div className="flex flex-row md:gap-12 justify-between items-center my-6">
           <BsArrowLeftShort

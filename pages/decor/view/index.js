@@ -171,7 +171,7 @@ function DecorListing({ data }) {
   return (
     <>
       <div
-        className="md:p-8 grid md:grid-cols-4 gap-8 relative overflow-hidden hide-scrollbar"
+        className="md:p-8 grid md:grid-cols-4 gap-8 relative overflow-hidden hide-scrollbar decor-bg-image"
         ref={divRef}
         style={{ height: divSize.height ?? "100vh" }}
       >
