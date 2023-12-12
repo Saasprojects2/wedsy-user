@@ -35,6 +35,11 @@ body {
   background-repeat: repeat;
   background-image: url("../public/assets/background/bg.jpg");
 }
+.events-mobile-bg-image {
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-image: url("../public/assets/background/events-mobile.png");
+}
 
 /* Strike */
 .strike {

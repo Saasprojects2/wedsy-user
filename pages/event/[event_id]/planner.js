@@ -4,14 +4,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { AiOutlinePlus, AiOutlinePlusSquare } from "react-icons/ai";
-import { BiEditAlt } from "react-icons/bi";
-import { BsInfoCircle } from "react-icons/bs";
+import { BiEditAlt, BiMap } from "react-icons/bi";
+import { BsArrowLeft, BsArrowRight, BsInfoCircle } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 
 export default function EventTool({ user }) {
   const router = useRouter();
   const [event, setEvent] = useState({});
-  const [eventDay, setEventDay] = useState("");
+  const [eventDay, setEventDay] = useState();
   const { event_id } = router.query;
   const fetchEvent = () => {
     fetch(
@@ -29,7 +29,11 @@ export default function EventTool({ user }) {
         if (response.message !== "error") {
           if (response.eventDays.length > 0) {
             setEvent(response);
-            setEventDay(response.eventDays[0]._id);
+            if (router.query.eventDay) {
+              setEventDay(router.query.eventDay);
+            } else {
+              setEventDay(response.eventDays[0]._id);
+            }
           } else {
             router.push(`/event/${event_id}`);
           }
@@ -157,181 +161,440 @@ export default function EventTool({ user }) {
     fetchEvent();
   }, []);
   return (
-    <div className="flex flex-col gap-8">
-      <div className="flex flex-col">
-        <div className="px-8 flex-wrap flex flex-row items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
-          {event?.eventDays?.map((item, index) => (
-            <div
-              key={item._id}
-              className={`p-4 grow cursor-pointer ${
-                eventDay === item._id && "text-black font-semibold"
-              }`}
-              onClick={() => {
-                setEventDay(item._id);
-              }}
-            >
-              {item.name}
-            </div>
-          ))}
-          <Link href={`/event/${event_id}`}>
-            <AiOutlinePlusSquare size={24} />
-          </Link>
-        </div>
-        <div className="grid md:grid-cols-4 gap-6 py-4">
-          <div className="hidden border-r md:flex flex-col gap-6 py-8 pl-8">
-            <div className="flex flex-col gap-3 pl-6">
-              <p className="flex flex-row justify-between pb-2 font-semibold text-xl">
-                Decor
-              </p>
-              <div className="flex flex-col gap-2">
-                <div className="text-gray-700">Entrance</div>
-                <div className="text-gray-700">Pathway</div>
-                <div className="font-medium text-lg flex flex-row gap-2 items-center pl-2">
-                  Stage<span className="h-px flex-grow bg-black"></span>
-                </div>
-                <div className="text-gray-700">Mandap</div>
+    <>
+      <div className="hidden md:block flex flex-col gap-8">
+        <div className="flex flex-col">
+          <div className="px-8 flex-wrap flex flex-row items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+            {event?.eventDays?.map((item, index) => (
+              <div
+                key={item._id}
+                className={`p-4 grow cursor-pointer ${
+                  eventDay === item._id && "text-black font-semibold"
+                }`}
+                onClick={() => {
+                  setEventDay(item._id);
+                }}
+              >
+                {item.name}
               </div>
-            </div>
+            ))}
+            <Link href={`/event/${event_id}`}>
+              <AiOutlinePlusSquare size={24} />
+            </Link>
           </div>
-          <div className="col-span-3 flex flex-col">
-            <div className="flex flex-row justify-between pr-8">
-              <div className="flex flex-col justify-between">
-                <span>14 November 2023</span>
-                <span>7.00PM Onwards</span>
-                <span>Laleet Place Banglore</span>
+          <div className="grid md:grid-cols-4 gap-6 py-4">
+            <div className="hidden border-r md:flex flex-col gap-6 py-8 pl-8">
+              <div className="flex flex-col gap-3 pl-6">
+                <p className="flex flex-row justify-between pb-2 font-semibold text-xl">
+                  Decor
+                </p>
+                <div className="flex flex-col gap-2">
+                  <div className="text-gray-700">Entrance</div>
+                  <div className="text-gray-700">Pathway</div>
+                  <div className="font-medium text-lg flex flex-row gap-2 items-center pl-2">
+                    Stage<span className="h-px flex-grow bg-black"></span>
+                  </div>
+                  <div className="text-gray-700">Mandap</div>
+                </div>
               </div>
-              <span className="">
-                Designated Planner :
-                <span className="text-rose-900 font-semibold">
-                  Rohaan Saleem
-                </span>
-              </span>
             </div>
-            {event.eventDays?.filter((item) => item._id === eventDay)[0]
-              ?.decorItems.length > 0 ? (
-              <>
-                {event.eventDays
-                  ?.filter((item) => item._id === eventDay)[0]
-                  ?.decorItems.map((item) => (
-                    <div
-                      className="flex flex-col gap-4 pt-8 border-b border-b-black"
-                      key={item._id}
-                    >
-                      <div className="grid grid-cols-5 gap-6 items-center px-4">
-                        <div className="relative col-span-3">
-                          <p className="text-xl font-semibold flex flex-row items-center gap-2 mb-2">
-                            <span>{item.decor?.name}</span>
-                            {/* <BiEditAlt
+            <div className="col-span-3 flex flex-col">
+              <div className="flex flex-row justify-between pr-8">
+                <div className="flex flex-col justify-between">
+                  <span>14 November 2023</span>
+                  <span>7.00PM Onwards</span>
+                  <span>Laleet Place Banglore</span>
+                </div>
+                <span className="">
+                  Designated Planner :
+                  <span className="text-rose-900 font-semibold">
+                    Rohaan Saleem
+                  </span>
+                </span>
+              </div>
+              {event.eventDays?.filter((item) => item._id === eventDay)[0]
+                ?.decorItems.length > 0 ? (
+                <>
+                  {event.eventDays
+                    ?.filter((item) => item._id === eventDay)[0]
+                    ?.decorItems.map((item) => (
+                      <div
+                        className="flex flex-col gap-4 pt-8 border-b border-b-black"
+                        key={item._id}
+                      >
+                        <div className="grid grid-cols-5 gap-6 items-center px-4">
+                          <div className="relative col-span-3">
+                            <p className="text-xl font-semibold flex flex-row items-center gap-2 mb-2">
+                              <span>{item.decor?.name}</span>
+                              {/* <BiEditAlt
                               size={24}
                               className="ml-auto cursor-pointer"
                             />
                             <MdDelete size={24} className="cursor-pointer" /> */}
-                          </p>
-                          <Image
-                            src={item.decor?.image}
-                            alt="Decor"
-                            width={0}
-                            height={0}
-                            sizes="100%"
-                            style={{ width: "100%", height: "auto" }}
-                            className="rounded-xl"
-                          />
-                        </div>
-                        {item.platform && item.flooring && (
-                          <div className="flex flex-row items-center gap-6 col-span-2">
-                            <AiOutlinePlus size={24} />
-                            <div className="flex flex-col gap-3">
-                              <Image
-                                src={"/assets/images/platform.png"}
-                                alt="Platform"
-                                width={0}
-                                height={0}
-                                sizes="100%"
-                                style={{ width: "100%", height: "auto" }}
-                              />
-                              <p className="font-medium text-center mb-2">
-                                Platform (
-                                {`${item.dimensions.length} x ${item.dimensions.breadth} x ${item.dimensions.height}`}
-                                )
-                              </p>
-                              <Image
-                                src={
-                                  item.flooring === "Carpet"
-                                    ? "/assets/images/carpet.png"
-                                    : item.flooring === "Flex"
-                                    ? "/assets/images/flex.png"
-                                    : item.flooring === "PrintedFlex"
-                                    ? "/assets/images/printedFlex.png"
-                                    : "/assets/images/carpet.png"
-                                }
-                                alt="Platform"
-                                width={0}
-                                height={0}
-                                sizes="100%"
-                                style={{ width: "100%", height: "auto" }}
-                              />
-                              <p className="font-medium text-center mb-2">
-                                Flooring:
-                                {` ${
-                                  item.flooring !== "PrintedFlex"
-                                    ? item.flooring
-                                    : "Printed Flex"
-                                }`}
-                              </p>
-                            </div>
+                            </p>
+                            <Image
+                              src={item.decor?.image}
+                              alt="Decor"
+                              width={0}
+                              height={0}
+                              sizes="100%"
+                              style={{ width: "100%", height: "auto" }}
+                              className="rounded-xl"
+                            />
                           </div>
+                          {item.platform && item.flooring && (
+                            <div className="flex flex-row items-center gap-6 col-span-2">
+                              <AiOutlinePlus size={24} />
+                              <div className="flex flex-col gap-3">
+                                <Image
+                                  src={"/assets/images/platform.png"}
+                                  alt="Platform"
+                                  width={0}
+                                  height={0}
+                                  sizes="100%"
+                                  style={{ width: "100%", height: "auto" }}
+                                />
+                                <p className="font-medium text-center mb-2">
+                                  Platform (
+                                  {`${item.dimensions.length} x ${item.dimensions.breadth} x ${item.dimensions.height}`}
+                                  )
+                                </p>
+                                <Image
+                                  src={
+                                    item.flooring === "Carpet"
+                                      ? "/assets/images/carpet.png"
+                                      : item.flooring === "Flex"
+                                      ? "/assets/images/flex.png"
+                                      : item.flooring === "PrintedFlex"
+                                      ? "/assets/images/printedFlex.png"
+                                      : "/assets/images/carpet.png"
+                                  }
+                                  alt="Platform"
+                                  width={0}
+                                  height={0}
+                                  sizes="100%"
+                                  style={{ width: "100%", height: "auto" }}
+                                />
+                                <p className="font-medium text-center mb-2">
+                                  Flooring:
+                                  {` ${
+                                    item.flooring !== "PrintedFlex"
+                                      ? item.flooring
+                                      : "Printed Flex"
+                                  }`}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex flex-row">
+                          <div className="flex flex-col px-4 pb-1">
+                            <p className="text-lg font-medium">Inclusive of:</p>
+                            {item.decor.productInfo?.included.map(
+                              (rec, recIndex) => (
+                                <p key={recIndex}>{rec}</p>
+                              )
+                            )}
+                          </div>
+                          <p className="mt-auto flex flex-row items-center justify-end gap-2 text-lg text-white font-medium w-1/2 ml-auto bg-gradient-to-l from-rose-900 to-white py-2 px-10">
+                            ₹ {item.price}{" "}
+                            <Tooltip
+                              content={
+                                <div className="flex flex-col gap-1">
+                                  <div className="flex flex-row justify-between gap-2">
+                                    <span>{item.category}:</span>
+                                    <span>
+                                      ₹
+                                      {
+                                        item.decor.productInfo.variant[
+                                          item.variant
+                                        ].sellingPrice
+                                      }
+                                    </span>
+                                  </div>
+                                  {item.platform && (
+                                    <div className="flex flex-row justify-between gap-2">
+                                      <span>Platform:</span>
+                                      <span>
+                                        ₹
+                                        {item.dimensions.length *
+                                          item.dimensions.breadth *
+                                          25}
+                                      </span>
+                                    </div>
+                                  )}
+                                  {item.flooring && (
+                                    <div className="flex flex-row justify-between gap-2">
+                                      <span>Flooring:</span>
+                                      <span>
+                                        ₹
+                                        {(item.dimensions.length +
+                                          item.dimensions.height) *
+                                          (item.dimensions.breadth +
+                                            item.dimensions.height) *
+                                          (item.flooring === "Carpet"
+                                            ? 8
+                                            : item.flooring === "Flex"
+                                            ? 10
+                                            : item.flooring === "PrintedFlex"
+                                            ? 15
+                                            : 0)}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              }
+                              trigger="hover"
+                              style="light"
+                            >
+                              <BsInfoCircle size={12} />
+                            </Tooltip>
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  <div className="overflow-x-auto mt-6 px-6">
+                    <Table className="border">
+                      <Table.Head>
+                        <Table.HeadCell>
+                          <span className="sr-only">#</span>
+                        </Table.HeadCell>
+                        <Table.HeadCell>Decor</Table.HeadCell>
+                        <Table.HeadCell>Price</Table.HeadCell>
+                      </Table.Head>
+                      <Table.Body className="divide-y">
+                        {event.eventDays
+                          ?.filter((item) => item._id === eventDay)[0]
+                          ?.decorItems.map((item, index) => (
+                            <Table.Row
+                              className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                              key={index}
+                            >
+                              <Table.Cell>{index + 1}</Table.Cell>
+                              <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                [{item.decor.category}] {item.decor.name}
+                              </Table.Cell>
+                              <Table.Cell>₹{item.price}</Table.Cell>
+                            </Table.Row>
+                          ))}
+                        <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                          <Table.Cell></Table.Cell>
+                          <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                            Total
+                          </Table.Cell>
+                          <Table.Cell>
+                            ₹
+                            {event.eventDays
+                              ?.filter((item) => item._id === eventDay)[0]
+                              ?.decorItems.reduce(
+                                (accumulator, currentValue) => {
+                                  return accumulator + currentValue.price;
+                                },
+                                0
+                              )}
+                          </Table.Cell>
+                        </Table.Row>
+                      </Table.Body>
+                    </Table>
+                  </div>
+                  {event.eventDays?.filter((item) => item._id === eventDay)[0]
+                    ?.status.finalized ? (
+                    event.eventDays?.filter((item) => item._id === eventDay)[0]
+                      ?.status.approved ? (
+                      <div className="text-center py-8 flex flex-col gap-2">
+                        <p className="text-lg font-medium">
+                          Your design has been approved!
+                        </p>
+                        {event.eventDays?.filter(
+                          (item) => item._id === eventDay
+                        )[0]?.status.paymentDone ? (
+                          <p className="text-lg font-medium">
+                            Your payment is done!
+                          </p>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              CreatePayment({ eventDay });
+                            }}
+                            className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
+                          >
+                            Proceed with Payment
+                          </button>
                         )}
                       </div>
-                      <div className="flex flex-row">
-                        <div className="flex flex-col px-4 pb-1">
+                    ) : (
+                      <div className="text-center py-8 flex flex-col gap-2">
+                        <p className="text-lg font-medium">Thank you!</p>
+                        <p>
+                          Your design has been sent for approval. You can
+                          proceed to payment once approved by your designated
+                          planner!
+                        </p>
+                        <p className="text-sm">
+                          {
+                            "(You'll be notified on your email and phone number)"
+                          }
+                        </p>
+                      </div>
+                    )
+                  ) : (
+                    <button
+                      onClick={() => {
+                        finalizeEventDay({ eventDay });
+                      }}
+                      className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
+                    >
+                      Finalize
+                    </button>
+                  )}
+                </>
+              ) : (
+                <p className="text-center py-8">
+                  No decor selected.{" "}
+                  <Link href={"/decor"} className="underline">
+                    Click here
+                  </Link>{" "}
+                  to browse
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="md:hidden events-mobile-bg-image flex flex-col gap-4 px-6 py-6">
+        <Link href={`/event/${event_id}`}>
+          <BsArrowLeft size={24} />
+        </Link>
+        <div className="flex flex-col gap-6">
+          <p className="text-xl font-semibold">{event.name}</p>
+          {event.eventDays
+            ?.filter((item) => item._id === eventDay)
+            ?.map((item, index) => (
+              <div
+                className="divide-y divide-black bg-white rounded-md border-2 border-black  relative"
+                key={index}
+              >
+                <div className="block p-4">
+                  <p className="font-medium ">{item.name}</p>
+                  <p className="text-right text-sm">{item.date}23</p>
+                  <p className=" text-right text-sm">{item.time} Onwards</p>
+                  <p className="flex gap-1 text-sm flex-row justify-end">
+                    <BiMap />
+                    {item.venue}
+                  </p>
+                </div>
+                <div className="border-y-2 border-black grid grid-cols-2">
+                  <span className="text-center">DECOR</span>
+                  <span className="text-center text-white bg-black">
+                    VENDORS
+                  </span>
+                </div>
+                {item.decorItems.length > 0 ? (
+                  item.decorItems.map((rec, recIndex) => (
+                    <div className="flex flex-col gap-2 p-4" key={recIndex}>
+                      <p className="font-medium">{rec.decor?.name}</p>
+                      <Image
+                        src={rec.decor?.image}
+                        alt="Decor"
+                        width={0}
+                        height={0}
+                        sizes="100%"
+                        style={{ width: "100%", height: "auto" }}
+                        className="rounded-xl"
+                      />
+                      {rec.platform && rec.flooring && (
+                        <div className="flex flex-row items-center gap-6 col-span-2">
+                          <AiOutlinePlus size={24} />
+                          <div className="flex flex-col gap-3">
+                            <Image
+                              src={"/assets/images/platform.png"}
+                              alt="Platform"
+                              width={0}
+                              height={0}
+                              sizes="100%"
+                              style={{ width: "100%", height: "auto" }}
+                            />
+                            <p className="font-medium text-center mb-2">
+                              Platform (
+                              {`${rec.dimensions.length} x ${rec.dimensions.breadth} x ${rec.dimensions.height}`}
+                              )
+                            </p>
+                            <Image
+                              src={
+                                rec.flooring === "Carpet"
+                                  ? "/assets/images/carpet.png"
+                                  : rec.flooring === "Flex"
+                                  ? "/assets/images/flex.png"
+                                  : rec.flooring === "PrintedFlex"
+                                  ? "/assets/images/printedFlex.png"
+                                  : "/assets/images/carpet.png"
+                              }
+                              alt="Platform"
+                              width={0}
+                              height={0}
+                              sizes="100%"
+                              style={{ width: "100%", height: "auto" }}
+                            />
+                            <p className="font-medium text-center mb-2">
+                              Flooring:
+                              {` ${
+                                rec.flooring !== "PrintedFlex"
+                                  ? item.flooring
+                                  : "Printed Flex"
+                              }`}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      <div className="grid grid-cols-3 items-center">
+                        <div className="col-span-2 flex flex-col border-r border-black mr-2">
                           <p className="text-lg font-medium">Inclusive of:</p>
-                          {item.decor.productInfo?.included.map(
-                            (rec, recIndex) => (
-                              <p key={recIndex}>{rec}</p>
+                          {rec.decor.productInfo?.included.map(
+                            (temp, tempIndec) => (
+                              <p key={tempIndec}>{temp}</p>
                             )
                           )}
                         </div>
-                        <p className="mt-auto flex flex-row items-center justify-end gap-2 text-lg text-white font-medium w-1/2 ml-auto bg-gradient-to-l from-rose-900 to-white py-2 px-10">
-                          ₹ {item.price}{" "}
+                        <p className="place-self-end text-[#AB2F32] font-medium flex flex-row items-center gap-2">
+                          ₹ {rec.price}
                           <Tooltip
                             content={
                               <div className="flex flex-col gap-1">
                                 <div className="flex flex-row justify-between gap-2">
-                                  <span>{item.category}:</span>
+                                  <span>{rec.category}:</span>
                                   <span>
                                     ₹
                                     {
-                                      item.decor.productInfo.variant[
-                                        item.variant
-                                      ].sellingPrice
+                                      rec.decor.productInfo.variant[rec.variant]
+                                        .sellingPrice
                                     }
                                   </span>
                                 </div>
-                                {item.platform && (
+                                {rec.platform && (
                                   <div className="flex flex-row justify-between gap-2">
                                     <span>Platform:</span>
                                     <span>
                                       ₹
-                                      {item.dimensions.length *
-                                        item.dimensions.breadth *
+                                      {rec.dimensions.length *
+                                        rec.dimensions.breadth *
                                         25}
                                     </span>
                                   </div>
                                 )}
-                                {item.flooring && (
+                                {rec.flooring && (
                                   <div className="flex flex-row justify-between gap-2">
                                     <span>Flooring:</span>
                                     <span>
                                       ₹
-                                      {(item.dimensions.length +
-                                        item.dimensions.height) *
-                                        (item.dimensions.breadth +
-                                          item.dimensions.height) *
-                                        (item.flooring === "Carpet"
+                                      {(rec.dimensions.length +
+                                        rec.dimensions.height) *
+                                        (rec.dimensions.breadth +
+                                          rec.dimensions.height) *
+                                        (rec.flooring === "Carpet"
                                           ? 8
-                                          : item.flooring === "Flex"
+                                          : rec.flooring === "Flex"
                                           ? 10
-                                          : item.flooring === "PrintedFlex"
+                                          : rec.flooring === "PrintedFlex"
                                           ? 15
                                           : 0)}
                                     </span>
@@ -347,108 +610,117 @@ export default function EventTool({ user }) {
                         </p>
                       </div>
                     </div>
-                  ))}
-                <div className="overflow-x-auto mt-6 px-6">
-                  <Table className="border">
-                    <Table.Head>
-                      <Table.HeadCell>
-                        <span className="sr-only">#</span>
-                      </Table.HeadCell>
-                      <Table.HeadCell>Decor</Table.HeadCell>
-                      <Table.HeadCell>Price</Table.HeadCell>
-                    </Table.Head>
-                    <Table.Body className="divide-y">
-                      {event.eventDays
-                        ?.filter((item) => item._id === eventDay)[0]
-                        ?.decorItems.map((item, index) => (
-                          <Table.Row
-                            className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                            key={index}
-                          >
-                            <Table.Cell>{index + 1}</Table.Cell>
-                            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                              [{item.decor.category}] {item.decor.name}
-                            </Table.Cell>
-                            <Table.Cell>₹{item.price}</Table.Cell>
-                          </Table.Row>
-                        ))}
-                      <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                        <Table.Cell></Table.Cell>
-                        <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                          Total
-                        </Table.Cell>
-                        <Table.Cell>
-                          ₹
+                  ))
+                ) : (
+                  <div className="flex flex-col gap-2 p-4">
+                    <p>
+                      No Decor selected yet{" "}
+                      <Link href="/decor" className="underline">
+                        Browse Now!
+                      </Link>
+                    </p>
+                  </div>
+                )}
+                {item.decorItems.length > 0 && (
+                  <>
+                    <div className="overflow-x-auto mt-6">
+                      <Table className="border">
+                        <Table.Head>
+                          <Table.HeadCell>Decor</Table.HeadCell>
+                          <Table.HeadCell>Price</Table.HeadCell>
+                        </Table.Head>
+                        <Table.Body className="divide-y">
                           {event.eventDays
                             ?.filter((item) => item._id === eventDay)[0]
-                            ?.decorItems.reduce((accumulator, currentValue) => {
-                              return accumulator + currentValue.price;
-                            }, 0)}
-                        </Table.Cell>
-                      </Table.Row>
-                    </Table.Body>
-                  </Table>
-                </div>
-                {event.eventDays?.filter((item) => item._id === eventDay)[0]
-                  ?.status.finalized ? (
-                  event.eventDays?.filter((item) => item._id === eventDay)[0]
-                    ?.status.approved ? (
-                    <div className="text-center py-8 flex flex-col gap-2">
-                      <p className="text-lg font-medium">
-                        Your design has been approved!
-                      </p>
-                      {event.eventDays?.filter(
+                            ?.decorItems.map((item, index) => (
+                              <Table.Row
+                                className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                key={index}
+                              >
+                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                  [{item.decor.category}] {item.decor.name}
+                                </Table.Cell>
+                                <Table.Cell>₹{item.price}</Table.Cell>
+                              </Table.Row>
+                            ))}
+                          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                            <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                              Total
+                            </Table.Cell>
+                            <Table.Cell>
+                              ₹
+                              {event.eventDays
+                                ?.filter((item) => item._id === eventDay)[0]
+                                ?.decorItems.reduce(
+                                  (accumulator, currentValue) => {
+                                    return accumulator + currentValue.price;
+                                  },
+                                  0
+                                )}
+                            </Table.Cell>
+                          </Table.Row>
+                        </Table.Body>
+                      </Table>
+                    </div>
+                    {event.eventDays?.filter((item) => item._id === eventDay)[0]
+                      ?.status.finalized ? (
+                      event.eventDays?.filter(
                         (item) => item._id === eventDay
-                      )[0]?.status.paymentDone ? (
-                        <p className="text-lg font-medium">
-                          Your payment is done!
-                        </p>
+                      )[0]?.status.approved ? (
+                        <div className="text-center py-8 flex flex-col gap-2">
+                          <p className="text-lg font-medium">
+                            Your design has been approved!
+                          </p>
+                          {event.eventDays?.filter(
+                            (item) => item._id === eventDay
+                          )[0]?.status.paymentDone ? (
+                            <p className="text-lg font-medium">
+                              Your payment is done!
+                            </p>
+                          ) : (
+                            <button
+                              onClick={() => {
+                                CreatePayment({ eventDay });
+                              }}
+                              className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
+                            >
+                              Proceed with Payment
+                            </button>
+                          )}
+                        </div>
                       ) : (
+                        <div className="text-center py-8 flex flex-col gap-2">
+                          <p className="text-lg font-medium">Thank you!</p>
+                          <p>
+                            Your design has been sent for approval. You can
+                            proceed to payment once approved by your designated
+                            planner!
+                          </p>
+                          <p className="text-sm">
+                            {
+                              "(You'll be notified on your email and phone number)"
+                            }
+                          </p>
+                        </div>
+                      )
+                    ) : (
+                      <div className="text-center py-8 flex flex-col gap-2">
                         <button
                           onClick={() => {
-                            CreatePayment({ eventDay });
+                            finalizeEventDay({ eventDay });
                           }}
                           className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
                         >
-                          Proceed with Payment
+                          Finalize
                         </button>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8 flex flex-col gap-2">
-                      <p className="text-lg font-medium">Thank you!</p>
-                      <p>
-                        Your design has been sent for approval. You can proceed
-                        to payment once approved by your designated planner!
-                      </p>
-                      <p className="text-sm">
-                        {"(You'll be notified on your email and phone number)"}
-                      </p>
-                    </div>
-                  )
-                ) : (
-                  <button
-                    onClick={() => {
-                      finalizeEventDay({ eventDay });
-                    }}
-                    className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
-                  >
-                    Finalize
-                  </button>
+                      </div>
+                    )}
+                  </>
                 )}
-              </>
-            ) : (
-              <p className="text-center py-8">
-                No decor selected.{" "}
-                <Link href={"/decor"} className="underline">
-                  Click here
-                </Link>{" "}
-                to browse
-              </p>
-            )}
-          </div>
+              </div>
+            ))}
         </div>
       </div>
-    </div>
+    </>
   );
 }
