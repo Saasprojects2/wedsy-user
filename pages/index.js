@@ -221,15 +221,15 @@ export default function Home() {
   return (
     <>
       <main
-        className={`${styles.main__div} flex flex-col py-8 md:p-0justify-around gap-6 md:gap-12`}
+        className={`${styles.main__div} flex flex-col justify-around gap-6 md:gap-12 `}
         id="mainDiv"
       >
-        <div className="strike mt-6">
+        <div className="strike mt-6 !hidden md:!block">
           <span className="text-white text-2xl md:text-4xl text-center font-normal">
             WEDDINGS MADE EASY
           </span>
         </div>
-        <div className="p-6 md:px-16 flex flex-row justify-between mt-6 mb-16 text-white">
+        <div className="p-6 md:px-16 hidden md:flex flex-row justify-between mt-6 mb-16 text-white">
           <div className="w-1/3 text-4xl md:text-7xl flex flex-col gap-2">
             <span className="mb-4">YOUR</span>{" "}
             <span className="mb-2">WEDDING</span>{" "}
@@ -296,6 +296,15 @@ export default function Home() {
             )}
           </div>
         </div>
+        <Image
+          src="/assets/images/landing-screen-mobile.png"
+          alt="Decor"
+          width={0}
+          height={0}
+          sizes="100vw"
+          className="block md:hidden"
+          style={{ height: "auto", width: "100vw" }}
+        />
       </main>
       <main className={`${styles.main__div__2}`}>
         <div className="text-center flex flex-col h-full relative">
