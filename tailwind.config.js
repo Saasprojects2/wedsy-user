@@ -16,6 +16,7 @@ module.exports = {
       animation: {
         marquee: "marquee 25s linear infinite",
         marquee2: "marquee2 25s linear infinite",
+        slideIn: "slideIn 2s ease-in-out infinite",
       },
       keyframes: {
         marquee: {
@@ -25,6 +26,10 @@ module.exports = {
         marquee2: {
           "0%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(0%)" },
+        },
+        slideIn: {
+          "0%": { opacity: 0, transform: "translateX(100%)" },
+          "100%": { opacity: 1, transform: "translateX(0)" },
         },
       },
     },

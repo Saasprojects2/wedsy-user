@@ -17,6 +17,7 @@
   width: 200px;
   height: 1px;
   background: #003d7c;
+  /* background: pink; */
 }
 
 .inputRange:nth-child(2)::-webkit-slider-runnable-track {

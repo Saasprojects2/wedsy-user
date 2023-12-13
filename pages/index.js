@@ -381,7 +381,7 @@ export default function Home() {
             {tempDecorList.map((item, index) => (
               <Link
                 href={`/decor/view?category=${decorList[decorIndex].id}`}
-                className={`relative w-1/5`}
+                className={`relative w-1/5 slideIn`}
                 key={item.id}
               >
                 <Image
@@ -421,7 +421,7 @@ export default function Home() {
           <p className="text-rose-900 md:w-2/3">{decorList[decorIndex].text}</p>
           <Link
             href={`/decor/view?category=${decorList[decorIndex].id}`}
-            className="bg-rose-900 rounded-full p-1 px-8 text-white w-max ml-auto md:ml-0 uppercase"
+            className="bg-rose-900 rounded-full p-1 px-8 text-white w-max mt-2 md:mt-0 uppercase"
           >
             Explore Now
           </Link>
@@ -579,7 +579,8 @@ export default function Home() {
         </div>
       </section>
       <PlanYourEvent />
-      <section className="w-full relative">
+      {/* Testimonial Desktop */}
+      <section className="w-full relative hidden md:block">
         <Image
           src={pinkBgGif}
           alt="Decor"
@@ -640,6 +641,54 @@ export default function Home() {
               style={{ width: "80%", height: "auto" }}
               className="mx-auto"
             />
+          </div>
+        </div>
+      </section>
+      {/* Testimonial Mobile */}
+      <section className="w-full relative md:hidden">
+        <Image
+          src={pinkBgGif}
+          alt="Decor"
+          width={0}
+          height={0}
+          sizes="100%"
+          style={{ width: "100%", height: "100%" }}
+          className="absolute top-0 -z-10"
+        />
+        <p className="font-medium text-2xl relative flex flex-row gap-2 relative py-6 items-center justify-center">
+          Customers <FaHeart />
+          Wedsy
+        </p>
+        <Rating className="justify-center">
+          <p className="ml-2 text-lg font-bold">4.8</p>
+          <Rating size="md">
+            <Rating.Star />
+            <Rating.Star />
+            <Rating.Star />
+            <Rating.Star />
+            <Rating.Star filled={true} />
+          </Rating>
+          <FcGoogle size={24} className="ml-2" />
+        </Rating>
+        <div className="flex p-4 md:py-16 md:px-24 flex-row items-center">
+          <div className="w-2/3 relative">
+            <Image
+              src="/assets/images/testimonial.png"
+              alt="Decor"
+              width={0}
+              height={0}
+              sizes="100%"
+              style={{ width: "80%", height: "auto" }}
+              className="mx-auto"
+            />
+          </div>
+          <div className="p-4 w-1/3 self-stretch flex flex-col gap-4">
+            <p className="text-sm text-justify">
+              {
+                "“Very reliable and systematic team that brings your vision to life and require no repeated follow up. so happy to have had them do the decor for my engagement. All the best to the team. “"
+              }
+            </p>
+            <p className="text-right">-Anju alex</p>
           </div>
         </div>
       </section>
