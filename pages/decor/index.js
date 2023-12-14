@@ -1,4 +1,5 @@
 import DecorCard from "@/components/cards/DecorCard";
+import DecorQuotation from "@/components/screens/DecorQuotation";
 import PlanYourEvent from "@/components/screens/PlanYourEvent";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +8,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaInfinity } from "react-icons/fa";
 
-function Decor({ bestSeller, popular }) {
+function Decor({ bestSeller, popular, userLoggedIn }) {
   const [bestSellerIndex, setBestSellerIndex] = useState([0, 1]);
   const [popularIndex, setPopularIndex] = useState([0, 1]);
   return (
@@ -543,7 +544,7 @@ function Decor({ bestSeller, popular }) {
           </div>
         </div>
       </div>
-      <div className="py-16 px-24 bg-gradient-to-b from-amber-100/0 via-amber-100/100 to-amber-100/100">
+      <div className="pt-16 pb-8 px-6 md:px-24 bg-gradient-to-b from-amber-100/0 via-20% via-amber-100/100 to-amber-100/100">
         <p className="md:mt-6 text-2xl md:text-3xl font-semibold mb-8">
           PACKAGES
         </p>
@@ -571,47 +572,8 @@ function Decor({ bestSeller, popular }) {
             className="cursor-pointer rounded-full bg-white"
           />
         </div>
-        <p className="md:mt-24 text-2xl md:text-3xl font-medium mb-8">
-          Have a decor in mind? Get an instant quote!
-        </p>
-        <div className="grid grid-cols-3">
-          <div className="col-span-2">
-            <p className="w-2/3 text-lg">
-              {
-                "Have a decor picture with you but you still don’t know how much it’s gonna cost? Upload your decor picture and Wedsy will revert back to you in 24 hours with a quote"
-              }
-            </p>
-            <div className="mt-8 flex flex-row gap-8 justify-center w-2/3">
-              <input
-                type="text"
-                placeholder="CITY"
-                name="city"
-                className="flex-grow pb-0 text-center bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0 placeholder:text-gray-500 placeholder:font-medium"
-              />
-              <input
-                type="text"
-                placeholder="ADDITIONAL COMMENTS"
-                name="comments"
-                className="flex-grow pb-0 text-center bg-transparent border-0 border-b-black outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0 placeholder:text-gray-500 placeholder:font-medium"
-              />
-            </div>
-          </div>
-          <div className="bg-[#57575799] mx-4 rounded-xl flex flex-col items-center justify-center gap-4">
-            <input
-              type="file"
-              id="fileInput"
-              className="hidden"
-              accept="image/*"
-            />
-            <label for="fileInput" className="bg-white p-2 rounded-full ">
-              <AiOutlinePlus size={24} />
-            </label>
-            <span id="fileName" className="text-sm">
-              UPLOAD HERE
-            </span>
-          </div>
-        </div>
       </div>
+      <DecorQuotation userLoggedIn={userLoggedIn} />
       <PlanYourEvent />
     </>
   );
