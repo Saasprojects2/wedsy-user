@@ -267,7 +267,7 @@ function Decor({ bestSeller, popular }) {
         <div className="hidden overflow-x-hidden overflow-y-hidden mt-8 md:gap-3 md:flex flex-row relative">
           <Link
             href={`/decor/view?category=Pathway`}
-            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow transition-all"
+            className="relative rounded-lg overflow-hidden hover:z-40 grow transition-all"
           >
             <Image
               src="/assets/images/pathway.png"
@@ -276,6 +276,7 @@ function Decor({ bestSeller, popular }) {
               height={0}
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
+              className="hover:scale-125 transition-all duration-500"
             />
             <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">PATHWAY</p>
@@ -283,7 +284,7 @@ function Decor({ bestSeller, popular }) {
           </Link>
           <Link
             href={`/decor/view?category=Entrance`}
-            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow transition-all"
+            className="relative rounded-lg overflow-hidden hover:z-40 grow transition-all"
           >
             <Image
               src="/assets/images/entrance.png"
@@ -292,6 +293,7 @@ function Decor({ bestSeller, popular }) {
               height={0}
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
+              className="hover:scale-125 transition-all duration-500"
             />
             <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">ENTRANCE</p>
@@ -299,7 +301,7 @@ function Decor({ bestSeller, popular }) {
           </Link>
           <Link
             href={`/decor/view?category=Stage`}
-            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow transition-all"
+            className="relative rounded-lg overflow-hidden hover:z-40 grow transition-all"
           >
             <Image
               src="/assets/images/stage.png"
@@ -308,6 +310,7 @@ function Decor({ bestSeller, popular }) {
               height={0}
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
+              className="hover:scale-125 transition-all duration-500"
             />
             <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">STAGE</p>
@@ -315,7 +318,7 @@ function Decor({ bestSeller, popular }) {
           </Link>
           <Link
             href={`/decor/view?category=Mandap`}
-            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow transition-all"
+            className="relative rounded-lg overflow-hidden hover:z-40 grow transition-all"
           >
             <Image
               src="/assets/images/mandap.png"
@@ -324,6 +327,7 @@ function Decor({ bestSeller, popular }) {
               height={0}
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
+              className="hover:scale-125 transition-all duration-500"
             />
             <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">MANDAP</p>
@@ -331,7 +335,7 @@ function Decor({ bestSeller, popular }) {
           </Link>
           <Link
             href={`/decor/view?category=Photobooth`}
-            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow transition-all"
+            className="relative rounded-lg overflow-hidden hover:z-40 grow transition-all"
           >
             <Image
               src="/assets/images/photobooth.png"
@@ -340,6 +344,7 @@ function Decor({ bestSeller, popular }) {
               height={0}
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
+              className="hover:scale-125 transition-all duration-500"
             />
             <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">PHOTOBOOTH</p>
@@ -347,7 +352,7 @@ function Decor({ bestSeller, popular }) {
           </Link>
           <Link
             href={`/decor/view?category=Nameboard`}
-            className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow transition-all"
+            className="relative rounded-lg overflow-hidden hover:z-40 grow transition-all"
           >
             <Image
               src="/assets/images/nameboard.png"
@@ -356,6 +361,7 @@ function Decor({ bestSeller, popular }) {
               height={0}
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
+              className="hover:scale-125 transition-all duration-500"
             />
             <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
               <p className="text-center">NAMEBOARD</p>

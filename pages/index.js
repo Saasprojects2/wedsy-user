@@ -381,7 +381,7 @@ export default function Home() {
             {tempDecorList.map((item, index) => (
               <Link
                 href={`/decor/view?category=${decorList[decorIndex].id}`}
-                className={`relative w-1/5 slideIn`}
+                className={`relative w-1/5 slideIn overflow-hidden`}
                 key={item.id}
               >
                 <Image
@@ -391,7 +391,7 @@ export default function Home() {
                   height={0}
                   sizes="100%"
                   style={{ width: "100%", height: "auto" }}
-                  className=""
+                  className="hover:scale-125 transition-all duration-500"
                 />
               </Link>
             ))}
