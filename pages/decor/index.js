@@ -8,7 +8,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaInfinity } from "react-icons/fa";
 
-function Decor({ bestSeller, popular, userLoggedIn }) {
+function Decor({ bestSeller, popular, userLoggedIn, user }) {
   const [bestSellerIndex, setBestSellerIndex] = useState([0, 1]);
   const [popularIndex, setPopularIndex] = useState([0, 1]);
   return (
@@ -573,7 +573,7 @@ function Decor({ bestSeller, popular, userLoggedIn }) {
           />
         </div>
       </div>
-      <DecorQuotation userLoggedIn={userLoggedIn} />
+      <DecorQuotation userLoggedIn={userLoggedIn} user={user} />
       <PlanYourEvent />
     </>
   );
