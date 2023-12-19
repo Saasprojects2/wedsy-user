@@ -375,10 +375,29 @@ export default function Home() {
               setDecorIndex(item);
             }}
           /> */}
+          <div className="overflow-hidden flex flex-row flex-nowrap absolute w-[33vw] md:w-[20vw] -translate-x-1/2 left-1/2 bottom-0 z-40">
+            <div className="animate-marquee whitespace-nowrap flex flex-row gap-3">
+              {categoryList.map((item, index) => (
+                <p
+                  className="font-medium text-2xl text-center w-[33vw] md:w-[20vw]"
+                  key={index}
+                >
+                  {item}
+                </p>
+              ))}
+            </div>
+            <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex flex-row left-3 gap-3">
+              {categoryList.map((item, index) => (
+                <p
+                  className="font-medium text-2xl text-center w-[33vw] md:w-[20vw]"
+                  key={index}
+                >
+                  {item}
+                </p>
+              ))}
+            </div>
+          </div>
 
-          <p className="font-medium text-2xl text-center absolute w-full bottom-0 z-40">
-            {decorList[decorIndex].id}
-          </p>
           <div className="absolute -top-14 bg-white z-10 h-28 w-full rounded-br-[25%] rounded-bl-[25%] md:rounded-br-[100%] md:rounded-bl-[100%]" />
           <div className="absolute -bottom-14 bg-white z-10 h-28 w-full rounded-tr-[25%] rounded-tl-[25%] md:rounded-tr-[100%] md:rounded-tl-[100%]" />
           <div className="relative overflow-hidden flex flex-row flex-nowrap">
