@@ -28,7 +28,7 @@ function Wishlist() {
   return (
     <>
       <div className="px-6 py-6 md:py-12 md:px-24 flex flex-col gap-4 md:gap-8 md:pt-24">
-        <div className="text-black text-2xl md:text-6xl font-semibold">
+        <div className="text-black text-2xl md:text-4xl font-semibold">
           Decor Wishlist
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-16">
