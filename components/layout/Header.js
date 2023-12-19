@@ -101,16 +101,14 @@ export default function Header({ userLoggedIn, user, Logout }) {
           >
             DECOR
           </Navbar.Link>
-          {userLoggedIn && (
-            <Navbar.Link
-              href="/event"
-              className={`font-medium text-${
-                variant === "dark" ? "white" : "black"
-              }`}
-            >
-              MY EVENT
-            </Navbar.Link>
-          )}
+          <Navbar.Link
+            href="/event"
+            className={`font-medium text-${
+              variant === "dark" ? "white" : "black"
+            }`}
+          >
+            MY EVENT
+          </Navbar.Link>
           <Navbar.Link
             href="#"
             className={`font-medium text-${
