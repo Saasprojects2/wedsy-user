@@ -56,7 +56,7 @@ export default function EventTool({ userLoggedIn }) {
     userLoggedIn && (
       <>
         <div className="hidden md:block bg-gradient-to-b from-[#948A72] to-white">
-          <div className="grid grid-cols-3 relative gap-12">
+          <div className="grid grid-cols-3 relative gap-12 pb-24">
             <div className="pl-32 flex flex-col gap-8 pt-24 col-span-2">
               <div className="text-black text-6xl font-medium">MY EVENTS</div>
               <div className="text-xl">
@@ -67,14 +67,17 @@ export default function EventTool({ userLoggedIn }) {
                 effortlessly - all in one place, at Wedsy.
               </div>
             </div>
-            <Image
-              src={`/assets/images/event-1.png`}
-              alt="Decor"
-              width={0}
-              height={0}
-              sizes="100%"
-              style={{ width: "100%", height: "auto" }}
-            />
+            <div>
+              <Image
+                src={`/assets/images/event-1.png`}
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "auto", height: "80vh" }}
+                className="absolute top-0 right-0"
+              />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-24 justify-between px-24 mb-12">
             <div className="flex flex-col gap-8 max-w-max">
