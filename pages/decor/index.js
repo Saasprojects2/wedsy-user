@@ -9,6 +9,14 @@ import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaInfinity } from "react-icons/fa";
 
 function Decor({ bestSeller, popular, userLoggedIn, user }) {
+  const [categoryList, setCategoryList] = useState([
+    "Stage",
+    "Pathway",
+    "Entrance",
+    "Photobooth",
+    "Mandap",
+    "Nameboard",
+  ]);
   const [bestSellerIndex, setBestSellerIndex] = useState([0, 1]);
   const [popularIndex, setPopularIndex] = useState([0, 1]);
   return (
@@ -286,391 +294,79 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
       </div>
       {/* Categories */}
       <div className="py-8">
-        <p className="md:mt-6 text-2xl md:text-3xl font-semibold text-center">
+        <p className="md:mt-6 text-2xl md:text-3xl mb-4 md:mb-8 font-semibold text-center">
           CATEGORIES
         </p>
-        <div className="hidden overflow-x-hidden overflow-y-hidden mt-8 md:gap-3 md:flex flex-row relative">
-          <div className="animate-marquee whitespace-nowrap flex flex-row md:gap-3">
-            <Link
-              href={`/decor/view?category=Pathway`}
-              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
-            >
-              <Image
-                src="/assets/images/pathway.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-                className="hover:scale-125 transition-all duration-500"
-              />
-              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                <p className="text-center">PATHWAY</p>
+        <div className="relative overflow-x-hidden flex flex-row flex-nowrap">
+          <div className="animate-marquee whitespace-nowrap flex flex-row gap-3">
+            {categoryList.map((item, index) => (
+              <div
+                key={index}
+                className="overflow-hidden rounded-lg w-[33vw] md:w-[20vw] relative"
+              >
+                <Link
+                  href={`/decor/view?category=${item}`}
+                  className="hover:z-40 transition-all"
+                >
+                  <Image
+                    src={`/assets/images/${item.toLowerCase()}.png`}
+                    alt="Decor"
+                    width={0}
+                    height={0}
+                    sizes="100%"
+                    style={{ width: "100%", height: "auto" }}
+                    className="hover:scale-125 transition-all duration-500 hidden md:inline"
+                  />
+                  <Image
+                    src={`/assets/images/${item.toLowerCase()}-mobile.png`}
+                    alt="Decor"
+                    width={0}
+                    height={0}
+                    sizes="100%"
+                    style={{ width: "100%", height: "auto" }}
+                    className="hover:scale-125 transition-all duration-500 md:hidden"
+                  />
+                  <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                    <p className="text-center">{item.toUpperCase()}</p>
+                  </div>
+                </Link>
               </div>
-            </Link>
-            <Link
-              href={`/decor/view?category=Entrance`}
-              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
-            >
-              <Image
-                src="/assets/images/entrance.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-                className="hover:scale-125 transition-all duration-500"
-              />
-              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                <p className="text-center">ENTRANCE</p>
-              </div>
-            </Link>
-            <Link
-              href={`/decor/view?category=Stage`}
-              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
-            >
-              <Image
-                src="/assets/images/stage.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-                className="hover:scale-125 transition-all duration-500"
-              />
-              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                <p className="text-center">STAGE</p>
-              </div>
-            </Link>
-            <Link
-              href={`/decor/view?category=Mandap`}
-              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
-            >
-              <Image
-                src="/assets/images/mandap.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-                className="hover:scale-125 transition-all duration-500"
-              />
-              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                <p className="text-center">MANDAP</p>
-              </div>
-            </Link>
-            <Link
-              href={`/decor/view?category=Photobooth`}
-              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
-            >
-              <Image
-                src="/assets/images/photobooth.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-                className="hover:scale-125 transition-all duration-500"
-              />
-              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                <p className="text-center">PHOTOBOOTH</p>
-              </div>
-            </Link>
-            <Link
-              href={`/decor/view?category=Nameboard`}
-              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
-            >
-              <Image
-                src="/assets/images/nameboard.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-                className="hover:scale-125 transition-all duration-500"
-              />
-              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                <p className="text-center">NAMEBOARD</p>
-              </div>
-            </Link>
+            ))}
           </div>
-          <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex flex-row left-3 md:gap-3">
-            <Link
-              href={`/decor/view?category=Pathway`}
-              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
-            >
-              <Image
-                src="/assets/images/pathway.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-                className="hover:scale-125 transition-all duration-500"
-              />
-              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                <p className="text-center">PATHWAY</p>
+          <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex flex-row left-3 gap-3">
+            {categoryList.map((item, index) => (
+              <div
+                key={index}
+                className="relative overflow-hidden rounded-lg w-[33vw] md:w-[20vw]"
+              >
+                <Link
+                  href={`/decor/view?category=${item}`}
+                  className="rounded-lg hover:overflow-hidden hover:z-40 transition-all"
+                >
+                  <Image
+                    src={`/assets/images/${item.toLowerCase()}.png`}
+                    alt="Decor"
+                    width={0}
+                    height={0}
+                    sizes="100%"
+                    style={{ width: "100%", height: "auto" }}
+                    className="hover:scale-125 transition-all duration-500 hidden md:inline"
+                  />
+                  <Image
+                    src={`/assets/images/${item.toLowerCase()}-mobile.png`}
+                    alt="Decor"
+                    width={0}
+                    height={0}
+                    sizes="100%"
+                    style={{ width: "100%", height: "auto" }}
+                    className="hover:scale-125 transition-all duration-500 md:hidden"
+                  />
+                  <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                    <p className="text-center">{item.toUpperCase()}</p>
+                  </div>
+                </Link>
               </div>
-            </Link>
-            <Link
-              href={`/decor/view?category=Entrance`}
-              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
-            >
-              <Image
-                src="/assets/images/entrance.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-                className="hover:scale-125 transition-all duration-500"
-              />
-              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                <p className="text-center">ENTRANCE</p>
-              </div>
-            </Link>
-            <Link
-              href={`/decor/view?category=Stage`}
-              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
-            >
-              <Image
-                src="/assets/images/stage.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-                className="hover:scale-125 transition-all duration-500"
-              />
-              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                <p className="text-center">STAGE</p>
-              </div>
-            </Link>
-            <Link
-              href={`/decor/view?category=Mandap`}
-              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
-            >
-              <Image
-                src="/assets/images/mandap.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-                className="hover:scale-125 transition-all duration-500"
-              />
-              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                <p className="text-center">MANDAP</p>
-              </div>
-            </Link>
-            <Link
-              href={`/decor/view?category=Photobooth`}
-              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
-            >
-              <Image
-                src="/assets/images/photobooth.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-                className="hover:scale-125 transition-all duration-500"
-              />
-              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                <p className="text-center">PHOTOBOOTH</p>
-              </div>
-            </Link>
-            <Link
-              href={`/decor/view?category=Nameboard`}
-              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
-            >
-              <Image
-                src="/assets/images/nameboard.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100%", height: "auto" }}
-                className="hover:scale-125 transition-all duration-500"
-              />
-              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                <p className="text-center">NAMEBOARD</p>
-              </div>
-            </Link>
-          </div>
-        </div>
-        <div className="relative flex md:hidden overflow-x-hidden overflow-y-hidden mt-8 md:gap-4 flex-row">
-          <div className="animate-marquee whitespace-nowrap flex flex-row">
-            <Link
-              href={`/decor/view?category=Pathway`}
-              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
-            >
-              <Image
-                src="/assets/images/pathway-mobile.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100vw", height: "auto" }}
-                className="!w-[30vw] max-w-[30vw]"
-              />
-            </Link>
-            <Link
-              href={`/decor/view?category=Entrance`}
-              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
-            >
-              <Image
-                src="/assets/images/entrance-mobile.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100vw", height: "auto" }}
-                className="!w-[30vw] max-w-[30vw]"
-              />
-            </Link>
-            <Link
-              href={`/decor/view?category=Stage`}
-              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
-            >
-              <Image
-                src="/assets/images/stage-mobile.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100vw", height: "auto" }}
-                className="!w-[30vw] max-w-[30vw]"
-              />
-            </Link>
-            <Link
-              href={`/decor/view?category=Mandap`}
-              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
-            >
-              <Image
-                src="/assets/images/mandap-mobile.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100vw", height: "auto" }}
-                className="!w-[30vw] max-w-[30vw]"
-              />
-            </Link>
-            <Link
-              href={`/decor/view?category=Photobooth`}
-              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
-            >
-              <Image
-                src="/assets/images/photobooth-mobile.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100vw", height: "auto" }}
-                className="!w-[30vw] max-w-[30vw]"
-              />
-            </Link>
-            <Link
-              href={`/decor/view?category=Nameboard`}
-              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
-            >
-              <Image
-                src="/assets/images/nameboard-mobile.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100vw", height: "auto" }}
-                className="!w-[30vw] max-w-[30vw]"
-              />
-            </Link>
-          </div>
-          <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex flex-row">
-            <Link
-              href={`/decor/view?category=Pathway`}
-              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
-            >
-              <Image
-                src="/assets/images/pathway-mobile.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100vw", height: "auto" }}
-                className="!w-[30vw] max-w-[30vw]"
-              />
-            </Link>
-            <Link
-              href={`/decor/view?category=Entrance`}
-              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
-            >
-              <Image
-                src="/assets/images/entrance-mobile.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100vw", height: "auto" }}
-                className="!w-[30vw] max-w-[30vw]"
-              />
-            </Link>
-            <Link
-              href={`/decor/view?category=Stage`}
-              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
-            >
-              <Image
-                src="/assets/images/stage-mobile.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100vw", height: "auto" }}
-                className="!w-[30vw] max-w-[30vw]"
-              />
-            </Link>
-            <Link
-              href={`/decor/view?category=Mandap`}
-              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
-            >
-              <Image
-                src="/assets/images/mandap-mobile.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100vw", height: "auto" }}
-                className="!w-[30vw] max-w-[30vw]"
-              />
-            </Link>
-            <Link
-              href={`/decor/view?category=Photobooth`}
-              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
-            >
-              <Image
-                src="/assets/images/photobooth-mobile.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100vw", height: "auto" }}
-                className="!w-[30vw] max-w-[30vw]"
-              />
-            </Link>
-            <Link
-              href={`/decor/view?category=Nameboard`}
-              className="relative rounded-lg hover:scale-[1.05] hover:z-40 grow"
-            >
-              <Image
-                src="/assets/images/nameboard-mobile.png"
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "100vw", height: "auto" }}
-                className="!w-[30vw] max-w-[30vw]"
-              />
-            </Link>
+            ))}
           </div>
         </div>
       </div>

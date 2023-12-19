@@ -25,6 +25,15 @@ function DecorListing({ data }) {
       style: true,
       stageSize: true,
     },
+    category: router.query.category || "",
+    categoryList: [
+      "Stage",
+      "Pathway",
+      "Entrance",
+      "Photobooth",
+      "Mandap",
+      "Nameboard",
+    ],
     style: [],
     styleList: ["Modern", "Traditional", "Both"],
     priceRange: [0, 115000],
@@ -72,10 +81,13 @@ function DecorListing({ data }) {
     if (loading) return;
     setLoading(true);
     try {
-      console.log(router.query.category, router.query);
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/decor?page=${page}${
-          router.query.category ? `&category=${router.query.category}` : ""
+          filters.category || router.query.category
+            ? `&category=${
+                filters.category ? filters.category : router.query.category
+              }`
+            : ""
         }${
           filters.occasion.length > 0
             ? `&occassion=${filters.occasion.join("|")}`
@@ -97,7 +109,14 @@ function DecorListing({ data }) {
         }`
       );
       const tempData = await response.json();
-      setList([...list, ...tempData.list]);
+      if (page === 1 && filters.sort.length <= 0) {
+        setList([
+          ...list,
+          ...tempData.list.sort((a, b) => 0.5 - Math.random()),
+        ]);
+      } else {
+        setList([...list, ...tempData.list]);
+      }
       if (tempData.totalPages === 0) {
         setPage(0);
       } else {
@@ -110,6 +129,7 @@ function DecorListing({ data }) {
     }
   };
   useEffect(() => {
+    console.log("Hurray");
     setPage(1);
     setList([]);
   }, [
@@ -123,6 +143,7 @@ function DecorListing({ data }) {
     filters.sort,
     filters.applyPriceFilter,
     filters.applySizeFilter,
+    filters.category,
   ]);
 
   useEffect(() => {
@@ -830,7 +851,38 @@ function DecorListing({ data }) {
               </Dropdown>
             </span>
           </div>
-          <div className="flex flex-row justify-between px-6 py-6 md:py-0 md:px-10 md:mb-8 items-center">
+          <div className="flex flex-col gap-4 md:gap-0 md:flex-row justify-between px-6 py-6 md:py-0 md:px-10 md:mb-8 items-center">
+            <div className="block md:hidden">
+              <Dropdown
+                inline
+                label={
+                  filters.category
+                    ? filters.category
+                    : router.query.category
+                    ? router.query.category
+                    : "Select Category"
+                }
+                className="max-w-max"
+              >
+                <Dropdown.Item
+                  onClick={() => {
+                    setFilters({ ...filters, category: "" });
+                  }}
+                >
+                  Select Category
+                </Dropdown.Item>
+                {filters.categoryList?.map((item, index) => (
+                  <Dropdown.Item
+                    key={index}
+                    onClick={() => {
+                      setFilters({ ...filters, category: item });
+                    }}
+                  >
+                    {item}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown>
+            </div>
             <div className="w-full md:w-1/2">
               <SearchBar
                 value={filters.search}
@@ -840,7 +892,36 @@ function DecorListing({ data }) {
                 disabled={false}
               />
             </div>
-            <div className="hidden md:inline">
+            <div className="hidden md:flex flex-row gap-3">
+              <Dropdown
+                inline
+                label={
+                  filters.category
+                    ? filters.category
+                    : router.query.category
+                    ? router.query.category
+                    : "Select Category"
+                }
+                className="max-w-max"
+              >
+                <Dropdown.Item
+                  onClick={() => {
+                    setFilters({ ...filters, category: "" });
+                  }}
+                >
+                  Select Category
+                </Dropdown.Item>
+                {filters.categoryList?.map((item, index) => (
+                  <Dropdown.Item
+                    key={index}
+                    onClick={() => {
+                      setFilters({ ...filters, category: item });
+                    }}
+                  >
+                    {item}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown>
               <Dropdown
                 inline
                 label={filters.sort ? filters.sort.replace(/-/g, " ") : "Sort"}

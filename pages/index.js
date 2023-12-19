@@ -17,6 +17,14 @@ import { FaHeart } from "react-icons/fa";
 import PlanYourEvent from "@/components/screens/PlanYourEvent";
 
 export default function Home() {
+  const categoryList = [
+    "Stage",
+    "Pathway",
+    "Entrance",
+    "Photobooth",
+    "Mandap",
+    "Nameboard",
+  ];
   const decorList = [
     {
       id: "Stage",
@@ -339,7 +347,7 @@ export default function Home() {
           THE WEDDING STORE
         </p>
         <div className="relative overflow-y-hidden">
-          <BsArrowLeftShort
+          {/* <BsArrowLeftShort
             size={48}
             className="cursor-pointer scale-[0.5] md:scale-[1] absolute top-1/2 -translate-y-1/2 z-40 rounded-full bg-white left-6"
             onClick={() => {
@@ -366,61 +374,88 @@ export default function Home() {
               }
               setDecorIndex(item);
             }}
-          />
+          /> */}
 
           <p className="font-medium text-2xl text-center absolute w-full bottom-0 z-40">
             {decorList[decorIndex].id}
           </p>
           <div className="absolute -top-14 bg-white z-10 h-28 w-full rounded-br-[25%] rounded-bl-[25%] md:rounded-br-[100%] md:rounded-bl-[100%]" />
           <div className="absolute -bottom-14 bg-white z-10 h-28 w-full rounded-tr-[25%] rounded-tl-[25%] md:rounded-tr-[100%] md:rounded-tl-[100%]" />
-          <div
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            className="hidden md:flex overflow-x-hidden overflow-y-hidden gap-3 flex-row relative items-center flex-nowrap"
-          >
-            {tempDecorList.map((item, index) => (
-              <Link
-                href={`/decor/view?category=${decorList[decorIndex].id}`}
-                className={`relative w-1/5 slideIn overflow-hidden`}
-                key={item.id}
-              >
-                <Image
-                  src={item.image}
-                  alt="Decor"
-                  width={0}
-                  height={0}
-                  sizes="100%"
-                  style={{ width: "100%", height: "auto" }}
-                  className="hover:scale-125 transition-all duration-500"
-                />
-              </Link>
-            ))}
-          </div>
-          <div className="flex md:hidden overflow-x-hidden overflow-y-hidden gap-3 flex-row relative items-center flex-nowrap">
-            {tempDecorList
-              .filter((item, index) => index !== 0 && index !== 4)
-              .map((item, index) => (
-                <Link
-                  href={`/decor/view?category=${decorList[decorIndex].id}`}
-                  className={`relative w-1/3`}
-                  key={item.id}
+          <div className="relative overflow-hidden flex flex-row flex-nowrap">
+            <div className="animate-marquee whitespace-nowrap flex flex-row gap-3">
+              {categoryList.map((item, index) => (
+                <div
+                  key={index}
+                  className="overflow-hidden rounded-lg w-[33vw] md:w-[20vw] relative"
                 >
-                  <Image
-                    src={item.image}
-                    alt="Decor"
-                    width={0}
-                    height={0}
-                    sizes="100%"
-                    style={{ width: "100%", height: "auto" }}
-                  />
-                </Link>
+                  <Link
+                    href={`/decor/view?category=${item}`}
+                    className="hover:z-40 transition-all"
+                  >
+                    <Image
+                      src={`/assets/images/${item.toLowerCase()}.png`}
+                      alt="Decor"
+                      width={0}
+                      height={0}
+                      sizes="100%"
+                      style={{ width: "100%", height: "auto" }}
+                      className="hover:scale-125 transition-all duration-500 hidden md:inline"
+                    />
+                    <Image
+                      src={`/assets/images/${item.toLowerCase()}-mobile.png`}
+                      alt="Decor"
+                      width={0}
+                      height={0}
+                      sizes="100%"
+                      style={{ width: "100%", height: "auto" }}
+                      className="hover:scale-125 transition-all duration-500 md:hidden"
+                    />
+                  </Link>
+                </div>
               ))}
+            </div>
+            <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex flex-row left-3 gap-3">
+              {categoryList.map((item, index) => (
+                <div
+                  key={index}
+                  className="relative overflow-hidden rounded-lg w-[33vw] md:w-[20vw]"
+                >
+                  <Link
+                    href={`/decor/view?category=${item}`}
+                    className="rounded-lg hover:overflow-hidden hover:z-40 transition-all"
+                  >
+                    <Image
+                      src={`/assets/images/${item.toLowerCase()}.png`}
+                      alt="Decor"
+                      width={0}
+                      height={0}
+                      sizes="100%"
+                      style={{ width: "100%", height: "auto" }}
+                      className="hover:scale-125 transition-all duration-500 hidden md:inline"
+                    />
+                    <Image
+                      src={`/assets/images/${item.toLowerCase()}-mobile.png`}
+                      alt="Decor"
+                      width={0}
+                      height={0}
+                      sizes="100%"
+                      style={{ width: "100%", height: "auto" }}
+                      className="hover:scale-125 transition-all duration-500 md:hidden"
+                    />
+                  </Link>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         <div className="z-20 flex flex-col md:flex-row gap-2 items-center justify-around p-6 md:px-12 md:py-8">
-          <p className="text-rose-900 md:w-2/3">{decorList[decorIndex].text}</p>
+          <p className="text-rose-900 md:w-2/3">
+            {
+              "Your one-stop shop for affordable and elegant weddings. Simplify planning with fixed-price stage decor, creative entry ideas, stylish furniture rentals, and more. Where affordability meets creativity for your special day."
+            }
+          </p>
           <Link
-            href={`/decor/view?category=${decorList[decorIndex].id}`}
+            href={`/decor/`}
             className="bg-rose-900 rounded-full p-1 px-8 text-white w-max mt-2 md:mt-0 uppercase"
           >
             Explore Now
