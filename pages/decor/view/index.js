@@ -896,7 +896,7 @@ export async function getServerSideProps(context) {
     const data = await response.json();
     return {
       props: {
-        data: data.list,
+        data: data.list.sort((a, b) => 0.5 - Math.random()),
       },
     };
   } catch (error) {

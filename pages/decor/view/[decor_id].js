@@ -730,7 +730,12 @@ function DecorListing({
               <SearchBar />
             </div> */}
             <div className="flex flex-row justify-between mb-6">
-              <p className="font-semibold text-2xl">{decor.name}</p>
+              <p className="font-semibold text-2xl">
+                {decor.name}{" "}
+                <span className="text-lg font-normal">
+                  ({decor?.productInfo.id})
+                </span>
+              </p>
               <Rating size={"md"}>
                 <Rating.Star />
                 <Rating.Star />
@@ -828,7 +833,7 @@ function DecorListing({
                 label={
                   <button
                     type="button"
-                    className="text-white bg-[#C84047] hover:bg-[#C84047] font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
+                    className="text-white bg-rose-900 hover:bg-rose-900 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
                     onClick={() => {
                       if (!userLoggedIn) {
                         setOpenLoginModal(true);
@@ -936,9 +941,9 @@ function DecorListing({
               <button
                 className={`${
                   isAddedToWishlist
-                    ? "text-[#C84047] bg-white hover-white"
-                    : "text-white bg-[#C84047] hover:bg-[#C84047]"
-                } cursor-pointer px-5 py-2.5 focus:outline-none rounded-lg border-[#C84047] border `}
+                    ? "text-rose-900 bg-white hover-white"
+                    : "text-white bg-rose-900 hover:bg-rose-900"
+                } cursor-pointer px-5 py-2.5 focus:outline-none rounded-lg border-rose-900 border `}
                 onClick={() => {
                   if (userLoggedIn) {
                     isAddedToWishlist ? RemoveFromWishList() : AddToWishlist();

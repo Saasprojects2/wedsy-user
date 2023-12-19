@@ -95,31 +95,55 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
         <div className="relative flex overflow-x-hidden">
           <div className="py-4 animate-marquee whitespace-nowrap">
             <span className="mx-8 text-xl text-white">PATHWAY</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-black">ENTRANCE</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-white">STAGE</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-black">MANDAP</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-white">PHOTOBOOTH</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-black">NAMEBOARD</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-white">ENTRANCE</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-black">PATHWAY</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-white">MANDAP</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-black">STAGE</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-white">NAMEBOARD</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-black">PHOTOBOOTH</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
           </div>
           <div className="absolute top-0 py-4 animate-marquee2 whitespace-nowrap">
             <span className="mx-8 text-xl text-white">PATHWAY</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-black">ENTRANCE</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-white">STAGE</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-black">MANDAP</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-white">PHOTOBOOTH</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-black">NAMEBOARD</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-white">ENTRANCE</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-black">PATHWAY</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-white">MANDAP</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-black">STAGE</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-white">NAMEBOARD</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-black">PHOTOBOOTH</span>
+            <span className="mx-0 text-xl text-white">&#x2022;</span>
           </div>
         </div>
       </section>
@@ -266,108 +290,214 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
           CATEGORIES
         </p>
         <div className="hidden overflow-x-hidden overflow-y-hidden mt-8 md:gap-3 md:flex flex-row relative">
-          <Link
-            href={`/decor/view?category=Pathway`}
-            className="relative rounded-lg overflow-hidden hover:z-40 grow transition-all"
-          >
-            <Image
-              src="/assets/images/pathway.png"
-              alt="Decor"
-              width={0}
-              height={0}
-              sizes="100%"
-              style={{ width: "100%", height: "auto" }}
-              className="hover:scale-125 transition-all duration-500"
-            />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-              <p className="text-center">PATHWAY</p>
-            </div>
-          </Link>
-          <Link
-            href={`/decor/view?category=Entrance`}
-            className="relative rounded-lg overflow-hidden hover:z-40 grow transition-all"
-          >
-            <Image
-              src="/assets/images/entrance.png"
-              alt="Decor"
-              width={0}
-              height={0}
-              sizes="100%"
-              style={{ width: "100%", height: "auto" }}
-              className="hover:scale-125 transition-all duration-500"
-            />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-              <p className="text-center">ENTRANCE</p>
-            </div>
-          </Link>
-          <Link
-            href={`/decor/view?category=Stage`}
-            className="relative rounded-lg overflow-hidden hover:z-40 grow transition-all"
-          >
-            <Image
-              src="/assets/images/stage.png"
-              alt="Decor"
-              width={0}
-              height={0}
-              sizes="100%"
-              style={{ width: "100%", height: "auto" }}
-              className="hover:scale-125 transition-all duration-500"
-            />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-              <p className="text-center">STAGE</p>
-            </div>
-          </Link>
-          <Link
-            href={`/decor/view?category=Mandap`}
-            className="relative rounded-lg overflow-hidden hover:z-40 grow transition-all"
-          >
-            <Image
-              src="/assets/images/mandap.png"
-              alt="Decor"
-              width={0}
-              height={0}
-              sizes="100%"
-              style={{ width: "100%", height: "auto" }}
-              className="hover:scale-125 transition-all duration-500"
-            />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-              <p className="text-center">MANDAP</p>
-            </div>
-          </Link>
-          <Link
-            href={`/decor/view?category=Photobooth`}
-            className="relative rounded-lg overflow-hidden hover:z-40 grow transition-all"
-          >
-            <Image
-              src="/assets/images/photobooth.png"
-              alt="Decor"
-              width={0}
-              height={0}
-              sizes="100%"
-              style={{ width: "100%", height: "auto" }}
-              className="hover:scale-125 transition-all duration-500"
-            />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-              <p className="text-center">PHOTOBOOTH</p>
-            </div>
-          </Link>
-          <Link
-            href={`/decor/view?category=Nameboard`}
-            className="relative rounded-lg overflow-hidden hover:z-40 grow transition-all"
-          >
-            <Image
-              src="/assets/images/nameboard.png"
-              alt="Decor"
-              width={0}
-              height={0}
-              sizes="100%"
-              style={{ width: "100%", height: "auto" }}
-              className="hover:scale-125 transition-all duration-500"
-            />
-            <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-              <p className="text-center">NAMEBOARD</p>
-            </div>
-          </Link>
+          <div className="animate-marquee whitespace-nowrap flex flex-row md:gap-3">
+            <Link
+              href={`/decor/view?category=Pathway`}
+              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
+            >
+              <Image
+                src="/assets/images/pathway.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+                className="hover:scale-125 transition-all duration-500"
+              />
+              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                <p className="text-center">PATHWAY</p>
+              </div>
+            </Link>
+            <Link
+              href={`/decor/view?category=Entrance`}
+              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
+            >
+              <Image
+                src="/assets/images/entrance.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+                className="hover:scale-125 transition-all duration-500"
+              />
+              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                <p className="text-center">ENTRANCE</p>
+              </div>
+            </Link>
+            <Link
+              href={`/decor/view?category=Stage`}
+              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
+            >
+              <Image
+                src="/assets/images/stage.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+                className="hover:scale-125 transition-all duration-500"
+              />
+              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                <p className="text-center">STAGE</p>
+              </div>
+            </Link>
+            <Link
+              href={`/decor/view?category=Mandap`}
+              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
+            >
+              <Image
+                src="/assets/images/mandap.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+                className="hover:scale-125 transition-all duration-500"
+              />
+              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                <p className="text-center">MANDAP</p>
+              </div>
+            </Link>
+            <Link
+              href={`/decor/view?category=Photobooth`}
+              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
+            >
+              <Image
+                src="/assets/images/photobooth.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+                className="hover:scale-125 transition-all duration-500"
+              />
+              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                <p className="text-center">PHOTOBOOTH</p>
+              </div>
+            </Link>
+            <Link
+              href={`/decor/view?category=Nameboard`}
+              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
+            >
+              <Image
+                src="/assets/images/nameboard.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+                className="hover:scale-125 transition-all duration-500"
+              />
+              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                <p className="text-center">NAMEBOARD</p>
+              </div>
+            </Link>
+          </div>
+          <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex flex-row left-3 md:gap-3">
+            <Link
+              href={`/decor/view?category=Pathway`}
+              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
+            >
+              <Image
+                src="/assets/images/pathway.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+                className="hover:scale-125 transition-all duration-500"
+              />
+              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                <p className="text-center">PATHWAY</p>
+              </div>
+            </Link>
+            <Link
+              href={`/decor/view?category=Entrance`}
+              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
+            >
+              <Image
+                src="/assets/images/entrance.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+                className="hover:scale-125 transition-all duration-500"
+              />
+              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                <p className="text-center">ENTRANCE</p>
+              </div>
+            </Link>
+            <Link
+              href={`/decor/view?category=Stage`}
+              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
+            >
+              <Image
+                src="/assets/images/stage.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+                className="hover:scale-125 transition-all duration-500"
+              />
+              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                <p className="text-center">STAGE</p>
+              </div>
+            </Link>
+            <Link
+              href={`/decor/view?category=Mandap`}
+              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
+            >
+              <Image
+                src="/assets/images/mandap.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+                className="hover:scale-125 transition-all duration-500"
+              />
+              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                <p className="text-center">MANDAP</p>
+              </div>
+            </Link>
+            <Link
+              href={`/decor/view?category=Photobooth`}
+              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
+            >
+              <Image
+                src="/assets/images/photobooth.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+                className="hover:scale-125 transition-all duration-500"
+              />
+              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                <p className="text-center">PHOTOBOOTH</p>
+              </div>
+            </Link>
+            <Link
+              href={`/decor/view?category=Nameboard`}
+              className="relative rounded-lg overflow-hidden hover:z-40 w-[18vw] transition-all"
+            >
+              <Image
+                src="/assets/images/nameboard.png"
+                alt="Decor"
+                width={0}
+                height={0}
+                sizes="100%"
+                style={{ width: "100%", height: "auto" }}
+                className="hover:scale-125 transition-all duration-500"
+              />
+              <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                <p className="text-center">NAMEBOARD</p>
+              </div>
+            </Link>
+          </div>
         </div>
         <div className="relative flex md:hidden overflow-x-hidden overflow-y-hidden mt-8 md:gap-4 flex-row">
           <div className="animate-marquee whitespace-nowrap flex flex-row">
