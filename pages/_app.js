@@ -22,11 +22,11 @@ function App({ Component, pageProps }) {
     "/my-orders",
   ];
   const isPathRestricted = () => {
-    return (
-      restrictedPaths.includes(router.pathname) ||
-      restrictedPaths.filter((item) => router.pathname.startsWith(item))
-        .length > 0
-    );
+    return router.pathname === "/event"
+      ? false
+      : restrictedPaths.includes(router.pathname) ||
+          restrictedPaths.filter((item) => router.pathname.startsWith(item))
+            .length > 0;
   };
   const Logout = () => {
     setLogIn(true);
