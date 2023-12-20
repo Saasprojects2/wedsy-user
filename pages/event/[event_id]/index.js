@@ -14,6 +14,7 @@ export default function EventTool() {
     time: "",
     date: "",
     venue: "",
+    _id: "",
   });
   const { event_id } = router.query;
   const fetchEvent = () => {
@@ -37,23 +38,48 @@ export default function EventTool() {
         router.push("/event");
       });
   };
-  const handleCreateEventDay = () => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        fetchEvent();
-        setData({ name: "", time: "", date: "", venue: "" });
+  const handleEventDay = () => {
+    if (data._id) {
+      fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}/eventDay/${data._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(data),
+        }
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          const { _id } = data;
+          fetchEvent();
+          setData({ name: "", time: "", date: "", venue: "", _id: "" });
+          console.log(response);
+          router.push(`/event/${event_id}/planner?eventDay=${_id}`);
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    } else {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}/eventDay`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(data),
       })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
+        .then((response) => response.json())
+        .then((response) => {
+          fetchEvent();
+          setData({ name: "", time: "", date: "", venue: "", _id: "" });
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    }
   };
   useEffect(() => {
     fetchEvent();
@@ -97,10 +123,23 @@ export default function EventTool() {
               {event?.eventDays?.map((item, index) => (
                 <div className="flex flex-row justify-between" key={index}>
                   {index + 1}. {item.name}
-                  {/* <BiSolidEditAlt size={24} /> */}
+                  <BiSolidEditAlt
+                    size={24}
+                    cursor={"pointer"}
+                    onClick={() => {
+                      const { name, time, date, venue, _id } = item;
+                      setData({ name, time, date, venue, _id });
+                      setDisplayForm(true);
+                    }}
+                  />
                 </div>
               ))}
-              <div className="flex flex-row justify-between text-black/50">
+              <div
+                className="flex flex-row justify-between text-black/50 cursor-pointer"
+                onClick={() => {
+                  setDisplayForm(true);
+                }}
+              >
                 <span>{event?.eventDays?.length + 1}. ADD ONE MORE DAY</span>
               </div>
             </div>
@@ -111,50 +150,54 @@ export default function EventTool() {
               Next
             </Link>
           </div>
-          <div className="relative bg-red-200 bg-opacity-40 rounded-3xl flex flex-col gap-6 p-8 py-12">
-            <div className="text-center text-3xl">TELL US ABOUT YOUR EVENT</div>
-            <input
-              type="text"
-              className="rounded-full p-2 text-center border-0"
-              placeholder="EVENT DAY (eg: Reception)"
-              name="name"
-              value={data.name}
-              onChange={(e) => setData({ ...data, name: e.target.value })}
-            />
-            <div className="grid grid-cols-2 gap-8 w-full">
+          {displayForm && (
+            <div className="relative bg-red-200 bg-opacity-40 rounded-3xl flex flex-col gap-6 p-8 py-12">
+              <div className="text-center text-3xl">
+                TELL US ABOUT YOUR EVENT
+              </div>
               <input
-                type="date"
+                type="text"
                 className="rounded-full p-2 text-center border-0"
-                placeholder="DATE"
-                name="date"
-                value={data.date}
-                onChange={(e) => setData({ ...data, date: e.target.value })}
+                placeholder="EVENT DAY (eg: Reception)"
+                name="name"
+                value={data.name}
+                onChange={(e) => setData({ ...data, name: e.target.value })}
               />
+              <div className="grid grid-cols-2 gap-8 w-full">
+                <input
+                  type="date"
+                  className="rounded-full p-2 text-center border-0"
+                  placeholder="DATE"
+                  name="date"
+                  value={data.date}
+                  onChange={(e) => setData({ ...data, date: e.target.value })}
+                />
+                <input
+                  type="time"
+                  className="rounded-full p-2 text-center border-0"
+                  placeholder="START TIME"
+                  name="time"
+                  value={data.time}
+                  onChange={(e) => setData({ ...data, time: e.target.value })}
+                />
+              </div>
               <input
-                type="time"
+                type="text"
                 className="rounded-full p-2 text-center border-0"
-                placeholder="START TIME"
-                name="time"
-                value={data.time}
-                onChange={(e) => setData({ ...data, time: e.target.value })}
+                placeholder="VENUE"
+                name="venue"
+                value={data.venue}
+                onChange={(e) => setData({ ...data, venue: e.target.value })}
               />
+              <button
+                className="bg-black disabled:bg-neutral-700 rounded-full p-2 px-12 text-white w-max mx-auto"
+                disabled={!data.name || !data.time || !data.date || !data.venue}
+                onClick={handleEventDay}
+              >
+                {data._id ? "UPDATE" : "SUBMIT"}
+              </button>
             </div>
-            <input
-              type="text"
-              className="rounded-full p-2 text-center border-0"
-              placeholder="VENUE"
-              name="venue"
-              value={data.venue}
-              onChange={(e) => setData({ ...data, venue: e.target.value })}
-            />
-            <button
-              className="bg-black disabled:bg-neutral-700 rounded-full p-2 px-12 text-white w-max mx-auto"
-              disabled={!data.name || !data.time || !data.date || !data.venue}
-              onClick={handleCreateEventDay}
-            >
-              SUBMIT
-            </button>
-          </div>
+          )}
         </div>
       </div>
       <div className="md:hidden events-mobile-bg-image flex flex-col gap-4 px-6 py-6">
@@ -217,9 +260,16 @@ export default function EventTool() {
                 className="border-b border-black placeholder:text-black text-center"
                 placeholder="VENUE"
               />
-              <div className="bg-black rounded-tl-full py-2 pl-8 pr-6 absolute bottom-0 right-0">
+              <button
+                className="bg-black text-white rounded-full w-full py-2"
+                disabled={!data.name || !data.time || !data.date || !data.venue}
+                onClick={handleEventDay}
+              >
+                {data._id ? "UPDATE" : "SUBMIT"}
+              </button>
+              {/* <div className="bg-black rounded-tl-full py-2 pl-8 pr-6 absolute bottom-0 right-0">
                 <BsArrowRight size={20} color="white" />
-              </div>
+              </div> */}
             </div>
           )}
         </div>
