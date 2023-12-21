@@ -6,6 +6,7 @@ import {
   TextInput,
   Spinner,
   Radio,
+  Select,
 } from "flowbite-react";
 import DecorCard from "@/components/cards/DecorCard";
 import { useState, useEffect, useRef } from "react";
@@ -38,6 +39,9 @@ function DecorListing({ data }) {
     styleList: ["Modern", "Traditional", "Both"],
     priceRange: [0, 115000],
     stageSizeRange: [0, 1500],
+    stageLengthRange: [0, 0],
+    stageWidthRange: [0, 0],
+    stageHeightRange: [0, 0],
     applyPriceFilter: false,
     applySizeFilter: false,
     colours: [],
@@ -102,9 +106,24 @@ function DecorListing({ data }) {
           filters.applyPriceFilter && filters.priceRange
             ? `&priceLower=${filters.priceRange[0]}&priceHigher=${filters.priceRange[1]}`
             : ""
+          // }${
+          //   filters.applySizeFilter && filters.stageSizeRange
+          //     ? `&stageSizeLower=${filters.stageSizeRange[0]}&stageSizeHigher=${filters.stageSizeRange[1]}`
+          //     : ""
         }${
-          filters.applySizeFilter && filters.stageSizeRange
-            ? `&stageSizeLower=${filters.stageSizeRange[0]}&stageSizeHigher=${filters.stageSizeRange[1]}`
+          filters.applySizeFilter &&
+          filters.stageLengthRange.filter((item) => item > 0).length > 0
+            ? `&stageLengthLower=${filters.stageLengthRange[0]}&stageLengthHigher=${filters.stageLengthRange[1]}`
+            : ""
+        }${
+          filters.applySizeFilter &&
+          filters.stageWidthRange.filter((item) => item > 0).length > 0
+            ? `&stageWidthLower=${filters.stageWidthRange[0]}&stageWidthHigher=${filters.stageWidthRange[1]}`
+            : ""
+        }${
+          filters.applySizeFilter &&
+          filters.stageHeightRange.filter((item) => item > 0).length > 0
+            ? `&stageHeightLower=${filters.stageHeightRange[0]}&stageHeightHigher=${filters.stageHeightRange[1]}`
             : ""
         }`
       );
@@ -144,6 +163,9 @@ function DecorListing({ data }) {
     filters.applyPriceFilter,
     filters.applySizeFilter,
     filters.category,
+    filters.stageLengthRange,
+    filters.stageHeightRange,
+    filters.stageWidthRange,
   ]);
 
   useEffect(() => {
@@ -423,7 +445,7 @@ function DecorListing({ data }) {
                 </Label>
               </div>
             )}
-            {filters.open.stageSize && (
+            {/* {filters.open.stageSize && (
               <div>
                 <RangeSlider
                   range={filters.stageSizeRange}
@@ -435,6 +457,79 @@ function DecorListing({ data }) {
                   }}
                   factor={20}
                 />
+              </div>
+            )} */}
+            {filters.open.stageSize && (
+              <div className="flex flex-col gap-3 p-3">
+                <Select
+                  value={JSON.stringify(filters.stageLengthRange)}
+                  onChange={(e) => {
+                    setFilters({
+                      ...filters,
+                      stageLengthRange: JSON.parse(e.target.value),
+                    });
+                  }}
+                >
+                  {[
+                    [0, 0],
+                    [0, 5],
+                    [5, 10],
+                    [10, 15],
+                  ].map((item, index) => (
+                    <option value={JSON.stringify(item)} key={index}>
+                      Length:{" "}
+                      {item[0] == 0 && item[1] == 0
+                        ? "Select Range"
+                        : `${item[0]} - ${item[1]}`}
+                    </option>
+                  ))}
+                </Select>
+                <Select
+                  value={JSON.stringify(filters.stageWidthRange)}
+                  onChange={(e) => {
+                    setFilters({
+                      ...filters,
+                      stageWidthRange: JSON.parse(e.target.value),
+                    });
+                  }}
+                >
+                  {[
+                    [0, 0],
+                    [0, 5],
+                    [5, 10],
+                    [10, 15],
+                  ].map((item, index) => (
+                    <option value={JSON.stringify(item)} key={index}>
+                      Width:{" "}
+                      {item[0] == 0 && item[1] == 0
+                        ? "Select Range"
+                        : `${item[0]} - ${item[1]}`}
+                    </option>
+                  ))}
+                </Select>
+                <Select
+                  value={JSON.stringify(filters.stageHeightRange)}
+                  onChange={(e) => {
+                    setFilters({
+                      ...filters,
+                      stageHeightRange: JSON.parse(e.target.value),
+                    });
+                  }}
+                >
+                  {[
+                    [0, 0],
+                    [0, 5],
+                    [5, 10],
+                    [10, 15],
+                  ].map((item, index) => (
+                    <option value={JSON.stringify(item)} key={index}>
+                      Height:{" "}
+                      {item[0] == 0 && item[1] == 0
+                        ? "Select Range"
+                        : `${item[0]} - ${item[1]}`}
+                    </option>
+                  ))}
+                </Select>
               </div>
             )}
           </div>
@@ -515,128 +610,135 @@ function DecorListing({ data }) {
                 className=""
                 dismissOnClick={false}
               >
-                <div className="flex flex-col p-4">
-                  <p className="text-lg flex flex-row justify-between">
-                    Occasion{" "}
-                    {filters.open.occasion ? (
-                      <AiOutlineMinus
-                        size={24}
-                        onClick={() =>
-                          setFilters({
-                            ...filters,
-                            open: { ...filters.open, occasion: false },
-                          })
-                        }
-                        className="cursor-pointer"
-                      />
-                    ) : (
-                      <AiOutlinePlus
-                        size={24}
-                        onClick={() =>
-                          setFilters({
-                            ...filters,
-                            open: { ...filters.open, occasion: true },
-                          })
-                        }
-                        className="cursor-pointer"
-                      />
-                    )}
-                  </p>
-                  {filters.open.occasion &&
-                    filters.occasionList.map((item, index) => (
-                      <div className="flex items-center gap-2 mt-2" key={index}>
-                        <Checkbox
-                          id={`ocassion-${item}`}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              if (!filters.occasion.includes(item)) {
-                                setFilters({
-                                  ...filters,
-                                  occasion: [...filters.occasion, item],
-                                });
-                              }
-                            } else {
-                              setFilters({
-                                ...filters,
-                                occasion: filters.occasion.filter(
-                                  (i) => i !== item
-                                ),
-                              });
-                            }
-                          }}
-                          checked={filters.occasion.includes(item)}
+                <div className="max-h-[80vh] overflow-y-auto z-40">
+                  <div className="flex flex-col p-4 ">
+                    <p className="text-lg flex flex-row justify-between">
+                      Occasion{" "}
+                      {filters.open.occasion ? (
+                        <AiOutlineMinus
+                          size={24}
+                          onClick={() =>
+                            setFilters({
+                              ...filters,
+                              open: { ...filters.open, occasion: false },
+                            })
+                          }
+                          className="cursor-pointer"
                         />
-                        <Label className="flex" htmlFor={`ocassion-${item}`}>
-                          {item}
-                        </Label>
-                      </div>
-                    ))}
-                </div>
-                <div className="flex flex-col p-4 border-t border-black">
-                  <p className="text-lg flex flex-row justify-between">
-                    Colours{" "}
-                    {filters.open.colours ? (
-                      <AiOutlineMinus
-                        size={24}
-                        onClick={() =>
-                          setFilters({
-                            ...filters,
-                            open: { ...filters.open, colours: false },
-                          })
-                        }
-                        className="cursor-pointer"
-                      />
-                    ) : (
-                      <AiOutlinePlus
-                        size={24}
-                        onClick={() =>
-                          setFilters({
-                            ...filters,
-                            open: { ...filters.open, colours: true },
-                          })
-                        }
-                        className="cursor-pointer"
-                      />
-                    )}
-                  </p>
-                  {filters.open.colours &&
-                    Object.keys(filters.coloursList).map((item, index) => (
-                      <div className="flex items-center gap-2 mt-2" key={index}>
-                        <Checkbox
-                          id={`colour-${item}`}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              if (!filters.colours.includes(item)) {
-                                setFilters({
-                                  ...filters,
-                                  colours: [...filters.colours, item],
-                                });
-                              }
-                            } else {
-                              setFilters({
-                                ...filters,
-                                colours: filters.colours.filter(
-                                  (i) => i !== item
-                                ),
-                              });
-                            }
-                          }}
-                          checked={filters.colours.includes(item)}
+                      ) : (
+                        <AiOutlinePlus
+                          size={24}
+                          onClick={() =>
+                            setFilters({
+                              ...filters,
+                              open: { ...filters.open, occasion: true },
+                            })
+                          }
+                          className="cursor-pointer"
                         />
+                      )}
+                    </p>
+                    {filters.open.occasion &&
+                      filters.occasionList.map((item, index) => (
                         <div
-                          className={`h-4 w-4 rounded-full `}
-                          style={{
-                            background: filters.coloursList[item],
-                          }}
+                          className="flex items-center gap-2 mt-2"
+                          key={index}
+                        >
+                          <Checkbox
+                            id={`ocassion-${item}`}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                if (!filters.occasion.includes(item)) {
+                                  setFilters({
+                                    ...filters,
+                                    occasion: [...filters.occasion, item],
+                                  });
+                                }
+                              } else {
+                                setFilters({
+                                  ...filters,
+                                  occasion: filters.occasion.filter(
+                                    (i) => i !== item
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={filters.occasion.includes(item)}
+                          />
+                          <Label className="flex" htmlFor={`ocassion-${item}`}>
+                            {item}
+                          </Label>
+                        </div>
+                      ))}
+                  </div>
+                  <div className="flex flex-col p-4 border-t border-black">
+                    <p className="text-lg flex flex-row justify-between">
+                      Colours{" "}
+                      {filters.open.colours ? (
+                        <AiOutlineMinus
+                          size={24}
+                          onClick={() =>
+                            setFilters({
+                              ...filters,
+                              open: { ...filters.open, colours: false },
+                            })
+                          }
+                          className="cursor-pointer"
                         />
-                        <Label className="flex" htmlFor={`colour-${item}`}>
-                          {item}
-                        </Label>
-                      </div>
-                    ))}
-                </div>
-                {/* Style Filter */}
-                {/* <div className="flex flex-col p-4 border-t border-black">
+                      ) : (
+                        <AiOutlinePlus
+                          size={24}
+                          onClick={() =>
+                            setFilters({
+                              ...filters,
+                              open: { ...filters.open, colours: true },
+                            })
+                          }
+                          className="cursor-pointer"
+                        />
+                      )}
+                    </p>
+                    {filters.open.colours &&
+                      Object.keys(filters.coloursList).map((item, index) => (
+                        <div
+                          className="flex items-center gap-2 mt-2"
+                          key={index}
+                        >
+                          <Checkbox
+                            id={`colour-${item}`}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                if (!filters.colours.includes(item)) {
+                                  setFilters({
+                                    ...filters,
+                                    colours: [...filters.colours, item],
+                                  });
+                                }
+                              } else {
+                                setFilters({
+                                  ...filters,
+                                  colours: filters.colours.filter(
+                                    (i) => i !== item
+                                  ),
+                                });
+                              }
+                            }}
+                            checked={filters.colours.includes(item)}
+                          />
+                          <div
+                            className={`h-4 w-4 rounded-full `}
+                            style={{
+                              background: filters.coloursList[item],
+                            }}
+                          />
+                          <Label className="flex" htmlFor={`colour-${item}`}>
+                            {item}
+                          </Label>
+                        </div>
+                      ))}
+                  </div>
+                  {/* Style Filter */}
+                  {/* <div className="flex flex-col p-4 border-t border-black">
                   <p className="text-lg flex flex-row justify-between">
                     Style{" "}
                     {filters.open.style ? (
@@ -692,59 +794,59 @@ function DecorListing({ data }) {
                       </div>
                     ))}
                 </div> */}
-                <div className="flex flex-col p-4 border-t border-black">
-                  <p className="text-lg flex flex-row justify-between">
-                    Stage Size (in sqft.){" "}
-                    {filters.open.stageSize ? (
-                      <AiOutlineMinus
-                        size={24}
-                        onClick={() =>
-                          setFilters({
-                            ...filters,
-                            open: { ...filters.open, stageSize: false },
-                          })
-                        }
-                        className="cursor-pointer"
-                      />
-                    ) : (
-                      <AiOutlinePlus
-                        size={24}
-                        onClick={() =>
-                          setFilters({
-                            ...filters,
-                            open: { ...filters.open, stageSize: true },
-                          })
-                        }
-                        className="cursor-pointer"
-                      />
-                    )}
-                  </p>
-                  {filters.open.stageSize && (
-                    <div className="flex items-center gap-2 mt-2">
-                      <Checkbox
-                        onChange={(e) => {
-                          if (e.target.checked) {
+                  <div className="flex flex-col p-4 border-t border-black">
+                    <p className="text-lg flex flex-row justify-between">
+                      Stage Size (in sqft.){" "}
+                      {filters.open.stageSize ? (
+                        <AiOutlineMinus
+                          size={24}
+                          onClick={() =>
                             setFilters({
                               ...filters,
-                              applySizeFilter: true,
-                            });
-                          } else {
-                            setFilters({
-                              ...filters,
-                              applySizeFilter: false,
-                            });
+                              open: { ...filters.open, stageSize: false },
+                            })
                           }
-                        }}
-                        checked={filters.applySizeFilter}
-                        id="size-filter"
-                      />
+                          className="cursor-pointer"
+                        />
+                      ) : (
+                        <AiOutlinePlus
+                          size={24}
+                          onClick={() =>
+                            setFilters({
+                              ...filters,
+                              open: { ...filters.open, stageSize: true },
+                            })
+                          }
+                          className="cursor-pointer"
+                        />
+                      )}
+                    </p>
+                    {filters.open.stageSize && (
+                      <div className="flex items-center gap-2 mt-2">
+                        <Checkbox
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFilters({
+                                ...filters,
+                                applySizeFilter: true,
+                              });
+                            } else {
+                              setFilters({
+                                ...filters,
+                                applySizeFilter: false,
+                              });
+                            }
+                          }}
+                          checked={filters.applySizeFilter}
+                          id="size-filter"
+                        />
 
-                      <Label className="flex" htmlFor="size-filter">
-                        Apply Size filter
-                      </Label>
-                    </div>
-                  )}
-                  {filters.open.stageSize && (
+                        <Label className="flex" htmlFor="size-filter">
+                          Apply Size filter
+                        </Label>
+                      </div>
+                    )}
+                    {/* {filters.open.stageSize && (
                     <div>
                       <RangeSlider
                         range={filters.stageSizeRange}
@@ -757,74 +859,148 @@ function DecorListing({ data }) {
                         factor={20}
                       />
                     </div>
-                  )}
-                </div>
-                <div className="flex flex-col p-4 border-t border-black">
-                  <p className="text-lg flex flex-row justify-between">
-                    Price Range{" "}
-                    {filters.open.priceRange ? (
-                      <AiOutlineMinus
-                        size={24}
-                        onClick={() =>
-                          setFilters({
-                            ...filters,
-                            open: { ...filters.open, priceRange: false },
-                          })
-                        }
-                        className="cursor-pointer"
-                      />
-                    ) : (
-                      <AiOutlinePlus
-                        size={24}
-                        onClick={() =>
-                          setFilters({
-                            ...filters,
-                            open: { ...filters.open, priceRange: true },
-                          })
-                        }
-                        className="cursor-pointer"
-                      />
+                  )} */}
+                    {filters.open.stageSize && (
+                      <div className="flex flex-col gap-3 p-3">
+                        <Select
+                          value={JSON.stringify(filters.stageLengthRange)}
+                          onChange={(e) => {
+                            setFilters({
+                              ...filters,
+                              stageLengthRange: JSON.parse(e.target.value),
+                            });
+                          }}
+                        >
+                          {[
+                            [0, 0],
+                            [0, 5],
+                            [5, 10],
+                            [10, 15],
+                          ].map((item, index) => (
+                            <option value={JSON.stringify(item)} key={index}>
+                              Length:{" "}
+                              {item[0] == 0 && item[1] == 0
+                                ? "Select Range"
+                                : `${item[0]} - ${item[1]}`}
+                            </option>
+                          ))}
+                        </Select>
+                        <Select
+                          value={JSON.stringify(filters.stageWidthRange)}
+                          onChange={(e) => {
+                            setFilters({
+                              ...filters,
+                              stageWidthRange: JSON.parse(e.target.value),
+                            });
+                          }}
+                        >
+                          {[
+                            [0, 0],
+                            [0, 5],
+                            [5, 10],
+                            [10, 15],
+                          ].map((item, index) => (
+                            <option value={JSON.stringify(item)} key={index}>
+                              Width:{" "}
+                              {item[0] == 0 && item[1] == 0
+                                ? "Select Range"
+                                : `${item[0]} - ${item[1]}`}
+                            </option>
+                          ))}
+                        </Select>
+                        <Select
+                          value={JSON.stringify(filters.stageHeightRange)}
+                          onChange={(e) => {
+                            setFilters({
+                              ...filters,
+                              stageHeightRange: JSON.parse(e.target.value),
+                            });
+                          }}
+                        >
+                          {[
+                            [0, 0],
+                            [0, 5],
+                            [5, 10],
+                            [10, 15],
+                          ].map((item, index) => (
+                            <option value={JSON.stringify(item)} key={index}>
+                              Height:{" "}
+                              {item[0] == 0 && item[1] == 0
+                                ? "Select Range"
+                                : `${item[0]} - ${item[1]}`}
+                            </option>
+                          ))}
+                        </Select>
+                      </div>
                     )}
-                  </p>
-                  {filters.open.priceRange && (
-                    <div className="flex items-center gap-2 mt-2">
-                      <Checkbox
-                        onChange={(e) => {
-                          if (e.target.checked) {
+                  </div>
+                  <div className="flex flex-col p-4 border-t border-black">
+                    <p className="text-lg flex flex-row justify-between">
+                      Price Range{" "}
+                      {filters.open.priceRange ? (
+                        <AiOutlineMinus
+                          size={24}
+                          onClick={() =>
                             setFilters({
                               ...filters,
-                              applyPriceFilter: true,
-                            });
-                          } else {
-                            setFilters({
-                              ...filters,
-                              applyPriceFilter: false,
-                            });
+                              open: { ...filters.open, priceRange: false },
+                            })
                           }
-                        }}
-                        checked={filters.applyPriceFilter}
-                        id="price-filter"
-                      />
+                          className="cursor-pointer"
+                        />
+                      ) : (
+                        <AiOutlinePlus
+                          size={24}
+                          onClick={() =>
+                            setFilters({
+                              ...filters,
+                              open: { ...filters.open, priceRange: true },
+                            })
+                          }
+                          className="cursor-pointer"
+                        />
+                      )}
+                    </p>
+                    {filters.open.priceRange && (
+                      <div className="flex items-center gap-2 mt-2">
+                        <Checkbox
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFilters({
+                                ...filters,
+                                applyPriceFilter: true,
+                              });
+                            } else {
+                              setFilters({
+                                ...filters,
+                                applyPriceFilter: false,
+                              });
+                            }
+                          }}
+                          checked={filters.applyPriceFilter}
+                          id="price-filter"
+                        />
 
-                      <Label className="flex" htmlFor="price-filter">
-                        Apply Price filter
-                      </Label>
-                    </div>
-                  )}
-                  {filters.open.priceRange && (
-                    <div>
-                      <RangeSlider
-                        range={filters.priceRange}
-                        setRange={(range) => {
-                          setFilters({
-                            ...filters,
-                            priceRange: range,
-                          });
-                        }}
-                        factor={2000}
-                      />
-                    </div>
-                  )}
+                        <Label className="flex" htmlFor="price-filter">
+                          Apply Price filter
+                        </Label>
+                      </div>
+                    )}
+                    {filters.open.priceRange && (
+                      <div>
+                        <RangeSlider
+                          range={filters.priceRange}
+                          setRange={(range) => {
+                            setFilters({
+                              ...filters,
+                              priceRange: range,
+                            });
+                          }}
+                          factor={2000}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </Dropdown>
             </span>
