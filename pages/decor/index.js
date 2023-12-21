@@ -1,6 +1,8 @@
 import DecorCard from "@/components/cards/DecorCard";
 import DecorQuotation from "@/components/screens/DecorQuotation";
 import PlanYourEvent from "@/components/screens/PlanYourEvent";
+import { processMobileNumber } from "@/utils/phoneNumber";
+import { Spinner } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -9,6 +11,16 @@ import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaInfinity } from "react-icons/fa";
 
 function Decor({ bestSeller, popular, userLoggedIn, user }) {
+  const [enquiryForm, setEnquiryForm] = useState({
+    phone: "",
+    name: "",
+    loading: false,
+    success: false,
+    otpSent: false,
+    Otp: "",
+    ReferenceId: "",
+    message: "",
+  });
   const [categoryList, setCategoryList] = useState([
     "Stage",
     "Pathway",
@@ -19,6 +31,86 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
   ]);
   const [bestSellerIndex, setBestSellerIndex] = useState([0, 1]);
   const [popularIndex, setPopularIndex] = useState([0, 1]);
+  const handleEnquiry = () => {
+    setEnquiryForm({
+      ...enquiryForm,
+      loading: true,
+    });
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/enquiry`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: enquiryForm.name,
+        phone: processMobileNumber(enquiryForm.phone),
+        verified: true,
+        source: "Decor Landing Page",
+        Otp: enquiryForm.Otp,
+        ReferenceId: enquiryForm.ReferenceId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (
+          response.message === "Enquiry Added Successfully" &&
+          response.token
+        ) {
+          setEnquiryForm({
+            phone: "",
+            name: "",
+            loading: false,
+            success: true,
+            otpSent: false,
+            Otp: "",
+            ReferenceId: "",
+            message: "",
+          });
+          localStorage.setItem("token", response.token);
+        } else {
+          setEnquiryForm({
+            ...enquiryForm,
+            loading: false,
+            Otp: "",
+            message: response.message,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
+  const SendOTP = async () => {
+    if (await processMobileNumber(enquiryForm.phone)) {
+      setEnquiryForm({
+        ...enquiryForm,
+        loading: true,
+      });
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phone: processMobileNumber(enquiryForm.phone),
+        }),
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          setEnquiryForm({
+            ...enquiryForm,
+            loading: false,
+            otpSent: true,
+            ReferenceId: response.ReferenceId,
+          });
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    } else {
+      alert("Please enter valid mobile number");
+    }
+  };
   return (
     <>
       <main className="relative" id="mainDiv">
@@ -40,6 +132,84 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
           style={{ width: "100%", height: "auto" }}
           className="md:hidden"
         />
+        {/* Enquiry Form */}
+        <div className="hidden md:flex absolute top-2/3 left-2/3 w-1/4 flex-col gap-3 text-center">
+          {enquiryForm.success ? (
+            <p className="text-white">
+              Your Wedsy Wedding Manager will contact you and assist you in
+              choosing the best!
+            </p>
+          ) : (
+            <>
+              <input
+                type="text"
+                placeholder="NAME"
+                value={enquiryForm.name}
+                onChange={(e) =>
+                  setEnquiryForm({ ...enquiryForm, name: e.target.value })
+                }
+                name="name"
+                className="text-center text-white bg-transparent border-0 border-b-white/80 outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-white focus:ring-0  placeholder:text-white"
+              />
+              <input
+                type="text"
+                placeholder="PHONE NO."
+                value={enquiryForm.phone}
+                onChange={(e) =>
+                  setEnquiryForm({
+                    ...enquiryForm,
+                    phone: e.target.value,
+                  })
+                }
+                name="phone"
+                disabled={enquiryForm.otpSent}
+                className="text-center text-white bg-transparent border-0 border-b-white/80 outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-white focus:ring-0  placeholder:text-white"
+              />
+              {enquiryForm.otpSent && (
+                <input
+                  type="text"
+                  placeholder="OTP"
+                  value={enquiryForm.Otp}
+                  onChange={(e) =>
+                    setEnquiryForm({
+                      ...enquiryForm,
+                      Otp: e.target.value,
+                    })
+                  }
+                  name="otp"
+                  className="text-center text-white bg-transparent border-0 border-b-white/80 outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-white focus:ring-0  placeholder:text-white"
+                />
+              )}
+              {enquiryForm.message && (
+                <p className="text-red-500 w-1/4">{enquiryForm.message}</p>
+              )}
+              <button
+                type="submit"
+                className="rounded-full bg-white text-black py-2 disabled:bg-white/50"
+                disabled={
+                  !enquiryForm.name ||
+                  !enquiryForm.phone ||
+                  // !/^\d{10}$/.test(enquiryForm.phone) ||
+                  // processMobileNumber(enquiryForm.phone) ||
+                  enquiryForm.loading ||
+                  (enquiryForm.otpSent ? !enquiryForm.Otp : false)
+                }
+                onClick={() => {
+                  enquiryForm.otpSent ? handleEnquiry() : SendOTP();
+                }}
+              >
+                {enquiryForm.loading ? (
+                  <>
+                    <Spinner size="sm" />
+                    <span className="pl-3">Loading...</span>
+                  </>
+                ) : (
+                  <>SUBMIT</>
+                )}
+              </button>
+            </>
+          )}
+        </div>
       </main>
       {/* BestSellers */}
       <section className="px-4 md:px-24 py-8 md:mt-8">
@@ -114,7 +284,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
           <div className="py-4 animate-marquee whitespace-nowrap">
             <span className="mx-8 text-xl text-white">PATHWAY</span>
             <span className="mx-0 text-xl text-white">&#x2022;</span>
-            <span className="mx-8 text-xl text-black">ENTRANCE</span>
+            <span className="mx-8 text-xl text-white">ENTRANCE</span>
             <span className="mx-0 text-xl text-white">&#x2022;</span>
             <span className="mx-8 text-xl text-white">STAGE</span>
             <span className="mx-0 text-xl text-white">&#x2022;</span>

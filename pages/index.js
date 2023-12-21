@@ -79,34 +79,38 @@ export default function Home() {
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
-  const handleMainEnquiry = () => {
-    setData({
-      ...data,
-      main: { ...data.main, loading: true },
-    });
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/enquiry`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: data.main.name,
-        phone: processMobileNumber(data.main.phone),
-        verified: false,
-        source: "Landing Screen",
-      }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          setData({
-            ...data,
-            main: { phone: "", name: "", loading: false, success: true },
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
+  const handleMainEnquiry = async () => {
+    if (await processMobileNumber(data.main.phone)) {
+      setData({
+        ...data,
+        main: { ...data.main, loading: true },
       });
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/enquiry`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: data.main.name,
+          phone: processMobileNumber(data.main.phone),
+          verified: false,
+          source: "Landing Screen",
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            setData({
+              ...data,
+              main: { phone: "", name: "", loading: false, success: true },
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    } else {
+      alert("Please enter valid mobile number");
+    }
   };
   const handleSecondaryEnquiry = () => {
     setData({
@@ -163,35 +167,39 @@ export default function Home() {
         console.error("There was a problem with the fetch operation:", error);
       });
   };
-  const SendOTP = () => {
-    setData({
-      ...data,
-      secondary: { ...data.secondary, loading: true },
-    });
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/otp`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        phone: processMobileNumber(data.secondary.phone),
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        setData({
-          ...data,
-          secondary: {
-            ...data.secondary,
-            loading: false,
-            otpSent: true,
-            ReferenceId: response.ReferenceId,
-          },
-        });
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
+  const SendOTP = async () => {
+    if (await processMobileNumber(data.secondary.phone)) {
+      setData({
+        ...data,
+        secondary: { ...data.secondary, loading: true },
       });
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          phone: processMobileNumber(data.secondary.phone),
+        }),
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          setData({
+            ...data,
+            secondary: {
+              ...data.secondary,
+              loading: false,
+              otpSent: true,
+              ReferenceId: response.ReferenceId,
+            },
+          });
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    } else {
+      alert("Please enter valid mobile number");
+    }
   };
   useEffect(() => {
     let length = decorList.length;
@@ -286,7 +294,7 @@ export default function Home() {
                     !data.main.name ||
                     !data.main.phone ||
                     // !/^\d{10}$/.test(data.main.phone) ||
-                    !processMobileNumber(data.main.phone) ||
+                    // !processMobileNumber(data.main.phone) ||
                     data.main.loading
                   }
                   onClick={handleMainEnquiry}
@@ -557,6 +565,7 @@ export default function Home() {
                 })
               }
               name="phone"
+              disabled={data.secondary.otpSent}
               className="md:w-1/4 text-black bg-transparent border-0 border-b-gray-500 outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-black focus:ring-0  placeholder:text-black"
             />
             {data.secondary.otpSent && (
@@ -584,7 +593,7 @@ export default function Home() {
                 !data.secondary.name ||
                 !data.secondary.phone ||
                 // !/^\d{10}$/.test(data.secondary.phone) ||
-                processMobileNumber(data.secondary.phone) ||
+                // processMobileNumber(data.secondary.phone) ||
                 data.secondary.loading ||
                 (data.secondary.otpSent ? !data.secondary.Otp : false)
               }
