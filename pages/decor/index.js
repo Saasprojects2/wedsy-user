@@ -41,6 +41,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
           className="md:hidden"
         />
       </main>
+      {/* BestSellers */}
       <section className="px-4 md:px-24 py-8 md:mt-8">
         <div className="flex justify-between relative">
           <h2 className="font-medium text-2xl md:text-4xl">
@@ -56,7 +57,8 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
             DECORE
           </div>
         </div>
-        <div className="flex flex-row md:gap-12 justify-between items-center my-6">
+        {/* BestSeller Desktop */}
+        <div className="hidden md:flex flex-row md:gap-12 justify-between items-center my-6">
           <BsArrowLeftShort
             size={48}
             className="cursor-pointer scale-[0.5] md:scale-[1]"
@@ -96,6 +98,14 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
               setBestSellerIndex([prev, next]);
             }}
           />
+        </div>
+        {/* BestSeller Mobile */}
+        <div className="hide-scrollbar flex md:hidden flex-row gap-8 flex-nowrap items-center my-6 overflow-x-auto">
+          {bestSeller.map((item, index) => (
+            <div className="min-w-[75vw] w-[80vw]" key={index}>
+              <DecorCard decor={item} />
+            </div>
+          ))}
         </div>
       </section>
       {/* MARQUEE FOR CATEGORIES */}
@@ -225,7 +235,8 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
             View More
           </Link>
         </div>
-        <div className="flex flex-row md:gap-12 justify-between items-center my-6">
+        {/* Popular Desktop */}
+        <div className="hidden md:flex flex-row md:gap-12 justify-between items-center my-6">
           <BsArrowLeftShort
             size={48}
             className="cursor-pointer scale-[0.5] md:scale-[1]"
@@ -265,6 +276,14 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
               setPopularIndex([prev, next]);
             }}
           />
+        </div>
+        {/* Popular Mobile */}
+        <div className="hide-scrollbar flex md:hidden flex-row gap-8 flex-nowrap items-center my-6 overflow-x-auto">
+          {popular.map((item, index) => (
+            <div className="min-w-[75vw] w-[80vw]" key={index}>
+              <DecorCard decor={item} />
+            </div>
+          ))}
         </div>
       </section>
       <div
