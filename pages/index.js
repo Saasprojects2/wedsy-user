@@ -15,6 +15,7 @@ import tickGif from "@/public/assets/gif/tick.gif";
 import { processMobileNumber } from "@/utils/phoneNumber";
 import { FaHeart } from "react-icons/fa";
 import PlanYourEvent from "@/components/screens/PlanYourEvent";
+import DecorPackageCard from "@/components/cards/DecorPackageCard";
 
 export default function Home() {
   const categoryList = [
@@ -653,6 +654,22 @@ export default function Home() {
             </div>
             <span>Innovative Solutions</span>
           </div>
+        </div>
+      </section>
+      <section className="flex flex-col  p-6 md:py-16 gap-6 md:px-24">
+        <p className="font-semibold text-2xl md:text-4xl text-rose-900 text-center">
+          PACKAGES
+        </p>
+        <p className="text-lg md:text-2xl text-center">
+          Unlock Ease and Affordability with Our Packages
+        </p>
+        <div className="grid md:grid-cols-3 gap-8">
+          <DecorPackageCard />
+          <DecorPackageCard />
+          <DecorPackageCard />
+          <DecorPackageCard />
+          <DecorPackageCard />
+          <DecorPackageCard />
         </div>
       </section>
       <PlanYourEvent />
