@@ -596,12 +596,18 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
 
 export async function getServerSideProps(context) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/decor`);
-    const data = await response.json();
+    const bestSellerResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/decor?label=bestSeller`
+    );
+    const bestSellerData = await bestSellerResponse.json();
+    const popularResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/decor?label=popular`
+    );
+    const popularData = await popularResponse.json();
     return {
       props: {
-        bestSeller: data.list,
-        popular: data.list,
+        bestSeller: bestSellerData.list.sort((a, b) => 0.5 - Math.random()),
+        popular: popularData.list.sort((a, b) => 0.5 - Math.random()),
       },
     };
   } catch (error) {
