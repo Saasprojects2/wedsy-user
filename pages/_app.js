@@ -102,6 +102,25 @@ function App({ Component, pageProps }) {
         {/* Language Meta Tag */}
         <meta httpEquiv="content-language" content="en" />
       </Head>
+      {/* <!-- Google tag (gtag.js) --> */}
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=G-ZL6YG37MF0`}
+      />
+      <Script
+        id="google-analytics"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-ZL6YG37MF0', {
+            page_path: window.location.pathname,
+          });
+        `,
+        }}
+      />
       {loading ? (
         <div className="grid place-content-center h-screen ">
           <Spinner size="xl" />
