@@ -17,7 +17,7 @@ import { FaHeart } from "react-icons/fa";
 import PlanYourEvent from "@/components/screens/PlanYourEvent";
 import DecorPackageCard from "@/components/cards/DecorPackageCard";
 
-export default function Home() {
+function Home({ packages }) {
   const categoryList = [
     "Stage",
     "Pathway",
@@ -395,7 +395,7 @@ export default function Home() {
                 "Pathway",
               ].map((item, index) => (
                 <p
-                  className="font-medium text-2xl text-center w-[33vw] md:w-[20vw]"
+                  className="font-medium text-xl text-center w-[33vw] md:w-[20vw]"
                   key={index}
                 >
                   {item}
@@ -412,7 +412,7 @@ export default function Home() {
                 "Pathway",
               ].map((item, index) => (
                 <p
-                  className="font-medium text-2xl text-center w-[33vw] md:w-[20vw]"
+                  className="font-medium text-xl text-center w-[33vw] md:w-[20vw]"
                   key={index}
                 >
                   {item}
@@ -420,7 +420,6 @@ export default function Home() {
               ))}
             </div>
           </div>
-
           <div className="absolute -top-14 bg-white z-10 h-28 w-full rounded-br-[25%] rounded-bl-[25%] md:rounded-br-[100%] md:rounded-bl-[100%]" />
           <div className="absolute -bottom-14 bg-white z-10 h-28 w-full rounded-tr-[25%] rounded-tl-[25%] md:rounded-tr-[100%] md:rounded-tl-[100%]" />
           <div className="relative overflow-hidden flex flex-row flex-nowrap">
@@ -656,20 +655,19 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="flex flex-col  p-6 md:py-16 gap-6 md:px-24">
-        <p className="font-semibold text-2xl md:text-4xl text-rose-900 text-center">
+      <section
+        className={`${styles.packages_section} flex flex-col  py-6 md:py-16 gap-6`}
+      >
+        <p className="font-semibold text-2xl md:text-4xl text-rose-900 text-center px-6 md:px-24">
           PACKAGES
         </p>
-        <p className="text-lg md:text-2xl text-center">
+        <p className="text-lg md:text-2xl text-center px-6 md:px-24">
           Unlock Ease and Affordability with Our Packages
         </p>
-        <div className="grid md:grid-cols-3 gap-8">
-          <DecorPackageCard />
-          <DecorPackageCard />
-          <DecorPackageCard />
-          <DecorPackageCard />
-          <DecorPackageCard />
-          <DecorPackageCard />
+        <div className="grid md:grid-cols-4 gap-8 px-6 md:px-24">
+          {packages?.map((item, index) => (
+            <DecorPackageCard decorPackage={item} key={index} />
+          ))}
         </div>
       </section>
       <PlanYourEvent />
@@ -839,3 +837,27 @@ export default function Home() {
     </>
   );
 }
+
+export async function getServerSideProps(context) {
+  try {
+    const packagesResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/decor-package?limit=8`
+    );
+    const packagesData = await packagesResponse.json();
+    return {
+      props: {
+        packages: packagesData.list.sort((a, b) => 0.5 - Math.random()),
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+
+    return {
+      props: {
+        packages: null,
+      },
+    };
+  }
+}
+
+export default Home;
