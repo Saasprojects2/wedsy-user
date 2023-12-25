@@ -82,3 +82,20 @@
     height: auto !important ;
   }
 }
+
+.packages_section {
+  background-image: url("/assets/background/bg-packages.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  /* height: 100vh; */
+  background-position-x: center;
+  background-position-y: top;
+}
+
+@media only screen and (max-width: 600px) {
+  .packages_section {
+    background-image: url("/assets/background/bg-packages.png");
+    height: auto !important ;
+  }
+}
