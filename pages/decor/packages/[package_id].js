@@ -244,8 +244,8 @@ function DecorListing({
               <p className="font-semibold text-2xl md:text-2xl mb-2 text-rose-900">
                 {item.category}: {item.name}
               </p>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="order-last md:order-first border-t md:border-t-0 md:border-r-0 border-black flex flex-col md:divide-y gap-2 md:divide-black md:pr-6">
+              <div className="grid md:grid-cols-3 gap-2 md:gap-6">
+                <div className="order-last md:order-first border-b pb-2 md:pb-0 md:border-b-0 border-black flex flex-col md:divide-y gap-2 md:divide-black md:pr-6">
                   <p className="text-xl font-medium hidden md:block">
                     Description
                   </p>
