@@ -1,6 +1,5 @@
 import { AiFillHeart } from "react-icons/ai";
 import {
-  Button,
   Checkbox,
   Dropdown,
   Label,
@@ -11,7 +10,6 @@ import {
 } from "flowbite-react";
 import DecorCard from "@/components/cards/DecorCard";
 import Image from "next/image";
-import SearchBar from "@/components/searchBar/SearchBar";
 import { useEffect, useState } from "react";
 import {
   BsArrowLeftShort,
@@ -58,6 +56,15 @@ function DecorListing({
     quantity: 1,
     unit: "",
   });
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [eventData, setEventData] = useState({
+    name: "",
+    community: "",
+    eventDay: "",
+    time: "",
+    date: "",
+    venue: "",
+  });
   const { decor_id } = router.query;
   const fetchEvents = () => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/event`, {
@@ -77,30 +84,39 @@ function DecorListing({
         console.error("There was a problem with the fetch operation:", error);
       });
   };
-  useEffect(() => {
-    if (decor_id && userLoggedIn) {
-      fetchEvents();
-      fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/user/is-added-to-wishlist?product=decor&_id=${decor_id}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-        .then((response) => (response.ok ? response.json() : null))
+  const createEvent = () => {
+    if (!userLoggedIn) {
+      setOpenLoginModal(true);
+    } else {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/event`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(eventData),
+      })
+        .then((response) => response.json())
         .then((response) => {
-          if (response) {
-            setIsAddedToWishlist(response.wishlist);
+          if (response._id) {
+            setShowEventModal(false);
+            setEventData({
+              name: "",
+              community: "",
+              eventDay: "",
+              time: "",
+              date: "",
+              venue: "",
+            });
+            fetchEvents();
+            alert("Event Created Successfully!");
           }
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
         });
     }
-  }, [decor_id, userLoggedIn]);
+  };
   const AddToWishlist = () => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/wishlist/decor`, {
       method: "POST",
@@ -206,6 +222,30 @@ function DecorListing({
         console.error("There was a problem with the fetch operation:", error);
       });
   };
+  useEffect(() => {
+    if (decor_id && userLoggedIn) {
+      fetchEvents();
+      fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/user/is-added-to-wishlist?product=decor&_id=${decor_id}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+        .then((response) => (response.ok ? response.json() : null))
+        .then((response) => {
+          if (response) {
+            setIsAddedToWishlist(response.wishlist);
+          }
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    }
+  }, [decor_id, userLoggedIn]);
   return (
     <>
       <Head>
@@ -215,6 +255,7 @@ function DecorListing({
         <meta property="og:description" content={decor?.seoTags?.description} />
         <meta property="og:image" content={decor?.seoTags?.image} />
       </Head>
+      {/* Pathway Quantity Model */}
       <Modal
         show={quantity.open}
         size="lg"
@@ -277,6 +318,103 @@ function DecorListing({
           </div>
         </Modal.Body>
       </Modal>
+      {/* Event Modal */}
+      <Modal
+        show={showEventModal}
+        size="lg"
+        popup
+        onClose={() => {
+          setShowEventModal(false);
+          setEventData({
+            name: "",
+            community: "",
+            eventDay: "",
+            time: "",
+            date: "",
+            venue: "",
+          });
+        }}
+      >
+        <Modal.Header>
+          <h3 className="text-xl font-medium text-gray-900 dark:text-white px-4">
+            Create New Event
+          </h3>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="flex flex-col gap-6">
+            <TextInput
+              type="text"
+              placeholder="EVENT NAME"
+              value={eventData.name}
+              onChange={(e) =>
+                setEventData({ ...eventData, name: e.target.value })
+              }
+            />
+            <TextInput
+              type="text"
+              name="eventDay"
+              placeholder="EVENT DAY (eg: Reception)"
+              value={eventData.eventDay}
+              onChange={(e) =>
+                setEventData({ ...eventData, eventDay: e.target.value })
+              }
+            />
+            <TextInput
+              type="text"
+              name="community"
+              placeholder="COMMUNITY"
+              value={eventData.community}
+              onChange={(e) =>
+                setEventData({ ...eventData, community: e.target.value })
+              }
+            />
+            <TextInput
+              type="date"
+              name="date"
+              placeholder="DATE"
+              value={eventData.date}
+              onChange={(e) =>
+                setEventData({ ...eventData, date: e.target.value })
+              }
+            />
+            <TextInput
+              type="time"
+              name="time"
+              placeholder="START TIME"
+              value={eventData.time}
+              onChange={(e) =>
+                setEventData({ ...eventData, time: e.target.value })
+              }
+            />
+            <TextInput
+              type="text"
+              name="venue"
+              placeholder="VENUE"
+              value={eventData.venue}
+              onChange={(e) =>
+                setEventData({ ...eventData, venue: e.target.value })
+              }
+            />
+            <button
+              className={`text-white bg-rose-900 border border-rose-900 hover:bg-rose-900 disabled:bg-rose-800 font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
+              disabled={
+                !eventData.name ||
+                !eventData.community ||
+                !eventData.eventDay ||
+                !eventData.time ||
+                !eventData.date ||
+                !eventData.venue
+              }
+              onClick={() => {
+                createEvent();
+              }}
+            >
+              Create Event
+            </button>
+          </div>
+        </Modal.Body>
+      </Modal>
+      {/* Addons Model */}
       <Modal
         show={addOns.open}
         size="lg"
@@ -951,8 +1089,11 @@ function DecorListing({
                 ))}
                 <Dropdown.Divider className="bg-black h-[1px] my-0" />
                 <Dropdown.Item
-                  as={Link}
-                  href="/event"
+                  // as={Link}
+                  // href="/event"
+                  onClick={() => {
+                    setShowEventModal(true);
+                  }}
                   className="bg-white text-cyan-600"
                 >
                   + Create New Event
