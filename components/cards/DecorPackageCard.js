@@ -3,7 +3,6 @@ import Link from "next/link";
 
 export default function DecorPackageCard({ className, key, decorPackage }) {
   const { _id, name } = decorPackage;
-  console.log(decorPackage);
   return (
     <>
       <Link
