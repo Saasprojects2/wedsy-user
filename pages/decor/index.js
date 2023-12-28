@@ -567,35 +567,6 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
           </span>
         </div>
       </div>
-      <div className="pt-16 pb-8 px-6 md:px-24 bg-gradient-to-b from-amber-100/0 via-20% via-amber-100/100 to-amber-100/100">
-        <p className="md:mt-6 text-2xl md:text-3xl font-semibold mb-8">
-          PACKAGES
-        </p>
-        <div className="relative">
-          <Image
-            src="/assets/temp/package.png"
-            alt="Decor"
-            width={0}
-            height={0}
-            sizes="100%"
-            style={{ width: "100%", height: "auto" }}
-          />
-        </div>
-        <div className="flex flex-row justify-center gap-16 mt-6 items-center">
-          <BsArrowLeftShort
-            size={24}
-            className="cursor-pointer rounded-full bg-white"
-          />
-          <div className="flex flex-col text-center">
-            <p className="font-medium">ALL FOR</p>
-            <p className="font-semibold text-xl">₹2,00,000</p>
-          </div>
-          <BsArrowRightShort
-            size={24}
-            className="cursor-pointer rounded-full bg-white"
-          />
-        </div>
-      </div>
       <DecorQuotation userLoggedIn={userLoggedIn} user={user} />
       <PlanYourEvent />
     </>
