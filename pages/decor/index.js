@@ -2,6 +2,7 @@ import DecorCard from "@/components/cards/DecorCard";
 import DecorQuotation from "@/components/screens/DecorQuotation";
 import PlanYourEvent from "@/components/screens/PlanYourEvent";
 import { processMobileNumber } from "@/utils/phoneNumber";
+import { toProperCase } from "@/utils/text";
 import { Spinner } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,7 +11,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaInfinity } from "react-icons/fa";
 
-function Decor({ bestSeller, popular, userLoggedIn, user }) {
+function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
   const [enquiryForm, setEnquiryForm] = useState({
     phone: "",
     name: "",
@@ -421,59 +422,73 @@ function Decor({ bestSeller, popular, userLoggedIn, user }) {
         <p className="text-black text-lg md:text-2xl font-normal font-light leading-normal uppercase text-center mt-6">
           {'"Decorating your love story, one beautiful detail at a time"'}
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 m-6 mt-10 md:gap-8 bg-[#FBE2C8]">
-          <div className=" flex flex-col p-6 justify-between md:py-8 order-last md:order-first gap-4 md:gap-0">
-            <p className="text-2xl md:text-3xl font-semibold">
-              String Lights Photobooth
-            </p>
-            <p>
-              A backdrop of string lights will not only bathe everyone in a
-              flattering radiance but will also add a whimsical aspect to the
-              scene.
-            </p>
-            <div className="flex flex-col">
-              <p className="font-medium text-lg md:text-2xl">Can be used for</p>
-              <p>Engagement</p>
-              <p>Wedding</p>
-              <p>Sangeet</p>
-            </div>
-            <div className="flex flex-col">
-              <p className="font-medium text-2xl">Props used</p>
-              <p>Halogen bulb</p>
-            </div>
-            <div className="flex flex-col">
-              <p className="font-medium text-2xl">Colour Theme</p>
-              <p>
-                <span className="flex items-center text-sm font-medium text-gray-900 dark:text-white">
-                  <span className="flex w-2.5 h-2.5 bg-black rounded-full mr-1.5 flex-shrink-0" />
-                  Black
-                </span>
+        {spotlight._id && (
+          <div
+            className={`grid grid-cols-1 md:grid-cols-2 m-6 mt-10 md:gap-8 bg-[${spotlight.spotlightColor}]`}
+            style={{ backgroundColor: spotlight.spotlightColor }}
+          >
+            <div className=" flex flex-col p-6 justify-between md:py-8 order-last md:order-first gap-4 md:gap-4">
+              <p className="text-2xl md:text-3xl font-semibold">
+                {spotlight.name}
               </p>
-              <p>
-                <span className="flex items-center text-sm font-medium text-gray-900 dark:text-white">
-                  <span className="flex w-2.5 h-2.5 bg-yellow-500 rounded-full mr-1.5 flex-shrink-0" />
-                  Gold
-                </span>
-              </p>
+              <p>{spotlight.description}</p>
+              <div className="flex flex-col">
+                <p className="font-medium text-lg md:text-2xl">
+                  Can be used for
+                </p>
+                {spotlight.productVariation?.occassion?.map((item, index) => (
+                  <p key={index}>{toProperCase(item)}</p>
+                ))}
+              </div>
+              <div className="flex flex-col">
+                <p className="font-medium text-2xl">Included</p>
+                {spotlight.productInfo.included.map((item, index) => (
+                  <p key={index}>{toProperCase(item)}</p>
+                ))}
+              </div>
+              {/* <div className="flex flex-col">
+                <p className="font-medium text-2xl">Colour Theme</p>
+                <p>
+                  <span className="flex items-center text-sm font-medium text-gray-900 dark:text-white">
+                    <span className="flex w-2.5 h-2.5 bg-black rounded-full mr-1.5 flex-shrink-0" />
+                    Black
+                  </span>
+                </p>
+                <p>
+                  <span className="flex items-center text-sm font-medium text-gray-900 dark:text-white">
+                    <span className="flex w-2.5 h-2.5 bg-yellow-500 rounded-full mr-1.5 flex-shrink-0" />
+                    Gold
+                  </span>
+                </p>
+              </div> */}
+              <div className="flex flex-col md:flex-row justify-between mt-auto">
+                <p className="text-3xl font-semibold">
+                  ₹{" "}
+                  {spotlight.productInfo.variant.artificialFlowers
+                    .sellingPrice ||
+                    spotlight.productInfo.variant.mixedFlowers.sellingPrice ||
+                    spotlight.productInfo.variant.naturalFlowers.sellingPrice}
+                </p>
+                <Link href={`/decor/view/${spotlight._id}`}>
+                  <button className="mt-6 md:mt-0 bg-black text-white py-2 px-8 rounded-lg">
+                    View More
+                  </button>
+                </Link>
+              </div>
             </div>
-            <div className="flex flex-col md:flex-row justify-between">
-              <p className="text-3xl font-semibold">₹40000</p>
-              <button className="mt-6 md:mt-0 bg-black text-white py-2 px-8 rounded-lg">
-                Add to Event
-              </button>
+            <div className="relative h-full">
+              <Image
+                src={spotlight.thumbnail}
+                alt="Decor"
+                // width={0}
+                // height={0}
+                sizes="100%"
+                fill="cover"
+                // style={{ width: "100%", height: "auto" }}
+              />
             </div>
           </div>
-          <div className="relative">
-            <Image
-              src="/assets/temp/d3.png"
-              alt="Decor"
-              width={0}
-              height={0}
-              sizes="100%"
-              style={{ width: "100%", height: "auto" }}
-            />
-          </div>
-        </div>
+        )}
       </section>
       <section className="px-6 md:px-24 py-8 md:mt-8">
         <div className="flex justify-between">
@@ -583,10 +598,15 @@ export async function getServerSideProps(context) {
       `${process.env.NEXT_PUBLIC_API_URL}/decor?label=popular`
     );
     const popularData = await popularResponse.json();
+    const spotlightResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/decor?spotlight=true&random=true`
+    );
+    const spotlightData = await spotlightResponse.json();
     return {
       props: {
         bestSeller: bestSellerData.list.sort((a, b) => 0.5 - Math.random()),
         popular: popularData.list.sort((a, b) => 0.5 - Math.random()),
+        spotlight: spotlightData.decor,
       },
     };
   } catch (error) {
@@ -596,6 +616,7 @@ export async function getServerSideProps(context) {
       props: {
         bestSeller: null,
         popular: null,
+        spotlight: null,
       },
     };
   }
