@@ -2,13 +2,17 @@ import { Table, Tooltip } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiOutlinePlus, AiOutlinePlusSquare } from "react-icons/ai";
 import { BiEditAlt, BiMap } from "react-icons/bi";
 import { BsArrowLeft, BsArrowRight, BsInfoCircle } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 
 export default function EventTool({ user }) {
+  const divRef = useRef(null);
+  const plannerRef = useRef(null);
+  const [divSize, setDivSize] = useState({ width: 0, height: 0 });
+  const [displayKey, setDisplayKey] = useState("");
   const router = useRouter();
   const [event, setEvent] = useState({});
   const [eventDay, setEventDay] = useState();
@@ -160,6 +164,55 @@ export default function EventTool({ user }) {
   useEffect(() => {
     fetchEvent();
   }, []);
+  useEffect(() => {
+    const handleResize = () => {
+      if (divRef.current) {
+        const { width, height } = divRef.current.getBoundingClientRect();
+        const { top } = divRef.current.getBoundingClientRect();
+        const totalHeight = window.innerHeight;
+        setDivSize({ width, height: totalHeight - top });
+      }
+    };
+
+    // Call handleResize initially to set the initial size
+    handleResize();
+
+    // Attach the event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+  const handlePlannerScroll = () => {
+    if (plannerRef.current) {
+      const plannerElements = Array.from(plannerRef.current.children);
+      for (let i = plannerElements.length - 1; i >= 0; i--) {
+        if (plannerElements[i].getAttribute("data-key")) {
+          const rect = plannerElements[i].getBoundingClientRect();
+          if (rect.top <= plannerRef.current.offsetTop + 5) {
+            setDisplayKey(plannerElements[i].getAttribute("data-key"));
+            break;
+          }
+        }
+      }
+    }
+  };
+  const handlePlannerClick = (key) => {
+    if (plannerRef.current) {
+      const plannerElement = plannerRef.current.querySelector(
+        `[data-key="${key}"]`
+      );
+      if (plannerElement) {
+        const offsetTop = plannerElement.offsetTop - divRef.current.offsetTop;
+        plannerRef.current.scrollTo({
+          top: offsetTop,
+          behavior: "smooth",
+        });
+      }
+    }
+  };
   return (
     <>
       <div className="hidden md:block flex flex-col gap-8">
@@ -182,28 +235,108 @@ export default function EventTool({ user }) {
               <AiOutlinePlusSquare size={24} />
             </Link>
           </div>
-          <div className="grid md:grid-cols-4 gap-6 py-4">
-            <div className="hidden border-r md:flex flex-col gap-6 py-8 pl-8">
-              <div className="flex flex-col gap-3 pl-6">
-                <p className="flex flex-row justify-between pb-2 font-semibold text-xl">
-                  Decor
-                </p>
-                <div className="flex flex-col gap-2">
-                  <div className="text-gray-700">Entrance</div>
-                  <div className="text-gray-700">Pathway</div>
-                  <div className="font-medium text-lg flex flex-row gap-2 items-center pl-2">
-                    Stage<span className="h-px flex-grow bg-black"></span>
+          <div
+            className="grid md:grid-cols-4 gap-6 py-4 overflow-hidden hide-scrollbar"
+            ref={divRef}
+            style={{ height: divSize.height ?? "100vh" }}
+          >
+            <div className="overflow-y-auto hide-scrollbar hidden border-r md:flex flex-col gap-6 py-8 pl-8">
+              {event.eventDays?.filter((item) => item._id === eventDay)[0]
+                ?.decorItems.length > 0 && (
+                <div className="flex flex-col gap-3 pl-6">
+                  <p className="flex flex-row justify-between pb-2 font-semibold text-xl">
+                    Decor
+                  </p>
+                  <div className="flex flex-col gap-2">
+                    {event.eventDays
+                      ?.filter((item) => item._id === eventDay)[0]
+                      ?.decorItems.map((item, index) =>
+                        displayKey === `decor-${item.decor._id}` ? (
+                          <div
+                            className="font-medium text-lg flex flex-row gap-2 items-center pl-2"
+                            key={index}
+                          >
+                            {item.category}
+                            <span className="h-px flex-grow bg-black"></span>
+                          </div>
+                        ) : (
+                          <div
+                            className="text-gray-700 cursor-pointer"
+                            key={index}
+                            onClick={() =>
+                              handlePlannerClick(`decor-${item.decor._id}`)
+                            }
+                          >
+                            {item.category}
+                          </div>
+                        )
+                      )}
                   </div>
-                  <div className="text-gray-700">Mandap</div>
                 </div>
-              </div>
+              )}
+              {event.eventDays?.filter((item) => item._id === eventDay)[0]
+                ?.packages.length > 0 && (
+                <div className="flex flex-col gap-3 pl-6">
+                  <p className="flex flex-row justify-between pb-2 font-semibold text-xl">
+                    Decor Packages
+                  </p>
+                  <div className="flex flex-col gap-2">
+                    {event.eventDays
+                      ?.filter((item) => item._id === eventDay)[0]
+                      ?.packages.map((item, index) =>
+                        displayKey === `package-${item.package._id}` ? (
+                          <div
+                            className="font-medium text-lg flex flex-row gap-2 items-center pl-2"
+                            key={index}
+                          >
+                            {item.package.name}
+                            <span className="h-px flex-grow bg-black"></span>
+                          </div>
+                        ) : (
+                          <div
+                            className="text-gray-700 cursor-pointer"
+                            key={index}
+                            onClick={() =>
+                              handlePlannerClick(`package-${item.package._id}`)
+                            }
+                          >
+                            {item.package.name}
+                          </div>
+                        )
+                      )}
+                  </div>
+                </div>
+              )}
             </div>
-            <div className="col-span-3 flex flex-col">
-              <div className="flex flex-row justify-between pr-8">
+            <div
+              className="overflow-y-auto hide-scrollbar col-span-3 flex flex-col"
+              ref={plannerRef}
+              onScroll={handlePlannerScroll}
+            >
+              <div className="flex flex-row justify-between pr-8 mb-4">
                 <div className="flex flex-col justify-between">
-                  <span>14 November 2023</span>
-                  <span>7.00PM Onwards</span>
-                  <span>Laleet Place Banglore</span>
+                  <span>
+                    {new Date(
+                      event.eventDays?.filter(
+                        (item) => item._id === eventDay
+                      )[0].date
+                    ).toDateString()}
+                  </span>
+                  <span>
+                    {
+                      event.eventDays?.filter(
+                        (item) => item._id === eventDay
+                      )[0].time
+                    }{" "}
+                    Onwards
+                  </span>
+                  <span>
+                    {
+                      event.eventDays?.filter(
+                        (item) => item._id === eventDay
+                      )[0].venue
+                    }
+                  </span>
                 </div>
                 <span className="">
                   Designated Planner :
@@ -213,6 +346,12 @@ export default function EventTool({ user }) {
                 </span>
               </div>
               {event.eventDays?.filter((item) => item._id === eventDay)[0]
+                ?.decorItems.length > 0 && (
+                <p className="text-xl font-semibold flex flex-row items-center gap-2">
+                  Decor
+                </p>
+              )}
+              {event.eventDays?.filter((item) => item._id === eventDay)[0]
                 ?.decorItems.length > 0 ? (
                 <>
                   {event.eventDays
@@ -221,8 +360,9 @@ export default function EventTool({ user }) {
                       <div
                         className="flex flex-col gap-4 pt-8 border-b border-b-black"
                         key={item._id}
+                        data-key={`decor-${item.decor._id}`}
                       >
-                        <div className="grid grid-cols-5 gap-6 items-center px-4">
+                        <div className="grid grid-cols-5 gap-6 items-center px-4 w-4/5">
                           <div className="relative col-span-3">
                             <p className="text-xl font-semibold flex flex-row items-center gap-2 mb-2">
                               <span>{item.decor?.name}</span>
@@ -353,13 +493,140 @@ export default function EventTool({ user }) {
                         </div>
                       </div>
                     ))}
-                  <div className="overflow-x-auto mt-6 px-6">
-                    <Table className="border">
+                </>
+              ) : null}
+              {event.eventDays?.filter((item) => item._id === eventDay)[0]
+                ?.packages.length > 0 && (
+                <p className="text-xl font-semibold flex flex-row items-center gap-2">
+                  Decor Packages
+                </p>
+              )}
+              {event.eventDays?.filter((item) => item._id === eventDay)[0]
+                ?.packages.length > 0 ? (
+                <>
+                  {event.eventDays
+                    ?.filter((item) => item._id === eventDay)[0]
+                    ?.packages.map((item) => (
+                      <div
+                        className="flex flex-col gap-3 pt-4 border-b border-b-black"
+                        key={item._id}
+                        data-key={`package-${item.package._id}`}
+                      >
+                        <p className="text-xl font-semibold flex flex-row items-center gap-2 mb-2">
+                          <span>{item.package?.name}</span>
+                        </p>
+                        {item.decorItems.map((rec, recIndex) => (
+                          <>
+                            <div className="flex flex-col gap-4" key={rec._id}>
+                              <div className="grid grid-cols-5 gap-6 items-center px-4 w-4/5">
+                                <div className="relative col-span-3">
+                                  <p className="text-xl font-semibold flex flex-row items-center gap-2 mb-2">
+                                    <span>{rec.decor?.name}</span>
+                                  </p>
+                                  <Image
+                                    src={rec.decor?.image}
+                                    alt="Decor"
+                                    width={0}
+                                    height={0}
+                                    sizes="100%"
+                                    style={{ width: "100%", height: "auto" }}
+                                    className="rounded-xl"
+                                  />
+                                </div>
+                                {rec.platform && rec.flooring && (
+                                  <div className="flex flex-row items-center gap-6 col-span-2">
+                                    <AiOutlinePlus size={24} />
+                                    <div className="flex flex-col gap-3">
+                                      <Image
+                                        src={"/assets/images/platform.png"}
+                                        alt="Platform"
+                                        width={0}
+                                        height={0}
+                                        sizes="100%"
+                                        style={{
+                                          width: "100%",
+                                          height: "auto",
+                                        }}
+                                      />
+                                      <p className="font-medium text-center mb-2">
+                                        Platform (
+                                        {`${rec.dimensions.length} x ${rec.dimensions.breadth} x ${rec.dimensions.height}`}
+                                        )
+                                      </p>
+                                      <Image
+                                        src={
+                                          rec.flooring === "Carpet"
+                                            ? "/assets/images/carpet.png"
+                                            : rec.flooring === "Flex"
+                                            ? "/assets/images/flex.png"
+                                            : rec.flooring === "PrintedFlex"
+                                            ? "/assets/images/printedFlex.png"
+                                            : "/assets/images/carpet.png"
+                                        }
+                                        alt="Platform"
+                                        width={0}
+                                        height={0}
+                                        sizes="100%"
+                                        style={{
+                                          width: "100%",
+                                          height: "auto",
+                                        }}
+                                      />
+                                      <p className="font-medium text-center mb-2">
+                                        Flooring:
+                                        {` ${
+                                          rec.flooring !== "PrintedFlex"
+                                            ? rec.flooring
+                                            : "Printed Flex"
+                                        }`}
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex flex-row">
+                                <div className="flex flex-col px-4 pb-1">
+                                  <p className="text-lg font-medium">
+                                    Inclusive of:
+                                  </p>
+                                  {rec.decor.productInfo?.included.map(
+                                    (temp, tIndex) => (
+                                      <p key={tIndex}>{temp}</p>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        ))}
+                      </div>
+                    ))}
+                </>
+              ) : null}
+              {event.eventDays?.filter((item) => item._id === eventDay)[0]
+                ?.decorItems.length <= 0 &&
+                event.eventDays?.filter((item) => item._id === eventDay)[0]
+                  ?.packages.length <= 0 && (
+                  <p className="text-center py-8">
+                    No decor selected.{" "}
+                    <Link href={"/decor"} className="underline">
+                      Click here
+                    </Link>{" "}
+                    to browse
+                  </p>
+                )}
+              {(event.eventDays?.filter((item) => item._id === eventDay)[0]
+                ?.decorItems.length > 0 ||
+                event.eventDays?.filter((item) => item._id === eventDay)[0]
+                  ?.packages.length > 0) && (
+                <>
+                  <div className="w-4/5 block mx-auto">
+                    <Table className="border my-3">
                       <Table.Head>
                         <Table.HeadCell>
                           <span className="sr-only">#</span>
                         </Table.HeadCell>
-                        <Table.HeadCell>Decor</Table.HeadCell>
+                        <Table.HeadCell>Decor/Packages</Table.HeadCell>
                         <Table.HeadCell>Price</Table.HeadCell>
                       </Table.Head>
                       <Table.Body className="divide-y">
@@ -373,6 +640,26 @@ export default function EventTool({ user }) {
                               <Table.Cell>{index + 1}</Table.Cell>
                               <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                 [{item.decor.category}] {item.decor.name}
+                              </Table.Cell>
+                              <Table.Cell>₹{item.price}</Table.Cell>
+                            </Table.Row>
+                          ))}
+                        {event.eventDays
+                          ?.filter((item) => item._id === eventDay)[0]
+                          ?.packages.map((item, index) => (
+                            <Table.Row
+                              className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                              key={index}
+                            >
+                              <Table.Cell>
+                                {event.eventDays?.filter(
+                                  (item) => item._id === eventDay
+                                )[0]?.decorItems.length +
+                                  index +
+                                  1}
+                              </Table.Cell>
+                              <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                [Package] {item.package.name}
                               </Table.Cell>
                               <Table.Cell>₹{item.price}</Table.Cell>
                             </Table.Row>
@@ -391,12 +678,43 @@ export default function EventTool({ user }) {
                                   return accumulator + currentValue.price;
                                 },
                                 0
-                              )}
+                              ) +
+                              event.eventDays
+                                ?.filter((item) => item._id === eventDay)[0]
+                                ?.packages.reduce(
+                                  (accumulator, currentValue) => {
+                                    return accumulator + currentValue.price;
+                                  },
+                                  0
+                                )}
                           </Table.Cell>
                         </Table.Row>
                       </Table.Body>
                     </Table>
                   </div>
+                  {/* <div className="overflow-x-auto mt-6 px-6 pt-[100%] -translate-y-0">
+                    
+                  </div> */}
+                  {/* <div className="overflow-x-auto mt-6 px-6">
+                    <Table className="border">
+                      <Table.Head>
+                        <Table.HeadCell>
+                          <span className="sr-only">#</span>
+                        </Table.HeadCell>
+                        <Table.HeadCell>Package</Table.HeadCell>
+                        <Table.HeadCell>Price</Table.HeadCell>
+                      </Table.Head>
+                      <Table.Body className="divide-y">
+                        <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                          <Table.Cell></Table.Cell>
+                          <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                            Total
+                          </Table.Cell>
+                          <Table.Cell>₹{}</Table.Cell>
+                        </Table.Row>
+                      </Table.Body>
+                    </Table>
+                  </div> */}
                   {event.eventDays?.filter((item) => item._id === eventDay)[0]
                     ?.status.finalized ? (
                     event.eventDays?.filter((item) => item._id === eventDay)[0]
@@ -448,14 +766,6 @@ export default function EventTool({ user }) {
                     </button>
                   )}
                 </>
-              ) : (
-                <p className="text-center py-8">
-                  No decor selected.{" "}
-                  <Link href={"/decor"} className="underline">
-                    Click here
-                  </Link>{" "}
-                  to browse
-                </p>
               )}
             </div>
           </div>
@@ -476,7 +786,9 @@ export default function EventTool({ user }) {
               >
                 <div className="block p-4">
                   <p className="font-medium ">{item.name}</p>
-                  <p className="text-right text-sm">{item.date}23</p>
+                  <p className="text-right text-sm">
+                    {new Date(item.date).toDateString()}
+                  </p>
                   <p className=" text-right text-sm">{item.time} Onwards</p>
                   <p className="flex gap-1 text-sm flex-row justify-end">
                     <BiMap />
@@ -489,129 +801,214 @@ export default function EventTool({ user }) {
                     VENDORS
                   </span>
                 </div>
-                {item.decorItems.length > 0 ? (
-                  item.decorItems.map((rec, recIndex) => (
-                    <div className="flex flex-col gap-2 p-4" key={recIndex}>
-                      <p className="font-medium">{rec.decor?.name}</p>
-                      <Image
-                        src={rec.decor?.image}
-                        alt="Decor"
-                        width={0}
-                        height={0}
-                        sizes="100%"
-                        style={{ width: "100%", height: "auto" }}
-                        className="rounded-xl"
-                      />
-                      {rec.platform && rec.flooring && (
-                        <div className="flex flex-row items-center gap-6 col-span-2">
-                          <AiOutlinePlus size={24} />
-                          <div className="flex flex-col gap-3">
-                            <Image
-                              src={"/assets/images/platform.png"}
-                              alt="Platform"
-                              width={0}
-                              height={0}
-                              sizes="100%"
-                              style={{ width: "100%", height: "auto" }}
-                            />
-                            <p className="font-medium text-center mb-2">
-                              Platform (
-                              {`${rec.dimensions.length} x ${rec.dimensions.breadth} x ${rec.dimensions.height}`}
-                              )
-                            </p>
-                            <Image
-                              src={
-                                rec.flooring === "Carpet"
-                                  ? "/assets/images/carpet.png"
-                                  : rec.flooring === "Flex"
-                                  ? "/assets/images/flex.png"
-                                  : rec.flooring === "PrintedFlex"
-                                  ? "/assets/images/printedFlex.png"
-                                  : "/assets/images/carpet.png"
-                              }
-                              alt="Platform"
-                              width={0}
-                              height={0}
-                              sizes="100%"
-                              style={{ width: "100%", height: "auto" }}
-                            />
-                            <p className="font-medium text-center mb-2">
-                              Flooring:
-                              {` ${
-                                rec.flooring !== "PrintedFlex"
-                                  ? item.flooring
-                                  : "Printed Flex"
-                              }`}
-                            </p>
+                {item.decorItems.length > 0
+                  ? item.decorItems.map((rec, recIndex) => (
+                      <div className="flex flex-col gap-2 p-4" key={recIndex}>
+                        <p className="font-medium">{rec.decor?.name}</p>
+                        <Image
+                          src={rec.decor?.image}
+                          alt="Decor"
+                          width={0}
+                          height={0}
+                          sizes="100%"
+                          style={{ width: "100%", height: "auto" }}
+                          className="rounded-xl"
+                        />
+                        {rec.platform && rec.flooring && (
+                          <div className="flex flex-row items-center gap-6 col-span-2">
+                            <AiOutlinePlus size={24} />
+                            <div className="flex flex-col gap-3">
+                              <Image
+                                src={"/assets/images/platform.png"}
+                                alt="Platform"
+                                width={0}
+                                height={0}
+                                sizes="100%"
+                                style={{ width: "100%", height: "auto" }}
+                              />
+                              <p className="font-medium text-center mb-2">
+                                Platform (
+                                {`${rec.dimensions.length} x ${rec.dimensions.breadth} x ${rec.dimensions.height}`}
+                                )
+                              </p>
+                              <Image
+                                src={
+                                  rec.flooring === "Carpet"
+                                    ? "/assets/images/carpet.png"
+                                    : rec.flooring === "Flex"
+                                    ? "/assets/images/flex.png"
+                                    : rec.flooring === "PrintedFlex"
+                                    ? "/assets/images/printedFlex.png"
+                                    : "/assets/images/carpet.png"
+                                }
+                                alt="Platform"
+                                width={0}
+                                height={0}
+                                sizes="100%"
+                                style={{ width: "100%", height: "auto" }}
+                              />
+                              <p className="font-medium text-center mb-2">
+                                Flooring:
+                                {` ${
+                                  rec.flooring !== "PrintedFlex"
+                                    ? item.flooring
+                                    : "Printed Flex"
+                                }`}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      <div className="grid grid-cols-3 items-center">
-                        <div className="col-span-2 flex flex-col border-r border-black mr-2">
-                          <p className="text-lg font-medium">Inclusive of:</p>
-                          {rec.decor.productInfo?.included.map(
-                            (temp, tempIndec) => (
-                              <p key={tempIndec}>{temp}</p>
-                            )
-                          )}
-                        </div>
-                        <p className="place-self-end text-[#AB2F32] font-medium flex flex-row items-center gap-2">
-                          ₹ {rec.price}
-                          <Tooltip
-                            content={
-                              <div className="flex flex-col gap-1">
-                                <div className="flex flex-row justify-between gap-2">
-                                  <span>{rec.category}:</span>
-                                  <span>
-                                    ₹
-                                    {
-                                      rec.decor.productInfo.variant[rec.variant]
-                                        .sellingPrice
-                                    }
-                                  </span>
-                                </div>
-                                {rec.platform && (
+                        )}
+                        <div className="grid grid-cols-3 items-center">
+                          <div className="col-span-2 flex flex-col border-r border-black mr-2">
+                            <p className="text-lg font-medium">Inclusive of:</p>
+                            {rec.decor.productInfo?.included.map(
+                              (temp, tempIndec) => (
+                                <p key={tempIndec}>{temp}</p>
+                              )
+                            )}
+                          </div>
+                          <p className="place-self-end text-[#AB2F32] font-medium flex flex-row items-center gap-2">
+                            ₹ {rec.price}
+                            <Tooltip
+                              content={
+                                <div className="flex flex-col gap-1">
                                   <div className="flex flex-row justify-between gap-2">
-                                    <span>Platform:</span>
+                                    <span>{rec.category}:</span>
                                     <span>
                                       ₹
-                                      {rec.dimensions.length *
-                                        rec.dimensions.breadth *
-                                        25}
+                                      {
+                                        rec.decor.productInfo.variant[
+                                          rec.variant
+                                        ].sellingPrice
+                                      }
                                     </span>
                                   </div>
-                                )}
-                                {rec.flooring && (
-                                  <div className="flex flex-row justify-between gap-2">
-                                    <span>Flooring:</span>
-                                    <span>
-                                      ₹
-                                      {(rec.dimensions.length +
-                                        rec.dimensions.height) *
-                                        (rec.dimensions.breadth +
+                                  {rec.platform && (
+                                    <div className="flex flex-row justify-between gap-2">
+                                      <span>Platform:</span>
+                                      <span>
+                                        ₹
+                                        {rec.dimensions.length *
+                                          rec.dimensions.breadth *
+                                          25}
+                                      </span>
+                                    </div>
+                                  )}
+                                  {rec.flooring && (
+                                    <div className="flex flex-row justify-between gap-2">
+                                      <span>Flooring:</span>
+                                      <span>
+                                        ₹
+                                        {(rec.dimensions.length +
                                           rec.dimensions.height) *
-                                        (rec.flooring === "Carpet"
-                                          ? 8
-                                          : rec.flooring === "Flex"
-                                          ? 10
-                                          : rec.flooring === "PrintedFlex"
-                                          ? 15
-                                          : 0)}
-                                    </span>
-                                  </div>
+                                          (rec.dimensions.breadth +
+                                            rec.dimensions.height) *
+                                          (rec.flooring === "Carpet"
+                                            ? 8
+                                            : rec.flooring === "Flex"
+                                            ? 10
+                                            : rec.flooring === "PrintedFlex"
+                                            ? 15
+                                            : 0)}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              }
+                              trigger="hover"
+                              style="light"
+                            >
+                              <BsInfoCircle size={12} />
+                            </Tooltip>
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  : null}
+                {item.packages.length > 0
+                  ? item.packages.map((rec, recIndex) => (
+                      <div className="flex flex-col gap-2 p-4" key={recIndex}>
+                        <p className="font-medium">{rec.package?.name}</p>
+                        {rec.decorItems.map((temp, tempIndex) => (
+                          <div
+                            className="flex flex-col gap-2 py-4"
+                            key={tempIndex}
+                          >
+                            <p className="font-medium">{temp.decor?.name}</p>
+                            <Image
+                              src={temp.decor?.image}
+                              alt="Decor"
+                              width={0}
+                              height={0}
+                              sizes="100%"
+                              style={{ width: "100%", height: "auto" }}
+                              className="rounded-xl"
+                            />
+                            {temp.platform && temp.flooring && (
+                              <div className="flex flex-row items-center gap-6 col-span-2">
+                                <AiOutlinePlus size={24} />
+                                <div className="flex flex-col gap-3">
+                                  <Image
+                                    src={"/assets/images/platform.png"}
+                                    alt="Platform"
+                                    width={0}
+                                    height={0}
+                                    sizes="100%"
+                                    style={{ width: "100%", height: "auto" }}
+                                  />
+                                  <p className="font-medium text-center mb-2">
+                                    Platform (
+                                    {`${temp.dimensions.length} x ${temp.dimensions.breadth} x ${temp.dimensions.height}`}
+                                    )
+                                  </p>
+                                  <Image
+                                    src={
+                                      temp.flooring === "Carpet"
+                                        ? "/assets/images/carpet.png"
+                                        : temp.flooring === "Flex"
+                                        ? "/assets/images/flex.png"
+                                        : temp.flooring === "PrintedFlex"
+                                        ? "/assets/images/printedFlex.png"
+                                        : "/assets/images/carpet.png"
+                                    }
+                                    alt="Platform"
+                                    width={0}
+                                    height={0}
+                                    sizes="100%"
+                                    style={{ width: "100%", height: "auto" }}
+                                  />
+                                  <p className="font-medium text-center mb-2">
+                                    Flooring:
+                                    {` ${
+                                      temp.flooring !== "PrintedFlex"
+                                        ? item.flooring
+                                        : "Printed Flex"
+                                    }`}
+                                  </p>
+                                </div>
+                              </div>
+                            )}
+                            <div className="grid grid-cols-3 items-center">
+                              <div className="col-span-2 flex flex-col mr-2">
+                                <p className="text-lg font-medium">
+                                  Inclusive of:
+                                </p>
+                                {temp.decor.productInfo?.included.map(
+                                  (t, tIndex) => (
+                                    <p key={tIndex}>{t}</p>
+                                  )
                                 )}
                               </div>
-                            }
-                            trigger="hover"
-                            style="light"
-                          >
-                            <BsInfoCircle size={12} />
-                          </Tooltip>
+                            </div>
+                          </div>
+                        ))}
+                        <p className="place-self-end text-[#AB2F32] font-medium flex flex-row items-center gap-2">
+                          ₹ {rec.price}
                         </p>
                       </div>
-                    </div>
-                  ))
-                ) : (
+                    ))
+                  : null}
+                {item.decorItems.length <= 0 && item.packages.length <= 0 && (
                   <div className="flex flex-col gap-2 p-4">
                     <p>
                       No Decor selected yet{" "}
@@ -621,102 +1018,145 @@ export default function EventTool({ user }) {
                     </p>
                   </div>
                 )}
-                {item.decorItems.length > 0 && (
-                  <>
-                    <div className="overflow-x-auto mt-6">
-                      <Table className="border">
-                        <Table.Head>
-                          <Table.HeadCell>Decor</Table.HeadCell>
-                          <Table.HeadCell>Price</Table.HeadCell>
-                        </Table.Head>
-                        <Table.Body className="divide-y">
-                          {event.eventDays
-                            ?.filter((item) => item._id === eventDay)[0]
-                            ?.decorItems.map((item, index) => (
-                              <Table.Row
-                                className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                key={index}
-                              >
-                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                  [{item.decor.category}] {item.decor.name}
-                                </Table.Cell>
-                                <Table.Cell>₹{item.price}</Table.Cell>
-                              </Table.Row>
-                            ))}
-                          <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                            <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                              Total
-                            </Table.Cell>
-                            <Table.Cell>
-                              ₹
+                {item.decorItems.length > 0 ||
+                  (item.packages.length > 0 && (
+                    <>
+                      <div className="overflow-x-auto mt-6">
+                        {item.decorItems.length > 0 && (
+                          <Table className="border">
+                            <Table.Head>
+                              <Table.HeadCell>Decor</Table.HeadCell>
+                              <Table.HeadCell>Price</Table.HeadCell>
+                            </Table.Head>
+                            <Table.Body className="divide-y">
                               {event.eventDays
                                 ?.filter((item) => item._id === eventDay)[0]
-                                ?.decorItems.reduce(
-                                  (accumulator, currentValue) => {
-                                    return accumulator + currentValue.price;
-                                  },
-                                  0
-                                )}
-                            </Table.Cell>
-                          </Table.Row>
-                        </Table.Body>
-                      </Table>
-                    </div>
-                    {event.eventDays?.filter((item) => item._id === eventDay)[0]
-                      ?.status.finalized ? (
-                      event.eventDays?.filter(
+                                ?.decorItems.map((item, index) => (
+                                  <Table.Row
+                                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                    key={index}
+                                  >
+                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                      [{item.decor.category}] {item.decor.name}
+                                    </Table.Cell>
+                                    <Table.Cell>₹{item.price}</Table.Cell>
+                                  </Table.Row>
+                                ))}
+                              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                  Total
+                                </Table.Cell>
+                                <Table.Cell>
+                                  ₹
+                                  {event.eventDays
+                                    ?.filter((item) => item._id === eventDay)[0]
+                                    ?.decorItems.reduce(
+                                      (accumulator, currentValue) => {
+                                        return accumulator + currentValue.price;
+                                      },
+                                      0
+                                    )}
+                                </Table.Cell>
+                              </Table.Row>
+                            </Table.Body>
+                          </Table>
+                        )}
+                        {item.packages.length > 0 && (
+                          <Table className="border">
+                            <Table.Head>
+                              <Table.HeadCell>Package</Table.HeadCell>
+                              <Table.HeadCell>Price</Table.HeadCell>
+                            </Table.Head>
+                            <Table.Body className="divide-y">
+                              {event.eventDays
+                                ?.filter((item) => item._id === eventDay)[0]
+                                ?.packages.map((item, index) => (
+                                  <Table.Row
+                                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                    key={index}
+                                  >
+                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                      {item.package.name}
+                                    </Table.Cell>
+                                    <Table.Cell>₹{item.price}</Table.Cell>
+                                  </Table.Row>
+                                ))}
+                              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                  Total
+                                </Table.Cell>
+                                <Table.Cell>
+                                  ₹
+                                  {event.eventDays
+                                    ?.filter((item) => item._id === eventDay)[0]
+                                    ?.packages.reduce(
+                                      (accumulator, currentValue) => {
+                                        return accumulator + currentValue.price;
+                                      },
+                                      0
+                                    )}
+                                </Table.Cell>
+                              </Table.Row>
+                            </Table.Body>
+                          </Table>
+                        )}
+                      </div>
+                      {event.eventDays?.filter(
                         (item) => item._id === eventDay
-                      )[0]?.status.approved ? (
-                        <div className="text-center py-8 flex flex-col gap-2">
-                          <p className="text-lg font-medium">
-                            Your design has been approved!
-                          </p>
-                          {event.eventDays?.filter(
-                            (item) => item._id === eventDay
-                          )[0]?.status.paymentDone ? (
+                      )[0]?.status.finalized ? (
+                        event.eventDays?.filter(
+                          (item) => item._id === eventDay
+                        )[0]?.status.approved ? (
+                          <div className="text-center py-8 flex flex-col gap-2">
                             <p className="text-lg font-medium">
-                              Your payment is done!
+                              Your design has been approved!
                             </p>
-                          ) : (
-                            <button
-                              onClick={() => {
-                                CreatePayment({ eventDay });
-                              }}
-                              className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
-                            >
-                              Proceed with Payment
-                            </button>
-                          )}
-                        </div>
+                            {event.eventDays?.filter(
+                              (item) => item._id === eventDay
+                            )[0]?.status.paymentDone ? (
+                              <p className="text-lg font-medium">
+                                Your payment is done!
+                              </p>
+                            ) : (
+                              <button
+                                onClick={() => {
+                                  CreatePayment({ eventDay });
+                                }}
+                                className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
+                              >
+                                Proceed with Payment
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="text-center py-8 flex flex-col gap-2">
+                            <p className="text-lg font-medium">Thank you!</p>
+                            <p>
+                              Your design has been sent for approval. You can
+                              proceed to payment once approved by your
+                              designated planner!
+                            </p>
+                            <p className="text-sm">
+                              {
+                                "(You'll be notified on your email and phone number)"
+                              }
+                            </p>
+                          </div>
+                        )
                       ) : (
                         <div className="text-center py-8 flex flex-col gap-2">
-                          <p className="text-lg font-medium">Thank you!</p>
-                          <p>
-                            Your design has been sent for approval. You can
-                            proceed to payment once approved by your designated
-                            planner!
-                          </p>
-                          <p className="text-sm">
-                            {
-                              "(You'll be notified on your email and phone number)"
-                            }
-                          </p>
+                          <button
+                            onClick={() => {
+                              finalizeEventDay({ eventDay });
+                            }}
+                            className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
+                          >
+                            Finalize
+                          </button>
                         </div>
-                      )
-                    ) : (
-                      <div className="text-center py-8 flex flex-col gap-2">
-                        <button
-                          onClick={() => {
-                            finalizeEventDay({ eventDay });
-                          }}
-                          className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
-                        >
-                          Finalize
-                        </button>
-                      </div>
-                    )}
-                  </>
-                )}
+                      )}
+                    </>
+                  ))}
               </div>
             ))}
         </div>
