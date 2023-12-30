@@ -824,7 +824,7 @@ function DecorListing({
               </ul>
             </div>
           )}
-          {/* <div className="flex flex-col pt-4 px-4 md:px-0">
+          <div className="flex flex-col pt-4 px-4 md:px-0">
             <p className="text-lg flex flex-row justify-between">
               Colour Theme
             </p>
@@ -834,7 +834,7 @@ function DecorListing({
               </p>
             ))}
           </div>
-          {decor.productVariation.flowers.length > 0 && (
+          {/* {decor.productVariation.flowers.length > 0 && (
             <div className="flex flex-col pt-4 px-4 md:px-0">
               <p className="text-lg flex flex-row justify-between">Flowers</p>
               {decor.productVariation.flowers.map((item, index) => (
@@ -887,7 +887,7 @@ function DecorListing({
             {/* <div className="w-full md:w-1/2 mb-4">
               <SearchBar />
             </div> */}
-            <div className="flex flex-row justify-between mb-6">
+            <div className="flex flex-col md:flex-row justify-between mb-6">
               <p className="font-semibold text-2xl">
                 {decor.name}{" "}
                 <span className="text-lg font-normal">
@@ -909,9 +909,9 @@ function DecorListing({
               height={0}
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
-              className="rounded-xl"
+              className="rounded-xl md:mb-10"
             />
-            <div className="flex flex-row flex-wrap gap-4 items-center mt-3">
+            <div className="flex flex-row flex-wrap gap-4 items-center">
               <div className="mr-auto  flex flex-col">
                 <p className="flex">
                   Price for &nbsp;
@@ -1116,12 +1116,12 @@ function DecorListing({
                 <AiFillHeart size={20} />
               </button>
             </div>
-            <p className="mt-3">{decor.description}</p>
+            <p className="mt-6">{decor.description}</p>
           </div>
         </div>
       </div>
       <div className="border-y border-y-black p-8 decor-bg-image">
-        <p className="text-2xl font-semibold px-12">Similar Stages</p>
+        <p className="text-2xl font-semibold px-12">Similar Decor</p>
         <div className="flex flex-row md:gap-12 justify-between items-center my-6">
           <BsArrowLeftShort
             size={48}
@@ -1179,7 +1179,9 @@ function DecorListing({
 export async function getServerSideProps(context) {
   try {
     const { decor_id } = context.params;
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/decor`);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/decor?similarDecorFor=${decor_id}`
+    );
     const similarDecor = await response.json();
     const decorResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/decor/${decor_id}`

@@ -246,7 +246,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
                     style={{ width: "100%", height: "auto" }}
                     className="hover:scale-125 transition-all duration-500 md:hidden"
                   />
-                  <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                  <div className="hidden md:block origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
                     <p className="text-center">{item.toUpperCase()}</p>
                   </div>
                 </Link>
@@ -281,7 +281,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
                     style={{ width: "100%", height: "auto" }}
                     className="hover:scale-125 transition-all duration-500 md:hidden"
                   />
-                  <div className="hidden md:inline origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                  <div className="hidden md:block origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
                     <p className="text-center">{item.toUpperCase()}</p>
                   </div>
                 </Link>
@@ -446,21 +446,6 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
                   <p key={index}>{toProperCase(item)}</p>
                 ))}
               </div>
-              {/* <div className="flex flex-col">
-                <p className="font-medium text-2xl">Colour Theme</p>
-                <p>
-                  <span className="flex items-center text-sm font-medium text-gray-900 dark:text-white">
-                    <span className="flex w-2.5 h-2.5 bg-black rounded-full mr-1.5 flex-shrink-0" />
-                    Black
-                  </span>
-                </p>
-                <p>
-                  <span className="flex items-center text-sm font-medium text-gray-900 dark:text-white">
-                    <span className="flex w-2.5 h-2.5 bg-yellow-500 rounded-full mr-1.5 flex-shrink-0" />
-                    Gold
-                  </span>
-                </p>
-              </div> */}
               <div className="flex flex-col md:flex-row justify-between mt-auto">
                 <p className="text-3xl font-semibold">
                   ₹{" "}
@@ -483,7 +468,9 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
                 // width={0}
                 // height={0}
                 sizes="100%"
-                fill="cover"
+                // fill="cover"
+                layout={"fill"}
+                objectFit="cover"
                 // style={{ width: "100%", height: "auto" }}
               />
             </div>
