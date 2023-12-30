@@ -356,35 +356,7 @@ function Home({ packages }) {
           THE WEDDING STORE
         </p>
         <div className="relative overflow-y-hidden">
-          {/* <BsArrowLeftShort
-            size={48}
-            className="cursor-pointer scale-[0.5] md:scale-[1] absolute top-1/2 -translate-y-1/2 z-40 rounded-full bg-white left-6"
-            onClick={() => {
-              let length = decorList.length;
-              let item = decorIndex;
-              if (item === 0) {
-                item = length - 1;
-              } else {
-                item--;
-              }
-              setDecorIndex(item);
-            }}
-          />
-          <BsArrowRightShort
-            size={48}
-            className="cursor-pointer scale-[0.5] md:scale-[1] absolute top-1/2 -translate-y-1/2 z-40 rounded-full bg-white right-6"
-            onClick={() => {
-              let length = decorList.length;
-              let item = decorIndex;
-              if (item === length - 1) {
-                item = 0;
-              } else {
-                item++;
-              }
-              setDecorIndex(item);
-            }}
-          /> */}
-          <div className="overflow-hidden flex flex-row flex-nowrap absolute w-[33vw] md:w-[20vw] -translate-x-1/2 left-1/2 bottom-0 z-40">
+          <div className="overflow-hidden flex flex-row flex-nowrap absolute w-[50vw] md:w-[20vw] -translate-x-1/2 left-1/2 bottom-0 z-40">
             <div className="animate-marquee whitespace-nowrap flex flex-row gap-3">
               {[
                 "Entrance",
@@ -395,7 +367,22 @@ function Home({ packages }) {
                 "Pathway",
               ].map((item, index) => (
                 <p
-                  className="font-medium text-xl text-center w-[33vw] md:w-[20vw]"
+                  className="font-medium text-xl text-center w-[50vw] md:w-[20vw] hidden md:block"
+                  key={index}
+                >
+                  {item}
+                </p>
+              ))}
+              {[
+                "Pathway",
+                "Entrance",
+                "Photobooth",
+                "Mandap",
+                "Nameboard",
+                "Stage",
+              ].map((item, index) => (
+                <p
+                  className="font-medium text-xl text-center w-[50vw] md:w-[20vw] block md:hidden"
                   key={index}
                 >
                   {item}
@@ -412,7 +399,22 @@ function Home({ packages }) {
                 "Pathway",
               ].map((item, index) => (
                 <p
-                  className="font-medium text-xl text-center w-[33vw] md:w-[20vw]"
+                  className="font-medium text-xl text-center w-[50vw] md:w-[20vw] hidden md:block"
+                  key={index}
+                >
+                  {item}
+                </p>
+              ))}
+              {[
+                "Pathway",
+                "Entrance",
+                "Photobooth",
+                "Mandap",
+                "Nameboard",
+                "Stage",
+              ].map((item, index) => (
+                <p
+                  className="font-medium text-xl text-center w-[50vw] md:w-[20vw] block md:hidden"
                   key={index}
                 >
                   {item}
