@@ -219,7 +219,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
         </p>
         <div className="grid grid-cols-3 gap-6 md:gap-16">
           {categoryList.map((item, index) => (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2" key={index}>
               <div key={index} className="relative overflow-hidden rounded-xl">
                 <Link
                   href={`/decor/view?category=${item}`}
