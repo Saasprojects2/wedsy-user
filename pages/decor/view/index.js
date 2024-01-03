@@ -220,61 +220,65 @@ function DecorListing({ data }) {
       >
         <div className="hide-scrollbar border-r border-black hidden md:flex flex-col divide-y gap-4 divide-black pr-6 overflow-y-auto">
           <p className="text-xl font-medium">Filter by</p>
-          <div className="flex flex-col pt-4">
-            <p className="text-lg flex flex-row justify-between">
-              Occasion{" "}
-              {filters.open.occasion ? (
-                <AiOutlineMinus
-                  size={24}
-                  onClick={() =>
-                    setFilters({
-                      ...filters,
-                      open: { ...filters.open, occasion: false },
-                    })
-                  }
-                  className="cursor-pointer"
-                />
-              ) : (
-                <AiOutlinePlus
-                  size={24}
-                  onClick={() =>
-                    setFilters({
-                      ...filters,
-                      open: { ...filters.open, occasion: true },
-                    })
-                  }
-                  className="cursor-pointer"
-                />
-              )}
-            </p>
-            {filters.open.occasion &&
-              filters.occasionList.map((item, index) => (
-                <div className="flex items-center gap-2 mt-2" key={index}>
-                  <Checkbox
-                    id={`ocassion-${item}`}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        if (!filters.occasion.includes(item)) {
+          {filters.category !== "Mandap" && (
+            <div className="flex flex-col pt-4">
+              <p className="text-lg flex flex-row justify-between">
+                Occasion{" "}
+                {filters.open.occasion ? (
+                  <AiOutlineMinus
+                    size={24}
+                    onClick={() =>
+                      setFilters({
+                        ...filters,
+                        open: { ...filters.open, occasion: false },
+                      })
+                    }
+                    className="cursor-pointer"
+                  />
+                ) : (
+                  <AiOutlinePlus
+                    size={24}
+                    onClick={() =>
+                      setFilters({
+                        ...filters,
+                        open: { ...filters.open, occasion: true },
+                      })
+                    }
+                    className="cursor-pointer"
+                  />
+                )}
+              </p>
+              {filters.open.occasion &&
+                filters.occasionList.map((item, index) => (
+                  <div className="flex items-center gap-2 mt-2" key={index}>
+                    <Checkbox
+                      id={`ocassion-${item}`}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          if (!filters.occasion.includes(item)) {
+                            setFilters({
+                              ...filters,
+                              occasion: [...filters.occasion, item],
+                            });
+                          }
+                        } else {
                           setFilters({
                             ...filters,
-                            occasion: [...filters.occasion, item],
+                            occasion: filters.occasion.filter(
+                              (i) => i !== item
+                            ),
                           });
                         }
-                      } else {
-                        setFilters({
-                          ...filters,
-                          occasion: filters.occasion.filter((i) => i !== item),
-                        });
-                      }
-                    }}
-                    checked={filters.occasion.includes(item)}
-                  />
-                  <Label className="flex" htmlFor={`ocassion-${item}`}>
-                    {item}
-                  </Label>
-                </div>
-              ))}
-          </div>
+                      }}
+                      checked={filters.occasion.includes(item)}
+                    />
+                    <Label className="flex" htmlFor={`ocassion-${item}`}>
+                      {item}
+                    </Label>
+                  </div>
+                ))}
+            </div>
+          )}
           <div className="flex flex-col pt-4">
             <p className="text-lg flex flex-row justify-between">
               Colours{" "}
@@ -634,66 +638,71 @@ function DecorListing({ data }) {
                 dismissOnClick={false}
               >
                 <div className="max-h-[80vh] overflow-y-auto z-40">
-                  <div className="flex flex-col p-4 ">
-                    <p className="text-lg flex flex-row justify-between">
-                      Occasion{" "}
-                      {filters.open.occasion ? (
-                        <AiOutlineMinus
-                          size={24}
-                          onClick={() =>
-                            setFilters({
-                              ...filters,
-                              open: { ...filters.open, occasion: false },
-                            })
-                          }
-                          className="cursor-pointer"
-                        />
-                      ) : (
-                        <AiOutlinePlus
-                          size={24}
-                          onClick={() =>
-                            setFilters({
-                              ...filters,
-                              open: { ...filters.open, occasion: true },
-                            })
-                          }
-                          className="cursor-pointer"
-                        />
-                      )}
-                    </p>
-                    {filters.open.occasion &&
-                      filters.occasionList.map((item, index) => (
-                        <div
-                          className="flex items-center gap-2 mt-2"
-                          key={index}
-                        >
-                          <Checkbox
-                            id={`ocassion-${item}`}
-                            onChange={(e) => {
-                              if (e.target.checked) {
-                                if (!filters.occasion.includes(item)) {
+                  {filters.category !== "Mandap" && (
+                    <div className="flex flex-col p-4 ">
+                      <p className="text-lg flex flex-row justify-between">
+                        Occasion{" "}
+                        {filters.open.occasion ? (
+                          <AiOutlineMinus
+                            size={24}
+                            onClick={() =>
+                              setFilters({
+                                ...filters,
+                                open: { ...filters.open, occasion: false },
+                              })
+                            }
+                            className="cursor-pointer"
+                          />
+                        ) : (
+                          <AiOutlinePlus
+                            size={24}
+                            onClick={() =>
+                              setFilters({
+                                ...filters,
+                                open: { ...filters.open, occasion: true },
+                              })
+                            }
+                            className="cursor-pointer"
+                          />
+                        )}
+                      </p>
+                      {filters.open.occasion &&
+                        filters.occasionList.map((item, index) => (
+                          <div
+                            className="flex items-center gap-2 mt-2"
+                            key={index}
+                          >
+                            <Checkbox
+                              id={`ocassion-${item}`}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  if (!filters.occasion.includes(item)) {
+                                    setFilters({
+                                      ...filters,
+                                      occasion: [...filters.occasion, item],
+                                    });
+                                  }
+                                } else {
                                   setFilters({
                                     ...filters,
-                                    occasion: [...filters.occasion, item],
+                                    occasion: filters.occasion.filter(
+                                      (i) => i !== item
+                                    ),
                                   });
                                 }
-                              } else {
-                                setFilters({
-                                  ...filters,
-                                  occasion: filters.occasion.filter(
-                                    (i) => i !== item
-                                  ),
-                                });
-                              }
-                            }}
-                            checked={filters.occasion.includes(item)}
-                          />
-                          <Label className="flex" htmlFor={`ocassion-${item}`}>
-                            {item}
-                          </Label>
-                        </div>
-                      ))}
-                  </div>
+                              }}
+                              checked={filters.occasion.includes(item)}
+                            />
+                            <Label
+                              className="flex"
+                              htmlFor={`ocassion-${item}`}
+                            >
+                              {item}
+                            </Label>
+                          </div>
+                        ))}
+                    </div>
+                  )}
                   <div className="flex flex-col p-4 border-t border-black">
                     <p className="text-lg flex flex-row justify-between">
                       Colours{" "}
@@ -1097,7 +1106,15 @@ function DecorListing({ data }) {
                   <Dropdown.Item
                     key={index}
                     onClick={() => {
-                      setFilters({ ...filters, category: item });
+                      if (item === "Mandap") {
+                        setFilters({
+                          ...filters,
+                          category: item,
+                          occasion: [],
+                        });
+                      } else {
+                        setFilters({ ...filters, category: item });
+                      }
                     }}
                   >
                     {item}

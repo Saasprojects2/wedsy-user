@@ -212,24 +212,21 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
           )}
         </div>
       </main>{" "}
-      {/* Categories */}
-      <div className="py-8">
-        <p className="md:mt-6 text-2xl md:text-3xl mb-4 md:mb-8 font-semibold text-center">
+      {/* Categories Grid*/}
+      <section className="py-8 md:py-16 px-6 md:px-24">
+        <p className="md:mt-6 text-2xl md:text-4xl mb-4 md:mb-8 font-semibold text-center text-rose-900 md:text-black">
           CATEGORIES
         </p>
-        <div className="relative overflow-x-hidden flex flex-row flex-nowrap">
-          <div className="animate-marquee whitespace-nowrap flex flex-row gap-3">
-            {categoryList.map((item, index) => (
-              <div
-                key={index}
-                className="overflow-hidden rounded-lg w-[33vw] md:w-[20vw] relative"
-              >
+        <div className="grid grid-cols-3 gap-6 md:gap-16">
+          {categoryList.map((item, index) => (
+            <div className="flex flex-col gap-2">
+              <div key={index} className="relative overflow-hidden rounded-xl">
                 <Link
                   href={`/decor/view?category=${item}`}
-                  className="hover:z-40 transition-all"
+                  className="hover:z-40 transition-all overflow-hidden"
                 >
                   <Image
-                    src={`/assets/images/${item.toLowerCase()}.png`}
+                    src={`/assets/images/${item.toLowerCase()}-desktop-sq.png`}
                     alt="Decor"
                     width={0}
                     height={0}
@@ -238,7 +235,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
                     className="hover:scale-125 transition-all duration-500 hidden md:inline"
                   />
                   <Image
-                    src={`/assets/images/${item.toLowerCase()}-mobile.png`}
+                    src={`/assets/images/${item.toLowerCase()}-mobile-sq.png`}
                     alt="Decor"
                     width={0}
                     height={0}
@@ -246,50 +243,23 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
                     style={{ width: "100%", height: "auto" }}
                     className="hover:scale-125 transition-all duration-500 md:hidden"
                   />
-                  <div className="hidden md:block origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                    <p className="text-center">{item.toUpperCase()}</p>
+                  <div className="hidden md:block absolute bottom-0 py-6 w-full">
+                    <p className="text-center text-lg font-semibold">
+                      {item.toUpperCase()}
+                    </p>
                   </div>
                 </Link>
               </div>
-            ))}
-          </div>
-          <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex flex-row left-3 gap-3">
-            {categoryList.map((item, index) => (
-              <div
-                key={index}
-                className="relative overflow-hidden rounded-lg w-[33vw] md:w-[20vw]"
+              <Link
+                href={`/decor/view?category=${item}`}
+                className="text-center text-sm font-medium md:hidden"
               >
-                <Link
-                  href={`/decor/view?category=${item}`}
-                  className="rounded-lg hover:overflow-hidden hover:z-40 transition-all"
-                >
-                  <Image
-                    src={`/assets/images/${item.toLowerCase()}.png`}
-                    alt="Decor"
-                    width={0}
-                    height={0}
-                    sizes="100%"
-                    style={{ width: "100%", height: "auto" }}
-                    className="hover:scale-125 transition-all duration-500 hidden md:inline"
-                  />
-                  <Image
-                    src={`/assets/images/${item.toLowerCase()}-mobile.png`}
-                    alt="Decor"
-                    width={0}
-                    height={0}
-                    sizes="100%"
-                    style={{ width: "100%", height: "auto" }}
-                    className="hover:scale-125 transition-all duration-500 md:hidden"
-                  />
-                  <div className="hidden md:block origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
-                    <p className="text-center">{item.toUpperCase()}</p>
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
+                {item.toUpperCase()}
+              </Link>
+            </div>
+          ))}
         </div>
-      </div>
+      </section>
       {/* BestSellers */}
       <section className="px-4 md:px-24 py-8 md:mt-8">
         <div className="flex justify-between relative">
@@ -361,7 +331,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
           ))}
         </div>
       </section>
-      {/* MARQUEE FOR CATEGORIES */}
+      {/* MARQUEE FOR CATEGORIES NAMES */}
       <section className="bg-[#840032] text-white font-semibold">
         <div className="relative flex overflow-x-hidden">
           <div className="py-4 animate-marquee whitespace-nowrap">
@@ -427,6 +397,19 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
             className={`grid grid-cols-1 md:grid-cols-2 m-6 mt-10 md:gap-8 bg-[${spotlight.spotlightColor}]`}
             style={{ backgroundColor: spotlight.spotlightColor }}
           >
+            <div className="relative h-full md:hidden">
+              <Image
+                src={spotlight.thumbnail}
+                alt="Decor Image"
+                width={0}
+                height={0}
+                sizes="100%"
+                // fill="cover"
+                // layout={"fill"}
+                // objectFit="cover"
+                style={{ width: "100%", height: "auto" }}
+              />
+            </div>
             <div className=" flex flex-col p-6 justify-between md:py-8 order-last md:order-first gap-4 md:gap-4">
               <p className="text-2xl md:text-3xl font-semibold">
                 {spotlight.name}
@@ -461,7 +444,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
                 </Link>
               </div>
             </div>
-            <div className="relative h-full">
+            <div className="relative h-full hidden md:block">
               <Image
                 src={spotlight.thumbnail}
                 alt="Decor"
@@ -567,6 +550,84 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
             <span className="md:hidden">{"😁"}</span>
             <span className="hidden md:inline">{"HAPPY"}</span> CUSTOMERS
           </span>
+        </div>
+      </div>{" "}
+      {/* Categories Image Marquee */}
+      <div className="py-8">
+        <p className="md:mt-6 text-2xl md:text-3xl mb-4 md:mb-8 font-semibold text-center">
+          CATEGORIES
+        </p>
+        <div className="relative overflow-x-hidden flex flex-row flex-nowrap">
+          <div className="animate-marquee whitespace-nowrap flex flex-row gap-3">
+            {categoryList.map((item, index) => (
+              <div
+                key={index}
+                className="overflow-hidden rounded-lg w-[33vw] md:w-[20vw] relative"
+              >
+                <Link
+                  href={`/decor/view?category=${item}`}
+                  className="hover:z-40 transition-all"
+                >
+                  <Image
+                    src={`/assets/images/${item.toLowerCase()}.png`}
+                    alt="Decor"
+                    width={0}
+                    height={0}
+                    sizes="100%"
+                    style={{ width: "100%", height: "auto" }}
+                    className="hover:scale-125 transition-all duration-500 hidden md:inline"
+                  />
+                  <Image
+                    src={`/assets/images/${item.toLowerCase()}-mobile.png`}
+                    alt="Decor"
+                    width={0}
+                    height={0}
+                    sizes="100%"
+                    style={{ width: "100%", height: "auto" }}
+                    className="hover:scale-125 transition-all duration-500 md:hidden"
+                  />
+                  <div className="hidden md:block origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                    <p className="text-center">{item.toUpperCase()}</p>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+          <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex flex-row left-3 gap-3">
+            {categoryList.map((item, index) => (
+              <div
+                key={index}
+                className="relative overflow-hidden rounded-lg w-[33vw] md:w-[20vw]"
+              >
+                <Link
+                  href={`/decor/view?category=${item}`}
+                  className="rounded-lg hover:overflow-hidden hover:z-40 transition-all"
+                >
+                  <Image
+                    src={`/assets/images/${item.toLowerCase()}.png`}
+                    alt="Decor"
+                    width={0}
+                    height={0}
+                    sizes="100%"
+                    style={{ width: "100%", height: "auto" }}
+                    className="hover:scale-125 transition-all duration-500 hidden md:inline"
+                  />
+                  <Image
+                    src={`/assets/images/${item.toLowerCase()}-mobile.png`}
+                    alt="Decor"
+                    width={0}
+                    height={0}
+                    sizes="100%"
+                    style={{ width: "100%", height: "auto" }}
+                    className="hover:scale-125 transition-all duration-500 md:hidden"
+                  />
+                  <div className="hidden md:block origin-top-left bg-gradient-to-b to-white from-white/0 via-white/60 via-30% absolute bottom-0 pb-4 pt-6 w-full">
+                    <p className="text-center">{item.toUpperCase()}</p>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <DecorQuotation userLoggedIn={userLoggedIn} user={user} />
