@@ -33,7 +33,8 @@ body {
 /* Backround Image */
 .decor-bg-image {
   background-repeat: repeat;
-  background-image: url("../public/assets/background/bg.jpg");
+  /* background-image: url("../public/assets/background/bg.jpg"); */
+  background-image: url("/assets/background/bg.jpg");
 }
 .events-mobile-bg-image {
   background-repeat: no-repeat;
