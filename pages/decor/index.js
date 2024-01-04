@@ -182,7 +182,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
                 />
               )}
               {enquiryForm.message && (
-                <p className="text-red-500 w-1/4">{enquiryForm.message}</p>
+                <p className="text-red-500">{enquiryForm.message}</p>
               )}
               <button
                 type="submit"

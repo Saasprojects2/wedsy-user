@@ -148,7 +148,6 @@ function DecorListing({ data }) {
     }
   };
   useEffect(() => {
-    console.log("Hurray");
     setPage(1);
     setList([]);
   }, [
