@@ -26,7 +26,11 @@ export default function EventTool({ userLoggedIn, setOpenLoginModal }) {
     })
       .then((response) => response.json())
       .then((response) => {
-        setEvents(response);
+        if (response.length > 0) {
+          router.push(`/event/${response[0]._id}/planner`);
+        } else {
+          setEvents(response);
+        }
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);

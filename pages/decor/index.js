@@ -578,7 +578,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
                     className="hover:scale-125 transition-all duration-500 hidden md:inline"
                   />
                   <Image
-                    src={`/assets/images/${item.toLowerCase()}-mobile.png`}
+                    src={`/assets/images/${item.toLowerCase()}-mobile-text.png`}
                     alt="Decor"
                     width={0}
                     height={0}
@@ -613,7 +613,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
                     className="hover:scale-125 transition-all duration-500 hidden md:inline"
                   />
                   <Image
-                    src={`/assets/images/${item.toLowerCase()}-mobile.png`}
+                    src={`/assets/images/${item.toLowerCase()}-mobile-text.png`}
                     alt="Decor"
                     width={0}
                     height={0}
