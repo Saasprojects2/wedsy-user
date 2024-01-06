@@ -94,7 +94,10 @@ function App({ Component, pageProps }) {
         {/* Open Graph Tags */}
         <meta property="og:title" content="Wedsy" />
         <meta property="og:description" content="Wedsy" />
-        <meta property="og:image" content="/logo-black.png" />
+        <meta
+          property="og:image"
+          content="https://wedsy.vercel.app/logo-black.png"
+        />
         <meta property="og:url" content="https://www.wedsy.in/" />
         <meta property="og:type" content="website" />
         {/* Robots Meta Tag */}
