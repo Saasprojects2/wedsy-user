@@ -84,26 +84,46 @@ function App({ Component, pageProps }) {
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
         {/* Title Tag */}
-        <title>Wedsy</title>
+        <title>Wedsy | Weddings Made Easy</title>
         {/* Meta Description Tag */}
-        <meta name="description" content="Wedsy" />
+        <meta
+          name="description"
+          content="Elevate your wedding experience with Wedsy - your affordable Wedtech partner. Explore stunning flower decor, captivating stage setups, and budget-friendly planning. Discover the best-in-town service, making your dream wedding a seamless and affordable reality."
+        />
+        {/* Meta Keywords Tag */}
+        <meta
+          name="keywords"
+          content="Wedding planner, wedding decor, stage decorations, flower decor, reception decor, engagement decor, mandap decoration, decorators, wedding planner, Haldi decor, Mehendi decor, nikah decor, valima decor, best wedding planners, best decorators"
+        />
         {/* Canonical Tag */}
         <link rel="canonical" href="https://www.wedsy.in/" />
-        {/* Viewport Meta Tag */}
+        {/* Viewport & Other Important Meta Tag */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta httpEquiv="content-language" content="en-us" />
+        <meta httpEquiv="content-type" content="text/html;charset=UTF-8" />
+        <meta name="revisit-after" content="7 days" />
         {/* Open Graph Tags */}
-        <meta property="og:title" content="Wedsy" />
-        <meta property="og:description" content="Wedsy" />
+        <meta property="og:locale" content="en_IN" />
+        <meta property="og:title" content="Wedsy | Weddings Made Easy" />
+        <meta
+          property="og:description"
+          content="Elevate your wedding experience with Wedsy - your affordable Wedtech partner. Explore stunning flower decor, captivating stage setups, and budget-friendly planning. Discover the best-in-town service, making your dream wedding a seamless and affordable reality."
+        />
         <meta
           property="og:image"
-          content="https://wedsy.vercel.app/logo-black.png"
+          content="https://wedsy.vercel.app/wedsy-logo.jpg"
         />
         <meta property="og:url" content="https://www.wedsy.in/" />
         <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Wedsy | Weddings Made Easy" />
         {/* Robots Meta Tag */}
         <meta name="robots" content="index, follow" />
         {/* Language Meta Tag */}
         <meta httpEquiv="content-language" content="en" />
+        {/* Geo Tags */}
+        <meta name="geo.position" content="Wedsy" />
+        <meta name="geo.placename" content="Banglore" />
+        {/* <meta name="geo.region" content="411025" /> */}
       </Head>
       {/* <!-- Google tag (gtag.js) --> */}
       <Script
