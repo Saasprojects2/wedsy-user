@@ -109,14 +109,14 @@ export default function Header({ userLoggedIn, user, Logout }) {
           >
             MY EVENT
           </Navbar.Link>
-          <Navbar.Link
+          {/* <Navbar.Link
             href="#"
             className={`font-medium text-${
               variant === "dark" ? "white" : "black"
             }`}
           >
             VENUES
-          </Navbar.Link>
+          </Navbar.Link> */}
           <Navbar.Link
             href="/wishlist"
             className={`font-medium text-${
