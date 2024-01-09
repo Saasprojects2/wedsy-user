@@ -394,7 +394,7 @@ function DecorListing({
                               ?.baseCost <= 0 && (
                               <div className="border-t border-t-black pt-2 flex flex-col gap-2">
                                 <p className="font-medium">
-                                  Dimensions for platform (in metres)
+                                  Dimensions for platform (in feet)
                                 </p>
                                 <div className="flex flex-row gap-2 itms-end">
                                   <div className="flex flex-col">
@@ -609,7 +609,7 @@ function DecorListing({
                           )}
                         </>
                       ) : (
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-4">
                           <div className="font-medium flex flex-row gap-4 items-center justify-between">
                             <Image
                               src="/assets/images/carpet.png"

@@ -285,7 +285,7 @@ function DecorListing({
               }}
             />
             <button
-              className={`text-white bg-[#C84047]  border border-[#C84047] hover:bg-[#C84047] font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
+              className={`text-white bg-rose-900  border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
               onClick={() => {
                 // setAddOns({ ...addOns, platform: true });
                 setQuantiy({
@@ -396,7 +396,7 @@ function DecorListing({
               }
             />
             <button
-              className={`text-white bg-rose-900 border border-rose-900 hover:bg-rose-900 disabled:bg-rose-800 font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
+              className={`text-white bg-rose-900 border border-rose-900 hover:bg-rose-900 hover:text-white disabled:bg-rose-800 font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
               disabled={
                 !eventData.name ||
                 !eventData.community ||
@@ -455,9 +455,9 @@ function DecorListing({
                   <button
                     className={`${
                       addOns.platform
-                        ? "text-white bg-[#C84047]"
-                        : "bg-white text-[#C84047]"
-                    }  border border-[#C84047] hover:bg-[#C84047] font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
+                        ? "text-white bg-rose-900"
+                        : "bg-white text-rose-900"
+                    }  border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
                     onClick={() => {
                       setAddOns({ ...addOns, platform: true });
                     }}
@@ -467,9 +467,9 @@ function DecorListing({
                   <button
                     className={`${
                       !addOns.platform && addOns.platform !== undefined
-                        ? "text-white bg-[#C84047]"
-                        : "bg-white text-[#C84047]"
-                    } border border-[#C84047] hover:bg-[#C84047] font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
+                        ? "text-white bg-rose-900"
+                        : "bg-white text-rose-900"
+                    } border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
                     onClick={() => {
                       setAddOns({
                         ...addOns,
@@ -504,7 +504,7 @@ function DecorListing({
                 {addOns.platform && (
                   <div className="border-t border-t-black pt-2 flex flex-col gap-2">
                     <p className="font-medium">
-                      Dimensions for platform (in metres)
+                      Dimensions for platform (in feet)
                     </p>
                     <div className="flex flex-row gap-2 itms-end">
                       <div className="flex flex-col">
@@ -566,7 +566,7 @@ function DecorListing({
                       </div>
                       <div className="flex flex-col">
                         <button
-                          className={`mt-auto text-white bg-[#C84047] border border-[#C84047] hover:bg-[#C84047] font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
+                          className={`mt-auto text-white bg-rose-900 border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
                           onClick={() => {
                             try {
                               let l = parseFloat(addOns.dimensions.length);
@@ -614,7 +614,7 @@ function DecorListing({
                     </p>
                     <div className="flex flex-col ml-auto">
                       <button
-                        className={`mt-auto text-white bg-[#C84047] border border-[#C84047] hover:bg-[#C84047] font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
+                        className={`mt-auto text-white bg-rose-900 border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
                         onClick={() => {
                           setAddOns({ ...addOns, flooring: "" });
                         }}
@@ -626,7 +626,7 @@ function DecorListing({
                 )}
               </>
             ) : (
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-4">
                 <div className="font-medium flex flex-row gap-4 items-center justify-between">
                   <Image
                     src="/assets/images/carpet.png"
@@ -646,9 +646,9 @@ function DecorListing({
                     <button
                       className={`${
                         addOns.flooring === "Carpet"
-                          ? "text-white bg-[#C84047]"
-                          : "bg-white text-[#C84047]"
-                      } hover:text-white border border-[#C84047] hover:bg-[#C84047] font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
+                          ? "text-white bg-rose-900"
+                          : "bg-white text-rose-900"
+                      } hover:text-white border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
                       onClick={() => {
                         setAddOns({
                           ...addOns,
@@ -679,9 +679,9 @@ function DecorListing({
                     <button
                       className={`${
                         addOns.flooring === "Flex"
-                          ? "text-white bg-[#C84047]"
-                          : "bg-white text-[#C84047]"
-                      } hover:text-white border border-[#C84047] hover:bg-[#C84047] font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
+                          ? "text-white bg-rose-900"
+                          : "bg-white text-rose-900"
+                      } hover:text-white border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
                       onClick={() => {
                         setAddOns({
                           ...addOns,
@@ -712,9 +712,9 @@ function DecorListing({
                     <button
                       className={`${
                         addOns.flooring === "PrintedFlex"
-                          ? "text-white bg-[#C84047]"
-                          : "bg-white text-[#C84047]"
-                      } hover:text-white border border-[#C84047] hover:bg-[#C84047] font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
+                          ? "text-white bg-rose-900"
+                          : "bg-white text-rose-900"
+                      } hover:text-white border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
                       onClick={() => {
                         setAddOns({
                           ...addOns,
@@ -764,7 +764,7 @@ function DecorListing({
                       </span>
                     </p>
                     <button
-                      className={`text-white bg-[#C84047] border border-[#C84047] hover:bg-[#C84047] font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
+                      className={`text-white bg-rose-900 border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
                       onClick={() => {
                         setAddOns({
                           ...addOns,
@@ -991,7 +991,7 @@ function DecorListing({
                 label={
                   <button
                     type="button"
-                    className="text-white bg-rose-900 hover:bg-rose-900 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
+                    className="text-white bg-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
                     onClick={() => {
                       if (!userLoggedIn) {
                         setOpenLoginModal(true);
