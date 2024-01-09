@@ -42,17 +42,25 @@ export default function FooterComponent() {
               </Footer.LinkGroup>
               <div className="md:mt-4 flex space-x-6 sm:mt-0 text-white">
                 <Footer.Icon
-                  href="#"
+                  href="https://www.facebook.com/wedsy.in?mibextid=LQQJ4d"
                   icon={BsFacebook}
                   className="text-white"
                 />
-                <Footer.Icon href="#" icon={BsTwitter} className="text-white" />
                 <Footer.Icon
-                  href="#"
+                  href="https://x.com/wedsyindia?s=11&t=cw__PWAfpNh_XaLeRkSHcg"
+                  icon={BsTwitter}
+                  className="text-white"
+                />
+                <Footer.Icon
+                  href="https://www.instagram.com/wedsy.in?igsh=MTV3bWszMjVrM2pzbQ=="
                   icon={BsInstagram}
                   className="text-white"
                 />
-                <Footer.Icon href="#" icon={BsGoogle} className="text-white" />
+                <Footer.Icon
+                  href="https://g.co/kgs/F3kbQei"
+                  icon={BsGoogle}
+                  className="text-white"
+                />
               </div>
             </div>
           </div>
