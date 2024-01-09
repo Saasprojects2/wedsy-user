@@ -125,13 +125,13 @@ function App({ Component, pageProps }) {
         <meta name="geo.placename" content="Banglore" />
         {/* <meta name="geo.region" content="411025" /> */}
         {/* Google */}
-        {router.pathname === "/decor" ||
-          (router.pathname === "/decor/view" && (
-            <meta
-              name="google-site-verification"
-              content="6NQH3LHjenBtdQYZzStAqCj51nFRb1P4Pb5jhIdugB0"
-            />
-          ))}
+        {(router.pathname === "/decor" ||
+          router.pathname === "/decor/view") && (
+          <meta
+            name="google-site-verification"
+            content="6NQH3LHjenBtdQYZzStAqCj51nFRb1P4Pb5jhIdugB0"
+          />
+        )}
       </Head>
       {/* <!-- Google tag (gtag.js) --> */}
       <Script
