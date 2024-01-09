@@ -4,6 +4,7 @@ import PlanYourEvent from "@/components/screens/PlanYourEvent";
 import { processMobileNumber } from "@/utils/phoneNumber";
 import { toProperCase } from "@/utils/text";
 import { Spinner } from "flowbite-react";
+import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -114,6 +115,12 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
   };
   return (
     <>
+      <Head>
+        <meta
+          name="google-site-verification"
+          content="6NQH3LHjenBtdQYZzStAqCj51nFRb1P4Pb5jhIdugB0"
+        />
+      </Head>
       <main className="relative" id="mainDiv">
         <Image
           src="/assets/images/decor-1.png"
