@@ -24,7 +24,8 @@ export default function DecorCard({ decor, className }) {
           ₹{" "}
           {decor.productInfo.variant.artificialFlowers.sellingPrice ||
             decor.productInfo.variant.mixedFlowers.sellingPrice ||
-            decor.productInfo.variant.naturalFlowers.sellingPrice}
+            decor.productInfo.variant.naturalFlowers.sellingPrice}{" "}
+          {decor.category === "Pathway" && `/ ${decor.unit}`}
         </p>
       </Link>
     </>

@@ -5,6 +5,7 @@ import {
   Label,
   Modal,
   Rating,
+  Select,
   TextInput,
   Tooltip,
 } from "flowbite-react";
@@ -277,13 +278,27 @@ function DecorListing({
         </Modal.Header>
         <Modal.Body>
           <div className="flex flex-row gap-6">
-            <TextInput
+            {/* <TextInput
               type="Number"
               value={quantity.quantity}
               onChange={(e) => {
                 setQuantiy({ ...quantity, quantity: parseInt(e.target.value) });
               }}
-            />
+            /> */}
+            <Select
+              value={quantity.quantity}
+              onChange={(e) => {
+                setQuantiy({ ...quantity, quantity: parseInt(e.target.value) });
+              }}
+            >
+              {Array.from({ length: 25 }, (_, index) => index + 1).map(
+                (value) => (
+                  <option key={value} value={value}>
+                    {value}
+                  </option>
+                )
+              )}
+            </Select>
             <button
               className={`text-white bg-rose-900  border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
               onClick={() => {
@@ -911,8 +926,8 @@ function DecorListing({
               style={{ width: "100%", height: "auto" }}
               className="rounded-xl md:mb-10"
             />
-            <div className="flex flex-row flex-wrap gap-4 items-center">
-              <div className="mr-auto  flex flex-col">
+            <div className="flex flex-row flex-wrap gap-4 items-center mt-4 md:mt-0">
+              <div className="mr-auto flex flex-col w-full md:w-auto">
                 <p className="flex">
                   Price for &nbsp;
                   {decor.productInfo.variant.artificialFlowers.sellingPrice >
@@ -981,7 +996,8 @@ function DecorListing({
                   )}
                 </p>
                 <p className="font-semibold text-xl">
-                  ₹ {decor.productInfo.variant[variant].sellingPrice}
+                  ₹ {decor.productInfo.variant[variant].sellingPrice}{" "}
+                  {decor.category === "Pathway" && `/ ${decor.unit}`}
                 </p>
               </div>
               <Dropdown

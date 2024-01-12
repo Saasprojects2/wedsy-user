@@ -6,6 +6,7 @@ import {
   Label,
   Modal,
   Rating,
+  Select,
   Table,
   TextInput,
   Tooltip,
@@ -281,7 +282,7 @@ function DecorListing({
                   {item.category === "Pathway" && (
                     <div className="flex flex-row gap-6">
                       <Label>Setect Pathway Quantity (Unit: {item.unit})</Label>
-                      <TextInput
+                      {/* <TextInput
                         type="Number"
                         value={
                           addOns.decorItems.find((i) => i.decor === item._id)
@@ -302,7 +303,37 @@ function DecorListing({
                             }),
                           });
                         }}
-                      />
+                      /> */}
+                      <Select
+                        value={
+                          addOns.decorItems.find((i) => i.decor === item._id)
+                            ?.quantity
+                        }
+                        onChange={(e) => {
+                          setAddOns({
+                            ...addOns,
+                            decorItems: addOns.decorItems.map((tempItem) => {
+                              if (tempItem.decor === item._id) {
+                                return {
+                                  ...tempItem,
+                                  quantity: parseInt(e.target.value),
+                                };
+                              } else {
+                                return tempItem;
+                              }
+                            }),
+                          });
+                        }}
+                      >
+                        {Array.from(
+                          { length: 25 },
+                          (_, index) => index + 1
+                        ).map((value) => (
+                          <option key={value} value={value}>
+                            {value}
+                          </option>
+                        ))}
+                      </Select>
                     </div>
                   )}
                   {["Stage", "Photobooth", "Mandap"].includes(
