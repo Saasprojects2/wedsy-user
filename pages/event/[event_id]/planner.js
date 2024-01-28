@@ -126,7 +126,11 @@ export default function EventTool({ user }) {
         "Content-Type": "application/json",
         authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      body: JSON.stringify({ eventId: event_id, eventDayId: eventDay }),
+      body: JSON.stringify({
+        eventId: event_id,
+        eventDayId: eventDay,
+        paymentMethod: "razporpay",
+      }),
     })
       .then((response) => (response.ok ? response.json() : null))
       .then((response) => {
