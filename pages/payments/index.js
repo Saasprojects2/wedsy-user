@@ -162,7 +162,7 @@ export default function Payments({ user }) {
                   </p>
                   <p className="mt-2">
                     Total Amount:{" "}
-                    {item.amount.toLocaleString("en-IN", {
+                    {(item.amount / 100).toLocaleString("en-IN", {
                       maximumFractionDigits: 2,
                       style: "currency",
                       currency: "INR",
@@ -170,7 +170,7 @@ export default function Payments({ user }) {
                   </p>
                   <p className="mt-2 text-green-500">
                     Amount Paid:{" "}
-                    {item.amountPaid.toLocaleString("en-IN", {
+                    {(item.amountPaid / 100).toLocaleString("en-IN", {
                       maximumFractionDigits: 2,
                       style: "currency",
                       currency: "INR",
@@ -178,7 +178,7 @@ export default function Payments({ user }) {
                   </p>
                   <p className="mt-2 text-red-500">
                     Amount Due:{" "}
-                    {item.amountDue.toLocaleString("en-IN", {
+                    {(item.amountDue / 100).toLocaleString("en-IN", {
                       maximumFractionDigits: 2,
                       style: "currency",
                       currency: "INR",
