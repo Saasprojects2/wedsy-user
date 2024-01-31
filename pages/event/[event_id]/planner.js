@@ -1,4 +1,4 @@
-import { Table, Tooltip } from "flowbite-react";
+import { Button, Modal, Table, Textarea, Tooltip } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -17,6 +17,17 @@ export default function EventTool({ user }) {
   const [event, setEvent] = useState({});
   const [eventDay, setEventDay] = useState();
   const { event_id } = router.query;
+  const [notes, setNotes] = useState({
+    open: false,
+    edit: false,
+    loading: false,
+    event_id: "",
+    eventDay: "",
+    decor_id: "",
+    package_id: "",
+    admin_notes: "",
+    user_notes: "",
+  });
   const fetchEvent = () => {
     fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}?populate=true`,
@@ -165,6 +176,44 @@ export default function EventTool({ user }) {
         console.error("There was a problem with the fetch operation:", error);
       });
   };
+  const UpdateNotes = () => {
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}/eventDay/${eventDay}/notes`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          decor_id: notes.decor_id,
+          package_id: notes.package_id,
+          admin_notes: notes.admin_notes,
+          user_notes: notes.user_notes,
+        }),
+      }
+    )
+      .then((response) => (response.ok ? response.json() : null))
+      .then((response) => {
+        if (response.message === "success") {
+          setNotes({
+            open: false,
+            edit: false,
+            loading: false,
+            event_id: "",
+            eventDay: "",
+            decor_id: "",
+            package_id: "",
+            admin_notes: "",
+            user_notes: "",
+          });
+          fetchEvent();
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   useEffect(() => {
     fetchEvent();
   }, []);
@@ -219,6 +268,55 @@ export default function EventTool({ user }) {
   };
   return (
     <>
+      {/* Notes Modal */}
+      <Modal
+        show={notes?.open || false}
+        size="lg"
+        popup
+        onClose={() =>
+          setNotes({
+            open: false,
+            edit: false,
+            loading: false,
+            event_id: "",
+            eventDay: "",
+            decor_id: "",
+            package_id: "",
+            admin_notes: "",
+            user_notes: "",
+          })
+        }
+      >
+        <Modal.Header>
+          <h3 className="text-xl font-medium text-gray-900 dark:text-white px-4">
+            Notes
+          </h3>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="flex flex-col gap-6">
+            <Textarea
+              rows={4}
+              value={notes?.user_notes}
+              onChange={(e) => {
+                setNotes({ ...notes, user_notes: e.target.value });
+              }}
+              readOnly={!notes?.edit}
+            />
+            <button
+              className={`text-white bg-rose-900  border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
+              onClick={() => {
+                if (!notes?.edit) {
+                  setNotes({ ...notes, edit: true });
+                } else {
+                  UpdateNotes();
+                }
+              }}
+            >
+              {notes?.edit ? "Save Notes" : "Edit Notes"}
+            </button>
+          </div>
+        </Modal.Body>
+      </Modal>
       <div className="hidden md:block flex flex-col gap-8">
         <div className="flex flex-col">
           <div className="px-8 flex-wrap flex flex-row items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
@@ -439,6 +537,24 @@ export default function EventTool({ user }) {
                                 <p key={recIndex}>{rec}</p>
                               )
                             )}
+                            <button
+                              onClick={() => {
+                                setNotes({
+                                  open: true,
+                                  edit: false,
+                                  loading: false,
+                                  event_id: event_id,
+                                  eventDay: eventDay,
+                                  decor_id: item.decor._id,
+                                  package_id: "",
+                                  admin_notes: item.admin_notes,
+                                  user_notes: item.user_notes,
+                                });
+                              }}
+                              className="text-rose-900 bg-white hover:bg-rose-900 hover:text-white cursor-pointer px-2 py-1.5 text-sm focus:outline-none rounded-lg border-rose-900 border"
+                            >
+                              View Notes
+                            </button>
                           </div>
                           <p className="mt-auto flex flex-row items-center justify-end gap-2 text-lg text-white font-medium w-1/2 ml-auto bg-gradient-to-l from-rose-900 to-white py-2 px-10">
                             ₹ {item.price}{" "}
@@ -519,6 +635,24 @@ export default function EventTool({ user }) {
                         <p className="text-xl font-semibold flex flex-row items-center gap-2 mb-2">
                           <span>{item.package?.name}</span>
                         </p>
+                        <button
+                          onClick={() => {
+                            setNotes({
+                              open: true,
+                              edit: false,
+                              loading: false,
+                              event_id: event_id,
+                              eventDay: eventDay,
+                              decor_id: "",
+                              package_id: item.package._id,
+                              admin_notes: item.admin_notes,
+                              user_notes: item.user_notes,
+                            });
+                          }}
+                          className="text-rose-900 bg-white hover:bg-rose-900 hover:text-white cursor-pointer px-2 py-1.5 text-sm focus:outline-none max-w-max rounded-lg border-rose-900 border"
+                        >
+                          View Notes
+                        </button>
                         {item.decorItems.map((rec, recIndex) => (
                           <>
                             <div className="flex flex-col gap-4" key={rec._id}>
