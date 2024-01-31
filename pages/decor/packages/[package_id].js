@@ -1035,7 +1035,7 @@ function DecorListing({
               <button
                 className={`${
                   isAddedToWishlist
-                    ? "text-rose-900 bg-white hover-white"
+                    ? "text-rose-900 bg-white hover:bg-white"
                     : "text-white bg-rose-900 hover:bg-rose-900"
                 } cursor-pointer px-5 py-2.5 focus:outline-none rounded-lg border-rose-900 border `}
                 onClick={() => {
