@@ -764,7 +764,7 @@ export default function EventTool({ user }) {
                         <Table.HeadCell>
                           <span className="sr-only">#</span>
                         </Table.HeadCell>
-                        <Table.HeadCell>Decor/Packages</Table.HeadCell>
+                        <Table.HeadCell>Decor/Packages/Service</Table.HeadCell>
                         <Table.HeadCell>Price</Table.HeadCell>
                       </Table.Head>
                       <Table.Body className="divide-y">
@@ -802,6 +802,44 @@ export default function EventTool({ user }) {
                               <Table.Cell>₹{item.price}</Table.Cell>
                             </Table.Row>
                           ))}
+                        {event.eventDays?.filter(
+                          (item) => item._id === eventDay
+                        )[0]?.other_costs &&
+                          event.eventDays?.filter(
+                            (item) => item._id === eventDay
+                          )[0]?.other_costs?.total_other_costs > 0 && (
+                            <>
+                              {event.eventDays?.filter(
+                                (item) => item._id === eventDay
+                              )[0]?.other_costs?.transportation_required && (
+                                <Table.Row
+                                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                  key={"transport"}
+                                >
+                                  <Table.Cell>
+                                    {event.eventDays?.filter(
+                                      (item) => item._id === eventDay
+                                    )[0]?.decorItems.length +
+                                      event.eventDays?.filter(
+                                        (item) => item._id === eventDay
+                                      )[0]?.packages.length +
+                                      1}
+                                  </Table.Cell>
+                                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    [Other] Transportation
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    ₹
+                                    {
+                                      event.eventDays?.filter(
+                                        (item) => item._id === eventDay
+                                      )[0]?.other_costs?.transportation_cost
+                                    }
+                                  </Table.Cell>
+                                </Table.Row>
+                              )}
+                            </>
+                          )}
                         <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                           <Table.Cell></Table.Cell>
                           <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
@@ -824,7 +862,14 @@ export default function EventTool({ user }) {
                                     return accumulator + currentValue.price;
                                   },
                                   0
-                                )}
+                                ) +
+                              (event.eventDays?.filter(
+                                (item) => item._id === eventDay
+                              )[0]?.other_costs?.total_other_costs > 0
+                                ? event.eventDays?.filter(
+                                    (item) => item._id === eventDay
+                                  )[0]?.other_costs?.total_other_costs
+                                : 0)}
                           </Table.Cell>
                         </Table.Row>
                       </Table.Body>
@@ -1156,145 +1201,191 @@ export default function EventTool({ user }) {
                     </p>
                   </div>
                 )}
-                {item.decorItems.length > 0 ||
-                  (item.packages.length > 0 && (
-                    <>
-                      <div className="overflow-x-auto mt-6">
-                        {item.decorItems.length > 0 && (
-                          <Table className="border">
-                            <Table.Head>
-                              <Table.HeadCell>Decor</Table.HeadCell>
-                              <Table.HeadCell>Price</Table.HeadCell>
-                            </Table.Head>
-                            <Table.Body className="divide-y">
-                              {event.eventDays
-                                ?.filter((item) => item._id === eventDay)[0]
-                                ?.decorItems.map((item, index) => (
-                                  <Table.Row
-                                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                    key={index}
-                                  >
-                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                      [{item.decor.category}] {item.decor.name}
-                                    </Table.Cell>
-                                    <Table.Cell>₹{item.price}</Table.Cell>
-                                  </Table.Row>
-                                ))}
-                              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                  Total
-                                </Table.Cell>
-                                <Table.Cell>
-                                  ₹
-                                  {event.eventDays
-                                    ?.filter((item) => item._id === eventDay)[0]
-                                    ?.decorItems.reduce(
-                                      (accumulator, currentValue) => {
-                                        return accumulator + currentValue.price;
-                                      },
-                                      0
-                                    )}
-                                </Table.Cell>
-                              </Table.Row>
-                            </Table.Body>
-                          </Table>
-                        )}
-                        {item.packages.length > 0 && (
-                          <Table className="border">
-                            <Table.Head>
-                              <Table.HeadCell>Package</Table.HeadCell>
-                              <Table.HeadCell>Price</Table.HeadCell>
-                            </Table.Head>
-                            <Table.Body className="divide-y">
-                              {event.eventDays
-                                ?.filter((item) => item._id === eventDay)[0]
-                                ?.packages.map((item, index) => (
-                                  <Table.Row
-                                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                    key={index}
-                                  >
-                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                      {item.package.name}
-                                    </Table.Cell>
-                                    <Table.Cell>₹{item.price}</Table.Cell>
-                                  </Table.Row>
-                                ))}
-                              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                  Total
-                                </Table.Cell>
-                                <Table.Cell>
-                                  ₹
-                                  {event.eventDays
-                                    ?.filter((item) => item._id === eventDay)[0]
-                                    ?.packages.reduce(
-                                      (accumulator, currentValue) => {
-                                        return accumulator + currentValue.price;
-                                      },
-                                      0
-                                    )}
-                                </Table.Cell>
-                              </Table.Row>
-                            </Table.Body>
-                          </Table>
-                        )}
-                      </div>
+                {item.decorItems.length + item.packages.length > 0 && (
+                  <>
+                    <div className="overflow-x-auto mt-6">
+                      {item.decorItems.length > 0 && (
+                        <Table className="border">
+                          <Table.Head>
+                            <Table.HeadCell>Decor</Table.HeadCell>
+                            <Table.HeadCell>Price</Table.HeadCell>
+                          </Table.Head>
+                          <Table.Body className="divide-y">
+                            {event.eventDays
+                              ?.filter((item) => item._id === eventDay)[0]
+                              ?.decorItems.map((item, index) => (
+                                <Table.Row
+                                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                  key={index}
+                                >
+                                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    [{item.decor.category}] {item.decor.name}
+                                  </Table.Cell>
+                                  <Table.Cell>₹{item.price}</Table.Cell>
+                                </Table.Row>
+                              ))}
+                            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                              <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                Total
+                              </Table.Cell>
+                              <Table.Cell>
+                                ₹
+                                {event.eventDays
+                                  ?.filter((item) => item._id === eventDay)[0]
+                                  ?.decorItems.reduce(
+                                    (accumulator, currentValue) => {
+                                      return accumulator + currentValue.price;
+                                    },
+                                    0
+                                  )}
+                              </Table.Cell>
+                            </Table.Row>
+                          </Table.Body>
+                        </Table>
+                      )}
+                      {item.packages.length > 0 && (
+                        <Table className="border">
+                          <Table.Head>
+                            <Table.HeadCell>Package</Table.HeadCell>
+                            <Table.HeadCell>Price</Table.HeadCell>
+                          </Table.Head>
+                          <Table.Body className="divide-y">
+                            {event.eventDays
+                              ?.filter((item) => item._id === eventDay)[0]
+                              ?.packages.map((item, index) => (
+                                <Table.Row
+                                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                  key={index}
+                                >
+                                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    {item.package.name}
+                                  </Table.Cell>
+                                  <Table.Cell>₹{item.price}</Table.Cell>
+                                </Table.Row>
+                              ))}
+                            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                              <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                Total
+                              </Table.Cell>
+                              <Table.Cell>
+                                ₹
+                                {event.eventDays
+                                  ?.filter((item) => item._id === eventDay)[0]
+                                  ?.packages.reduce(
+                                    (accumulator, currentValue) => {
+                                      return accumulator + currentValue.price;
+                                    },
+                                    0
+                                  )}
+                              </Table.Cell>
+                            </Table.Row>
+                          </Table.Body>
+                        </Table>
+                      )}
                       {event.eventDays?.filter(
                         (item) => item._id === eventDay
-                      )[0]?.status.finalized ? (
+                      )[0]?.other_costs &&
                         event.eventDays?.filter(
                           (item) => item._id === eventDay
-                        )[0]?.status.approved ? (
-                          <div className="text-center py-8 flex flex-col gap-2">
+                        )[0]?.other_costs?.total_other_costs > 0 && (
+                          <Table className="border">
+                            <Table.Head>
+                              <Table.HeadCell>Service</Table.HeadCell>
+                              <Table.HeadCell>Price</Table.HeadCell>
+                            </Table.Head>
+                            <Table.Body className="divide-y">
+                              {event.eventDays?.filter(
+                                (item) => item._id === eventDay
+                              )[0]?.other_costs?.transportation_required && (
+                                <Table.Row
+                                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                  key={"transport"}
+                                >
+                                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    [Other] Transportation
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    ₹
+                                    {
+                                      event.eventDays?.filter(
+                                        (item) => item._id === eventDay
+                                      )[0]?.other_costs?.transportation_cost
+                                    }
+                                  </Table.Cell>
+                                </Table.Row>
+                              )}
+                              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                  Total
+                                </Table.Cell>
+                                <Table.Cell>
+                                  ₹
+                                  {
+                                    event.eventDays?.filter(
+                                      (item) => item._id === eventDay
+                                    )[0]?.other_costs?.total_other_costs
+                                  }
+                                </Table.Cell>
+                              </Table.Row>
+                            </Table.Body>
+                          </Table>
+                        )}
+                    </div>
+                    {event.eventDays?.filter((item) => item._id === eventDay)[0]
+                      ?.status.finalized ? (
+                      event.eventDays?.filter(
+                        (item) => item._id === eventDay
+                      )[0]?.status.approved ? (
+                        <div className="text-center py-8 flex flex-col gap-2">
+                          <p className="text-lg font-medium">
+                            Your design has been approved!
+                          </p>
+                          {event.eventDays?.filter(
+                            (item) => item._id === eventDay
+                          )[0]?.status.paymentDone ? (
                             <p className="text-lg font-medium">
-                              Your design has been approved!
+                              Your payment is done!
                             </p>
-                            {event.eventDays?.filter(
-                              (item) => item._id === eventDay
-                            )[0]?.status.paymentDone ? (
-                              <p className="text-lg font-medium">
-                                Your payment is done!
-                              </p>
-                            ) : (
-                              <button
-                                onClick={() => {
-                                  CreatePayment({ eventDay });
-                                }}
-                                className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
-                              >
-                                Proceed with Payment
-                              </button>
-                            )}
-                          </div>
-                        ) : (
-                          <div className="text-center py-8 flex flex-col gap-2">
-                            <p className="text-lg font-medium">Thank you!</p>
-                            <p>
-                              Your design has been sent for approval. You can
-                              proceed to payment once approved by your
-                              designated planner!
-                            </p>
-                            <p className="text-sm">
-                              {
-                                "(You'll be notified on your email and phone number)"
-                              }
-                            </p>
-                          </div>
-                        )
+                          ) : (
+                            <button
+                              onClick={() => {
+                                CreatePayment({ eventDay });
+                              }}
+                              className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
+                            >
+                              Proceed with Payment
+                            </button>
+                          )}
+                        </div>
                       ) : (
                         <div className="text-center py-8 flex flex-col gap-2">
-                          <button
-                            onClick={() => {
-                              finalizeEventDay({ eventDay });
-                            }}
-                            className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
-                          >
-                            Finalize
-                          </button>
+                          <p className="text-lg font-medium">Thank you!</p>
+                          <p>
+                            Your design has been sent for approval. You can
+                            proceed to payment once approved by your designated
+                            planner!
+                          </p>
+                          <p className="text-sm">
+                            {
+                              "(You'll be notified on your email and phone number)"
+                            }
+                          </p>
                         </div>
-                      )}
-                    </>
-                  ))}
+                      )
+                    ) : (
+                      <div className="text-center py-8 flex flex-col gap-2">
+                        <button
+                          onClick={() => {
+                            finalizeEventDay({ eventDay });
+                          }}
+                          className="bg-neutral-700 rounded-full p-2 px-16 text-white w-max mx-auto mt-12"
+                        >
+                          Finalize
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             ))}
         </div>
