@@ -16,7 +16,9 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-
+html {
+  scroll-behavior: smooth;
+}
 @layer base {
   .font-outline-1 {
     -webkit-text-stroke: 1px rgba(132, 0, 50, 0.3);
