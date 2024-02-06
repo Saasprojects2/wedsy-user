@@ -65,11 +65,15 @@ export default function HomePage({}) {
         id="mainDiv"
       >
         <div className="md:col-span-2 flex jusitfy-end h-[90vh] md:h-auto">
-          <p className="block w-full text-2xl md:text-3xl text-center md:text-left italic font-semibold tracking-wide text-white md:ml-6 mb-48 mt-auto">
+          <p className="block w-full text-2xl md:text-3xl text-center md:text-left italic font-semibold tracking-wide text-white md:ml-6 mb-36 mt-auto">
             #WEDDINGSMADEEASY
           </p>
         </div>
-        <form className="bg-white md:bg-black/70 h-full w-full rounded-tl-3xl rounded-tr-3xl md:rounded-xl p-8 flex flex-col gap-6 md:text-white">
+        <div className="md:hidden h-12" id="enquiryFormDiv" />
+        <form
+          className="bg-white md:bg-black/70 h-full w-full rounded-tl-3xl rounded-tr-3xl md:rounded-xl p-8 flex flex-col gap-6 md:text-white"
+          id="enquiryForm"
+        >
           <p className="hidden md:block font-semibold text-2xl">
             SPEAK TO OUR WEDDING EXPERT
           </p>
@@ -161,6 +165,7 @@ export default function HomePage({}) {
               muted
               loop
               className="w-80 mx-auto"
+              style={{ pointerEvents: "none" }}
             >
               <source
                 src={"assets/videos/wedding_store_video.mp4"}
@@ -178,7 +183,21 @@ export default function HomePage({}) {
               "Create your dream wedding effortlessly with India's premier online decor store. Explore diverse categories, select with fixed pricing, and let us transform your vision into reality. Your perfect celebration begins right here!"
             }
           </p>
-          <Link href={"#mainDiv"} className="ml-auto md:ml-0 mr-auto">
+          <Link
+            href={"#enquiryFormDiv"}
+            className="md:hidden ml-auto md:ml-0 mr-auto"
+          >
+            <button
+              className="bg-rose-900 text-white py-2 px-12 rounded-full font-medium"
+              style={{ boxShadow: "0px 5px 25px 0px rgba(132, 0, 50, 1)" }}
+            >
+              Plan your wedding now!
+            </button>
+          </Link>
+          <Link
+            href={"#mainDiv"}
+            className="hidden md:block ml-auto md:ml-0 mr-auto"
+          >
             <button
               className="bg-rose-900 text-white py-2 px-12 rounded-full font-medium"
               style={{ boxShadow: "0px 5px 25px 0px rgba(132, 0, 50, 1)" }}
@@ -194,6 +213,7 @@ export default function HomePage({}) {
             muted
             loop
             className="w-80 mx-auto"
+            style={{ pointerEvents: "none" }}
           >
             <source
               src={"assets/videos/wedding_store_video.mp4"}
@@ -273,7 +293,15 @@ export default function HomePage({}) {
           </div>
         </div>
         <div className="flex items-center justify-center mt-16">
-          <Link href={"#mainDiv"}>
+          <Link href={"#enquiryFormDiv"} className="md:hidden">
+            <button
+              className="bg-rose-900 text-white py-2 px-6 rounded-full font-medium"
+              style={{ boxShadow: "0px 0px 19px 0px #FFFFFF" }}
+            >
+              Get Free Quote
+            </button>
+          </Link>
+          <Link href={"#mainDiv"} className="hidden md:block">
             <button
               className="bg-rose-900 text-white py-2 px-6 rounded-full font-medium"
               style={{ boxShadow: "0px 0px 19px 0px #FFFFFF" }}
@@ -290,8 +318,19 @@ export default function HomePage({}) {
           Why choose <span className="text-rose-900">WEDSY</span>?
         </p>
         <Link
+          href={"#enquiryFormDiv"}
+          className="block md:hidden order-last md:col-span-3  mx-auto mt-4 md:mt-16 mb-12 md:mb-0"
+        >
+          <button
+            className="bg-rose-900 text-white py-2 px-6 rounded-full font-medium "
+            style={{ boxShadow: "0px 0px 19px 0px #FFFFFF" }}
+          >
+            Contact us to know more
+          </button>
+        </Link>
+        <Link
           href={"#mainDiv"}
-          className="order-last md:col-span-3 block mx-auto mt-4 md:mt-16 mb-12 md:mb-0"
+          className="order-last md:col-span-3 hidden md:block mx-auto mt-4 md:mt-16 mb-12 md:mb-0"
         >
           <button
             className="bg-rose-900 text-white py-2 px-6 rounded-full font-medium "
@@ -561,7 +600,15 @@ export default function HomePage({}) {
         <p className="text-white font-semibold text-2xl md:text-3xl">
           Speak to our certified Wedding Specialist today!
         </p>
-        <Link href={"#mainDiv"}>
+        <Link href={"#enquiryFormDiv"} className="md:hidden">
+          <button
+            className="bg-white text-rose-900 py-2 px-6 rounded-full md:rounded-lg font-medium"
+            style={{ boxShadow: "0px 0px 19px 0px #FFFFFF" }}
+          >
+            Contact us to know more
+          </button>
+        </Link>
+        <Link href={"#mainDiv"} className="hidden md:block">
           <button
             className="bg-white text-rose-900 py-2 px-6 rounded-full md:rounded-lg font-medium"
             style={{ boxShadow: "0px 0px 19px 0px #FFFFFF" }}
