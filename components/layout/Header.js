@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 export default function Header({ userLoggedIn, user, Logout }) {
   const router = useRouter();
   const [variant, setVariant] = useState("light");
+  const [displayHeaderLinks, setDisplayHeaderLinks] = useState(true);
   useEffect(() => {
     const myElement = document.getElementById("mainDiv");
     const isElementVisible = () => {
@@ -35,7 +36,11 @@ export default function Header({ userLoggedIn, user, Logout }) {
       window.removeEventListener("scroll", checkVisibility);
     };
   }, []);
-
+  useEffect(() => {
+    if (router?.pathname === "/weddings-made-easy") {
+      setDisplayHeaderLinks(false);
+    }
+  }, [router?.pathname]);
   return (
     <>
       <Navbar
@@ -44,72 +49,78 @@ export default function Header({ userLoggedIn, user, Logout }) {
           variant === "dark" ? "bg-[#1B1B1B]" : "bg-[#FFFFFF]"
         } md:px-12 [font-family:'Montserrat-Medium',Helvetica] sticky top-0 z-50 w-full shadow-md`}
       >
-        <Navbar.Toggle />
-        <Navbar.Brand href="/">
+        {displayHeaderLinks && <Navbar.Toggle />}
+        <Navbar.Brand
+          href="/"
+          className={`${displayHeaderLinks ? "" : "mx-auto my-2"}`}
+        >
           <img
             alt="Flowbite React Logo"
             className="mr-3 h-6 sm:h-9"
             src={variant === "dark" ? "/logo-white.png" : "/logo-black.png"}
           />
         </Navbar.Brand>
-        <div className="flex md:order-2">
-          <Dropdown
-            inline
-            label={
-              <FaRegUserCircle
-                color={variant !== "dark" ? "#1B1B1B" : "#FFFFFF"}
-                size={24}
-              />
-            }
-            arrowIcon={false}
-          >
-            {userLoggedIn ? (
-              <>
-                <Dropdown.Header as={Link} href={"/my-account"}>
-                  <span className="block text-sm">{user.name}</span>
-                </Dropdown.Header>
-                <Dropdown.Item as={Link} href={"/my-account"}>
-                  My Account
+        {displayHeaderLinks && (
+          <div className="flex md:order-2">
+            <Dropdown
+              inline
+              label={
+                <FaRegUserCircle
+                  color={variant !== "dark" ? "#1B1B1B" : "#FFFFFF"}
+                  size={24}
+                />
+              }
+              arrowIcon={false}
+            >
+              {userLoggedIn ? (
+                <>
+                  <Dropdown.Header as={Link} href={"/my-account"}>
+                    <span className="block text-sm">{user.name}</span>
+                  </Dropdown.Header>
+                  <Dropdown.Item as={Link} href={"/my-account"}>
+                    My Account
+                  </Dropdown.Item>
+                  <Dropdown.Item href={"/my-orders"}>Orders</Dropdown.Item>
+                  <Dropdown.Item href={"/event"}>Events</Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item
+                    className="flex gap-2"
+                    onClick={() => {
+                      Logout();
+                    }}
+                  >
+                    <BiLogOut />
+                    Logout
+                  </Dropdown.Item>
+                </>
+              ) : (
+                <Dropdown.Item href="/login" className="flex gap-2">
+                  <BiLogIn />
+                  Login
                 </Dropdown.Item>
-                <Dropdown.Item href={"/my-orders"}>Orders</Dropdown.Item>
-                <Dropdown.Item href={"/event"}>Events</Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item
-                  className="flex gap-2"
-                  onClick={() => {
-                    Logout();
-                  }}
-                >
-                  <BiLogOut />
-                  Logout
-                </Dropdown.Item>
-              </>
-            ) : (
-              <Dropdown.Item href="/login" className="flex gap-2">
-                <BiLogIn />
-                Login
-              </Dropdown.Item>
-            )}
-          </Dropdown>
-        </div>
-        <Navbar.Collapse className={`${styles.navbar__links}`}>
-          <Navbar.Link
-            href="/decor"
-            className={`font-medium text-${
-              variant === "dark" ? "white" : "black"
-            }`}
-          >
-            DECOR
-          </Navbar.Link>
-          <Navbar.Link
-            href="/event"
-            className={`font-medium text-${
-              variant === "dark" ? "white" : "black"
-            }`}
-          >
-            MY EVENT
-          </Navbar.Link>
-          {/* <Navbar.Link
+              )}
+            </Dropdown>
+          </div>
+        )}
+        {displayHeaderLinks && (
+          <Navbar.Collapse className={`${styles.navbar__links}`}>
+            <Navbar.Link
+              href="/decor"
+              className={`font-medium text-${
+                variant === "dark" ? "white" : "black"
+              }`}
+            >
+              DECOR
+            </Navbar.Link>
+            <Navbar.Link
+              href="/event"
+              className={`font-medium text-${
+                variant === "dark" ? "white" : "black"
+              }`}
+            >
+              MY EVENT
+            </Navbar.Link>
+            {/* <Navbar.Link
             href="#"
             className={`font-medium text-${
               variant === "dark" ? "white" : "black"
@@ -117,15 +128,16 @@ export default function Header({ userLoggedIn, user, Logout }) {
           >
             VENUES
           </Navbar.Link> */}
-          <Navbar.Link
-            href="/wishlist"
-            className={`font-medium text-${
-              variant === "dark" ? "white" : "black"
-            }`}
-          >
-            WISHLIST
-          </Navbar.Link>
-        </Navbar.Collapse>
+            <Navbar.Link
+              href="/wishlist"
+              className={`font-medium text-${
+                variant === "dark" ? "white" : "black"
+              }`}
+            >
+              WISHLIST
+            </Navbar.Link>
+          </Navbar.Collapse>
+        )}
       </Navbar>
     </>
   );
