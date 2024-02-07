@@ -173,12 +173,12 @@ export default function HomePage({}) {
               />
             </video>
           </div>
-          <p className="text-lg mt-auto hidden md:block">
+          <p className="text-lg  hidden md:block">
             {
               "Effortlessly bring your dream wedding to life with India's premier online decor store. Explore diverse categories such as stages, mandaps, entrances, and more, all with fixed pricing. Simply browse, click, and select decor to enhance your event. Your perfect celebration begins with ease and transparency. Allow us to transform your vision into reality, ensuring every detail reflects your unique love story on this special day. Start your perfect celebration right here!"
             }
           </p>
-          <p className="text-lg mt-auto md:hidden">
+          <p className="text-lg  md:hidden">
             {
               "Create your dream wedding effortlessly with India's premier online decor store. Explore diverse categories, select with fixed pricing, and let us transform your vision into reality. Your perfect celebration begins right here!"
             }
