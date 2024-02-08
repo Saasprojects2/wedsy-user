@@ -3,6 +3,7 @@ import { processMobileNumber } from "@/utils/phoneNumber";
 import { Checkbox, Footer, Label, Select, TextInput } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import { useState } from "react";
 import { BsFacebook, BsInstagram, BsTwitter, BsGoogle } from "react-icons/bs";
 import { MdFormatQuote } from "react-icons/md";
@@ -30,7 +31,7 @@ export default function HomePage({}) {
           name: data.name,
           phone: processMobileNumber(data.phone),
           verified: false,
-          source: "Landing Screen",
+          source: "Landing Screen | Ads (Google & Facebook)",
           additionalInfo: {
             event_date: data.event_date,
             whatsapp_updates: data.whatsapp_updates,
@@ -57,21 +58,50 @@ export default function HomePage({}) {
       alert("Please enter valid mobile number");
     }
   };
+  function gtag_report_conversion(url) {
+    var callback = function () {
+      if (typeof url != "undefined") {
+        window.location = url;
+      }
+    };
+    gtag("event", "conversion", {
+      send_to: "AW-468340693/XR5HCPaW7oQYENWfqd8B",
+      event_callback: callback,
+    });
+    return false;
+  }
   return (
     <>
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=AW-468340693`}
+      />
+      <Script
+        id="google-analytics"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'AW-468340693');
+          function gtag_report_conversion(url) { var callback = function () { if (typeof(url) != 'undefined') { window.location = url; } }; gtag('event', 'conversion', { 'send_to': 'AW-468340693/XR5HCPaW7oQYENWfqd8B', 'event_callback': callback }); return false; }
+        `,
+        }}
+      />
       {/* Landing Screen with form */}
       <div
-        className={`${styles.main__div} grid md:grid-cols-3 gap-0 md:px-12 md:py-12`}
+        className={`${styles.main__div} grid md:grid-cols-3 gap-0 md:px-12 md:py-12 relative`}
         id="mainDiv"
       >
-        <div className="md:col-span-2 flex jusitfy-end h-[90vh] md:h-auto">
+        <div className="md:col-span-2 flex jusitfy-end h-[90vh] md:h-auto z-10">
           <p className="block w-full text-2xl md:text-3xl text-center md:text-left italic font-semibold tracking-wide text-white md:ml-6 mb-36 mt-auto">
             #WEDDINGSMADEEASY
           </p>
         </div>
         <div className="md:hidden h-12" id="enquiryFormDiv" />
         <form
-          className="bg-white md:bg-black/70 h-full w-full rounded-tl-3xl rounded-tr-3xl md:rounded-xl p-8 flex flex-col gap-6 md:text-white"
+          className="z-10 bg-white md:bg-black/70 h-full w-full rounded-tl-3xl rounded-tr-3xl md:rounded-xl p-8 flex flex-col gap-6 md:text-white"
           id="enquiryForm"
         >
           <p className="hidden md:block font-semibold text-2xl">
@@ -144,7 +174,12 @@ export default function HomePage({}) {
                 type="submit"
                 className="bg-rose-900 text-white py-2 px-12 rounded-lg font-medium disabled:bg-rose-900/80 disabled:cursor-not-allowed"
                 style={{ boxShadow: "0px 5px 25px 0px rgba(132, 0, 50, 1)" }}
-                onClick={handleSubmit}
+                onClick={(e) => {
+                  gtag_report_conversion(
+                    `${window.location.origin}/weddings-made-easy`
+                  ); // Add the gtag_report_conversion function call here
+                  handleSubmit(e); // Call the existing handleSubmit function
+                }}
               >
                 GET INSTANT QUOTE!
               </button>
@@ -153,7 +188,7 @@ export default function HomePage({}) {
         </form>
       </div>
       {/* India’s First Online Wedding Planinng ! */}
-      <div className="px-6 py-8 md:px-24 md:py-16 grid md:grid-cols-3 gap-12">
+      <div className="px-6 py-8 md:px-24 md:py-16 grid md:grid-cols-3 gap-12 bg-white">
         <div className="col-span-2 flex flex-col gap-8 text-center md:text-left">
           <p className="font-semibold text-2xl ">
             {"India’s First Online Wedding Planinng !"}
@@ -166,12 +201,8 @@ export default function HomePage({}) {
               loop
               className="w-80 mx-auto"
               style={{ pointerEvents: "none" }}
-            >
-              <source
-                src={"assets/videos/wedding_store_video.mp4"}
-                type="video/mp4"
-              />
-            </video>
+              src={"assets/videos/wedding_store_video-mobile.mov"}
+            />
           </div>
           <p className="text-lg  hidden md:block">
             {
@@ -222,9 +253,8 @@ export default function HomePage({}) {
           </video>
         </div>
       </div>
-
       {/* Service Offered */}
-      <div className="px-6 md:px-36 py-8 md:py-16">
+      <div className="px-6 md:px-36 py-8 md:py-16 bg-white">
         <p className="text-rose-900 font-semibold text-2xl md:text-3xl text-center mb-6 md:mb-16">
           SERVICES WE OFFER
         </p>
@@ -311,9 +341,8 @@ export default function HomePage({}) {
           </Link>
         </div>
       </div>
-
       {/* Why Choose Us */}
-      <div className="px-8 md:px-24 py-8 md:py-16 grid md:grid-cols-3 gap-12">
+      <div className="px-8 md:px-24 py-8 md:py-16 grid md:grid-cols-3 gap-12 bg-white">
         <p className="md:hidden font-semibold text-2xl text-[#204D96] order-first text-center">
           Why choose <span className="text-rose-900">WEDSY</span>?
         </p>
