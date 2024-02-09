@@ -269,9 +269,14 @@ export default function HomePage({}) {
               style={{ width: "100%", height: "auto" }}
             />
             <p className="text-xl font-medium">Wedding Decorations</p>
-            <p className="px-4">
+            <p className="px-4 hidden md:block">
               {
-                "From Consulting to flawless execution, we’ve got it all covered!"
+                "From complimentary consulting to seamless execution, we've got every aspect covered with expertise and precision!"
+              }
+            </p>
+            <p className="px-4 md:hidden">
+              {
+                "From thoughtful consultation to flawless execution, we have every aspect expertly managed for you"
               }
             </p>
           </div>
@@ -285,9 +290,14 @@ export default function HomePage({}) {
               style={{ width: "100%", height: "auto" }}
             />
             <p className="text-xl font-medium">Wedding Photography</p>
-            <p className="px-4">
+            <p className="px-4 hidden md:block">
               {
-                "Every click tells the unique story of your love in timeless frames"
+                "Each click captures the distinctive tale of your love in timeless frames. Wedsy simplifies the process and assists you seamlessly in choosing the perfect photographer hassle-free."
+              }
+            </p>
+            <p className="px-4 md:hidden">
+              {
+                "Every click tells your unique love story. Wedsy simplifies and seamlessly assists you in choosing the perfect photographer."
               }
             </p>
           </div>
@@ -301,9 +311,14 @@ export default function HomePage({}) {
               style={{ width: "100%", height: "auto" }}
             />
             <p className="text-xl font-medium">Makeup Assistance</p>
-            <p className="px-4">
+            <p className="px-4 hidden md:block">
               {
-                "Our skilled artists bring out your best features for your special day"
+                "Wedsy partners with top-notch makeup artists to enhance your best features on your special day. We'll help you choose the right artist within your budget."
+              }
+            </p>
+            <p className="px-4 md:hidden">
+              {
+                "Wedsy links you to top makeup artists, ensuring your best features shine on your special day, all within your budget."
               }
             </p>
           </div>
@@ -317,8 +332,15 @@ export default function HomePage({}) {
               style={{ width: "100%", height: "auto" }}
             />
             <p className="text-xl font-medium">Venue Consultation</p>
-            <p className="px-4">
-              {"Unlock the perfect venue ensuring every detail aligns"}
+            <p className="px-4 hidden md:block">
+              {
+                "Discover the ideal venue where every detail aligns seamlessly. With connections to 200+ venues, unlocking your perfect space is a hassle-free choice."
+              }
+            </p>
+            <p className="px-4 md:hidden">
+              {
+                "Find your perfect venue effortlessly with Wedsy's 200+ venue connections, ensuring every detail aligns seamlessly."
+              }
             </p>
           </div>
         </div>
