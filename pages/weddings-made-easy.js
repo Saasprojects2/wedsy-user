@@ -20,43 +20,51 @@ export default function HomePage({}) {
   const [testimonial, setTestimonials] = useState({ total: 2, display: 0 });
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (await processMobileNumber(data.phone)) {
-      setLoading(true);
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/enquiry`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          phone: processMobileNumber(data.phone),
-          verified: false,
-          source: "Landing Screen | Ads (Google & Facebook)",
-          additionalInfo: {
-            event_date: data.event_date,
-            whatsapp_updates: data.whatsapp_updates,
+    return new Promise(async (resolve, reject) => {
+      if (await processMobileNumber(data.phone)) {
+        setLoading(true);
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/enquiry`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }),
-      })
-        .then((response) => {
-          if (response.ok) {
-            setData({
-              ...data,
-              phone: "",
-              name: "",
-              event_date: "",
-              whatsapp_updates: false,
-            });
-            setLoading(false);
-            setSuccess(true);
-          }
+          body: JSON.stringify({
+            name: data.name,
+            phone: processMobileNumber(data.phone),
+            verified: false,
+            source: "Landing Screen | Ads (Google & Facebook)",
+            additionalInfo: {
+              event_date: data.event_date,
+              whatsapp_updates: data.whatsapp_updates,
+            },
+          }),
         })
-        .catch((error) => {
-          console.error("There was a problem with the fetch operation:", error);
-        });
-    } else {
-      alert("Please enter valid mobile number");
-    }
+          .then((response) => {
+            if (response.ok) {
+              setData({
+                ...data,
+                phone: "",
+                name: "",
+                event_date: "",
+                whatsapp_updates: false,
+              });
+              setLoading(false);
+              setSuccess(true);
+              resolve();
+            }
+          })
+          .catch((error) => {
+            console.error(
+              "There was a problem with the fetch operation:",
+              error
+            );
+            reject(error);
+          });
+      } else {
+        alert("Please enter valid mobile number");
+        reject();
+      }
+    });
   };
   function gtag_report_conversion(url) {
     var callback = function () {
@@ -174,11 +182,19 @@ export default function HomePage({}) {
                 type="submit"
                 className="bg-rose-900 text-white py-2 px-12 rounded-lg font-medium disabled:bg-rose-900/80 disabled:cursor-not-allowed"
                 style={{ boxShadow: "0px 5px 25px 0px rgba(132, 0, 50, 1)" }}
-                onClick={(e) => {
-                  handleSubmit(e); // Call the existing handleSubmit function
-                  gtag_report_conversion(
-                    `${window.location.origin}/weddings-made-easy`
-                  ); // Add the gtag_report_conversion function call here
+                onClick={async (e) => {
+                  handleSubmit(e)
+                    .then((r) => {
+                      gtag_report_conversion(
+                        `${window.location.origin}/weddings-made-easy`
+                      ); // Add the gtag_report_conversion function call here
+                    })
+                    .catch((e) => {
+                      console.log(e);
+                    }); // Call the existing handleSubmit function
+                  // gtag_report_conversion(
+                  //   `${window.location.origin}/weddings-made-easy`
+                  // ); // Add the gtag_report_conversion function call here
                 }}
               >
                 GET INSTANT QUOTE!
