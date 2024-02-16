@@ -55,18 +55,18 @@ export default function DecorQuotation({ userLoggedIn, user }) {
     }
   };
   return userLoggedIn ? (
-    <div className="py-16 px-6 md:px-24 bg-amber-100">
+    <div className="py-16 px-6 md:px-16 md:mx-24 bg-rose-900 md:rounded-3xl text-white">
       <p className="text-2xl md:text-3xl font-medium mb-8">
         Have a decor in mind? Get an instant quote!
       </p>
-      <div className="grid md:grid-cols-3">
-        <div className="col-span-2">
-          <p className="md:w-2/3 text-lg">
+      <div className="grid md:grid-cols-3 gap-4">
+        <div className="md:col-span-2">
+          <p className="text-lg">
             {
               "Have a decor picture with you but you still don’t know how much it’s gonna cost? Upload your decor picture and Wedsy will revert back to you in 24 hours with a quote"
             }
           </p>
-          <div className="mt-8 flex flex-col md:flex-row gap-8 justify-center md:w-2/3">
+          <div className="mt-8 flex flex-col md:flex-row gap-8 justify-center">
             <input
               type="text"
               placeholder="CITY"
@@ -93,7 +93,7 @@ export default function DecorQuotation({ userLoggedIn, user }) {
         </div>
         <label
           for="fileInput"
-          className="cursor-pointer bg-[#57575799] mx-4 rounded-xl flex flex-col items-center justify-center gap-4 p-6 mt-4 md:mt-0"
+          className="cursor-pointer bg-[#57575799] md:mx-4 rounded-xl flex flex-col items-center justify-center gap-4 p-6 mt-4 md:mt-0 w-full"
         >
           <input
             type="file"
@@ -106,8 +106,8 @@ export default function DecorQuotation({ userLoggedIn, user }) {
             }}
             disabled={formData.loading}
           />
-          <div className="bg-white p-2 rounded-full ">
-            <AiOutlinePlus size={24} />
+          <div className="bg-black p-2 rounded-full ">
+            <AiOutlinePlus size={24} color="white" />
           </div>
           <span id="fileName" className="text-sm">
             {imageFile?.name || "UPLOAD HERE"}
@@ -116,7 +116,7 @@ export default function DecorQuotation({ userLoggedIn, user }) {
       </div>
       <button
         type="submit"
-        className="rounded-full bg-black disabled:bg-black/50 text-white py-2 px-8 my-2"
+        className="rounded-full bg-white disabled:bg-white/50 text-black py-2 px-8 my-2 mx-auto block mt-4"
         disabled={
           !formData.location ||
           !formData.comment ||
