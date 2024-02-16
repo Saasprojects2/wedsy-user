@@ -16,6 +16,7 @@ import { processMobileNumber } from "@/utils/phoneNumber";
 import { FaHeart } from "react-icons/fa";
 import PlanYourEvent from "@/components/screens/PlanYourEvent";
 import DecorPackageCard from "@/components/cards/DecorPackageCard";
+import Head from "next/head";
 
 function Home({ packages }) {
   const categoryList = [
@@ -237,6 +238,23 @@ function Home({ packages }) {
   }, [decorIndex, isHovered]);
   return (
     <>
+      <Head>
+        <title>
+          Top Wedding Planner in bangalore | Event Decorators in Bangalore |
+          Wedsy
+        </title>
+        <meta
+          name="description"
+          content="Discover expert event decorators in Bangalore with Wedsy. Renowned as the best wedding planners, our team creates memorable event decorations for your special occasions"
+        />
+        <meta
+          name="keywords"
+          content="event planners in bangalore,wedding planners in bangalore,event decorators in bangalore,best wedding planners in bangalore,top wedding planners in bangalore"
+        />
+        <meta name="robots" content="index, follow" />
+        <meta name="copyright" content="Wedsy" />
+        <meta name="language" content="EN" />
+      </Head>
       <main
         className={`${styles.main__div} flex flex-col justify-around gap-6 md:gap-12 `}
         id="mainDiv"
