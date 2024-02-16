@@ -120,6 +120,20 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
           name="google-site-verification"
           content="6NQH3LHjenBtdQYZzStAqCj51nFRb1P4Pb5jhIdugB0"
         />
+        <title>
+          Wedding & Hall Decoration | Flower Decorators in Bangalore | Wedsy
+        </title>
+        <meta
+          name="description"
+          content="Turn your dream wedding into reality with Wedsy's exquisite wedding decorations. From vibrant wedding flowers to elegant hall designs, our decorators in Bangalore craft unforgettable moments."
+        />
+        <meta
+          name="keywords"
+          content="wedding decorations,wedding flower decoration,wedding hall decoration,flower decorators in bangalore,decorators in bangalore,wedding decorators in bangalore"
+        />
+        <meta name="robots" content="index, follow" />
+        <meta name="copyright" content="Wedsy" />
+        <meta name="language" content="EN" />
       </Head>
       <main className="relative" id="mainDiv">
         <Image
@@ -666,7 +680,6 @@ export async function getServerSideProps(context) {
     };
   } catch (error) {
     console.error("Error fetching data:", error);
-
     return {
       props: {
         bestSeller: null,
