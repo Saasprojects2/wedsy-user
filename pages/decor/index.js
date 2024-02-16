@@ -11,6 +11,7 @@ import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaInfinity } from "react-icons/fa";
+import styles from "@/styles/DecorPage.module.css";
 
 function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
   const [enquiryForm, setEnquiryForm] = useState({
@@ -651,8 +652,129 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
           </div>
         </div>
       </div>
-      <DecorQuotation userLoggedIn={userLoggedIn} user={user} />
       <PlanYourEvent />
+      <DecorQuotation userLoggedIn={userLoggedIn} user={user} />
+      <div
+        className={`py-6 md:py-20 px-4 md:px-24 text-center flex flex-col gap-6 ${styles.bg_main_section} mt-8`}
+      >
+        <h1 className="text-3xl uppercase font-semibold leading-relaxed">
+          &#34;Transforming Wedding Dreams into Reality: The Art of Bespoke
+          Decorations by Wedsy&#34;
+        </h1>
+        <p className="text-xl font-normal">
+          Elevate your special day with Wedsy, renowned wedding decorators in
+          Bangalore. Specializing in enchanting hall and flower decorations, our
+          team creates bespoke experiences capturing the essence of your love
+          story. From concept to the final touch, our flower decorators use only
+          the freshest blooms for a stunning backdrop. Whether a lavish affair
+          or intimate gathering, Wedsy&#39;s commitment to excellence brings
+          your wedding visions to life with elegance. Trust us for unforgettable
+          decorations as timeless as your wedding day.
+        </p>
+      </div>
+      <div className="py-6 md:py-12 px-4 md:px-24 flex flex-col gap-6 bg-gradient-to-b from-white to-[#CEA15B]">
+        <Image
+          src="/assets/images/decor-faq-img.png"
+          alt="Decor"
+          width={0}
+          height={0}
+          sizes="100%"
+          style={{
+            width: "80vw",
+            height: "auto",
+            margin: "2em auto",
+            marginBottom: "4em",
+          }}
+        />
+        <h2 className="text-2xl uppercase font-semibold text-center mb-8">
+          MOST FREQUENTLY ASKED QUESTIONS BY OUR CUSTOMERS
+        </h2>
+        <div className="divide-y-2 divide-black divide-dashed text-lg">
+          <div className="flex flex-col gap-4 my-4 py-4">
+            <p className="font-medium">What is the event tool?</p>
+            <p className="font-light">
+              The event tool is a specially designed organizational tool for
+              your events. Simply create an event, such as &#34;Rahul&#39;s
+              wedding,&#34; and add multiple event days like haldi, sangeet, and
+              the wedding ceremony. Once set up, easily add your selected decor
+              to the respective event days. This tool ensures your event stays
+              well-organized and hassle-free.
+            </p>
+          </div>
+          <div className="flex flex-col gap-4 my-4 py-4">
+            <p className="font-medium">
+              What unique wedding decoration themes can Wedsy offer for my
+              wedding in Bangalore?
+            </p>
+            <p className="font-light">
+              At Wedsy, we create a variety of stunning themes that range from
+              traditional to contemporary for your wedding decoration needs. Our
+              team specializes in customizing themes that resonate with your
+              story, all the while incorporating the beauty of Bangalore&#39;s
+              diverse culture.
+            </p>
+          </div>
+          <div className="flex flex-col gap-4 my-4 py-4">
+            <p className="font-medium">
+              How can Wedsy enhance my wedding venue with exceptional wedding
+              hall decoration?
+            </p>
+            <p className="font-light">
+              Our expert decorators at Wedsy are skilled in transforming any
+              wedding hall in Bangalore into a magical setting. We carefully
+              consider every element, from lighting to layout, ensuring that
+              your wedding hall decoration is both breathtaking and memorable.
+            </p>
+          </div>
+          <div className="flex flex-col gap-4 my-4 py-4">
+            <p className="font-medium">
+              Can I request specific types of flowers for my wedding flower
+              decoration?
+            </p>
+            <p className="font-light">
+              Absolutely! We pride ourselves on personalizing each wedding
+              flower decoration to your taste. Share your preferred flowers with
+              us, and our talented flower decorators in Bangalore will
+              incorporate them into your wedding&#39;s design palette with
+              creativity and flair.
+            </p>
+          </div>
+          <div className="flex flex-col gap-4 my-4 py-4">
+            <p className="font-medium">
+              Does Wedsy have packages for decorators in Bangalore?
+            </p>
+            <p className="font-light">
+              Yes, Wedsy offers a range of packages for wedding decorations that
+              can be tailored to fit your specific needs and budget. Our
+              packages include a variety of décor options curated by the best
+              decorators in Bangalore to make your wedding truly exceptional.
+            </p>
+          </div>
+          <div className="flex flex-col gap-4 my-4 py-4">
+            <p className="font-medium">
+              What makes Wedsy stand out from other wedding decorators in
+              Bangalore?
+            </p>
+            <p className="font-light">
+              What sets Wedsy apart is our attention to detail and commitment to
+              delivering personalized service. As leading wedding decorators in
+              Bangalore, we pride ourselves on working closely with you to
+              understand your vision and executing it beyond your expectations.
+            </p>
+          </div>
+          <div className="flex flex-col gap-4 my-4 py-4">
+            <p className="font-medium">
+              How does Wedsy ensure the quality of wedding flower decoration?
+            </p>
+            <p className="font-light">
+              At Wedsy, quality is our top priority. Our flower decorators in
+              Bangalore meticulously source the freshest, most vibrant flowers
+              on the day of the event. Our designs are crafted to ensure the
+              flowers maintain their beauty throughout your entire wedding day.
+            </p>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
