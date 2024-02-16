@@ -218,6 +218,37 @@ function DecorListing({ data }) {
           name="google-site-verification"
           content="6NQH3LHjenBtdQYZzStAqCj51nFRb1P4Pb5jhIdugB0"
         />
+        {router.query.category === "Stage" && (
+          <>
+            <title>Best Wedding Stage Decoration For Marriage | Wedsy</title>
+            <meta
+              name="description"
+              content="Find the perfect wedding stage decoration at Wedsy. Our best stage decoration for marriage will make your day unforgettable. Book now! "
+            />
+            <meta
+              name="keywords"
+              content="wedding stage decoration,best stage decoration for marriage, best wedding stage decoration"
+            />
+            <meta name="robots" content="index, follow" />
+            <meta name="copyright" content="Wedsy" />
+            <meta name="language" content="EN" />
+          </>
+        )}
+        {router.query.category === "Mandap" && (
+          <>
+            <title>
+              Affordable Mandap Decoration Prices | Elegant Designs by Wedsy
+            </title>
+            <meta
+              name="description"
+              content="Wedsy offers competitive mandap decoration prices for weddings. Explore our cost-effective packages for breathtaking designs that don't compromise on elegance. "
+            />
+            <meta name="keywords" content="mandap decoration price" />
+            <meta name="robots" content="index, follow" />
+            <meta name="copyright" content="Wedsy" />
+            <meta name="language" content="EN" />
+          </>
+        )}
       </Head>
       <div
         className="md:p-8 grid md:grid-cols-4 gap-8 relative overflow-hidden hide-scrollbar decor-bg-image"
