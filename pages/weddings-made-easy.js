@@ -175,10 +175,10 @@ export default function HomePage({}) {
                 className="bg-rose-900 text-white py-2 px-12 rounded-lg font-medium disabled:bg-rose-900/80 disabled:cursor-not-allowed"
                 style={{ boxShadow: "0px 5px 25px 0px rgba(132, 0, 50, 1)" }}
                 onClick={(e) => {
+                  handleSubmit(e); // Call the existing handleSubmit function
                   gtag_report_conversion(
                     `${window.location.origin}/weddings-made-easy`
                   ); // Add the gtag_report_conversion function call here
-                  handleSubmit(e); // Call the existing handleSubmit function
                 }}
               >
                 GET INSTANT QUOTE!
