@@ -103,7 +103,10 @@ export default function HomePage({}) {
         id="mainDiv"
       >
         <div className="md:col-span-2 flex jusitfy-end h-[90vh] md:h-auto z-10">
-          <p className="block w-full text-2xl md:text-3xl text-center md:text-left italic font-semibold tracking-wide text-white md:ml-6 mb-36 mt-auto">
+          <p
+            className="block w-full text-2xl md:text-3xl text-center md:text-left italic font-semibold tracking-wide text-white md:ml-6 mb-36 mt-auto"
+            style={{ textShadow: "0px 0px 19px #FFFFFF" }}
+          >
             #WEDDINGSMADEEASY
           </p>
         </div>
