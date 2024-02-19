@@ -12,6 +12,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaInfinity } from "react-icons/fa";
 import styles from "@/styles/DecorPage.module.css";
+import FAQAccordion from "@/components/accordion/FAQAccordion";
 
 function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
   const [enquiryForm, setEnquiryForm] = useState({
@@ -690,8 +691,38 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
           MOST FREQUENTLY ASKED QUESTIONS BY OUR CUSTOMERS
         </h2>
         <div className="divide-y-2 divide-black divide-dashed text-lg">
-          <div className="flex flex-col gap-4 my-4 py-4">
-            <p className="font-medium">What is the event tool?</p>
+          <FAQAccordion
+            question={"What is the event tool?"}
+            answer={`The event tool is a specially designed organizational tool for your events. Simply create an event, such as "Rahul's wedding," and add multiple event days like haldi, sangeet, and the wedding ceremony. Once set up, easily add your selected decor to the respective event days. This tool ensures your event stays well-organized and hassle-free.`}
+          />
+          <FAQAccordion
+            question={
+              "What unique wedding decoration themes can Wedsy offer for my wedding in Bangalore?"
+            }
+            answer={`At Wedsy, we create a variety of stunning themes that range from traditional to contemporary for your wedding decoration needs. Our team specializes in customizing themes that resonate with your story, all the while incorporating the beauty of Bangalore's diverse culture.`}
+          />
+          <FAQAccordion
+            question={`How can Wedsy enhance my wedding venue with exceptional wedding hall decoration?`}
+            answer={`Our expert decorators at Wedsy are skilled in transforming any wedding hall in Bangalore into a magical setting. We carefully consider every element, from lighting to layout, ensuring that your wedding hall decoration is both breathtaking and memorable.`}
+          />
+          <FAQAccordion
+            question={`Can I request specific types of flowers for my wedding flower decoration?`}
+            answer={`Absolutely! We pride ourselves on personalizing each wedding flower decoration to your taste. Share your preferred flowers with us, and our talented flower decorators in Bangalore will incorporate them into your wedding's design palette with creativity and flair.`}
+          />
+          <FAQAccordion
+            question={`Does Wedsy have packages for decorators in Bangalore?`}
+            answer={`Yes, Wedsy offers a range of packages for wedding decorations that can be tailored to fit your specific needs and budget. Our packages include a variety of décor options curated by the best decorators in Bangalore to make your wedding truly exceptional.`}
+          />
+          <FAQAccordion
+            question={`What makes Wedsy stand out from other wedding decorators in Bangalore?`}
+            answer={`What sets Wedsy apart is our attention to detail and commitment to delivering personalized service. As leading wedding decorators in Bangalore, we pride ourselves on working closely with you to understand your vision and executing it beyond your expectations.`}
+          />
+          <FAQAccordion
+            question={`How does Wedsy ensure the quality of wedding flower decoration?`}
+            answer={`At Wedsy, quality is our top priority. Our flower decorators in Bangalore meticulously source the freshest, most vibrant flowers on the day of the event. Our designs are crafted to ensure the flowers maintain their beauty throughout your entire wedding day.`}
+          />
+          {/* <div className="flex flex-col gap-4 my-4 py-4">
+            <p className="font-medium"></p>
             <p className="font-light">
               The event tool is a specially designed organizational tool for
               your events. Simply create an event, such as &#34;Rahul&#39;s
@@ -772,7 +803,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
               on the day of the event. Our designs are crafted to ensure the
               flowers maintain their beauty throughout your entire wedding day.
             </p>
-          </div>
+          </div> */}
         </div>
       </div>
     </>
