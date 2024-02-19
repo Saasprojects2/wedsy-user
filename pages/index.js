@@ -17,6 +17,7 @@ import { FaHeart } from "react-icons/fa";
 import PlanYourEvent from "@/components/screens/PlanYourEvent";
 import DecorPackageCard from "@/components/cards/DecorPackageCard";
 import Head from "next/head";
+import Testimonials from "@/components/screens/Testimonials";
 
 function Home({ packages }) {
   const categoryList = [
@@ -691,119 +692,7 @@ function Home({ packages }) {
         </div>
       </section>
       <PlanYourEvent />
-      {/* Testimonial Desktop */}
-      <section className="w-full relative hidden md:block">
-        <Image
-          src={pinkBgGif}
-          alt="Decor"
-          width={0}
-          height={0}
-          sizes="100%"
-          style={{ width: "100%", height: "50%" }}
-          className="absolute top-0 -z-10"
-        />
-        <div className="flex p-4 md:py-16 md:px-24 flex-row items-center">
-          <div className="p-4 w-2/3 self-stretch flex flex-col gap-4">
-            <p className="font-semibold md:text-4xl relative flex flex-row gap-2 relative">
-              Customers{" "}
-              {/* <Image
-                src={heartGif}
-                alt="Decor"
-                width={0}
-                height={0}
-                sizes="100%"
-                style={{ width: "1em", height: "auto" }}
-              />{" "} */}
-              <FaHeart />
-              Wedsy
-            </p>
-            <Rating>
-              <p className="ml-2 text-lg font-bold">4.8</p>
-              <Rating size="md">
-                <Rating.Star />
-                <Rating.Star />
-                <Rating.Star />
-                <Rating.Star />
-                <Rating.Star filled={true} />
-              </Rating>
-              <FcGoogle size={24} className="ml-2" />
-            </Rating>
-            <p className="">
-              Customers love Wedsy for its seamless wedding planning experience,
-              offering a curated selection of wewdding exxentials and
-              personalised services that simplfy the process and make their
-              special day truly memorable
-            </p>
-            <div className="mt-auto mb-4 w-2/3 mx-auto">
-              <p>
-                {
-                  "“Very reliable and systematic team that brings your vision to life and require no repeated follow up. so happy to have had them do the decor for my engagement. All the best to the team. “"
-                }
-              </p>
-              <p className="text-right">-Anju alex</p>
-            </div>
-          </div>
-          <div className="w-1/3 relative">
-            <Image
-              src="/assets/images/testimonial.png"
-              alt="Decor"
-              width={0}
-              height={0}
-              sizes="100%"
-              style={{ width: "80%", height: "auto" }}
-              className="mx-auto"
-            />
-          </div>
-        </div>
-      </section>
-      {/* Testimonial Mobile */}
-      <section className="w-full relative md:hidden">
-        <Image
-          src={pinkBgGif}
-          alt="Decor"
-          width={0}
-          height={0}
-          sizes="100%"
-          style={{ width: "100%", height: "100%" }}
-          className="absolute top-0 -z-10"
-        />
-        <p className="font-medium text-2xl relative flex flex-row gap-2 relative py-6 items-center justify-center">
-          Customers <FaHeart />
-          Wedsy
-        </p>
-        <Rating className="justify-center">
-          <p className="ml-2 text-lg font-bold">4.8</p>
-          <Rating size="md">
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star />
-            <Rating.Star filled={true} />
-          </Rating>
-          <FcGoogle size={24} className="ml-2" />
-        </Rating>
-        <div className="flex p-4 md:py-16 md:px-24 flex-row items-center">
-          <div className="w-2/3 relative">
-            <Image
-              src="/assets/images/testimonial.png"
-              alt="Decor"
-              width={0}
-              height={0}
-              sizes="100%"
-              style={{ width: "80%", height: "auto" }}
-              className="mx-auto"
-            />
-          </div>
-          <div className="p-4 w-1/3 self-stretch flex flex-col gap-4">
-            <p className="text-sm text-justify">
-              {
-                "“Very reliable and systematic team that brings your vision to life and require no repeated follow up. so happy to have had them do the decor for my engagement. All the best to the team. “"
-              }
-            </p>
-            <p className="text-right">-Anju alex</p>
-          </div>
-        </div>
-      </section>
+      <Testimonials />
       <section className="mt-8 mb-8">
         <div className="w-full py-12 relative">
           <p className="mb-32 md:mb-0 text-center text-rose-900 text-xl font-semibold tracking-wider uppercase px-6 md:px-16 md:w-1/2 md:translate-y-full">
