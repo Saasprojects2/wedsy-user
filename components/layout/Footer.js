@@ -7,7 +7,11 @@ export default function FooterComponent() {
   const [displayFooter, setDisplayFooter] = useState(true);
   const router = useRouter();
   useEffect(() => {
-    if (router?.pathname === "/weddings-made-easy") {
+    if (
+      router?.pathname === "/weddings-made-easy" ||
+      router?.pathname === "/decor/view" ||
+      router?.pathname.startsWith("/event")
+    ) {
       setDisplayFooter(false);
     }
   }, [router?.pathname]);
