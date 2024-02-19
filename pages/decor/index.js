@@ -575,7 +575,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
         </div>
       </div>{" "}
       {/* Categories Image Marquee */}
-      <div className="py-8">
+      {/* <div className="py-8">
         <p className="md:mt-6 text-2xl md:text-3xl mb-4 md:mb-8 font-semibold text-center">
           CATEGORIES
         </p>
@@ -651,7 +651,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
       <PlanYourEvent />
       <DecorQuotation userLoggedIn={userLoggedIn} user={user} />
       <div
