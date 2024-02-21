@@ -1,3 +1,4 @@
+import { toProperCase } from "@/utils/text";
 import { Button, Modal, Table, Textarea, Tooltip } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -618,60 +619,75 @@ export default function EventTool({ user }) {
                               View Notes
                             </button>
                           </div>
-                          <p className="mt-auto flex flex-row items-center justify-end gap-2 text-lg text-white font-medium w-1/2 ml-auto bg-gradient-to-l from-rose-900 to-white py-2 px-10">
-                            ₹ {item.price}{" "}
-                            <Tooltip
-                              content={
-                                <div className="flex flex-col gap-1">
-                                  <div className="flex flex-row justify-between gap-2">
-                                    <span>{item.category}:</span>
-                                    <span>
-                                      ₹
-                                      {
-                                        item.decor.productInfo.variant[
-                                          item.variant
-                                        ].sellingPrice
-                                      }
-                                    </span>
-                                  </div>
-                                  {item.platform && (
+                          <div className="flex flex-col w-1/2 ml-auto">
+                            <p className="font-medium text-lg mt-auto text-right px-10">
+                              Price for{" "}
+                              <span className="text-rose-900">
+                                {item.variant === "artificialFlowers"
+                                  ? "Artificial"
+                                  : item.variant === "naturalFlowers"
+                                  ? "Natural"
+                                  : item.variant === "mixedFlowers"
+                                  ? "Mixed"
+                                  : ""}{" "}
+                                Flowers.
+                              </span>
+                            </p>
+                            <p className="mt-auto flex flex-row items-center justify-end gap-2 text-lg text-white font-medium bg-gradient-to-l from-rose-900 to-white py-2 px-10">
+                              ₹ {item.price}{" "}
+                              <Tooltip
+                                content={
+                                  <div className="flex flex-col gap-1">
                                     <div className="flex flex-row justify-between gap-2">
-                                      <span>Platform:</span>
+                                      <span>{item.category}:</span>
                                       <span>
                                         ₹
-                                        {item.dimensions.length *
-                                          item.dimensions.breadth *
-                                          25}
+                                        {
+                                          item.decor.productInfo.variant[
+                                            item.variant
+                                          ].sellingPrice
+                                        }
                                       </span>
                                     </div>
-                                  )}
-                                  {item.flooring && (
-                                    <div className="flex flex-row justify-between gap-2">
-                                      <span>Flooring:</span>
-                                      <span>
-                                        ₹
-                                        {(item.dimensions.length +
-                                          item.dimensions.height) *
-                                          (item.dimensions.breadth +
+                                    {item.platform && (
+                                      <div className="flex flex-row justify-between gap-2">
+                                        <span>Platform:</span>
+                                        <span>
+                                          ₹
+                                          {item.dimensions.length *
+                                            item.dimensions.breadth *
+                                            25}
+                                        </span>
+                                      </div>
+                                    )}
+                                    {item.flooring && (
+                                      <div className="flex flex-row justify-between gap-2">
+                                        <span>Flooring:</span>
+                                        <span>
+                                          ₹
+                                          {(item.dimensions.length +
                                             item.dimensions.height) *
-                                          (item.flooring === "Carpet"
-                                            ? 8
-                                            : item.flooring === "Flex"
-                                            ? 10
-                                            : item.flooring === "PrintedFlex"
-                                            ? 15
-                                            : 0)}
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
-                              }
-                              trigger="hover"
-                              style="light"
-                            >
-                              <BsInfoCircle size={12} />
-                            </Tooltip>
-                          </p>
+                                            (item.dimensions.breadth +
+                                              item.dimensions.height) *
+                                            (item.flooring === "Carpet"
+                                              ? 8
+                                              : item.flooring === "Flex"
+                                              ? 10
+                                              : item.flooring === "PrintedFlex"
+                                              ? 15
+                                              : 0)}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                }
+                                trigger="hover"
+                                style="light"
+                              >
+                                <BsInfoCircle size={12} />
+                              </Tooltip>
+                            </p>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -915,6 +931,7 @@ export default function EventTool({ user }) {
                               )}
                             </>
                           )}
+                        ₹
                         <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                           <Table.Cell></Table.Cell>
                           <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
