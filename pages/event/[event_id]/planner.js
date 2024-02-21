@@ -266,6 +266,56 @@ export default function EventTool({ user }) {
       }
     }
   };
+  const RemoveDecorFromEvent = ({ decor_id }) => {
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}/decor/${eventDay}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          decor: decor_id,
+        }),
+      }
+    )
+      .then((response) => (response.ok ? response.json() : null))
+      .then((response) => {
+        if (response.message === "success") {
+          fetchEvent();
+          alert("Item removed from event!");
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
+  const RemovePackageFromEvent = ({ package_id }) => {
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}/decor-package/${eventDay}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          package: package_id,
+        }),
+      }
+    )
+      .then((response) => (response.ok ? response.json() : null))
+      .then((response) => {
+        if (response.message === "success") {
+          fetchEvent();
+          alert("Item removed from event!");
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   return (
     <>
       {/* Notes Modal */}
@@ -471,8 +521,20 @@ export default function EventTool({ user }) {
                               {/* <BiEditAlt
                               size={24}
                               className="ml-auto cursor-pointer"
-                            />
-                            <MdDelete size={24} className="cursor-pointer" /> */}
+                            /> */}
+                              {!event.eventDays?.filter(
+                                (i) => i._id === eventDay
+                              )[0].status.finalized && (
+                                <MdDelete
+                                  size={24}
+                                  className="cursor-pointer"
+                                  onClick={() => {
+                                    RemoveDecorFromEvent({
+                                      decor_id: item.decor._id,
+                                    });
+                                  }}
+                                />
+                              )}
                             </p>
                             <Image
                               src={item.decor?.image}
@@ -634,6 +696,19 @@ export default function EventTool({ user }) {
                       >
                         <p className="text-xl font-semibold flex flex-row items-center gap-2 mb-2">
                           <span>{item.package?.name}</span>
+                          {!event.eventDays?.filter(
+                            (i) => i._id === eventDay
+                          )[0].status.finalized && (
+                            <MdDelete
+                              size={24}
+                              className="cursor-pointer"
+                              onClick={() => {
+                                RemovePackageFromEvent({
+                                  package_id: item.package._id,
+                                });
+                              }}
+                            />
+                          )}
                         </p>
                         <button
                           onClick={() => {
@@ -987,7 +1062,20 @@ export default function EventTool({ user }) {
                 {item.decorItems.length > 0
                   ? item.decorItems.map((rec, recIndex) => (
                       <div className="flex flex-col gap-2 p-4" key={recIndex}>
-                        <p className="font-medium">{rec.decor?.name}</p>
+                        <p className="font-medium flex flex-row gap-2">
+                          {rec.decor?.name}
+                          {!item.status.finalized && (
+                            <MdDelete
+                              size={24}
+                              className="cursor-pointer"
+                              onClick={() => {
+                                RemoveDecorFromEvent({
+                                  decor_id: rec.decor._id,
+                                });
+                              }}
+                            />
+                          )}{" "}
+                        </p>
                         <Image
                           src={rec.decor?.image}
                           alt="Decor"
@@ -1111,13 +1199,26 @@ export default function EventTool({ user }) {
                 {item.packages.length > 0
                   ? item.packages.map((rec, recIndex) => (
                       <div className="flex flex-col gap-2 p-4" key={recIndex}>
-                        <p className="font-medium">{rec.package?.name}</p>
+                        <p className="font-medium flex flex-row gap-2">
+                          {rec.package?.name}
+                          {!item.status.finalized && (
+                            <MdDelete
+                              size={24}
+                              className="cursor-pointer"
+                              onClick={() => {
+                                RemovePackageFromEvent({
+                                  package_id: rec.package._id,
+                                });
+                              }}
+                            />
+                          )}
+                        </p>
                         {rec.decorItems.map((temp, tempIndex) => (
                           <div
                             className="flex flex-col gap-2 py-4"
                             key={tempIndex}
                           >
-                            <p className="font-medium">{temp.decor?.name}</p>
+                            <p className="font-medium ">{temp.decor?.name}</p>
                             <Image
                               src={temp.decor?.image}
                               alt="Decor"
