@@ -21,9 +21,9 @@ const FAQAccordion = ({ question, answer }) => {
       >
         <span>{question}</span>
         {isOpen ? (
-          <BsCaretDownFill cursor={"pointer"} className="float-right mr-6" />
-        ) : (
           <BsCaretUpFill cursor={"pointer"} className="float-right mr-6" />
+        ) : (
+          <BsCaretDownFill cursor={"pointer"} className="float-right mr-6" />
         )}
       </p>
       {isOpen && <p className="font-light">{answer}</p>}
