@@ -1134,12 +1134,39 @@ export default function EventTool({ user }) {
                           </Table.Body>
                         </Table>
                       </div>
+                      {event?.status?.approved && (
+                        <>
+                          <div className="w-2/3 mx-auto flex flex-col gap-3 mb-6">
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="text-right">Item Bill</div>
+                              <div className="text-rose-900">
+                                {event.amount.preTotal}
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 border-b-black border-b pb-3">
+                              <div className="text-right">
+                                Coupon code discount
+                              </div>
+                              <div className="text-rose-900">
+                                {event.amount.discount}
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 font-medium">
+                              <div className="text-right">Amount Payable</div>
+                              <div className="text-rose-900">
+                                {event.amount.total} INR
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )}
                       {event?.status.finalized ? (
                         event?.status.approved ? (
                           <div className="text-center py-8 flex flex-col gap-2">
-                            <p className="text-lg font-medium">
-                              Your design has been approved!
-                            </p>
+                            <div className="p-6 bg-black text-white text-center">
+                              Your event has been verified and approved! You can
+                              now proceed to payment
+                            </div>
                             {event?.status.paymentDone ? (
                               <p className="text-lg font-medium">
                                 Your payment is done!
