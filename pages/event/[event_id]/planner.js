@@ -679,6 +679,15 @@ export default function EventTool({ user }) {
                                             </span>
                                           </div>
                                         )}
+                                        {item.addOns?.map((rec, recIndex) => (
+                                          <div
+                                            className="flex flex-row justify-between gap-2"
+                                            key={recIndex}
+                                          >
+                                            <span>{rec.name}:</span>
+                                            <span>₹{rec.price}</span>
+                                          </div>
+                                        ))}
                                       </div>
                                     }
                                     trigger="hover"
