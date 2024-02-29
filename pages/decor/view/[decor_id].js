@@ -930,70 +930,55 @@ function DecorListing({
               <div className="mr-auto flex flex-col w-full md:w-auto">
                 <p className="flex">
                   Price for &nbsp;
-                  {decor.productInfo.variant.artificialFlowers.sellingPrice >
-                  0 ? (
-                    <Dropdown
-                      inline
-                      renderTrigger={() => (
-                        <span className="font-semibold text-rose-900 cursor-pointer flex items-center gap-1">
-                          {variant === "artificialFlowers"
-                            ? "Artificial"
-                            : variant === "naturalFlowers"
-                            ? "Natural"
-                            : variant === "mixedFlowers"
-                            ? "Mixed"
-                            : ""}{" "}
-                          Flowers <BsChevronDown />
-                        </span>
+                  <Dropdown
+                    inline
+                    renderTrigger={() => (
+                      <span className="font-semibold text-rose-900 cursor-pointer flex items-center gap-1">
+                        {variant === "artificialFlowers"
+                          ? "Artificial"
+                          : variant === "naturalFlowers"
+                          ? "Natural"
+                          : variant === "mixedFlowers"
+                          ? "Mixed"
+                          : ""}{" "}
+                        Flowers <BsChevronDown />
+                      </span>
+                    )}
+                    className="text-rose-900"
+                  >
+                    {decor.productInfo.variant.artificialFlowers.sellingPrice >
+                      0 &&
+                      variant !== "artificialFlowers" && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setVariant("artificialFlowers");
+                          }}
+                        >
+                          Artifical Flowers
+                        </Dropdown.Item>
                       )}
-                      className="text-rose-900"
-                    >
-                      {decor.productInfo.variant.artificialFlowers
-                        .sellingPrice > 0 &&
-                        variant !== "artificialFlowers" && (
-                          <Dropdown.Item
-                            onClick={() => {
-                              setVariant("artificialFlowers");
-                            }}
-                          >
-                            Artifical Flowers
-                          </Dropdown.Item>
-                        )}
-                      {decor.productInfo.variant.naturalFlowers.sellingPrice >
-                        0 &&
-                        variant !== "naturalFlowers" && (
-                          <Dropdown.Item
-                            onClick={() => {
-                              setVariant("naturalFlowers");
-                            }}
-                          >
-                            Natural Flowers
-                          </Dropdown.Item>
-                        )}
-                      {decor.productInfo.variant.mixedFlowers.sellingPrice >
-                        0 &&
-                        variant !== "mixedFlowers" && (
-                          <Dropdown.Item
-                            onClick={() => {
-                              setVariant("mixedFlowers");
-                            }}
-                          >
-                            Mixed Flowers
-                          </Dropdown.Item>
-                        )}
-                    </Dropdown>
-                  ) : (
-                    <span className="font-semibold text-rose-900 flex items-center gap-1">
-                      {variant === "artificialFlowers"
-                        ? "Artificial"
-                        : variant === "naturalFlowers"
-                        ? "Natural"
-                        : variant === "mixedFlowers"
-                        ? "Mixed"
-                        : ""}{" "}
-                      Flowers
-                    </span>
-                  )}
+                    {decor.productInfo.variant.naturalFlowers.sellingPrice >
+                      0 &&
+                      variant !== "naturalFlowers" && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setVariant("naturalFlowers");
+                          }}
+                        >
+                          Natural Flowers
+                        </Dropdown.Item>
+                      )}
+                    {decor.productInfo.variant.mixedFlowers.sellingPrice > 0 &&
+                      variant !== "mixedFlowers" && (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setVariant("mixedFlowers");
+                          }}
+                        >
+                          Mixed Flowers
+                        </Dropdown.Item>
+                      )}
+                  </Dropdown>
                 </p>
                 <p className="font-semibold text-xl">
                   ₹ {decor.productInfo.variant[variant].sellingPrice}{" "}
