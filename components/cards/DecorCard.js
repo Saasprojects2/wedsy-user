@@ -5,7 +5,11 @@ export default function DecorCard({ decor, className }) {
   const { _id, thumbnail, name } = decor;
   return (
     <>
-      <Link href={`/decor/view/${_id}`} className={`${className}`}>
+      <Link
+        href={`/decor/view/${_id}`}
+        target="_blank"
+        className={`${className}`}
+      >
         <div className={`relative pt-[56.25%]`}>
           <Image
             src={`${thumbnail}`}
