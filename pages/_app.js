@@ -22,7 +22,8 @@ function App({ Component, pageProps }) {
     "/my-orders",
   ];
   const isPathRestricted = () => {
-    return router.pathname === "/event"
+    return router.pathname === "/event" ||
+      router.pathname === "/event/[event_id]/view"
       ? false
       : restrictedPaths.includes(router.pathname) ||
           restrictedPaths.filter((item) => router.pathname.startsWith(item))
