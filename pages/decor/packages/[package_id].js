@@ -25,6 +25,7 @@ import Link from "next/link";
 import { toProperCase } from "@/utils/text";
 import Head from "next/head";
 import DecorPackageCard from "@/components/cards/DecorPackageCard";
+import DecorDisclaimer from "@/components/marquee/DecorDisclaimer";
 
 const addOnsInitialValues = {
   open: false,
@@ -249,6 +250,7 @@ function DecorListing({
         />
         <meta property="og:image" content={decorPackage?.seoTags?.image} />
       </Head>
+      <DecorDisclaimer />
       <Modal
         show={addOns.open}
         size="lg"

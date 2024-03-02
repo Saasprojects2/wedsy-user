@@ -14,6 +14,7 @@ import RangeSlider from "@/components/slider/RangeSlider";
 import SearchBar from "@/components/searchBar/SearchBar";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import DecorDisclaimer from "@/components/marquee/DecorDisclaimer";
 
 function DecorListing({ data }) {
   const divRef = useRef(null);
@@ -250,6 +251,7 @@ function DecorListing({ data }) {
           </>
         )}
       </Head>
+      <DecorDisclaimer />
       <div
         className="md:p-8 grid md:grid-cols-4 gap-8 relative overflow-hidden hide-scrollbar decor-bg-image"
         ref={divRef}

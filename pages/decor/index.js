@@ -13,6 +13,7 @@ import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaInfinity } from "react-icons/fa";
 import styles from "@/styles/DecorPage.module.css";
 import FAQAccordion from "@/components/accordion/FAQAccordion";
+import DecorDisclaimer from "@/components/marquee/DecorDisclaimer";
 
 function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
   const [enquiryForm, setEnquiryForm] = useState({
@@ -137,6 +138,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
         <meta name="copyright" content="Wedsy" />
         <meta name="language" content="EN" />
       </Head>
+      <DecorDisclaimer />
       <main className="relative" id="mainDiv">
         <Image
           src="/assets/images/decor-1.png"

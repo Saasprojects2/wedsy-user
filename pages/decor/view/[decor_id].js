@@ -22,6 +22,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { toProperCase } from "@/utils/text";
 import Head from "next/head";
+import DecorDisclaimer from "@/components/marquee/DecorDisclaimer";
 
 function DecorListing({
   similarDecor,
@@ -256,6 +257,7 @@ function DecorListing({
         <meta property="og:description" content={decor?.seoTags?.description} />
         <meta property="og:image" content={decor?.seoTags?.image} />
       </Head>
+      <DecorDisclaimer />
       {/* Pathway Quantity Model */}
       <Modal
         show={quantity.open}
