@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { AiOutlinePlus, AiOutlinePlusSquare } from "react-icons/ai";
-import { BiEditAlt, BiMap } from "react-icons/bi";
 import { BsArrowLeft, BsArrowRight, BsInfoCircle } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 
@@ -219,7 +218,6 @@ export default function EventTool({ user }) {
   useEffect(() => {
     const handleResize = () => {
       if (divRef.current) {
-        console.log("Hello123");
         const { width, height } = divRef.current.getBoundingClientRect();
         const { top } = divRef.current.getBoundingClientRect();
         const totalHeight = window.innerHeight;
