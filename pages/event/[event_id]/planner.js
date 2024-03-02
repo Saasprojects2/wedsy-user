@@ -367,14 +367,17 @@ export default function EventTool({ user }) {
       </Modal>
       <div className="flex flex-col overflow-hidden hide-scrollbar">
         {/* Event Planner Header */}
-        <div className="bg-[#DBB9BD] px-8 flex-wrap flex flex-row gap-4 items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
-          <div className="text-black font-medium pr-8 text-left">
-            {event.name}
+        <div className="md:bg-[#DBB9BD] px-8 flex-wrap flex flex-col md:flex-row gap-0 md:gap-4 items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+          <div className="text-black font-medium py-4 md:py-0 md:pr-8 text-left flex flex-row justify-between w-full md:w-auto">
+            <Link href={`/event/${event_id}`} className="md:hidden mr-auto">
+              <BsArrowLeft size={24} />
+            </Link>
+            <span className="mr-auto md:mr-0">{event.name}</span>
           </div>
           {event?.eventDays?.map((item, index) => (
             <div
               key={item._id}
-              className={`px-3 mx-1 py-2 my-2 grow cursor-pointer ${
+              className={`hidden md:block px-3 mx-1 py-2 my-2 grow cursor-pointer ${
                 eventDay === item._id
                   ? " font-semibold bg-white rounded-2xl text-rose-900"
                   : "font-normal text-black"
@@ -386,7 +389,24 @@ export default function EventTool({ user }) {
               {item.name}
             </div>
           ))}
-          <Link href={`/event/${event_id}`}>
+          <div className="flex md:hidden flex-row gap-3 w-full flex-wrap mb-3">
+            {event?.eventDays?.map((item, index) => (
+              <div
+                key={item._id}
+                className={`md:hidden px-6 mx-1 py-2 cursor-pointer rounded-full shadow-xl font-semibold ${
+                  eventDay === item._id
+                    ? "bg-rose-900 text-white"
+                    : "text-black bg-gray-300"
+                }`}
+                onClick={() => {
+                  setEventDay(item._id);
+                }}
+              >
+                {item.name}
+              </div>
+            ))}
+          </div>
+          <Link href={`/event/${event_id}`} className="hidden md:block">
             <AiOutlinePlusSquare size={24} />
           </Link>
         </div>
@@ -466,7 +486,7 @@ export default function EventTool({ user }) {
               ))}
           </div>
           <div
-            className="overflow-y-auto hide-scrollbar col-span-3 flex flex-col"
+            className="overflow-y-auto hide-scrollbar col-span-3 flex flex-col px-6 md:px-0"
             ref={plannerRef}
             onScroll={handlePlannerScroll}
           >
@@ -474,7 +494,7 @@ export default function EventTool({ user }) {
               ?.filter((i) => i._id === eventDay)
               ?.map((tempEventDay, tempIndex) => (
                 <>
-                  <div className="flex flex-row justify-between pr-8 mb-4 text-md">
+                  <div className="flex flex-col md:flex-row justify-between pr-8 mb-4 text-md">
                     <div className="flex flex-col justify-between">
                       <span>{new Date(tempEventDay.date).toDateString()}</span>
                       <span>{tempEventDay.time} Onwards</span>
@@ -518,8 +538,8 @@ export default function EventTool({ user }) {
                             key={item._id}
                             data-key={`decor-${item.decor._id}`}
                           >
-                            <div className="grid grid-cols-5 gap-6 items-center px-4 w-4/5">
-                              <div className="relative col-span-3">
+                            <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-center px-4 md:w-4/5">
+                              <div className="relative md:col-span-3">
                                 <p className="text-xl font-semibold flex flex-row items-center gap-2 mb-2">
                                   <span>{item.decor?.name}</span>
                                   {!tempEventDay.status.finalized && (
@@ -545,7 +565,7 @@ export default function EventTool({ user }) {
                                 />
                               </div>
                               {item.platform && item.flooring && (
-                                <div className="flex flex-row items-center gap-6 col-span-2">
+                                <div className="flex flex-row items-center gap-6 md:col-span-2">
                                   <AiOutlinePlus size={24} />
                                   <div className="flex flex-col gap-3">
                                     <Image
@@ -589,7 +609,7 @@ export default function EventTool({ user }) {
                                 </div>
                               )}
                             </div>
-                            <div className="flex flex-row">
+                            <div className="flex flex-col md:flex-row">
                               <div className="flex flex-col px-4 pb-1">
                                 <p className="text-lg font-medium">
                                   Inclusive of:
@@ -618,7 +638,7 @@ export default function EventTool({ user }) {
                                   View Notes
                                 </button>
                               </div>
-                              <div className="flex flex-col w-1/2 ml-auto">
+                              <div className="flex flex-col md:w-1/2 md:ml-auto">
                                 <p className="font-medium text-lg mt-auto text-right px-10">
                                   Price for{" "}
                                   <span className="text-rose-900">
@@ -733,8 +753,8 @@ export default function EventTool({ user }) {
                                 className="flex flex-col gap-4"
                                 key={rec._id}
                               >
-                                <div className="grid grid-cols-5 gap-6 items-center px-4 w-4/5">
-                                  <div className="relative col-span-3">
+                                <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-center px-4 md:w-4/5">
+                                  <div className="relative md:col-span-3">
                                     <p className="text-xl font-semibold flex flex-row items-center gap-2 mb-2">
                                       <span>{rec.decor?.name}</span>
                                     </p>
@@ -749,7 +769,7 @@ export default function EventTool({ user }) {
                                     />
                                   </div>
                                   {rec.platform && rec.flooring && (
-                                    <div className="flex flex-row items-center gap-6 col-span-2">
+                                    <div className="flex flex-row items-center gap-6 md:col-span-2">
                                       <AiOutlinePlus size={24} />
                                       <div className="flex flex-col gap-3">
                                         <Image
@@ -799,7 +819,7 @@ export default function EventTool({ user }) {
                                     </div>
                                   )}
                                 </div>
-                                <div className="flex flex-row">
+                                <div className="flex flex-col md:flex-row">
                                   <div className="flex flex-col px-4 pb-1">
                                     <p className="text-lg font-medium">
                                       Inclusive of:
@@ -814,7 +834,7 @@ export default function EventTool({ user }) {
                               </div>
                             </>
                           ))}
-                          <div className="flex flex-row">
+                          <div className="flex flex-col md:flex-row">
                             <div className="flex flex-col px-4  pt-auto pb-1">
                               <button
                                 onClick={() => {
@@ -835,7 +855,7 @@ export default function EventTool({ user }) {
                                 View Notes
                               </button>
                             </div>
-                            <div className="flex flex-col w-1/2 ml-auto">
+                            <div className="flex flex-col md:w-1/2 md:ml-auto">
                               <p className="font-medium text-lg mt-auto text-right px-10">
                                 Price for{" "}
                                 <span className="text-rose-900">
@@ -863,7 +883,7 @@ export default function EventTool({ user }) {
                       <p className="text-xl font-semibold flex flex-row items-center gap-2">
                         {tempEventDay.customItemsTitle || "ADD ONS"}
                       </p>
-                      <div className=" block mx-auto">
+                      <div className="mx-auto hidden md:block">
                         <Table className="border my-3">
                           <Table.Head>
                             <Table.HeadCell>Item Name</Table.HeadCell>
@@ -886,8 +906,41 @@ export default function EventTool({ user }) {
                           </Table.Body>
                         </Table>
                       </div>
+                      <div>
+                        <div className="block md:hidden relative overflow-x-auto">
+                          <table className="table-auto w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                              <tr>
+                                <th scope="col" className="px-6 py-3">
+                                  Item Name
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                  Qty.
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                  Price
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {tempEventDay?.customItems.map((item, index) => (
+                                <tr
+                                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                  key={index}
+                                >
+                                  <td className="whitespace-nowrap font-medium text-gray-900 dark:text-white px-6 py-4">
+                                    {item.name}
+                                  </td>
+                                  <td className="px-6 py-4">{item.quantity}</td>
+                                  <td className="px-6 py-4">₹{item.price}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                       <div className="flex flex-row border-b border-b-black">
-                        <div className="flex flex-col w-1/2 ml-auto">
+                        <div className="flex flex-col w-full md:w-1/2 md:ml-auto">
                           <div className="mt-auto flex flex-row items-center justify-end gap-2 text-lg text-white font-medium bg-gradient-to-l from-rose-900 to-white py-2 px-10">
                             ₹{" "}
                             {tempEventDay?.customItems.reduce(
@@ -903,7 +956,7 @@ export default function EventTool({ user }) {
                   )}
                   {tempEventDay?.mandatoryItems.filter((i) => i.itemRequired)
                     .length > 0 && (
-                    <div className="grid grid-cols-2 divide-x divide-y divide-black">
+                    <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-y divide-black">
                       {tempEventDay?.mandatoryItems
                         .filter((i) => i.itemRequired)
                         ?.map((item, index) => (
@@ -944,164 +997,114 @@ export default function EventTool({ user }) {
                       <p className="mt-8 text-xl font-semibold flex flex-row justify-center items-center gap-2">
                         EVENT SUMMARY
                       </p>
-                      <div className="w-4/5 block mx-auto pb-6 mb-6 border-b border-b-black">
-                        <Table className="border my-3">
-                          <Table.Head>
-                            <Table.HeadCell>
-                              <span className="sr-only">#</span>
-                            </Table.HeadCell>
-                            <Table.HeadCell>Item</Table.HeadCell>
-                            <Table.HeadCell>Price</Table.HeadCell>
-                          </Table.Head>
-                          <Table.Body className="divide-y">
-                            {tempEventDay?.decorItems.map((item, index) => (
-                              <Table.Row
-                                className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                key={index}
-                              >
-                                <Table.Cell>{index + 1}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                  [{item.decor.category}] {item.decor.name}
-                                </Table.Cell>
-                                <Table.Cell>₹{item.price}</Table.Cell>
-                              </Table.Row>
-                            ))}
-                            {tempEventDay?.packages.map((item, index) => (
-                              <Table.Row
-                                className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                key={index}
-                              >
-                                <Table.Cell>
-                                  {tempEventDay?.decorItems.length + index + 1}
-                                </Table.Cell>
-                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                  [Package] {item.package.name}
-                                </Table.Cell>
-                                <Table.Cell>₹{item.price}</Table.Cell>
-                              </Table.Row>
-                            ))}
-                            {tempEventDay.customItems.length > 0 && (
-                              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                <Table.Cell>
-                                  {tempEventDay?.decorItems.length +
-                                    tempEventDay?.packages.length +
-                                    1}
-                                </Table.Cell>
-                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                  {tempEventDay.customItemsTitle || "ADD ONS"}
-                                </Table.Cell>
-                                <Table.Cell>
-                                  ₹
-                                  {tempEventDay?.customItems.reduce(
-                                    (accumulator, currentValue) => {
-                                      return accumulator + currentValue.price;
-                                    },
-                                    0
-                                  )}
-                                </Table.Cell>
-                              </Table.Row>
-                            )}
-                            {tempEventDay?.mandatoryItems
-                              .filter((i) => i.itemRequired)
-                              ?.map((item, index) => (
+                      <div>
+                        <div className="overflow-x-auto md:w-4/5 block mx-auto pb-6 mb-6 border-b border-b-black">
+                          <Table className="border my-3">
+                            <Table.Head>
+                              <Table.HeadCell>
+                                <span className="sr-only">#</span>
+                              </Table.HeadCell>
+                              <Table.HeadCell>Item</Table.HeadCell>
+                              <Table.HeadCell>Price</Table.HeadCell>
+                            </Table.Head>
+                            <Table.Body className="divide-y">
+                              {tempEventDay?.decorItems.map((item, index) => (
+                                <Table.Row
+                                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                  key={index}
+                                >
+                                  <Table.Cell>{index + 1}</Table.Cell>
+                                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    [{item.decor.category}] {item.decor.name}
+                                  </Table.Cell>
+                                  <Table.Cell>₹{item.price}</Table.Cell>
+                                </Table.Row>
+                              ))}
+                              {tempEventDay?.packages.map((item, index) => (
                                 <Table.Row
                                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                                   key={index}
                                 >
                                   <Table.Cell>
                                     {tempEventDay?.decorItems.length +
-                                      tempEventDay?.packages.length +
-                                      (tempEventDay.customItems.length
-                                        ? 1
-                                        : 0) +
                                       index +
                                       1}
                                   </Table.Cell>
                                   <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                    {item.description}
+                                    [Package] {item.package.name}
                                   </Table.Cell>
                                   <Table.Cell>₹{item.price}</Table.Cell>
                                 </Table.Row>
                               ))}
-                            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                              <Table.Cell />
-                              <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                Total
-                              </Table.Cell>
-                              <Table.Cell>
-                                ₹
-                                {tempEventDay?.decorItems.reduce(
-                                  (accumulator, currentValue) => {
-                                    return accumulator + currentValue.price;
-                                  },
-                                  0
-                                ) +
-                                  tempEventDay?.packages.reduce(
-                                    (accumulator, currentValue) => {
-                                      return accumulator + currentValue.price;
-                                    },
-                                    0
-                                  ) +
-                                  tempEventDay?.customItems.reduce(
-                                    (accumulator, currentValue) => {
-                                      return accumulator + currentValue.price;
-                                    },
-                                    0
-                                  ) +
-                                  tempEventDay?.mandatoryItems.reduce(
-                                    (accumulator, currentValue) => {
-                                      return accumulator + currentValue.price;
-                                    },
-                                    0
-                                  )}
-                              </Table.Cell>
-                            </Table.Row>
-                          </Table.Body>
-                        </Table>
-                      </div>
-                      <p className="mt-8 text-xl font-semibold flex flex-row justify-center items-center gap-2">
-                        TOTAL SUMMARY
-                      </p>
-                      <div className="w-4/5 block mx-auto pb-6 mb-6 border-b border-b-black">
-                        <Table className="border my-3">
-                          <Table.Head>
-                            <Table.HeadCell>
-                              <span className="sr-only">#</span>
-                            </Table.HeadCell>
-                            <Table.HeadCell>Event Day</Table.HeadCell>
-                            <Table.HeadCell>Price</Table.HeadCell>
-                          </Table.Head>
-                          <Table.Body className="divide-y">
-                            {event.eventDays?.map((item, index) => (
-                              <Table.Row
-                                className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                key={index}
-                              >
-                                <Table.Cell>{index + 1}</Table.Cell>
-                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                  {item.name}
+                              {tempEventDay.customItems.length > 0 && (
+                                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                  <Table.Cell>
+                                    {tempEventDay?.decorItems.length +
+                                      tempEventDay?.packages.length +
+                                      1}
+                                  </Table.Cell>
+                                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    {tempEventDay.customItemsTitle || "ADD ONS"}
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    ₹
+                                    {tempEventDay?.customItems.reduce(
+                                      (accumulator, currentValue) => {
+                                        return accumulator + currentValue.price;
+                                      },
+                                      0
+                                    )}
+                                  </Table.Cell>
+                                </Table.Row>
+                              )}
+                              {tempEventDay?.mandatoryItems
+                                .filter((i) => i.itemRequired)
+                                ?.map((item, index) => (
+                                  <Table.Row
+                                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                    key={index}
+                                  >
+                                    <Table.Cell>
+                                      {tempEventDay?.decorItems.length +
+                                        tempEventDay?.packages.length +
+                                        (tempEventDay.customItems.length
+                                          ? 1
+                                          : 0) +
+                                        index +
+                                        1}
+                                    </Table.Cell>
+                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                      {item.description}
+                                    </Table.Cell>
+                                    <Table.Cell>₹{item.price}</Table.Cell>
+                                  </Table.Row>
+                                ))}
+                              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                <Table.Cell />
+                                <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                  Total
                                 </Table.Cell>
                                 <Table.Cell>
                                   ₹
-                                  {item?.decorItems.reduce(
+                                  {tempEventDay?.decorItems.reduce(
                                     (accumulator, currentValue) => {
                                       return accumulator + currentValue.price;
                                     },
                                     0
                                   ) +
-                                    item?.packages.reduce(
+                                    tempEventDay?.packages.reduce(
                                       (accumulator, currentValue) => {
                                         return accumulator + currentValue.price;
                                       },
                                       0
                                     ) +
-                                    item?.customItems.reduce(
+                                    tempEventDay?.customItems.reduce(
                                       (accumulator, currentValue) => {
                                         return accumulator + currentValue.price;
                                       },
                                       0
                                     ) +
-                                    item?.mandatoryItems.reduce(
+                                    tempEventDay?.mandatoryItems.reduce(
                                       (accumulator, currentValue) => {
                                         return accumulator + currentValue.price;
                                       },
@@ -1109,63 +1112,125 @@ export default function EventTool({ user }) {
                                     )}
                                 </Table.Cell>
                               </Table.Row>
-                            ))}
+                            </Table.Body>
+                          </Table>
+                        </div>
+                      </div>
+                      <p className="mt-8 text-xl font-semibold flex flex-row justify-center items-center gap-2">
+                        TOTAL SUMMARY
+                      </p>
+                      <div>
+                        <div className="overflow-x-auto md:w-4/5 block mx-auto pb-6 mb-6 border-b border-b-black">
+                          <Table className="border my-3">
+                            <Table.Head>
+                              <Table.HeadCell>
+                                <span className="sr-only">#</span>
+                              </Table.HeadCell>
+                              <Table.HeadCell>Event Day</Table.HeadCell>
+                              <Table.HeadCell>Price</Table.HeadCell>
+                            </Table.Head>
+                            <Table.Body className="divide-y">
+                              {event.eventDays?.map((item, index) => (
+                                <Table.Row
+                                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                  key={index}
+                                >
+                                  <Table.Cell>{index + 1}</Table.Cell>
+                                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                    {item.name}
+                                  </Table.Cell>
+                                  <Table.Cell>
+                                    ₹
+                                    {item?.decorItems.reduce(
+                                      (accumulator, currentValue) => {
+                                        return accumulator + currentValue.price;
+                                      },
+                                      0
+                                    ) +
+                                      item?.packages.reduce(
+                                        (accumulator, currentValue) => {
+                                          return (
+                                            accumulator + currentValue.price
+                                          );
+                                        },
+                                        0
+                                      ) +
+                                      item?.customItems.reduce(
+                                        (accumulator, currentValue) => {
+                                          return (
+                                            accumulator + currentValue.price
+                                          );
+                                        },
+                                        0
+                                      ) +
+                                      item?.mandatoryItems.reduce(
+                                        (accumulator, currentValue) => {
+                                          return (
+                                            accumulator + currentValue.price
+                                          );
+                                        },
+                                        0
+                                      )}
+                                  </Table.Cell>
+                                </Table.Row>
+                              ))}
 
-                            <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                              <Table.Cell />
-                              <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                Total
-                              </Table.Cell>
-                              <Table.Cell>
-                                ₹
-                                {event.eventDays?.reduce(
-                                  (masterAccumulator, masterCurrentValue) => {
-                                    return (
-                                      masterAccumulator +
-                                      masterCurrentValue.decorItems.reduce(
-                                        (accumulator, currentValue) => {
-                                          return (
-                                            accumulator + currentValue.price
-                                          );
-                                        },
-                                        0
-                                      ) +
-                                      masterCurrentValue?.packages.reduce(
-                                        (accumulator, currentValue) => {
-                                          return (
-                                            accumulator + currentValue.price
-                                          );
-                                        },
-                                        0
-                                      ) +
-                                      masterCurrentValue?.customItems.reduce(
-                                        (accumulator, currentValue) => {
-                                          return (
-                                            accumulator + currentValue.price
-                                          );
-                                        },
-                                        0
-                                      ) +
-                                      masterCurrentValue?.mandatoryItems.reduce(
-                                        (accumulator, currentValue) => {
-                                          return (
-                                            accumulator + currentValue.price
-                                          );
-                                        },
-                                        0
-                                      )
-                                    );
-                                  },
-                                  0
-                                )}
-                              </Table.Cell>
-                            </Table.Row>
-                          </Table.Body>
-                        </Table>
+                              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                <Table.Cell />
+                                <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                  Total
+                                </Table.Cell>
+                                <Table.Cell>
+                                  ₹
+                                  {event.eventDays?.reduce(
+                                    (masterAccumulator, masterCurrentValue) => {
+                                      return (
+                                        masterAccumulator +
+                                        masterCurrentValue.decorItems.reduce(
+                                          (accumulator, currentValue) => {
+                                            return (
+                                              accumulator + currentValue.price
+                                            );
+                                          },
+                                          0
+                                        ) +
+                                        masterCurrentValue?.packages.reduce(
+                                          (accumulator, currentValue) => {
+                                            return (
+                                              accumulator + currentValue.price
+                                            );
+                                          },
+                                          0
+                                        ) +
+                                        masterCurrentValue?.customItems.reduce(
+                                          (accumulator, currentValue) => {
+                                            return (
+                                              accumulator + currentValue.price
+                                            );
+                                          },
+                                          0
+                                        ) +
+                                        masterCurrentValue?.mandatoryItems.reduce(
+                                          (accumulator, currentValue) => {
+                                            return (
+                                              accumulator + currentValue.price
+                                            );
+                                          },
+                                          0
+                                        )
+                                      );
+                                    },
+                                    0
+                                  )}
+                                </Table.Cell>
+                              </Table.Row>
+                            </Table.Body>
+                          </Table>
+                        </div>
                       </div>
                       {event?.status?.approved && (
                         <>
-                          <div className="w-2/3 mx-auto flex flex-col gap-3 mb-6">
+                          <div className="md:w-2/3 mx-auto flex flex-col gap-3 mb-6">
                             <div className="grid grid-cols-2 gap-4">
                               <div className="text-right">Item Bill</div>
                               <div className="text-rose-900">
