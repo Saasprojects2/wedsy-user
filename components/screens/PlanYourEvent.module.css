@@ -1,0 +1,20 @@
+.bg_div_top {
+  background-image: url("/assets/background/bg-planyourevent-1.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: auto;
+  min-height: calc((100vw * 475) / 1400);
+  background-position-x: center;
+  background-position-y: bottom;
+}
+.bg_div_bottom {
+  background-image: url("/assets/background/bg-planyourevent-2.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: auto;
+  min-height: calc((100vw * 175) / 1399);
+  background-position-x: center;
+  background-position-y: top;
+}
