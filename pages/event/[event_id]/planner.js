@@ -74,6 +74,8 @@ export default function EventTool({ user }) {
         if (response.message === "success") {
           fetchEvent();
           alert("Finalized the event!");
+        } else {
+          alert("Error, finalizing the event. Try Again.");
         }
       })
       .catch((error) => {
