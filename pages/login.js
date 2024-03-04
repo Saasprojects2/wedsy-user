@@ -75,7 +75,7 @@ export default function Login() {
             message: "",
           });
           localStorage.setItem("token", response.token);
-          router.push("/my-account");
+          router.push("/decor/view");
         } else {
           setData({
             ...data,
