@@ -155,8 +155,8 @@ export default function EventTool({ user }) {
       </Modal>
       <div className="flex flex-col overflow-hidden hide-scrollbar">
         {/* Event Planner Header */}
-        <div className="md:bg-[#DBB9BD] px-8 flex-wrap flex flex-col md:flex-row gap-0 md:gap-4 items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
-          <div className="text-black font-medium py-4 md:py-0 md:pr-8 text-left flex flex-row justify-between w-full md:w-auto">
+        <div className="md:bg-[#DBB9BD] md:px-8 flex-wrap flex flex-col md:flex-row gap-0 md:gap-4 items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+          <div className="text-black font-medium px-8 md:px-0 py-4 md:py-0 md:pr-8 text-left flex flex-row justify-between w-full md:w-auto">
             <Link href={`/event/${event_id}`} className="md:hidden mr-auto">
               <BsArrowLeft size={24} />
             </Link>
@@ -177,22 +177,26 @@ export default function EventTool({ user }) {
               {item.name}
             </div>
           ))}
-          <div className="flex md:hidden flex-row gap-3 w-full flex-wrap mb-3">
-            {event?.eventDays?.map((item, index) => (
-              <div
-                key={item._id}
-                className={`md:hidden px-6 mx-1 py-2 cursor-pointer rounded-full shadow-xl font-semibold ${
-                  eventDay === item._id
-                    ? "bg-rose-900 text-white"
-                    : "text-black bg-gray-300"
-                }`}
-                onClick={() => {
-                  setEventDay(item._id);
-                }}
-              >
-                {item.name}
-              </div>
-            ))}
+          <div className="overflow-hidden md:hidden w-full">
+            <div className="flex md:hidden flex-row gap-3 w-full overflow-x-auto mb-3">
+              {[...event?.eventDays, ...event?.eventDays]?.map(
+                (item, index) => (
+                  <div
+                    key={item._id}
+                    className={`md:hidden px-6 mx-1 py-2 cursor-pointer rounded-full shadow-xl font-semibold ${
+                      eventDay === item._id
+                        ? "bg-rose-900 text-white"
+                        : "text-black bg-gray-300"
+                    }`}
+                    onClick={() => {
+                      setEventDay(item._id);
+                    }}
+                  >
+                    {item.name}
+                  </div>
+                )
+              )}
+            </div>
           </div>
         </div>
         <div
