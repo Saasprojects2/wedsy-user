@@ -179,23 +179,21 @@ export default function EventTool({ user }) {
           ))}
           <div className="overflow-hidden md:hidden w-full">
             <div className="flex md:hidden flex-row gap-3 w-full overflow-x-auto mb-3">
-              {[...event?.eventDays, ...event?.eventDays]?.map(
-                (item, index) => (
-                  <div
-                    key={item._id}
-                    className={`md:hidden px-6 mx-1 py-2 cursor-pointer rounded-full shadow-xl font-semibold ${
-                      eventDay === item._id
-                        ? "bg-rose-900 text-white"
-                        : "text-black bg-gray-300"
-                    }`}
-                    onClick={() => {
-                      setEventDay(item._id);
-                    }}
-                  >
-                    {item.name}
-                  </div>
-                )
-              )}
+              {event?.eventDays?.map((item, index) => (
+                <div
+                  key={item._id}
+                  className={`md:hidden px-6 mx-1 py-2 cursor-pointer rounded-full shadow-xl font-semibold ${
+                    eventDay === item._id
+                      ? "bg-rose-900 text-white"
+                      : "text-black bg-gray-300"
+                  }`}
+                  onClick={() => {
+                    setEventDay(item._id);
+                  }}
+                >
+                  {item.name}
+                </div>
+              ))}
             </div>
           </div>
         </div>
