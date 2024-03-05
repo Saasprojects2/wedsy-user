@@ -172,11 +172,20 @@ function App({ Component, pageProps }) {
       ) : (
         <>
           {/* Whatsapp Chatbot Script */}
-          <Script
+          {/* <Script
             type="text/javascript"
             src="https://d3mkw6s8thqya7.cloudfront.net/integration-plugin.js"
             id="aisensy-wa-widget"
             widget-id="I7ZLEV"
+          /> */}
+          {/* Updated Script for Whastapp Chatbot Integration */}
+          <Script
+            strategy="afterInteractive"
+            src="https://app.interakt.ai/kiwi-sdk/kiwi-sdk-17-prod-min.js"
+            onLoad={() => {
+              // Initialize Kiwi SDK after script is loaded
+              kiwi.init("", "YSNtpXF4Dmqafpa8XeSZzWfcawpPm4QP", {});
+            }}
           />
           <Header userLoggedIn={!logIn} user={user} Logout={Logout} />
           <LoginModal
