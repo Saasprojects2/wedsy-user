@@ -1,6 +1,13 @@
 "use client";
 
-import { Button, Checkbox, Label, Modal, Spinner, TextInput } from "flowbite-react";
+import {
+  Button,
+  Checkbox,
+  Label,
+  Modal,
+  Spinner,
+  TextInput,
+} from "flowbite-react";
 import { useState } from "react";
 
 export default function LoginModal({
@@ -111,7 +118,7 @@ export default function LoginModal({
             <div className=" gap-6 flex flex-col w-2/3 mx-auto">
               <input
                 type="text"
-                placeholder="NAME"
+                placeholder="NAME (First and Last Name)"
                 value={data.name}
                 onChange={(e) =>
                   setData({

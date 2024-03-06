@@ -114,7 +114,7 @@ export default function Login() {
           <div className=" gap-6 flex flex-col w-3/4">
             <input
               type="text"
-              placeholder="NAME"
+              placeholder="NAME (First and Last Name)"
               value={data.name}
               onChange={(e) =>
                 setData({
