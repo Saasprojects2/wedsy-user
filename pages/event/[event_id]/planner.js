@@ -6,7 +6,8 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { AiOutlinePlus, AiOutlinePlusSquare } from "react-icons/ai";
 import { BsArrowLeft, BsArrowRight, BsInfoCircle } from "react-icons/bs";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdShare } from "react-icons/md";
+import { RWebShare } from "react-web-share";
 
 export default function EventTool({ user }) {
   const divRef = useRef(null);
@@ -368,11 +369,21 @@ export default function EventTool({ user }) {
       <div className="flex flex-col overflow-hidden hide-scrollbar">
         {/* Event Planner Header */}
         <div className="md:bg-[#DBB9BD] md:px-8 flex-wrap flex flex-col md:flex-row gap-0 md:gap-4 items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
-          <div className="text-black font-medium px-8 md:px-0 py-4 md:py-0 md:pr-8 text-left flex flex-row justify-between w-full md:w-auto">
+          <div className="text-black font-medium px-8 md:px-0 py-4 md:py-0 md:pr-8 text-left flex flex-row justify-between  items-center w-full md:w-auto">
             <Link href={`/event/${event_id}`} className="md:hidden mr-auto">
               <BsArrowLeft size={24} />
             </Link>
             <span className="mr-auto md:mr-0">{event.name}</span>
+            <RWebShare
+              data={{
+                title: `EventPlanner - ${event.name}`,
+                text: `Check out the Wedsy's event plan for ${event.name}.`,
+                url: `https://wedsy.in/event/${event?._id}/view`,
+              }}
+              onClick={() => console.log("shared successfully!")}
+            >
+              <MdShare className="ml-1" cursor={"pointer"} />
+            </RWebShare>
           </div>
           {event?.eventDays?.map((item, index) => (
             <div
