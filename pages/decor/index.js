@@ -7,7 +7,7 @@ import { Spinner } from "flowbite-react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaInfinity } from "react-icons/fa";
@@ -15,7 +15,8 @@ import styles from "@/styles/DecorPage.module.css";
 import FAQAccordion from "@/components/accordion/FAQAccordion";
 import DecorDisclaimer from "@/components/marquee/DecorDisclaimer";
 
-function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
+function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
+  const [spotlightIndex, setSpotlightIndex] = useState(0);
   const [enquiryForm, setEnquiryForm] = useState({
     phone: "",
     name: "",
@@ -116,6 +117,35 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
       alert("Please enter valid mobile number");
     }
   };
+
+  useEffect(() => {
+    let intervalId;
+    const startAutoPlay = () => {
+      intervalId = setInterval(() => {
+        setSpotlightIndex(
+          (prevSlide) => (prevSlide + 1) % spotlightList.length
+        );
+      }, 15000); // Change slide every 15 seconds
+    };
+    const resetAutoPlay = () => {
+      clearInterval(intervalId);
+      startAutoPlay();
+    };
+    startAutoPlay();
+    const spotLightContainer = document.getElementById("spotlight");
+    if (spotLightContainer) {
+      spotLightContainer.addEventListener("mouseenter", resetAutoPlay);
+      spotLightContainer.addEventListener("mouseleave", resetAutoPlay);
+    }
+    return () => {
+      clearInterval(intervalId);
+      if (spotLightContainer) {
+        spotLightContainer.removeEventListener("mouseenter", resetAutoPlay);
+        spotLightContainer.removeEventListener("mouseleave", resetAutoPlay);
+      }
+    };
+  }, [spotlightIndex]);
+
   return (
     <>
       <Head>
@@ -413,18 +443,20 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
           </div>
         </div>
       </section>
-      <section className="px-6 md:px-24 md:py-12">
+      <section className="px-6 md:px-24 md:py-12" id="spotlight">
         <p className="text-black text-lg md:text-2xl font-normal font-light leading-normal uppercase text-center mt-6">
           {'"Decorating your love story, one beautiful detail at a time"'}
         </p>
-        {spotlight._id && (
+        {spotlightList.length > 0 && spotlightList[spotlightIndex]._id && (
           <div
-            className={`grid grid-cols-1 md:grid-cols-2 m-6 mt-10 md:gap-8 bg-[${spotlight.spotlightColor}]`}
-            style={{ backgroundColor: spotlight.spotlightColor }}
+            className={`grid grid-cols-1 md:grid-cols-2 m-6 mt-10 md:gap-8 bg-[${spotlightList[spotlightIndex].spotlightColor}]`}
+            style={{
+              backgroundColor: spotlightList[spotlightIndex].spotlightColor,
+            }}
           >
             <div className="relative h-full md:hidden">
               <Image
-                src={spotlight.thumbnail}
+                src={spotlightList[spotlightIndex].thumbnail}
                 alt="Decor Image"
                 width={0}
                 height={0}
@@ -437,32 +469,38 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
             </div>
             <div className=" flex flex-col p-6 justify-between md:py-8 order-last md:order-first gap-4 md:gap-4">
               <p className="text-2xl md:text-3xl font-semibold">
-                {spotlight.name}
+                {spotlightList[spotlightIndex].name}
               </p>
-              <p>{spotlight.description}</p>
+              <p>{spotlightList[spotlightIndex].description}</p>
               <div className="flex flex-col">
                 <p className="font-medium text-lg md:text-2xl">
                   Can be used for
                 </p>
-                {spotlight.productVariation?.occassion?.map((item, index) => (
-                  <p key={index}>{toProperCase(item)}</p>
-                ))}
+                {spotlightList[spotlightIndex].productVariation?.occassion?.map(
+                  (item, index) => (
+                    <p key={index}>{toProperCase(item)}</p>
+                  )
+                )}
               </div>
               <div className="flex flex-col">
                 <p className="font-medium text-2xl">Included</p>
-                {spotlight.productInfo.included.map((item, index) => (
-                  <p key={index}>{toProperCase(item)}</p>
-                ))}
+                {spotlightList[spotlightIndex].productInfo.included.map(
+                  (item, index) => (
+                    <p key={index}>{toProperCase(item)}</p>
+                  )
+                )}
               </div>
               <div className="flex flex-col md:flex-row justify-between mt-auto">
                 <p className="text-3xl font-semibold">
                   ₹{" "}
-                  {spotlight.productInfo.variant.artificialFlowers
-                    .sellingPrice ||
-                    spotlight.productInfo.variant.mixedFlowers.sellingPrice ||
-                    spotlight.productInfo.variant.naturalFlowers.sellingPrice}
+                  {spotlightList[spotlightIndex].productInfo.variant
+                    .artificialFlowers.sellingPrice ||
+                    spotlightList[spotlightIndex].productInfo.variant
+                      .mixedFlowers.sellingPrice ||
+                    spotlightList[spotlightIndex].productInfo.variant
+                      .naturalFlowers.sellingPrice}
                 </p>
-                <Link href={`/decor/view/${spotlight._id}`}>
+                <Link href={`/decor/view/${spotlightList[spotlightIndex]._id}`}>
                   <button className="mt-6 md:mt-0 bg-black text-white py-2 px-8 rounded-lg">
                     View More
                   </button>
@@ -471,7 +509,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
             </div>
             <div className="relative h-full hidden md:block">
               <Image
-                src={spotlight.thumbnail}
+                src={spotlightList[spotlightIndex].thumbnail}
                 alt="Decor"
                 // width={0}
                 // height={0}
@@ -482,6 +520,21 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlight }) {
                 // style={{ width: "100%", height: "auto" }}
               />
             </div>
+          </div>
+        )}
+        {spotlightList.length > 0 && (
+          <div className="flex flex-row gap-2 md:gap-4 items-center justify-center">
+            {spotlightList.map((item, index) => (
+              <span
+                key={index}
+                className={`cursor-pointer rounded-full h-2 md:h-4 w-2 md:w-4 ${
+                  index === spotlightIndex ? "bg-black" : "bg-gray-400"
+                }`}
+                onClick={() => {
+                  setSpotlightIndex(index);
+                }}
+              ></span>
+            ))}
           </div>
         )}
       </section>
@@ -739,15 +792,16 @@ export async function getServerSideProps(context) {
       `${process.env.NEXT_PUBLIC_API_URL}/decor?label=popular`
     );
     const popularData = await popularResponse.json();
-    const spotlightResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/decor?spotlight=true&random=true`
+    const spotlightListResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/decor?spotlight=true&random=false`
     );
-    const spotlightData = await spotlightResponse.json();
+    const spotlightListData = await spotlightListResponse.json();
     return {
       props: {
         bestSeller: bestSellerData.list.sort((a, b) => 0.5 - Math.random()),
         popular: popularData.list.sort((a, b) => 0.5 - Math.random()),
-        spotlight: spotlightData.decor,
+
+        spotlightList: spotlightListData.list,
       },
     };
   } catch (error) {
@@ -756,7 +810,8 @@ export async function getServerSideProps(context) {
       props: {
         bestSeller: null,
         popular: null,
-        spotlight: null,
+
+        spotlightList: null,
       },
     };
   }
