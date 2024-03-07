@@ -4,6 +4,7 @@ import { BiMap, BiSolidEditAlt } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import EventHowItWorks from "@/components/screens/EventHowItWorks";
 
 export default function EventTool({ userLoggedIn, setOpenLoginModal }) {
   const router = useRouter();
@@ -287,6 +288,7 @@ export default function EventTool({ userLoggedIn, setOpenLoginModal }) {
           </button>
         </div>
       </div>
+      <EventHowItWorks />
     </>
   );
 }
