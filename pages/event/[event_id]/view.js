@@ -194,7 +194,7 @@ export default function EventTool({ user }) {
               {event?.eventDays?.map((item, index) => (
                 <div
                   key={item._id}
-                  className={`md:hidden px-6 mx-1 py-2 cursor-pointer rounded-full shadow-xl font-semibold ${
+                  className={`md:hidden px-6 mx-1 py-2 cursor-pointer rounded-full font-semibold ${
                     eventDay === item._id
                       ? "bg-rose-900 text-white"
                       : "text-black bg-gray-300"
