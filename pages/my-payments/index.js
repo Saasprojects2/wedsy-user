@@ -1,7 +1,8 @@
 import UserProfileHeader from "@/components/layout/UserProfileHeader";
 import UserSidebar from "@/components/layout/UserSidebar";
 import { toProperCase } from "@/utils/text";
-import { Pagination, Select, Table } from "flowbite-react";
+import { Button, Pagination, Select, Table } from "flowbite-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BsBell } from "react-icons/bs";
 
@@ -12,6 +13,7 @@ export default function Payments({ user }) {
     amountPaid: 0,
     amountDue: 0,
   });
+  const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [paymentType, setPaymentType] = useState("All");
   const [paymentPage, setPaymentPage] = useState(1);
@@ -32,6 +34,7 @@ export default function Payments({ user }) {
         const { totalAmount, amountPaid, amountDue } = response;
         setLoading(false);
         setPayments(response.payments);
+        setEvents(response.events);
         setPaymentStats({ totalAmount, amountPaid, amountDue });
       })
       .catch((error) => {
@@ -150,7 +153,7 @@ export default function Payments({ user }) {
                 Total Bills
               </p>
               <p className="text-3xl font-medium">
-                {paymentStats.totalAmount.toLocaleString("en-IN", {
+                {paymentStats?.totalAmount?.toLocaleString("en-IN", {
                   maximumFractionDigits: 2,
                   style: "currency",
                   currency: "INR",
@@ -162,7 +165,7 @@ export default function Payments({ user }) {
                 Amount Paid
               </p>
               <p className="text-3xl font-medium ">
-                {paymentStats.amountPaid.toLocaleString("en-IN", {
+                {paymentStats?.amountPaid?.toLocaleString("en-IN", {
                   maximumFractionDigits: 2,
                   style: "currency",
                   currency: "INR",
@@ -174,7 +177,7 @@ export default function Payments({ user }) {
                 Balance Amount
               </p>
               <p className="text-3xl font-medium ">
-                {paymentStats.amountDue.toLocaleString("en-IN", {
+                {paymentStats?.amountDue?.toLocaleString("en-IN", {
                   maximumFractionDigits: 2,
                   style: "currency",
                   currency: "INR",
@@ -182,19 +185,66 @@ export default function Payments({ user }) {
               </p>
             </div>
           </div>
+          <div className="flex flex-col gap-4 mt-12">
+            {events
+              ?.filter((e) => e?.status?.approved && e?.amount?.due > 0)
+              ?.map((item, index) => (
+                <div
+                  className="bg-white rounded-xl px-8 py-4 shadow-xl flex flex-col md:flex-row gap-4 justify-between md:items-center font-medium"
+                  key={index}
+                >
+                  <div className="flex flex-col">
+                    <p>
+                      {index + 1}. {item.name}
+                    </p>
+                    <p>
+                      Total Bill:{" "}
+                      {(item?.amount?.total).toLocaleString("en-IN", {
+                        maximumFractionDigits: 2,
+                        style: "currency",
+                        currency: "INR",
+                      })}
+                    </p>
+                    <p className="text-green-500">
+                      Amount Paid:{" "}
+                      {(item?.amount?.paid).toLocaleString("en-IN", {
+                        maximumFractionDigits: 2,
+                        style: "currency",
+                        currency: "INR",
+                      })}
+                    </p>
+                    <p className="text-red-500">
+                      Amount Due:{" "}
+                      {(item?.amount?.due).toLocaleString("en-IN", {
+                        maximumFractionDigits: 2,
+                        style: "currency",
+                        currency: "INR",
+                      })}
+                    </p>
+                  </div>
+                  <Link
+                    className="font-semibold bg-rose-900 rounded-full p-2 px-16 text-white text-center"
+                    href={`/event/${item._id}/payment`}
+                    target="_blank"
+                  >
+                    Pay Now
+                  </Link>
+                </div>
+              ))}
+          </div>
         </div>
         <div className="flex flex-row gap-2 items-center justify-center py-2 px-6 bg-gray-300 text-lg">
           <BsBell />
           <span>
             Last Payment made on{" "}
-            {new Date(payments.reverse()[0]?.createdAt).toLocaleDateString(
+            {new Date(payments?.reverse()[0]?.createdAt).toLocaleDateString(
               "en-GB",
               {
                 day: "2-digit",
                 month: "2-digit",
                 year: "numeric",
               }
-            )}
+            ) || ""}
             <span className="font-semibold ml-6">
               {(payments.reverse()[0]?.amount / 100).toLocaleString("en-IN", {
                 maximumFractionDigits: 2,
