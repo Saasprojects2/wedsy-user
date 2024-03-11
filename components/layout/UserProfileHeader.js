@@ -40,7 +40,7 @@ export default function UserProfileHeader({ display }) {
       </div>
       <div className="px-8 md:hidden py-6">
         <Select
-          onClick={(e) => {
+          onChange={(e) => {
             router.push(e.target.value);
           }}
           value={router.pathname}
