@@ -308,7 +308,8 @@ export default function Payments({ user }) {
                       </Table.Cell>
                       <Table.Cell>
                         {toProperCase(
-                          item?.transactions[0].method?.split("_").join(" ")
+                          item?.transactions[0]?.method?.split("_").join(" ") ||
+                            ""
                         )}
                       </Table.Cell>
                     </Table.Row>
