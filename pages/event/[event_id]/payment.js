@@ -5,6 +5,7 @@ import {
   Modal,
   Radio,
   Table,
+  TextInput,
   Textarea,
   Tooltip,
 } from "flowbite-react";
@@ -27,7 +28,7 @@ export default function EventTool({ user }) {
     earliestDate: "",
   });
   const { event_id } = router.query;
-  const fetchEvent = () => {
+  const fetchPayment = () => {
     fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}?populate=true`,
       {
@@ -57,8 +58,12 @@ export default function EventTool({ user }) {
               allowAdvancePayment: daysDifference > 10,
               earliestDate: earliestDate,
             });
-            if (daysDifference < 10) {
-              setPaymentAmount(response.amount.total);
+            if (daysDifference < 10 || response.amount.paid > 0) {
+              setPaymentAmount(
+                response.amount.paid > 0
+                  ? response.amount.due
+                  : response.amount.total
+              );
               setPaymentOption("full-payment");
             } else {
               setPaymentAmount(Math.ceil(response?.amount.total * 0.2));
@@ -153,7 +158,7 @@ export default function EventTool({ user }) {
       .then((response) => {
         if (response.message === "success") {
           // makePayment({ order_id: response.order_id, amount: response.amount });
-          // fetchEvent();
+          fetchPayment();
           // alert("Finalized the event!");
         }
       })
@@ -162,7 +167,7 @@ export default function EventTool({ user }) {
       });
   };
   useEffect(() => {
-    fetchEvent();
+    fetchPayment();
   }, []);
   return (
     <>
@@ -174,7 +179,7 @@ export default function EventTool({ user }) {
             width={0}
             height={0}
             sizes="100%"
-            className="h-20 w-auto"
+            className="h-12 md:h-20 w-auto"
           />
           <Image
             src={"/logo-black.png"}
@@ -182,7 +187,7 @@ export default function EventTool({ user }) {
             width={0}
             height={0}
             sizes="100%"
-            className="h-12 w-auto"
+            className="h-8 md:h-12 w-auto"
           />
         </div>
         <p className="flex flex-row justify-between pb-2 font-semibold text-2xl">
@@ -192,43 +197,91 @@ export default function EventTool({ user }) {
           Choose payment method style
         </p>
         <div className="flex flex-col gap-6 border-b border-b-black pb-4">
-          <div>
-            <div className="flex items-center gap-2 text-lg">
-              <Radio
-                id="advance-payment"
-                name="advance-payment"
-                value="advance-payment"
-                checked={paymentOption === "advance-payment"}
-                onChange={(e) => {
-                  setPaymentOption(e.target.value);
-                  setPaymentAmount(Math.ceil(event?.amount?.total * 0.2));
-                }}
-                disabled={!eventInfo.allowAdvancePayment}
-              />
-              <Label htmlFor="advance-payment">
-                Booking amount ( 20% of Total Bill ){" "}
-                {!eventInfo.allowAdvancePayment && (
+          {event?.amount?.paid === 0 && (
+            <div>
+              <div className="flex flex-col md:flex-row md:items-center gap-2 text-lg">
+                <div className="flex items-center gap-2">
+                  <Radio
+                    id="advance-payment"
+                    name="advance-payment"
+                    value="advance-payment"
+                    checked={paymentOption === "advance-payment"}
+                    onChange={(e) => {
+                      setPaymentOption(e.target.value);
+                      setPaymentAmount(Math.ceil(event?.amount?.total * 0.2));
+                    }}
+                    disabled={!eventInfo.allowAdvancePayment}
+                  />
+                  <Label htmlFor="advance-payment">
+                    Booking amount ( 20% of Total Bill ){" "}
+                    {!eventInfo.allowAdvancePayment && (
+                      <span className="text-rose-900">
+                        Not Allowed as event date is near.
+                      </span>
+                    )}
+                    <br />
+                    <span>
+                      <span className="text-rose-900">
+                        ₹{Math.ceil(event?.amount?.total * 0.2)}
+                      </span>{" "}
+                      to be paid
+                    </span>
+                  </Label>
+                </div>
+                <Label className="md:ml-auto">
+                  Remaining amount payable:{" "}
                   <span className="text-rose-900">
-                    Not Allowed as event date is near.
+                    ₹
+                    {event?.amount?.total -
+                      Math.ceil(event?.amount?.total * 0.2)}
                   </span>
-                )}
-                <br />
-                <span>
-                  <span className="text-rose-900">
-                    ₹{Math.ceil(event?.amount?.total * 0.2)}
-                  </span>{" "}
-                  to be paid
-                </span>
-              </Label>
-              <Label className="ml-auto">
-                Remaining amount payable:{" "}
-                <span className="text-rose-900">
-                  ₹
-                  {event?.amount?.total - Math.ceil(event?.amount?.total * 0.2)}
-                </span>
-              </Label>
+                </Label>
+              </div>
             </div>
-          </div>
+          )}
+          {event?.amount?.paid != 0 && (
+            <div>
+              <div className="flex flex-col md:flex-row md:items-center gap-2 text-lg">
+                <div className="flex items-center gap-2">
+                  <Radio
+                    id="variable-payment"
+                    name="variable-payment"
+                    value="variable-payment"
+                    checked={paymentOption === "variable-payment"}
+                    onChange={(e) => {
+                      setPaymentOption(e.target.value);
+                      setPaymentAmount(event?.amount?.due);
+                    }}
+                  />
+                  <Label htmlFor="advance-payment">
+                    Enter amount:
+                    <br />
+                    <TextInput
+                      type="number"
+                      max={event?.amount?.due}
+                      value={paymentAmount.toString()}
+                      onChange={(e) => {
+                        setPaymentAmount(
+                          (parseInt(e.target.value) || 0) > 0
+                            ? parseInt(e.target.value) > event?.amount?.due
+                              ? event?.amount?.due
+                              : parseInt(e.target.value)
+                            : 0
+                        );
+                      }}
+                      disabled={paymentOption !== "variable-payment"}
+                    />
+                  </Label>
+                </div>
+                <Label className="md:ml-auto">
+                  Remaining amount payable:{" "}
+                  <span className="text-rose-900">
+                    ₹{event?.amount?.due - paymentAmount}
+                  </span>
+                </Label>
+              </div>
+            </div>
+          )}
           <div>
             <div className="flex items-center gap-2 text-lg">
               <Radio
@@ -238,10 +291,25 @@ export default function EventTool({ user }) {
                 checked={paymentOption === "full-payment"}
                 onChange={(e) => {
                   setPaymentOption(e.target.value);
-                  setPaymentAmount(event?.amount.total);
+                  setPaymentAmount(
+                    event?.amount?.paid === 0
+                      ? event?.amount.total
+                      : event?.amount?.due
+                  );
                 }}
               />
-              <Label htmlFor="full-payment">Full payment</Label>
+              <Label htmlFor="full-payment">
+                {event?.amount?.paid === 0
+                  ? "Full Payment"
+                  : `Pending Amount: ${(event?.amount?.due || 0).toLocaleString(
+                      "en-IN",
+                      {
+                        maximumFractionDigits: 2,
+                        style: "currency",
+                        currency: "INR",
+                      }
+                    )}`}
+              </Label>
             </div>
           </div>
         </div>
