@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { processMobileNumber } from "@/utils/phoneNumber";
 
-export default function Login() {
+export default function Login({ CheckLogin }) {
   let router = useRouter();
   const [data, setData] = useState({
     phone: "",
@@ -76,6 +76,7 @@ export default function Login() {
           });
           localStorage.setItem("token", response.token);
           router.push("/decor/view");
+          CheckLogin();
         } else {
           setData({
             ...data,

@@ -201,6 +201,7 @@ function App({ Component, pageProps }) {
             userLoggedIn={!logIn}
             user={user}
             setOpenLoginModal={setOpenLoginModal}
+            CheckLogin={CheckLogin}
           />
           <Footer />
         </>
