@@ -1,13 +1,13 @@
-import { toProperCase } from "@/utils/text";
-import { Button, Modal, Table, Textarea, Tooltip } from "flowbite-react";
+import CustomItemsTable from "@/components/event-tool/CustomItemsTable";
+import EventToolShareButton from "@/components/event-tool/EventToolShareButton";
+import { Modal, Table, Textarea, Tooltip } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { AiOutlinePlus, AiOutlinePlusSquare } from "react-icons/ai";
-import { BsArrowLeft, BsArrowRight, BsInfoCircle } from "react-icons/bs";
-import { MdDelete, MdShare } from "react-icons/md";
-import { RWebShare } from "react-web-share";
+import { BsArrowLeft, BsInfoCircle } from "react-icons/bs";
+import { MdDelete } from "react-icons/md";
 
 export default function EventTool({ user }) {
   const divRef = useRef(null);
@@ -77,100 +77,6 @@ export default function EventTool({ user }) {
           alert("Finalized the event!");
         } else {
           alert("Error, finalizing the event. Try Again.");
-        }
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
-  };
-  const initializeRazorpay = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
-
-      document.body.appendChild(script);
-    });
-  };
-  const makePayment = async ({ order_id, amount }) => {
-    const res = await initializeRazorpay();
-    if (!res) {
-      alert("Razorpay SDK Failed to load");
-      return;
-    }
-    var options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
-      name: "Wedsy",
-      currency: "INR",
-      amount: amount,
-      order_id: order_id,
-      description: "Your Event Payment",
-      // image: "https://manuarora.in/logo.png",
-      handler: function (response) {
-        // Validate payment at server - using webhooks is a better idea.
-        // console.log(response);
-        // alert(response.razorpay_payment_id);
-        // alert(response.razorpay_order_id);
-        // alert(response.razorpay_signature);
-        UpdatePayment({ order_id, response });
-      },
-      prefill: {
-        name: user.name,
-        email: user.email,
-        contact: user.phone,
-      },
-    };
-
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
-  };
-  // TODO: Update the create payment api router body.
-  const CreatePayment = ({ eventDay }) => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({
-        eventId: event_id,
-        eventDayId: eventDay,
-        paymentMethod: "razporpay",
-      }),
-    })
-      .then((response) => (response.ok ? response.json() : null))
-      .then((response) => {
-        if (response.message === "success") {
-          makePayment({ order_id: response.order_id, amount: response.amount });
-          // fetchEvent();
-          // alert("Finalized the event!");
-        }
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
-  };
-  const UpdatePayment = ({ response, order_id }) => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/${order_id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({ response }),
-    })
-      .then((response) => (response.ok ? response.json() : null))
-      .then((response) => {
-        if (response.message === "success") {
-          // makePayment({ order_id: response.order_id, amount: response.amount });
-          // fetchEvent();
-          // alert("Finalized the event!");
         }
       })
       .catch((error) => {
@@ -374,16 +280,10 @@ export default function EventTool({ user }) {
               <BsArrowLeft size={24} />
             </Link>
             <span className="mr-auto md:mr-0">{event.name}</span>
-            <RWebShare
-              data={{
-                title: `EventPlanner - ${event.name}`,
-                text: `Check out the Wedsy's event plan for ${event.name}.`,
-                url: `https://wedsy.in/event/${event?._id}/view`,
-              }}
-              onClick={() => console.log("shared successfully!")}
-            >
-              <MdShare className="ml-1" cursor={"pointer"} />
-            </RWebShare>
+            <EventToolShareButton
+              eventName={event?.name}
+              eventId={event?._id}
+            />
           </div>
           {event?.eventDays?.map((item, index) => (
             <div
@@ -891,82 +791,10 @@ export default function EventTool({ user }) {
                       ))}
                     </>
                   )}
-                  {tempEventDay?.customItems.length > 0 && (
-                    <>
-                      <p className="text-xl font-semibold flex flex-row items-center gap-2">
-                        {tempEventDay.customItemsTitle || "ADD ONS"}
-                      </p>
-                      <div className="mx-auto hidden md:block">
-                        <Table className="border my-3">
-                          <Table.Head>
-                            <Table.HeadCell>Item Name</Table.HeadCell>
-                            <Table.HeadCell>Qty.</Table.HeadCell>
-                            <Table.HeadCell>Price</Table.HeadCell>
-                          </Table.Head>
-                          <Table.Body className="divide-y">
-                            {tempEventDay?.customItems.map((item, index) => (
-                              <Table.Row
-                                className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                key={index}
-                              >
-                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                  {item.name}
-                                </Table.Cell>
-                                <Table.Cell>{item.quantity}</Table.Cell>
-                                <Table.Cell>₹{item.price}</Table.Cell>
-                              </Table.Row>
-                            ))}
-                          </Table.Body>
-                        </Table>
-                      </div>
-                      <div>
-                        <div className="block md:hidden relative overflow-x-auto">
-                          <table className="table-auto w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                              <tr>
-                                <th scope="col" className="px-6 py-3">
-                                  Item Name
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                  Qty.
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                  Price
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {tempEventDay?.customItems.map((item, index) => (
-                                <tr
-                                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                  key={index}
-                                >
-                                  <td className="whitespace-nowrap font-medium text-gray-900 dark:text-white px-6 py-4">
-                                    {item.name}
-                                  </td>
-                                  <td className="px-6 py-4">{item.quantity}</td>
-                                  <td className="px-6 py-4">₹{item.price}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <div className="flex flex-row border-b border-b-black">
-                        <div className="flex flex-col w-full md:w-1/2 md:ml-auto">
-                          <div className="mt-auto flex flex-row items-center justify-end gap-2 text-lg text-white font-medium bg-gradient-to-l from-rose-900 to-white py-2 px-10">
-                            ₹{" "}
-                            {tempEventDay?.customItems.reduce(
-                              (accumulator, currentValue) => {
-                                return accumulator + currentValue.price;
-                              },
-                              0
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )}
+                  <CustomItemsTable
+                    customItems={tempEventDay?.customItems || []}
+                    customItemsTitle={tempEventDay?.customItemsTitle || ""}
+                  />
                   {tempEventDay?.mandatoryItems.filter((i) => i.itemRequired)
                     .length > 0 && (
                     <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-y divide-black">
