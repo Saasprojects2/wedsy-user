@@ -183,8 +183,13 @@ function App({ Component, pageProps }) {
             strategy="afterInteractive"
             src="https://app.interakt.ai/kiwi-sdk/kiwi-sdk-17-prod-min.js"
             onLoad={() => {
-              // Initialize Kiwi SDK after script is loaded
-              kiwi.init("", "YSNtpXF4Dmqafpa8XeSZzWfcawpPm4QP", {});
+              if (
+                router.pathname !== "/event/[event_id]/view" &&
+                router.pathname !== "/event/[event_id]/planner"
+              ) {
+                // Initialize Kiwi SDK after script is loaded
+                kiwi.init("", "YSNtpXF4Dmqafpa8XeSZzWfcawpPm4QP", {});
+              }
             }}
           />
           <Header userLoggedIn={!logIn} user={user} Logout={Logout} />
