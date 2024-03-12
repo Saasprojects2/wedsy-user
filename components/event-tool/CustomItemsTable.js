@@ -1,6 +1,7 @@
 import { toPriceString } from "@/utils/text";
 import { Table } from "flowbite-react";
 import Image from "next/image";
+import ImageCard from "../cards/ImageCard";
 
 export default function CustomItemsTable({ customItems, customItemsTitle }) {
   return (
@@ -27,12 +28,8 @@ export default function CustomItemsTable({ customItems, customItemsTitle }) {
                       <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white flex flex-col md:flex-row justify-between">
                         <p>{item.name}</p>
                         {item.image && (
-                          <Image
+                          <ImageCard
                             src={item?.image}
-                            alt="Decor"
-                            width={0}
-                            height={0}
-                            sizes="100%"
                             className="rounded-xl w-24 h-auto"
                           />
                         )}
