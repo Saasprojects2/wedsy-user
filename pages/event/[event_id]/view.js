@@ -1,3 +1,5 @@
+import CustomItemsTable from "@/components/event-tool/CustomItemsTable";
+import EventToolShareButton from "@/components/event-tool/EventToolShareButton";
 import { Modal, Table, Textarea, Tooltip } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -163,16 +165,10 @@ export default function EventTool({ user }) {
               <BsArrowLeft size={24} />
             </Link>
             <span className="mr-auto md:mr-0">{event.name}</span>
-            <RWebShare
-              data={{
-                title: `EventPlanner - ${event.name}`,
-                text: `Check out the Wedsy's event plan for ${event.name}.`,
-                url: `https://wedsy.in/event/${event?._id}/view`,
-              }}
-              onClick={() => console.log("shared successfully!")}
-            >
-              <MdShare className="ml-1" cursor={"pointer"} />
-            </RWebShare>
+            <EventToolShareButton
+              eventName={event?.name}
+              eventId={event?._id}
+            />
           </div>
           {event?.eventDays?.map((item, index) => (
             <div
@@ -655,82 +651,10 @@ export default function EventTool({ user }) {
                       ))}
                     </>
                   )}
-                  {tempEventDay?.customItems.length > 0 && (
-                    <>
-                      <p className="text-xl font-semibold flex flex-row items-center gap-2">
-                        {tempEventDay.customItemsTitle || "ADD ONS"}
-                      </p>
-                      <div className="mx-auto hidden md:block">
-                        <Table className="border my-3">
-                          <Table.Head>
-                            <Table.HeadCell>Item Name</Table.HeadCell>
-                            <Table.HeadCell>Qty.</Table.HeadCell>
-                            <Table.HeadCell>Price</Table.HeadCell>
-                          </Table.Head>
-                          <Table.Body className="divide-y">
-                            {tempEventDay?.customItems.map((item, index) => (
-                              <Table.Row
-                                className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                key={index}
-                              >
-                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                  {item.name}
-                                </Table.Cell>
-                                <Table.Cell>{item.quantity}</Table.Cell>
-                                <Table.Cell>₹{item.price}</Table.Cell>
-                              </Table.Row>
-                            ))}
-                          </Table.Body>
-                        </Table>
-                      </div>
-                      <div>
-                        <div className="block md:hidden relative overflow-x-auto">
-                          <table className="table-auto w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                              <tr>
-                                <th scope="col" className="px-6 py-3">
-                                  Item Name
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                  Qty.
-                                </th>
-                                <th scope="col" className="px-6 py-3">
-                                  Price
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {tempEventDay?.customItems.map((item, index) => (
-                                <tr
-                                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                  key={index}
-                                >
-                                  <td className="whitespace-nowrap font-medium text-gray-900 dark:text-white px-6 py-4">
-                                    {item.name}
-                                  </td>
-                                  <td className="px-6 py-4">{item.quantity}</td>
-                                  <td className="px-6 py-4">₹{item.price}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <div className="flex flex-row border-b border-b-black">
-                        <div className="flex flex-col w-full md:w-1/2 md:ml-auto">
-                          <div className="mt-auto flex flex-row items-center justify-end gap-2 text-lg text-white font-medium bg-gradient-to-l from-rose-900 to-white py-2 px-10">
-                            ₹{" "}
-                            {tempEventDay?.customItems.reduce(
-                              (accumulator, currentValue) => {
-                                return accumulator + currentValue.price;
-                              },
-                              0
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )}
+                  <CustomItemsTable
+                    customItems={tempEventDay?.customItems || []}
+                    customItemsTitle={tempEventDay?.customItemsTitle || ""}
+                  />
                   {tempEventDay?.mandatoryItems.filter((i) => i.itemRequired)
                     .length > 0 && (
                     <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-y divide-black">
