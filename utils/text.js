@@ -18,3 +18,11 @@ export function toProperCase(inputString) {
 
   return properCaseString;
 }
+
+export function toPriceString(amount) {
+  return amount.toLocaleString("en-IN", {
+    maximumFractionDigits: 2,
+    style: "currency",
+    currency: "INR",
+  });
+}
