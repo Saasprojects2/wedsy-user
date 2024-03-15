@@ -14,7 +14,7 @@ export default function EventDayInfo({ tempEventDay }) {
             {new Date("1970-01-01T" + tempEventDay.time).toLocaleTimeString(
               "en-US",
               { hour: "numeric", minute: "2-digit" }
-            )}
+            )}{" "}
             Onwards
           </span>
           <span>{tempEventDay.venue}</span>
