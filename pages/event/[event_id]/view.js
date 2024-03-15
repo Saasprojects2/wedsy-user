@@ -7,8 +7,6 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeft, BsInfoCircle } from "react-icons/bs";
-import { MdShare } from "react-icons/md";
-import { RWebShare } from "react-web-share";
 
 export default function EventTool({ user }) {
   const divRef = useRef(null);
