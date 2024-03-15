@@ -31,6 +31,7 @@ function DecorListing({
   setOpenLoginModal,
 }) {
   const router = useRouter();
+  const [showDescription, setShowDescription] = useState(false);
   const [similarIndex, setSimilarIndex] = useState([0, 1, 2]);
   const [isAddedToWishlist, setIsAddedToWishlist] = useState(false);
   const [eventList, setEventList] = useState([]);
@@ -919,15 +920,6 @@ function DecorListing({
                 <Rating.Star filled={false} />
               </Rating>
             </div>
-            {/* <Image
-              src={decor.image}
-              alt="Decor"
-              width={0}
-              height={0}
-              sizes="100%"
-              style={{ width: "100%", height: "auto" }}
-              className="rounded-xl md:mb-10"
-            /> */}
             <div className={`relative pt-[56.25%] md:mb-10`}>
               <Image
                 src={`${decor.image}`}
@@ -1132,7 +1124,23 @@ function DecorListing({
                 <AiFillHeart size={20} />
               </button>
             </div>
-            <p className="mt-6">{decor.description}</p>
+            <p className="mt-6 ">
+              <span
+                className={`${
+                  showDescription ? "line-clamp-none" : "line-clamp-2"
+                } md:line-clamp-none`}
+              >
+                {decor.description}
+              </span>
+              <span
+                className=" md:hidden text-blue-600 hover:font-medium underline cursor-pointer"
+                onClick={() => {
+                  setShowDescription(!showDescription);
+                }}
+              >
+                {showDescription ? "view less" : "view more"}
+              </span>
+            </p>
           </div>
         </div>
       </div>
