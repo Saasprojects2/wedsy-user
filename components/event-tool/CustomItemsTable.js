@@ -1,6 +1,5 @@
 import { toPriceString } from "@/utils/text";
 import { Table } from "flowbite-react";
-import Image from "next/image";
 import ImageCard from "../cards/ImageCard";
 
 export default function CustomItemsTable({ customItems, customItemsTitle }) {
@@ -16,7 +15,7 @@ export default function CustomItemsTable({ customItems, customItemsTitle }) {
           </p>
           <div className="md:mr-3">
             <div className="overflow-x-auto">
-              <Table className="border mb-3 ">
+              <Table className="border mb-3 table-fixed md:table-auto w-full">
                 <Table.Head>
                   <Table.HeadCell>Item Name</Table.HeadCell>
                   <Table.HeadCell>Qty.</Table.HeadCell>
@@ -28,7 +27,7 @@ export default function CustomItemsTable({ customItems, customItemsTitle }) {
                       className="bg-white dark:border-gray-700 dark:bg-gray-800"
                       key={index}
                     >
-                      <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white flex flex-col md:flex-row justify-between">
+                      <Table.Cell className="font-medium text-gray-900 dark:text-white flex flex-col md:flex-row justify-between">
                         <p>{item.name}</p>
                         {item.image && (
                           <ImageCard

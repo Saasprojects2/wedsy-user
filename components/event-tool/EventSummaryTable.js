@@ -9,7 +9,7 @@ export default function EventSummaryTable({ tempEventDay }) {
       </p>
       <div>
         <div className="overflow-x-auto md:w-4/5 block mx-auto pb-6 mb-6 border-b border-b-black">
-          <Table className="border my-3">
+          <Table className="border my-3 table-fixed md:table-auto w-full">
             <Table.Head>
               <Table.HeadCell>
                 <span className="sr-only">#</span>
@@ -24,7 +24,7 @@ export default function EventSummaryTable({ tempEventDay }) {
                   key={index}
                 >
                   <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                  <Table.Cell className="font-medium text-gray-900 dark:text-white">
                     [{item.decor.category}] {item.decor.name}
                   </Table.Cell>
                   <Table.Cell>{toPriceString(item.price)}</Table.Cell>
@@ -38,7 +38,7 @@ export default function EventSummaryTable({ tempEventDay }) {
                   <Table.Cell>
                     {tempEventDay?.decorItems.length + index + 1}
                   </Table.Cell>
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                  <Table.Cell className="font-medium text-gray-900 dark:text-white">
                     [Package] {item.package.name}
                   </Table.Cell>
                   <Table.Cell>{toPriceString(item.price)}</Table.Cell>
@@ -51,7 +51,7 @@ export default function EventSummaryTable({ tempEventDay }) {
                       tempEventDay?.packages.length +
                       1}
                   </Table.Cell>
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                  <Table.Cell className="font-medium text-gray-900 dark:text-white">
                     {tempEventDay.customItemsTitle || "ADD ONS"}
                   </Table.Cell>
                   <Table.Cell>
@@ -80,7 +80,7 @@ export default function EventSummaryTable({ tempEventDay }) {
                         index +
                         1}
                     </Table.Cell>
-                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                    <Table.Cell className="font-medium text-gray-900 dark:text-white">
                       {item.description}
                     </Table.Cell>
                     <Table.Cell>{toPriceString(item.price)}</Table.Cell>
@@ -88,7 +88,7 @@ export default function EventSummaryTable({ tempEventDay }) {
                 ))}
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                 <Table.Cell />
-                <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                <Table.Cell className="text-right font-medium text-gray-900 dark:text-white">
                   Total
                 </Table.Cell>
                 <Table.Cell>
