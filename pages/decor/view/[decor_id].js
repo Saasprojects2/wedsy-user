@@ -919,7 +919,7 @@ function DecorListing({
                 <Rating.Star filled={false} />
               </Rating>
             </div>
-            <Image
+            {/* <Image
               src={decor.image}
               alt="Decor"
               width={0}
@@ -927,7 +927,20 @@ function DecorListing({
               sizes="100%"
               style={{ width: "100%", height: "auto" }}
               className="rounded-xl md:mb-10"
-            />
+            /> */}
+            <div className={`relative pt-[56.25%] md:mb-10`}>
+              <Image
+                src={`${decor.image}`}
+                alt="Decor"
+                // width={0}
+                // height={0}
+                sizes="100%"
+                layout={"fill"}
+                objectFit="contain"
+                // style={{ width: "100%", height: "auto" }}
+                className="rounded-xl "
+              />
+            </div>
             <div className="flex flex-row flex-wrap gap-4 items-center mt-4 md:mt-0">
               <div className="mr-auto flex flex-col w-full md:w-auto">
                 <p className="flex">
