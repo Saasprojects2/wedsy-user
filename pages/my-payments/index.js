@@ -33,7 +33,7 @@ export default function Payments({ user }) {
       .then((response) => {
         const { totalAmount, amountPaid, amountDue } = response;
         setLoading(false);
-        setPayments(response.payments);
+        setPayments(response.payments.reverse());
         setEvents(response.events);
         setPaymentStats({ totalAmount, amountPaid, amountDue });
       })
@@ -290,7 +290,7 @@ export default function Payments({ user }) {
                       key={item._id}
                     >
                       <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                        {item.razporPayId}
+                        {item.razporPayId || item._id}
                       </Table.Cell>
                       <Table.Cell>
                         {new Date(item.createdAt).toLocaleDateString("en-US", {
@@ -302,16 +302,19 @@ export default function Payments({ user }) {
                       <Table.Cell className="font-medium">
                         ₹{item.amount / 100}
                       </Table.Cell>
-                      <Table.Cell className="">Payment Mode</Table.Cell>
+                      <Table.Cell className="">
+                        {toProperCase(
+                          item?.paymentMethod === "cash"
+                            ? "cash"
+                            : item?.transactions[0]?.method
+                                ?.split("_")
+                                .join(" ") || ""
+                        )}
+                      </Table.Cell>
                       <Table.Cell className="">
                         {toProperCase(item.status.split("_").join(" "))}
                       </Table.Cell>
-                      <Table.Cell>
-                        {toProperCase(
-                          item?.transactions[0]?.method?.split("_").join(" ") ||
-                            ""
-                        )}
-                      </Table.Cell>
+                      <Table.Cell></Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
