@@ -375,72 +375,6 @@ function Home({ packages }) {
           THE WEDDING STORE
         </p>
         <div className="relative overflow-y-hidden">
-          <div className="overflow-hidden flex flex-row flex-nowrap absolute w-[50vw] md:w-[20vw] -translate-x-1/2 left-1/2 bottom-0 z-40">
-            <div className="animate-marquee whitespace-nowrap flex flex-row gap-3">
-              {[
-                "Entrance",
-                "Photobooth",
-                "Mandap",
-                "Nameboard",
-                "Stage",
-                "Pathway",
-              ].map((item, index) => (
-                <p
-                  className="font-medium text-xl text-center w-[50vw] md:w-[20vw] hidden md:block"
-                  key={index}
-                >
-                  {item}
-                </p>
-              ))}
-              {[
-                "Pathway",
-                "Entrance",
-                "Photobooth",
-                "Mandap",
-                "Nameboard",
-                "Stage",
-              ].map((item, index) => (
-                <p
-                  className="font-medium text-xl text-center w-[50vw] md:w-[20vw] block md:hidden"
-                  key={index}
-                >
-                  {item}
-                </p>
-              ))}
-            </div>
-            <div className="absolute top-0 animate-marquee2 whitespace-nowrap flex flex-row left-3 gap-3 ">
-              {[
-                "Entrance",
-                "Photobooth",
-                "Mandap",
-                "Nameboard",
-                "Stage",
-                "Pathway",
-              ].map((item, index) => (
-                <p
-                  className="font-medium text-xl text-center w-[50vw] md:w-[20vw] hidden md:block"
-                  key={index}
-                >
-                  {item}
-                </p>
-              ))}
-              {[
-                "Pathway",
-                "Entrance",
-                "Photobooth",
-                "Mandap",
-                "Nameboard",
-                "Stage",
-              ].map((item, index) => (
-                <p
-                  className="font-medium text-xl text-center w-[50vw] md:w-[20vw] block md:hidden"
-                  key={index}
-                >
-                  {item}
-                </p>
-              ))}
-            </div>
-          </div>
           <div className="absolute -top-14 bg-white z-10 h-28 w-full rounded-br-[25%] rounded-bl-[25%] md:rounded-br-[100%] md:rounded-bl-[100%]" />
           <div className="absolute -bottom-14 bg-white z-10 h-28 w-full rounded-tr-[25%] rounded-tl-[25%] md:rounded-tr-[100%] md:rounded-tl-[100%]" />
           <div className="relative overflow-hidden flex flex-row flex-nowrap">
@@ -510,18 +444,18 @@ function Home({ packages }) {
             </div>
           </div>
         </div>
-        <div className="z-20 flex flex-col md:flex-row gap-2 items-center justify-around p-6 md:px-12 md:py-8">
-          <p className="text-rose-900 md:w-2/3">
-            {
-              "Your one-stop shop for affordable and elegant weddings. Simplify planning with fixed-price stage decor, creative entry ideas, stylish furniture rentals, and more. Where affordability meets creativity for your special day."
-            }
-          </p>
+        <div className="z-20 flex flex-col items-center gap-4 p-6 md:px-12 -mt-6">
           <Link
             href={`/decor/`}
             className="bg-rose-900 rounded-full p-1 px-8 text-white w-max mt-2 md:mt-0 uppercase"
           >
             Explore Now
           </Link>
+          <p className="text-rose-900 text-center">
+            {
+              "Your one-stop shop for affordable and elegant weddings. Simplify planning with fixed-price stage decor, creative entry ideas, stylish furniture rentals, and more. Where affordability meets creativity for your special day."
+            }
+          </p>
         </div>
       </section>
       <section className={`${styles.section__1} flex flex-col md:py-16 gap-6`}>
