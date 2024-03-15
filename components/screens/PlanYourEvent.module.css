@@ -8,6 +8,11 @@
   background-position-x: center;
   background-position-y: bottom;
 }
+@media only screen and (max-width: 600px) {
+  .bg_div_top {
+    background-image: url("/assets/background/bg-planyourevent-mobile.png");
+  }
+}
 .bg_div_bottom {
   background-image: url("/assets/background/bg-planyourevent-2.png");
   background-size: cover;
@@ -17,4 +22,9 @@
   min-height: calc((100vw * 175) / 1399);
   background-position-x: center;
   background-position-y: top;
+}
+@media only screen and (max-width: 600px) {
+  .bg_div_bottom {
+    background: rgba(255, 255, 255, 1);
+  }
 }
