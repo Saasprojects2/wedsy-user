@@ -150,7 +150,6 @@ export default function EventTool({ user }) {
   }, []);
   const handlePlannerScroll = () => {
     if (plannerRef.current) {
-      console.log("Hello");
       const plannerElements = Array.from(plannerRef.current.children);
       for (let i = plannerElements.length - 1; i >= 0; i--) {
         if (plannerElements[i].getAttribute("data-key")) {
@@ -237,7 +236,7 @@ export default function EventTool({ user }) {
       />
       <div className="flex flex-col overflow-hidden hide-scrollbar">
         {/* Event Planner Header */}
-        <div className="md:bg-[#DBB9BD] md:px-8 flex-wrap flex flex-col md:flex-row gap-0 md:gap-4 items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+        <div className="md:bg-[#DBB9BD] md:px-8 flex-wrap flex flex-col md:flex-row justify-between gap-0 md:gap-4 items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
           <div className="text-black font-medium px-8 md:px-0 py-4 md:py-0 md:pr-8 text-left flex flex-row justify-between  items-center w-full md:w-auto">
             <Link href={`/event/${event_id}`} className="md:hidden mr-auto">
               <BsArrowLeft size={24} />
@@ -251,7 +250,7 @@ export default function EventTool({ user }) {
           {event?.eventDays?.map((item, index) => (
             <div
               key={item._id}
-              className={`hidden md:block px-3 mx-1 py-2 my-2 grow cursor-pointer ${
+              className={`hidden md:block px-8 mx-1 py-2 my-2 cursor-pointer ${
                 eventDay === item._id
                   ? " font-semibold bg-white rounded-2xl text-rose-900"
                   : "font-normal text-black"
@@ -268,7 +267,7 @@ export default function EventTool({ user }) {
               {event?.eventDays?.map((item, index) => (
                 <div
                   key={item._id}
-                  className={`md:hidden px-6 mx-1 py-2 cursor-pointer rounded-full font-semibold ${
+                  className={`md:hidden px-6 mx-1 py-2 cursor-pointer text-xs shadow-md rounded-full font-semibold ${
                     eventDay === item._id
                       ? "bg-rose-900 text-white"
                       : "text-black bg-gray-300"
@@ -352,22 +351,22 @@ export default function EventTool({ user }) {
                         <>
                           <div className="md:w-2/3 mx-auto flex flex-col gap-3 mb-6">
                             <div className="grid grid-cols-2 gap-4">
-                              <div className="text-right">Item Bill</div>
-                              <div className="text-rose-900">
+                              <div className="text-left">Item Bill</div>
+                              <div className="text-rose-900 text-right">
                                 {toPriceString(event.amount.preTotal)}
                               </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4 border-b-black border-b pb-3">
-                              <div className="text-right">
+                              <div className="text-left">
                                 Coupon code discount
                               </div>
-                              <div className="text-rose-900">
+                              <div className="text-rose-900 text-right">
                                 {toPriceString(event.amount.discount)}
                               </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4 font-medium">
-                              <div className="text-right">Amount Payable</div>
-                              <div className="text-rose-900">
+                              <div className="text-left">Amount Payable</div>
+                              <div className="text-rose-900 text-right">
                                 {toPriceString(event.amount.total)}
                               </div>
                             </div>
@@ -377,11 +376,11 @@ export default function EventTool({ user }) {
                       {event?.status.finalized ? (
                         event?.status.approved ? (
                           <div className="text-center py-8 flex flex-col gap-2">
-                            <div className="p-6 bg-black text-white text-center">
+                            <div className="p-6 bg-black text-white text-center w-screen -mx-6 font-medium">
                               Your event has been verified and approved! You can
                               now proceed to payment
                             </div>
-                            {event?.status.paymentDone ? (
+                            {!event?.status.paymentDone ? (
                               <p className="text-lg font-medium">
                                 Your payment is done!
                               </p>
