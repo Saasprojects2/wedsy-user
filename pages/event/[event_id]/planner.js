@@ -1,3 +1,4 @@
+import AddEventDayModal from "@/components/event-tool/AddEventDayModal";
 import CustomItemsTable from "@/components/event-tool/CustomItemsTable";
 import DecorItemsList from "@/components/event-tool/DecorItemsList";
 import DecorPackagesList from "@/components/event-tool/DecorPackagesList";
@@ -24,6 +25,7 @@ export default function EventTool({ user }) {
   const [event, setEvent] = useState({});
   const [eventDay, setEventDay] = useState();
   const { event_id } = router.query;
+  const [loading, setLoading] = useState(false);
   const [notes, setNotes] = useState({
     open: false,
     edit: false,
@@ -35,6 +37,7 @@ export default function EventTool({ user }) {
     admin_notes: "",
     user_notes: "",
   });
+  const [addEventDayModalOpen, setAddEventDayModalOpen] = useState(false);
   const fetchEvent = () => {
     fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}?populate=true`,
@@ -234,6 +237,14 @@ export default function EventTool({ user }) {
         UpdateNotes={UpdateNotes}
         allowEdit={true}
       />
+      <AddEventDayModal
+        fetchEvent={fetchEvent}
+        show={addEventDayModalOpen}
+        onClose={() => setAddEventDayModalOpen(false)}
+        loading={loading}
+        setLoading={setLoading}
+        event_id={event_id}
+      />
       <div className="flex flex-col overflow-hidden hide-scrollbar">
         {/* Event Planner Header */}
         <div className="md:bg-[#DBB9BD] md:px-8 flex-wrap flex flex-col md:flex-row justify-between gap-0 md:gap-4 items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
@@ -279,11 +290,23 @@ export default function EventTool({ user }) {
                   {item.name}
                 </div>
               ))}
+              {!event?.status?.approved && (
+                <AiOutlinePlusSquare
+                  size={24}
+                  onClick={() => setAddEventDayModalOpen(true)}
+                  cursor={"pointer"}
+                />
+              )}
             </div>
           </div>
-          <Link href={`/event/${event_id}`} className="hidden md:block">
-            <AiOutlinePlusSquare size={24} />
-          </Link>
+          {!event?.status?.approved && (
+            <AiOutlinePlusSquare
+              size={24}
+              onClick={() => setAddEventDayModalOpen(true)}
+              cursor={"pointer"}
+              className="hidden md:block"
+            />
+          )}
         </div>
         <div
           className="grid md:grid-cols-4 gap-6 py-4 overflow-hidden hide-scrollbar grow"
