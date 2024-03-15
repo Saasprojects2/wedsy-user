@@ -454,7 +454,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
               backgroundColor: spotlightList[spotlightIndex].spotlightColor,
             }}
           >
-            <div className="relative h-full md:hidden">
+            <div className="relative h-72 md:hidden">
               <Image
                 src={spotlightList[spotlightIndex].thumbnail}
                 alt="Decor Image"
@@ -464,34 +464,42 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
                 // fill="cover"
                 // layout={"fill"}
                 // objectFit="cover"
-                style={{ width: "100%", height: "auto" }}
+                layout={"fill"}
+                objectFit="cover"
+                className="w-full"
               />
             </div>
             <div className=" flex flex-col p-6 justify-between md:py-8 order-last md:order-first gap-4 md:gap-4">
-              <p className="text-2xl md:text-3xl font-semibold">
+              <p className="text-xl md:text-3xl font-semibold">
                 {spotlightList[spotlightIndex].name}
               </p>
-              <p>{spotlightList[spotlightIndex].description}</p>
+              <p className="hidden md:block">
+                {spotlightList[spotlightIndex].description}
+              </p>
               <div className="flex flex-col">
                 <p className="font-medium text-lg md:text-2xl">
                   Can be used for
                 </p>
                 {spotlightList[spotlightIndex].productVariation?.occassion?.map(
                   (item, index) => (
-                    <p key={index}>{toProperCase(item)}</p>
+                    <p key={index} className="text-sm md:text-base">
+                      {toProperCase(item)}
+                    </p>
                   )
                 )}
               </div>
               <div className="flex flex-col">
-                <p className="font-medium text-2xl">Included</p>
+                <p className="font-medium text-lg md:text-2xl">Included</p>
                 {spotlightList[spotlightIndex].productInfo.included.map(
                   (item, index) => (
-                    <p key={index}>{toProperCase(item)}</p>
+                    <p key={index} className="text-sm md:text-base">
+                      {toProperCase(item)}
+                    </p>
                   )
                 )}
               </div>
-              <div className="flex flex-col md:flex-row justify-between mt-auto">
-                <p className="text-3xl font-semibold">
+              <div className="flex flex-row justify-between mt-auto">
+                <p className="text-2xl md:text-3xl font-semibold text-right md:text-left">
                   ₹{" "}
                   {spotlightList[spotlightIndex].productInfo.variant
                     .artificialFlowers.sellingPrice ||
@@ -501,7 +509,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
                       .naturalFlowers.sellingPrice}
                 </p>
                 <Link href={`/decor/view/${spotlightList[spotlightIndex]._id}`}>
-                  <button className="mt-6 md:mt-0 bg-black text-white py-2 px-8 rounded-lg">
+                  <button className="mt-0 bg-black text-white py-2 px-8 rounded-lg">
                     View More
                   </button>
                 </Link>
