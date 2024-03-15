@@ -8,7 +8,10 @@ export default function CustomItemsTable({ customItems, customItemsTitle }) {
     <>
       {customItems.length > 0 && (
         <>
-          <p className="text-xl font-semibold flex flex-row items-center gap-2 my-3">
+          <p
+            className="text-xl font-semibold flex flex-row items-center gap-2 my-3"
+            data-key={"custom-add-ons"}
+          >
             {customItemsTitle || "ADD ONS"}
           </p>
           <div className="md:mr-3">
