@@ -15,9 +15,6 @@ export default function DecorPackagesList({
     <>
       {packages.length > 0 && (
         <>
-          <p className="text-xl font-semibold flex flex-row items-center gap-2">
-            Decor Packages
-          </p>
           {packages.map((item) => (
             <div
               className="flex flex-col gap-3 pt-4 border-b border-b-black"
@@ -43,7 +40,7 @@ export default function DecorPackagesList({
                   <div className="flex flex-col gap-4" key={rec._id}>
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-center px-4 md:w-4/5">
                       <div className="relative md:col-span-3">
-                        <p className="text-xl font-semibold flex flex-row items-center gap-2 mb-2">
+                        <p className="text-base font-semibold flex flex-row items-center gap-2 mb-2">
                           <span>{rec.decor?.name}</span>
                         </p>
                         <Image
@@ -52,13 +49,13 @@ export default function DecorPackagesList({
                           width={0}
                           height={0}
                           sizes="100%"
-                          className="rounded-xl w-auto h-48"
+                          className="rounded-xl w-auto h-92"
                         />
                       </div>
                       {rec.platform && rec.flooring && (
-                        <div className="flex flex-row items-center gap-6 md:col-span-2">
+                        <div className="flex flex-col md:flex-row items-center gap-6 md:col-span-2">
                           <AiOutlinePlus size={24} />
-                          <div className="flex flex-col gap-3">
+                          <div className="flex flex-row md:flex-col gap-3">
                             <Image
                               src={"/assets/images/platform.png"}
                               alt="Platform"

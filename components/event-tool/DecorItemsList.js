@@ -17,9 +17,6 @@ export default function DecorItemsList({
     <>
       {decorItems.length > 0 && (
         <>
-          <p className="text-xl font-semibold flex flex-row items-center gap-2">
-            Decor
-          </p>
           {decorItems
             ?.sort(
               (a, b) =>
@@ -42,13 +39,13 @@ export default function DecorItemsList({
             )
             ?.map((item) => (
               <div
-                className="flex flex-col gap-4 pt-8 border-b border-b-black"
+                className="flex flex-col gap-4 pt-2 border-b border-b-black"
                 key={item._id}
                 data-key={`decor-${item.decor._id}`}
               >
                 <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-center px-4 md:w-4/5">
                   <div className="relative md:col-span-3">
-                    <p className="text-xl font-semibold flex flex-row items-center gap-2 mb-2">
+                    <p className="text-base font-semibold flex flex-row items-center gap-2 mb-2.5">
                       <span>{item.decor?.name}</span>
                       {allowEdit && !status.finalized && (
                         <MdDelete
@@ -68,13 +65,13 @@ export default function DecorItemsList({
                       width={0}
                       height={0}
                       sizes="100%"
-                      className="rounded-xl w-auto h-48"
+                      className="rounded-xl w-auto h-92"
                     />
                   </div>
                   {item.platform && item.flooring && (
-                    <div className="flex flex-row items-center gap-6 md:col-span-2">
+                    <div className="flex flex-col md:flex-row items-center gap-6 md:col-span-2">
                       <AiOutlinePlus size={24} />
-                      <div className="flex flex-col gap-3">
+                      <div className="flex flex-row md:flex-col gap-3">
                         <Image
                           src={"/assets/images/platform.png"}
                           alt="Platform"
@@ -117,11 +114,13 @@ export default function DecorItemsList({
                   )}
                 </div>
                 <div className="flex flex-col md:flex-row">
-                  <div className="flex flex-col px-4 pb-1">
+                  <div className="flex flex-col px-4 pb-6 gap-2">
                     <p className="text-lg font-medium">Inclusive of:</p>
-                    {item.decor.productInfo?.included.map((rec, recIndex) => (
-                      <p key={recIndex}>{rec}</p>
-                    ))}
+                    <ul className="list-disc">
+                      {item.decor.productInfo?.included.map((rec, recIndex) => (
+                        <li key={recIndex}>{rec}</li>
+                      ))}
+                    </ul>
                     <button
                       onClick={() => {
                         setNotes({
@@ -141,7 +140,7 @@ export default function DecorItemsList({
                       View Notes
                     </button>
                   </div>
-                  <div className="flex flex-col md:w-1/2 md:ml-auto">
+                  <div className="flex flex-col md:w-1/2 md:ml-auto justify-end">
                     <p className="font-medium text-lg mt-auto text-right px-10">
                       Price for{" "}
                       <span className="text-rose-900">
@@ -152,10 +151,10 @@ export default function DecorItemsList({
                           : item.variant === "mixedFlowers"
                           ? "Mixed"
                           : ""}{" "}
-                        Flowers.
+                        Flowers
                       </span>
                     </p>
-                    <div className="mt-auto flex flex-row items-center justify-end gap-2 text-lg text-white font-medium bg-gradient-to-l from-rose-900 to-white py-2 px-10">
+                    <div className="flex flex-row items-center justify-end gap-2 text-lg text-white font-medium bg-gradient-to-l from-rose-900 to-white py-2 px-10">
                       ₹ {item.price}{" "}
                       <Tooltip
                         content={

@@ -9,13 +9,13 @@ export default function EventSummaryTable({ tempEventDay }) {
       </p>
       <div>
         <div className="overflow-x-auto md:w-4/5 block mx-auto pb-6 mb-6 border-b border-b-black">
-          <Table className="border my-3 table-fixed md:table-auto w-full">
+          <Table className="border mb-3  w-full">
             <Table.Head>
-              <Table.HeadCell>
+              <Table.HeadCell className="p-1">
                 <span className="sr-only">#</span>
               </Table.HeadCell>
-              <Table.HeadCell>Item</Table.HeadCell>
-              <Table.HeadCell>Price</Table.HeadCell>
+              <Table.HeadCell className="p-1">Item</Table.HeadCell>
+              <Table.HeadCell className="p-1 text-right">Price</Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y">
               {tempEventDay?.decorItems.map((item, index) => (
@@ -23,11 +23,13 @@ export default function EventSummaryTable({ tempEventDay }) {
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                   key={index}
                 >
-                  <Table.Cell>{index + 1}</Table.Cell>
-                  <Table.Cell className="font-medium text-gray-900 dark:text-white">
+                  <Table.Cell className="p-1">{index + 1}</Table.Cell>
+                  <Table.Cell className="font-medium text-gray-900 dark:text-white p-1">
                     [{item.decor.category}] {item.decor.name}
                   </Table.Cell>
-                  <Table.Cell>{toPriceString(item.price)}</Table.Cell>
+                  <Table.Cell className="p-1 text-rose-900 text-right">
+                    {toPriceString(item.price)}
+                  </Table.Cell>
                 </Table.Row>
               ))}
               {tempEventDay?.packages.map((item, index) => (
@@ -35,26 +37,28 @@ export default function EventSummaryTable({ tempEventDay }) {
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                   key={index}
                 >
-                  <Table.Cell>
+                  <Table.Cell className="p-1">
                     {tempEventDay?.decorItems.length + index + 1}
                   </Table.Cell>
-                  <Table.Cell className="font-medium text-gray-900 dark:text-white">
+                  <Table.Cell className="font-medium text-gray-900 dark:text-white p-1">
                     [Package] {item.package.name}
                   </Table.Cell>
-                  <Table.Cell>{toPriceString(item.price)}</Table.Cell>
+                  <Table.Cell className="p-1 text-rose-900 text-right">
+                    {toPriceString(item.price)}
+                  </Table.Cell>
                 </Table.Row>
               ))}
               {tempEventDay.customItems.length > 0 && (
                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <Table.Cell>
+                  <Table.Cell className="p-1">
                     {tempEventDay?.decorItems.length +
                       tempEventDay?.packages.length +
                       1}
                   </Table.Cell>
-                  <Table.Cell className="font-medium text-gray-900 dark:text-white">
+                  <Table.Cell className="font-medium text-gray-900 dark:text-white p-1">
                     {tempEventDay.customItemsTitle || "ADD ONS"}
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell className="p-1 text-rose-900 text-right">
                     {toPriceString(
                       tempEventDay?.customItems.reduce(
                         (accumulator, currentValue) => {
@@ -73,25 +77,27 @@ export default function EventSummaryTable({ tempEventDay }) {
                     className="bg-white dark:border-gray-700 dark:bg-gray-800"
                     key={index}
                   >
-                    <Table.Cell>
+                    <Table.Cell className="p-1">
                       {tempEventDay?.decorItems.length +
                         tempEventDay?.packages.length +
                         (tempEventDay.customItems.length ? 1 : 0) +
                         index +
                         1}
                     </Table.Cell>
-                    <Table.Cell className="font-medium text-gray-900 dark:text-white">
+                    <Table.Cell className="font-medium text-gray-900 dark:text-white p-1">
                       {item.description}
                     </Table.Cell>
-                    <Table.Cell>{toPriceString(item.price)}</Table.Cell>
+                    <Table.Cell className="p-1 text-rose-900 text-right">
+                      {toPriceString(item.price)}
+                    </Table.Cell>
                   </Table.Row>
                 ))}
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell />
-                <Table.Cell className="text-right font-medium text-gray-900 dark:text-white">
+                <Table.Cell className="p-1" />
+                <Table.Cell className="text-right font-medium text-gray-900 dark:text-white p-1">
                   Total
                 </Table.Cell>
-                <Table.Cell>
+                <Table.Cell className="p-1 text-rose-900 text-right font-semibold">
                   {toPriceString(
                     tempEventDay?.decorItems.reduce(
                       (accumulator, currentValue) => {
