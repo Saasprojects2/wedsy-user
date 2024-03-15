@@ -1,6 +1,11 @@
 import CustomItemsTable from "@/components/event-tool/CustomItemsTable";
+import EventSummaryTable from "@/components/event-tool/EventSummaryTable";
 import EventToolShareButton from "@/components/event-tool/EventToolShareButton";
-import { Modal, Table, Textarea, Tooltip } from "flowbite-react";
+import EventToolSidebar from "@/components/event-tool/EventToolSidebar";
+import NotesModal from "@/components/event-tool/NotesModal";
+import TotalSummaryTable from "@/components/event-tool/TotalSummaryTable";
+import { toPriceString } from "@/utils/text";
+import { Tooltip } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -223,55 +228,12 @@ export default function EventTool({ user }) {
   };
   return (
     <>
-      {/* Notes Modal */}
-      <Modal
-        show={notes?.open || false}
-        size="lg"
-        popup
-        onClose={() =>
-          setNotes({
-            open: false,
-            edit: false,
-            loading: false,
-            event_id: "",
-            eventDay: "",
-            decor_id: "",
-            package_id: "",
-            admin_notes: "",
-            user_notes: "",
-          })
-        }
-      >
-        <Modal.Header>
-          <h3 className="text-xl font-medium text-gray-900 dark:text-white px-4">
-            Notes
-          </h3>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="flex flex-col gap-6">
-            <Textarea
-              rows={4}
-              value={notes?.user_notes}
-              onChange={(e) => {
-                setNotes({ ...notes, user_notes: e.target.value });
-              }}
-              readOnly={!notes?.edit}
-            />
-            <button
-              className={`text-white bg-rose-900  border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
-              onClick={() => {
-                if (!notes?.edit) {
-                  setNotes({ ...notes, edit: true });
-                } else {
-                  UpdateNotes();
-                }
-              }}
-            >
-              {notes?.edit ? "Save Notes" : "Edit Notes"}
-            </button>
-          </div>
-        </Modal.Body>
-      </Modal>
+      <NotesModal
+        notes={notes}
+        setNotes={setNotes}
+        UpdateNotes={UpdateNotes}
+        allowEdit={true}
+      />
       <div className="flex flex-col overflow-hidden hide-scrollbar">
         {/* Event Planner Header */}
         <div className="md:bg-[#DBB9BD] md:px-8 flex-wrap flex flex-col md:flex-row gap-0 md:gap-4 items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
@@ -328,76 +290,11 @@ export default function EventTool({ user }) {
           ref={divRef}
           style={{ height: divSize.height ?? "100vh" }}
         >
-          <div className="overflow-y-auto hide-scrollbar hidden border-r md:flex flex-col gap-6 py-4 pl-8">
-            {event.eventDays
-              ?.filter((i) => i._id === eventDay)
-              ?.map((tempEventDay, tempIndex) => (
-                <>
-                  {tempEventDay?.decorItems.length > 0 && (
-                    <div className="flex flex-col gap-3 pl-6">
-                      <p className="flex flex-row justify-between pb-2 font-semibold text-xl">
-                        Decor
-                      </p>
-                      <div className="flex flex-col gap-2">
-                        {tempEventDay?.decorItems.map((item, index) =>
-                          displayKey === `decor-${item.decor._id}` ? (
-                            <div
-                              className="font-medium text-lg flex flex-row gap-2 items-center pl-2"
-                              key={index}
-                            >
-                              {item.category}
-                              <span className="h-px flex-grow bg-black"></span>
-                            </div>
-                          ) : (
-                            <div
-                              className="text-gray-700 cursor-pointer"
-                              key={index}
-                              onClick={() =>
-                                handlePlannerClick(`decor-${item.decor._id}`)
-                              }
-                            >
-                              {item.category}
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  {tempEventDay?.packages.length > 0 && (
-                    <div className="flex flex-col gap-3 pl-6">
-                      <p className="flex flex-row justify-between pb-2 font-semibold text-xl">
-                        Decor Packages
-                      </p>
-                      <div className="flex flex-col gap-2">
-                        {tempEventDay?.packages.map((item, index) =>
-                          displayKey === `package-${item.package._id}` ? (
-                            <div
-                              className="font-medium text-lg flex flex-row gap-2 items-center pl-2"
-                              key={index}
-                            >
-                              {item.package.name}
-                              <span className="h-px flex-grow bg-black"></span>
-                            </div>
-                          ) : (
-                            <div
-                              className="text-gray-700 cursor-pointer"
-                              key={index}
-                              onClick={() =>
-                                handlePlannerClick(
-                                  `package-${item.package._id}`
-                                )
-                              }
-                            >
-                              {item.package.name}
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </>
-              ))}
-          </div>
+          <EventToolSidebar
+            tempEventDay={event.eventDays?.filter((i) => i._id === eventDay)[0]}
+            displayKey={displayKey}
+            handlePlannerClick={handlePlannerClick}
+          />
           <div
             className="overflow-y-auto hide-scrollbar col-span-3 flex flex-col px-6 md:px-0"
             ref={plannerRef}
@@ -825,7 +722,9 @@ export default function EventTool({ user }) {
                     </div>
                   )}
                   {tempEventDay?.decorItems.length <= 0 &&
-                  tempEventDay?.packages.length <= 0 ? (
+                  tempEventDay?.packages.length <= 0 &&
+                  tempEventDay?.customItems.length <= 0 &&
+                  tempEventDay?.mandatoryItems.length <= 0 ? (
                     <p className="text-center py-8">
                       No decor selected.{" "}
                       <Link href={"/decor"} className="underline">
@@ -835,247 +734,15 @@ export default function EventTool({ user }) {
                     </p>
                   ) : (
                     <>
-                      <p className="mt-8 text-xl font-semibold flex flex-row justify-center items-center gap-2">
-                        EVENT SUMMARY
-                      </p>
-                      <div>
-                        <div className="overflow-x-auto md:w-4/5 block mx-auto pb-6 mb-6 border-b border-b-black">
-                          <Table className="border my-3">
-                            <Table.Head>
-                              <Table.HeadCell>
-                                <span className="sr-only">#</span>
-                              </Table.HeadCell>
-                              <Table.HeadCell>Item</Table.HeadCell>
-                              <Table.HeadCell>Price</Table.HeadCell>
-                            </Table.Head>
-                            <Table.Body className="divide-y">
-                              {tempEventDay?.decorItems.map((item, index) => (
-                                <Table.Row
-                                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                  key={index}
-                                >
-                                  <Table.Cell>{index + 1}</Table.Cell>
-                                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                    [{item.decor.category}] {item.decor.name}
-                                  </Table.Cell>
-                                  <Table.Cell>₹{item.price}</Table.Cell>
-                                </Table.Row>
-                              ))}
-                              {tempEventDay?.packages.map((item, index) => (
-                                <Table.Row
-                                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                  key={index}
-                                >
-                                  <Table.Cell>
-                                    {tempEventDay?.decorItems.length +
-                                      index +
-                                      1}
-                                  </Table.Cell>
-                                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                    [Package] {item.package.name}
-                                  </Table.Cell>
-                                  <Table.Cell>₹{item.price}</Table.Cell>
-                                </Table.Row>
-                              ))}
-                              {tempEventDay.customItems.length > 0 && (
-                                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                  <Table.Cell>
-                                    {tempEventDay?.decorItems.length +
-                                      tempEventDay?.packages.length +
-                                      1}
-                                  </Table.Cell>
-                                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                    {tempEventDay.customItemsTitle || "ADD ONS"}
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    ₹
-                                    {tempEventDay?.customItems.reduce(
-                                      (accumulator, currentValue) => {
-                                        return accumulator + currentValue.price;
-                                      },
-                                      0
-                                    )}
-                                  </Table.Cell>
-                                </Table.Row>
-                              )}
-                              {tempEventDay?.mandatoryItems
-                                .filter((i) => i.itemRequired)
-                                ?.map((item, index) => (
-                                  <Table.Row
-                                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                    key={index}
-                                  >
-                                    <Table.Cell>
-                                      {tempEventDay?.decorItems.length +
-                                        tempEventDay?.packages.length +
-                                        (tempEventDay.customItems.length
-                                          ? 1
-                                          : 0) +
-                                        index +
-                                        1}
-                                    </Table.Cell>
-                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                      {item.description}
-                                    </Table.Cell>
-                                    <Table.Cell>₹{item.price}</Table.Cell>
-                                  </Table.Row>
-                                ))}
-                              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                <Table.Cell />
-                                <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                  Total
-                                </Table.Cell>
-                                <Table.Cell>
-                                  ₹
-                                  {tempEventDay?.decorItems.reduce(
-                                    (accumulator, currentValue) => {
-                                      return accumulator + currentValue.price;
-                                    },
-                                    0
-                                  ) +
-                                    tempEventDay?.packages.reduce(
-                                      (accumulator, currentValue) => {
-                                        return accumulator + currentValue.price;
-                                      },
-                                      0
-                                    ) +
-                                    tempEventDay?.customItems.reduce(
-                                      (accumulator, currentValue) => {
-                                        return accumulator + currentValue.price;
-                                      },
-                                      0
-                                    ) +
-                                    tempEventDay?.mandatoryItems.reduce(
-                                      (accumulator, currentValue) => {
-                                        return accumulator + currentValue.price;
-                                      },
-                                      0
-                                    )}
-                                </Table.Cell>
-                              </Table.Row>
-                            </Table.Body>
-                          </Table>
-                        </div>
-                      </div>
-                      <p className="mt-8 text-xl font-semibold flex flex-row justify-center items-center gap-2">
-                        TOTAL SUMMARY
-                      </p>
-                      <div>
-                        <div className="overflow-x-auto md:w-4/5 block mx-auto pb-6 mb-6 border-b border-b-black">
-                          <Table className="border my-3">
-                            <Table.Head>
-                              <Table.HeadCell>
-                                <span className="sr-only">#</span>
-                              </Table.HeadCell>
-                              <Table.HeadCell>Event Day</Table.HeadCell>
-                              <Table.HeadCell>Price</Table.HeadCell>
-                            </Table.Head>
-                            <Table.Body className="divide-y">
-                              {event.eventDays?.map((item, index) => (
-                                <Table.Row
-                                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                  key={index}
-                                >
-                                  <Table.Cell>{index + 1}</Table.Cell>
-                                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                    {item.name}
-                                  </Table.Cell>
-                                  <Table.Cell>
-                                    ₹
-                                    {item?.decorItems.reduce(
-                                      (accumulator, currentValue) => {
-                                        return accumulator + currentValue.price;
-                                      },
-                                      0
-                                    ) +
-                                      item?.packages.reduce(
-                                        (accumulator, currentValue) => {
-                                          return (
-                                            accumulator + currentValue.price
-                                          );
-                                        },
-                                        0
-                                      ) +
-                                      item?.customItems.reduce(
-                                        (accumulator, currentValue) => {
-                                          return (
-                                            accumulator + currentValue.price
-                                          );
-                                        },
-                                        0
-                                      ) +
-                                      item?.mandatoryItems.reduce(
-                                        (accumulator, currentValue) => {
-                                          return (
-                                            accumulator + currentValue.price
-                                          );
-                                        },
-                                        0
-                                      )}
-                                  </Table.Cell>
-                                </Table.Row>
-                              ))}
-
-                              <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                <Table.Cell />
-                                <Table.Cell className="text-right whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                  Total
-                                </Table.Cell>
-                                <Table.Cell>
-                                  ₹
-                                  {event.eventDays?.reduce(
-                                    (masterAccumulator, masterCurrentValue) => {
-                                      return (
-                                        masterAccumulator +
-                                        masterCurrentValue.decorItems.reduce(
-                                          (accumulator, currentValue) => {
-                                            return (
-                                              accumulator + currentValue.price
-                                            );
-                                          },
-                                          0
-                                        ) +
-                                        masterCurrentValue?.packages.reduce(
-                                          (accumulator, currentValue) => {
-                                            return (
-                                              accumulator + currentValue.price
-                                            );
-                                          },
-                                          0
-                                        ) +
-                                        masterCurrentValue?.customItems.reduce(
-                                          (accumulator, currentValue) => {
-                                            return (
-                                              accumulator + currentValue.price
-                                            );
-                                          },
-                                          0
-                                        ) +
-                                        masterCurrentValue?.mandatoryItems.reduce(
-                                          (accumulator, currentValue) => {
-                                            return (
-                                              accumulator + currentValue.price
-                                            );
-                                          },
-                                          0
-                                        )
-                                      );
-                                    },
-                                    0
-                                  )}
-                                </Table.Cell>
-                              </Table.Row>
-                            </Table.Body>
-                          </Table>
-                        </div>
-                      </div>
+                      <EventSummaryTable tempEventDay={tempEventDay} />
+                      <TotalSummaryTable event={event} />
                       {event?.status?.approved && (
                         <>
                           <div className="md:w-2/3 mx-auto flex flex-col gap-3 mb-6">
                             <div className="grid grid-cols-2 gap-4">
                               <div className="text-right">Item Bill</div>
                               <div className="text-rose-900">
-                                {event.amount.preTotal}
+                                {toPriceString(event.amount.preTotal)}
                               </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4 border-b-black border-b pb-3">
@@ -1083,13 +750,13 @@ export default function EventTool({ user }) {
                                 Coupon code discount
                               </div>
                               <div className="text-rose-900">
-                                {event.amount.discount}
+                                {toPriceString(event.amount.discount)}
                               </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4 font-medium">
                               <div className="text-right">Amount Payable</div>
                               <div className="text-rose-900">
-                                {event.amount.total} INR
+                                {toPriceString(event.amount.total)}
                               </div>
                             </div>
                           </div>

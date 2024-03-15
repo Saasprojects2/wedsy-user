@@ -1,5 +1,7 @@
 import CustomItemsTable from "@/components/event-tool/CustomItemsTable";
 import EventToolShareButton from "@/components/event-tool/EventToolShareButton";
+import EventToolSidebar from "@/components/event-tool/EventToolSidebar";
+import NotesModal from "@/components/event-tool/NotesModal";
 import { Modal, Table, Textarea, Tooltip } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -118,43 +120,7 @@ export default function EventTool({ user }) {
   };
   return (
     <>
-      {/* Notes Modal */}
-      <Modal
-        show={notes?.open || false}
-        size="lg"
-        popup
-        onClose={() =>
-          setNotes({
-            open: false,
-            edit: false,
-            loading: false,
-            event_id: "",
-            eventDay: "",
-            decor_id: "",
-            package_id: "",
-            admin_notes: "",
-            user_notes: "",
-          })
-        }
-      >
-        <Modal.Header>
-          <h3 className="text-xl font-medium text-gray-900 dark:text-white px-4">
-            Notes
-          </h3>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="flex flex-col gap-6">
-            <Textarea
-              rows={4}
-              value={notes?.user_notes}
-              onChange={(e) => {
-                setNotes({ ...notes, user_notes: e.target.value });
-              }}
-              readOnly={!notes?.edit}
-            />
-          </div>
-        </Modal.Body>
-      </Modal>
+      <NotesModal notes={notes} setNotes={setNotes} allowEdit={false} />
       <div className="flex flex-col overflow-hidden hide-scrollbar">
         {/* Event Planner Header */}
         <div className="md:bg-[#DBB9BD] md:px-8 flex-wrap flex flex-col md:flex-row gap-0 md:gap-4 items-center justify-center font-medium text-center text-lg text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
@@ -208,76 +174,11 @@ export default function EventTool({ user }) {
           ref={divRef}
           style={{ height: divSize.height ?? "100vh" }}
         >
-          <div className="overflow-y-auto hide-scrollbar hidden border-r md:flex flex-col gap-6 py-4 pl-8">
-            {event.eventDays
-              ?.filter((i) => i._id === eventDay)
-              ?.map((tempEventDay, tempIndex) => (
-                <>
-                  {tempEventDay?.decorItems.length > 0 && (
-                    <div className="flex flex-col gap-3 pl-6">
-                      <p className="flex flex-row justify-between pb-2 font-semibold text-xl">
-                        Decor
-                      </p>
-                      <div className="flex flex-col gap-2">
-                        {tempEventDay?.decorItems.map((item, index) =>
-                          displayKey === `decor-${item.decor._id}` ? (
-                            <div
-                              className="font-medium text-lg flex flex-row gap-2 items-center pl-2"
-                              key={index}
-                            >
-                              {item.category}
-                              <span className="h-px flex-grow bg-black"></span>
-                            </div>
-                          ) : (
-                            <div
-                              className="text-gray-700 cursor-pointer"
-                              key={index}
-                              onClick={() =>
-                                handlePlannerClick(`decor-${item.decor._id}`)
-                              }
-                            >
-                              {item.category}
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </div>
-                  )}
-                  {tempEventDay?.packages.length > 0 && (
-                    <div className="flex flex-col gap-3 pl-6">
-                      <p className="flex flex-row justify-between pb-2 font-semibold text-xl">
-                        Decor Packages
-                      </p>
-                      <div className="flex flex-col gap-2">
-                        {tempEventDay?.packages.map((item, index) =>
-                          displayKey === `package-${item.package._id}` ? (
-                            <div
-                              className="font-medium text-lg flex flex-row gap-2 items-center pl-2"
-                              key={index}
-                            >
-                              {item.package.name}
-                              <span className="h-px flex-grow bg-black"></span>
-                            </div>
-                          ) : (
-                            <div
-                              className="text-gray-700 cursor-pointer"
-                              key={index}
-                              onClick={() =>
-                                handlePlannerClick(
-                                  `package-${item.package._id}`
-                                )
-                              }
-                            >
-                              {item.package.name}
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </>
-              ))}
-          </div>
+          <EventToolSidebar
+            tempEventDay={event.eventDays?.filter((i) => i._id === eventDay)[0]}
+            displayKey={displayKey}
+            handlePlannerClick={handlePlannerClick}
+          />
           <div
             className="overflow-y-auto hide-scrollbar col-span-3 flex flex-col px-6 md:px-0"
             ref={plannerRef}
