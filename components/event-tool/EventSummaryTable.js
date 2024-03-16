@@ -23,7 +23,7 @@ export default function EventSummaryTable({ tempEventDay }) {
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                   key={index}
                 >
-                  <Table.Cell className="p-1">{index + 1}</Table.Cell>
+                  <Table.Cell className="p-2">{index + 1}</Table.Cell>
                   <Table.Cell className="font-medium text-gray-900 dark:text-white p-1">
                     [{item.decor.category}] {item.decor.name}
                   </Table.Cell>
@@ -37,7 +37,7 @@ export default function EventSummaryTable({ tempEventDay }) {
                   className="bg-white dark:border-gray-700 dark:bg-gray-800"
                   key={index}
                 >
-                  <Table.Cell className="p-1">
+                  <Table.Cell className="p-2">
                     {tempEventDay?.decorItems.length + index + 1}
                   </Table.Cell>
                   <Table.Cell className="font-medium text-gray-900 dark:text-white p-1">
@@ -50,7 +50,7 @@ export default function EventSummaryTable({ tempEventDay }) {
               ))}
               {tempEventDay.customItems.length > 0 && (
                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                  <Table.Cell className="p-1">
+                  <Table.Cell className="p-2">
                     {tempEventDay?.decorItems.length +
                       tempEventDay?.packages.length +
                       1}
@@ -77,7 +77,7 @@ export default function EventSummaryTable({ tempEventDay }) {
                     className="bg-white dark:border-gray-700 dark:bg-gray-800"
                     key={index}
                   >
-                    <Table.Cell className="p-1">
+                    <Table.Cell className="p-2">
                       {tempEventDay?.decorItems.length +
                         tempEventDay?.packages.length +
                         (tempEventDay.customItems.length ? 1 : 0) +
@@ -93,7 +93,7 @@ export default function EventSummaryTable({ tempEventDay }) {
                   </Table.Row>
                 ))}
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <Table.Cell className="p-1" />
+                <Table.Cell className="p-2" />
                 <Table.Cell className="text-right font-medium text-gray-900 dark:text-white p-1">
                   Total
                 </Table.Cell>
