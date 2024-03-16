@@ -403,7 +403,7 @@ export default function EventTool({ user }) {
                               Your event has been verified and approved! You can
                               now proceed to payment
                             </div>
-                            {!event?.status.paymentDone ? (
+                            {event?.status.paymentDone ? (
                               <p className="text-lg font-medium">
                                 Your payment is done!
                               </p>
