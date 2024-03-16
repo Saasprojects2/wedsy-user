@@ -499,7 +499,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
                 )}
               </div>
               <div className="flex flex-row justify-between mt-auto">
-                <p className="text-2xl md:text-3xl font-semibold text-right md:text-left">
+                <p className="text-xl md:text-3xl font-semibold text-right md:text-left">
                   ₹{" "}
                   {spotlightList[spotlightIndex].productInfo.variant
                     .artificialFlowers.sellingPrice ||
@@ -509,7 +509,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
                       .naturalFlowers.sellingPrice}
                 </p>
                 <Link href={`/decor/view/${spotlightList[spotlightIndex]._id}`}>
-                  <button className="mt-0 bg-black text-white py-2 px-8 rounded-lg">
+                  <button className="mt-0 bg-black text-white py-2 px-4 md:px-8 rounded-lg">
                     View More
                   </button>
                 </Link>
