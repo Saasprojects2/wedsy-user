@@ -4,7 +4,7 @@
   background-repeat: no-repeat;
   width: 100%;
   height: auto;
-  min-height: calc((100vw * 475) / 1400);
+  min-height: calc((100vw * 465) / 1400);
   background-position-x: center;
   background-position-y: bottom;
 }
@@ -19,7 +19,7 @@
   background-repeat: no-repeat;
   width: 100%;
   height: auto;
-  min-height: calc((100vw * 175) / 1399);
+  min-height: calc((100vw * 155) / 1399);
   background-position-x: center;
   background-position-y: top;
 }
