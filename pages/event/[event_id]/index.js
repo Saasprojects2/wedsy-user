@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
-import { BiMap, BiSolidEditAlt } from "react-icons/bi";
+import { BiMap, BiSolidEditAlt, BiTrashAlt } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -31,6 +31,28 @@ export default function EventTool() {
           setEvent(response);
         } else {
           router.push("/event");
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+        router.push("/event");
+      });
+  };
+  const deleteEventDay = (dayId) => {
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}/eventDay/${dayId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.message !== "error") {
+          fetchEvent();
         }
       })
       .catch((error) => {
@@ -123,15 +145,34 @@ export default function EventTool() {
               {event?.eventDays?.map((item, index) => (
                 <div className="flex flex-row justify-between" key={index}>
                   {index + 1}. {item.name}
-                  <BiSolidEditAlt
-                    size={24}
-                    cursor={"pointer"}
-                    onClick={() => {
-                      const { name, time, date, venue, _id } = item;
-                      setData({ name, time, date, venue, _id });
-                      setDisplayForm(true);
-                    }}
-                  />
+                  <div className="flex flex-row gap-2">
+                    {!event?.status?.finalized && (
+                      <BiSolidEditAlt
+                        size={24}
+                        cursor={"pointer"}
+                        onClick={() => {
+                          const { name, time, date, venue, _id } = item;
+                          setData({ name, time, date, venue, _id });
+                          setDisplayForm(true);
+                        }}
+                      />
+                    )}
+                    {!event?.status?.finalized && (
+                      <BiTrashAlt
+                        size={24}
+                        cursor={"pointer"}
+                        onClick={() => {
+                          if (
+                            confirm(
+                              `Do you want to delete the event day ${item.name}`
+                            )
+                          ) {
+                            deleteEventDay(item._id);
+                          }
+                        }}
+                      />
+                    )}
+                  </div>
                 </div>
               ))}
               <div
