@@ -113,7 +113,7 @@ export default function Header({ userLoggedIn, user, Logout }) {
               DECOR
             </Navbar.Link>
             <Navbar.Link
-              href="/event"
+              href={user.event ? `/event/${user.event}/planner` : "/event"}
               className={`font-medium text-${
                 variant === "dark" ? "white" : "black"
               }`}
