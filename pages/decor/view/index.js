@@ -23,10 +23,10 @@ function DecorListing({ data }) {
   const [filters, setFilters] = useState({
     open: {
       occasion: true,
-      colours: true,
-      priceRange: true,
-      style: true,
-      stageSize: true,
+      colours: false,
+      priceRange: false,
+      style: false,
+      stageSize: false,
     },
     category: router.query.category || "",
     categoryList: [
@@ -260,7 +260,7 @@ function DecorListing({ data }) {
         <div className="hide-scrollbar border-r border-black hidden md:flex flex-col divide-y gap-4 divide-black pr-6 overflow-y-auto">
           <p className="text-xl font-medium">Filter by</p>
           {filters.category !== "Mandap" && (
-            <div className="flex flex-col pt-4">
+            <div className="flex flex-col pt-4 md:gap-2">
               <p className="text-lg flex flex-row justify-between">
                 Occasion{" "}
                 {filters.open.occasion ? (
@@ -676,7 +676,7 @@ function DecorListing({ data }) {
                 className=""
                 dismissOnClick={false}
               >
-                <div className="max-h-[80vh] overflow-y-auto z-40">
+                <div className="max-h-[80vh] overflow-y-auto z-40 ml-auto">
                   {filters.category !== "Mandap" && (
                     <div className="flex flex-col p-4 ">
                       <p className="text-lg flex flex-row justify-between">
