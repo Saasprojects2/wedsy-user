@@ -833,7 +833,7 @@ function DecorListing({
               <p className="text-lg flex flex-row justify-between">
                 Can be used for
               </p>
-              <ul className="list-disc pl-4 flex flex-col gap-1">
+              <ul className="list-disc pl-4 flex flex-col gap-3">
                 {decor.productVariation.occassion.map((item, index) => (
                   <li className="" key={index}>
                     {toProperCase(item)}
@@ -842,7 +842,7 @@ function DecorListing({
               </ul>
             </div>
           )}
-          <div className="flex flex-col pt-4 px-4 md:px-0">
+          <div className="flex flex-col pt-4 px-4 md:px-0 gap-3">
             <p className="text-lg flex flex-row justify-between">
               Colour Theme
             </p>
@@ -874,7 +874,7 @@ function DecorListing({
           )} */}
           <div className="flex flex-col pt-4 px-4 md:px-0 gap-2">
             <p className="text-lg flex flex-row justify-between">Included</p>
-            <ul className="list-disc pl-4 flex flex-col gap-1">
+            <ul className="list-disc pl-4 flex flex-col gap-3">
               {decor.productInfo.included.map((item, index) => (
                 <li className="" key={index}>
                   {toProperCase(item)}
@@ -884,7 +884,7 @@ function DecorListing({
           </div>
           <div className="flex flex-col pt-4 px-4 md:px-0 gap-2">
             <p className="text-lg flex flex-row justify-between">Sizes:</p>
-            <ul className="list-disc pl-4 flex flex-col gap-1">
+            <ul className="list-disc pl-4 flex flex-col gap-3">
               {decor.productInfo.measurements.length > 0 && (
                 <li>Length: {decor.productInfo.measurements.length} ft.</li>
               )}
@@ -1133,7 +1133,7 @@ function DecorListing({
                 {decor.description}
               </span>
               <span
-                className=" md:hidden text-blue-600 hover:font-medium underline cursor-pointer"
+                className=" md:hidden text-rose-900 hover:font-medium underline cursor-pointer"
                 onClick={() => {
                   setShowDescription(!showDescription);
                 }}
