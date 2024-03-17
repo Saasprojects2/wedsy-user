@@ -133,6 +133,7 @@ function DecorListing({
       .then((response) => {
         if (response.message === "success") {
           setIsAddedToWishlist(true);
+          alert("Decor added to wishlist!");
         }
       })
       .catch((error) => {
@@ -152,6 +153,7 @@ function DecorListing({
       .then((response) => {
         if (response.message === "success") {
           setIsAddedToWishlist(false);
+          alert("Decor removed from wishlist!");
         }
       })
       .catch((error) => {
@@ -391,9 +393,13 @@ function DecorListing({
               name="date"
               placeholder="DATE"
               value={eventData.date}
-              onChange={(e) =>
-                setEventData({ ...eventData, date: e.target.value })
-              }
+              onChange={(e) => {
+                if (new Date(e.target.value) > new Date()) {
+                  setEventData({ ...eventData, date: e.target.value });
+                } else {
+                  alert("Please enter a future date.");
+                }
+              }}
             />
             <TextInput
               type="time"
@@ -625,7 +631,7 @@ function DecorListing({
                 {addOns.price > 0 && (
                   <div className="border-t border-t-black pt-2 flex flex-row gap-2">
                     <p className="font-medium flex flex-col">
-                      <span>Flooring Price: </span>
+                      <span>Platform Price: </span>
                       <span className="text-rose-900 font-semibold">
                         ₹{addOns.price}
                       </span>
