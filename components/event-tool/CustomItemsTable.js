@@ -17,6 +17,9 @@ export default function CustomItemsTable({ customItems, customItemsTitle }) {
             <div className="overflow-x-auto">
               <Table className="border mb-3 w-full text-sm md:text-md">
                 <Table.Head>
+                  <Table.HeadCell className="p-1">
+                    <span className="sr-only">#</span>
+                  </Table.HeadCell>
                   <Table.HeadCell>Item Name</Table.HeadCell>
                   <Table.HeadCell className="p-1">Qty.</Table.HeadCell>
                   <Table.HeadCell className="text-right p-1">
@@ -29,6 +32,9 @@ export default function CustomItemsTable({ customItems, customItemsTitle }) {
                       className="text-xs bg-white dark:border-gray-700 dark:bg-gray-800 divide-x"
                       key={index}
                     >
+                      <Table.Cell className="p-1 text-center">
+                        {index + 1}
+                      </Table.Cell>
                       <Table.Cell className="font-medium text-gray-900 dark:text-white flex flex-col md:flex-row justify-between">
                         <p>{item.name}</p>
                         {item.image && (

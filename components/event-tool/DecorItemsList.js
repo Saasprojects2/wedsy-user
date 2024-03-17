@@ -234,7 +234,7 @@ export default function DecorItemsList({
                         trigger="hover"
                         style="light"
                       >
-                        <BsInfoCircle size={12} />
+                        <BsInfoCircle size={16} />
                       </Tooltip>
                     </div>
                   </div>

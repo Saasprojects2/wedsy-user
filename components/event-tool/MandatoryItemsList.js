@@ -6,12 +6,12 @@ export default function MandatoryItemsList({ mandatoryItems }) {
     <>
       {mandatoryItems.length > 0 && (
         <>
-          <p
+          {/* <p
             className="text-xl font-semibold flex flex-row items-center gap-2 my-3"
             data-key={"custom-add-ons"}
           >
             Mandatory Items
-          </p>
+          </p> */}
           <div className="grid grid-cols-1 md:grid-cols-2 divide-x divide-y divide-black">
             {mandatoryItems?.map((item, index) => (
               <div className="grid grid-cols-4 gap-2 px-2" key={index}>
