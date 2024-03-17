@@ -7,7 +7,7 @@ export default function Orders({ user }) {
   const [event, setEvent] = useState({});
   const [loading, setLoading] = useState(false);
   const [eventId, setEventId] = useState("");
-  const [eventDayId, setEventDayId] = useState("");
+  const [eventDayId, setEventDayId] = useState([]);
   const fetchEvents = () => {
     setLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/event`, {
@@ -60,7 +60,7 @@ export default function Orders({ user }) {
   }, [eventId]);
   return (
     <>
-      <div className="flex flex-col bg-gray-100">
+      <div className="flex flex-col bg-gray-100 min-h-[70vh]">
         <UserProfileHeader display={"my-orders"} />
         <div className="flex flex-col gap-3 px-8 md:px-36 mb-12 md:my-12">
           {eventId && event?._id ? (
@@ -77,12 +77,14 @@ export default function Orders({ user }) {
                   >
                     <div className="grid grid-cols-2 md:grid-cols-4 md:text-lg gap-6">
                       <div className="flex flex-row items-center gap-6">
-                        {item._id === eventDayId ? (
+                        {eventDayId.includes(item._id) ? (
                           <MdExpandLess
                             cursor={"pointer"}
                             onClick={() => {
                               if (!loading) {
-                                setEventDayId("");
+                                setEventDayId(
+                                  eventDayId.filter((i) => i._id !== item._id)
+                                );
                               }
                             }}
                             size={24}
@@ -92,7 +94,7 @@ export default function Orders({ user }) {
                             cursor={"pointer"}
                             onClick={() => {
                               if (!loading) {
-                                setEventDayId(item._id);
+                                setEventDayId([...eventDayId, item._id]);
                               }
                             }}
                             size={24}
@@ -132,7 +134,7 @@ export default function Orders({ user }) {
                         })}
                       </span>
                     </div>
-                    {eventDayId === item._id && (
+                    {eventDayId.includes(item._id) && (
                       <div className="px-6 md:px-12 py-4 md:w-1/2 gap-2 flex flex-col text-sm md:text-md">
                         <div className="grid grid-cols-3 gap-4">
                           <p className="col-span-2">Product</p>
