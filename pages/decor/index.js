@@ -515,7 +515,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
                 </Link>
               </div>
             </div>
-            <div className="relative h-full hidden md:block">
+            <div className="relative h-full hidden md:block w-full">
               <Image
                 src={spotlightList[spotlightIndex].thumbnail}
                 alt="Decor"
