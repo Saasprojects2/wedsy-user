@@ -145,7 +145,7 @@ export default function Payments({ user }) {
             <span className="uppercase bg-black text-white px-8 py-2 rounded-lg">
               Decor
             </span>
-            <span className="uppercase px-8 py-2">Makeup</span>
+            {/* <span className="uppercase px-8 py-2">Makeup</span> */}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y-2 md:divide-y-0 divide-black md:divide-x-2 mt-8 py-2 border-b-2 bg-white rounded-2xl px-8 py-6 mx-auto">
             <div className="flex flex-col items-center justify-center gap-2 p-4">
