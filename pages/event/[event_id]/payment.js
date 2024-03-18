@@ -1,25 +1,12 @@
-import { toProperCase } from "@/utils/text";
-import {
-  Button,
-  Label,
-  Modal,
-  Radio,
-  Table,
-  TextInput,
-  Textarea,
-  Tooltip,
-} from "flowbite-react";
+import { checkValidEmail } from "@/utils/email";
+import { Label, Modal, Radio, TextInput } from "flowbite-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
-import { AiOutlinePlus, AiOutlinePlusSquare } from "react-icons/ai";
-import { BiEditAlt, BiMap } from "react-icons/bi";
-import { BsArrowLeft, BsArrowRight, BsInfoCircle } from "react-icons/bs";
-import { MdDelete } from "react-icons/md";
+import { useEffect, useState } from "react";
 
 export default function EventTool({ user }) {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [event, setEvent] = useState({});
   const [paymentAmount, setPaymentAmount] = useState(0);
   const [paymentOption, setPaymentOption] = useState("advance-payment");
@@ -28,6 +15,7 @@ export default function EventTool({ user }) {
     earliestDate: "",
   });
   const { event_id } = router.query;
+  const [addEmail, setAddEmail] = useState({ email: "", display: false });
   const fetchPayment = () => {
     fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}?populate=true`,
@@ -114,7 +102,7 @@ export default function EventTool({ user }) {
       },
       prefill: {
         name: user.name,
-        email: user.email,
+        email: user.email || addEmail.email,
         contact: user.phone,
       },
     };
@@ -166,11 +154,77 @@ export default function EventTool({ user }) {
         console.error("There was a problem with the fetch operation:", error);
       });
   };
+  const addUserEmail = () => {
+    setLoading(true);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        name: user.name,
+        phone: user.phone,
+        email: addEmail.email,
+      }),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setLoading(false);
+        setAddEmail({ display: false });
+        CreatePayment();
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   useEffect(() => {
     fetchPayment();
   }, []);
   return (
     <>
+      <Modal
+        show={addEmail?.display || false}
+        size="lg"
+        popup
+        onClose={() =>
+          setAddEmail({
+            email: "",
+            display: false,
+          })
+        }
+      >
+        <Modal.Header>
+          <h3 className="text-xl font-medium text-gray-900 dark:text-white px-4">
+            Add your Email.
+          </h3>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="mb-4">
+            <Label value="Your Email Id:" />
+            <TextInput
+              type="email"
+              placeholder="email@example.com"
+              value={addEmail?.email}
+              onChange={(e) => {
+                setAddEmail({ ...addEmail, email: e.target.value });
+              }}
+              disabled={loading}
+            />
+          </div>
+          <div>
+            <button
+              className={`text-white bg-rose-900  disabled:bg-rose-700 disabled:cursor-not-allowed border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
+              onClick={() => {
+                addUserEmail();
+              }}
+              disabled={loading || !checkValidEmail(addEmail.email)}
+            >
+              Add Email
+            </button>
+          </div>
+        </Modal.Body>
+      </Modal>
       <div className="flex flex-col gap-8 px-6 md:px-24 py-6 md:py-12">
         <div className="flex flex-row justify-between">
           <Image
@@ -316,7 +370,11 @@ export default function EventTool({ user }) {
         <button
           className="font-semibold bg-rose-900 rounded-full p-2 px-16 text-white w-max mx-auto"
           onClick={() => {
-            CreatePayment();
+            if (user.email) {
+              CreatePayment();
+            } else {
+              setAddEmail({ display: true });
+            }
           }}
         >
           Pay Now
