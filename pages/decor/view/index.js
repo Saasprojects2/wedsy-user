@@ -676,7 +676,7 @@ function DecorListing({ data }) {
                 className=""
                 dismissOnClick={false}
               >
-                <div className="max-h-[80vh] overflow-y-auto z-40 ml-auto">
+                <div className="max-h-[75vh] overflow-y-auto z-40 ml-auto">
                   {filters.category !== "Mandap" && (
                     <div className="flex flex-col p-4 ">
                       <p className="text-lg flex flex-row justify-between">
