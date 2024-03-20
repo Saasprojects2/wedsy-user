@@ -1,14 +1,21 @@
 import UserProfileHeader from "@/components/layout/UserProfileHeader";
 import UserSidebar from "@/components/layout/UserSidebar";
 import { checkValidEmail } from "@/utils/email";
+import { uploadFile } from "@/utils/file";
 import { processMobileNumber } from "@/utils/phoneNumber";
 import { Avatar, Button, TextInput } from "flowbite-react";
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
+import { BiEditAlt } from "react-icons/bi";
 
 export default function Account({ user }) {
   const [userInfo, setUserInfo] = useState(user);
   const [editProfile, setEditProfile] = useState(false);
   const [editAddress, setEditAddress] = useState(false);
+  const [editProfilePhoto, setEditProfilePhoto] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const profilePhotoRef = useRef();
   const [loading, setLoading] = useState(false);
   const fetchUser = () => {
     setLoading(true);
@@ -74,6 +81,39 @@ export default function Account({ user }) {
         console.error("There was a problem with the fetch operation:", error);
       });
   };
+  const updateProfilePhoto = async () => {
+    if (!profilePhoto) {
+      alert("Please select the image");
+    } else {
+      setLoading(true);
+      const image = await uploadFile({
+        file: profilePhoto,
+        path: "user/profile",
+        id: Date.now() + user.phone.replace("+", "-"),
+      });
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          profilePhoto: image,
+        }),
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          setLoading(false);
+          setEditProfilePhoto(false);
+          setProfilePhoto(null);
+          fetchUser();
+          profilePhotoRef.current.value = "";
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    }
+  };
   useEffect(() => {
     fetchUser();
   }, []);
@@ -84,7 +124,77 @@ export default function Account({ user }) {
         <div className="flex flex-col gap-3 px-8 md:px-36 mb-12 md:my-12">
           <p className="text-2xl font-medium">Personal Information</p>
           <div className="flex flex-col md:flex-row gap-8 md:gap-12 md:items-center mb-8">
-            <div className="h-64 w-64 bg-gray-500 rounded-full mx-auto md:mx-0" />
+            <div className="h-60 w-60 bg-gray-500 rounded-full mx-auto md:mx-0 relative group">
+              {editProfilePhoto ? (
+                <label
+                  for="fileInput"
+                  className="cursor-pointer flex flex-col items-center justify-center gap-4 p-6 h-60 w-60 relative"
+                >
+                  <input
+                    type="file"
+                    id="fileInput"
+                    className="hidden"
+                    accept="image/*"
+                    ref={profilePhotoRef}
+                    onChange={(e) => {
+                      setProfilePhoto(e.target.files[0]);
+                    }}
+                    disabled={loading}
+                  />
+                  <div className="bg-black p-2 rounded-full ">
+                    <AiOutlinePlus size={24} color="white" />
+                  </div>
+                  <span id="fileName" className="text-sm">
+                    {profilePhoto?.name || "UPLOAD HERE"}
+                  </span>
+                  {profilePhoto && (
+                    <Button
+                      onClick={() => {
+                        updateProfilePhoto();
+                      }}
+                      disabled={!profilePhoto}
+                      className="bg-rose-800 enabled:hover:bg-rose-900"
+                    >
+                      Upload
+                    </Button>
+                  )}
+                  {!profilePhoto && (
+                    <Button
+                      onClick={() => {
+                        setEditProfilePhoto(false);
+                        setProfilePhoto(null);
+                        profilePhotoRef.current.value = "";
+                      }}
+                      color="failure"
+                    >
+                      Cancel
+                    </Button>
+                  )}
+                </label>
+              ) : (
+                <>
+                  {userInfo.profilePhoto && (
+                    <Image
+                      src={userInfo.profilePhoto}
+                      alt="Profile Picture"
+                      sizes="100%"
+                      layout={"fill"}
+                      objectFit="cover"
+                      className="rounded-full"
+                    />
+                  )}
+                  <BiEditAlt
+                    className="hidden group-hover:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-black hover:text-blue-500"
+                    cursor={"pointer"}
+                    size={36}
+                    onClick={() => {
+                      setEditProfilePhoto(true);
+                      setProfilePhoto(null);
+                    }}
+                  />
+                </>
+              )}
+            </div>
             <div className="flex flex-col gap-3 md:flex-grow md:bg-white md:shadow-lg md:rounded-3xl md:p-8">
               <div>
                 <p>Full Name:</p>
