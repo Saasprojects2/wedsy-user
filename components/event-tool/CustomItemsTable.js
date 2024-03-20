@@ -57,7 +57,7 @@ export default function CustomItemsTable({ customItems, customItemsTitle }) {
             </div>
           </div>
           <div className="flex flex-row border-b border-b-black">
-            <div className="flex flex-col w-full md:w-1/2 md:ml-auto">
+            <div className="flex flex-col w-full md:w-1/3 md:ml-auto">
               <div className="mt-auto flex flex-row items-center justify-between gap-2 text-lg text-white font-medium bg-gradient-to-l from-rose-900 to-white py-2 px-10">
                 <span className="uppercase text-black font-medium">Total</span>
                 <span className="font-medium">

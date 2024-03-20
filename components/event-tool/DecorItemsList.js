@@ -3,6 +3,7 @@ import Image from "next/image";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
+import ImageCard from "../cards/ImageCard";
 
 export default function DecorItemsList({
   decorItems,
@@ -59,10 +60,7 @@ export default function DecorItemsList({
                         />
                       )}
                     </p>
-                    <div
-                      className={`relative pt-[70%]`}
-                      // lassName={`relative pt-[56.25%]`}
-                    >
+                    <div className={`relative pt-[56.25%]`}>
                       <Image
                         src={item.decor?.image}
                         alt="Decor"
@@ -74,6 +72,11 @@ export default function DecorItemsList({
                         className="rounded-xl"
                         // className="rounded-xl w-auto !h-96"
                       />
+                      {/* <ImageCard
+                        src={item.decor?.image}
+                        // className={`relative pt-[70%]`}
+                        className={"rounded-xl"}
+                      /> */}
                     </div>
                   </div>
                   {item.platform && item.flooring && (
@@ -161,7 +164,7 @@ export default function DecorItemsList({
                       </button>
                     </div>
                   </div>
-                  <div className="flex flex-col md:w-1/2 md:ml-auto justify-end">
+                  <div className="flex flex-col md:w-1/3 md:ml-auto justify-end">
                     <p className="font-medium text-sm md:text-lg mt-auto text-right px-10">
                       {/* Price for{" "} */}
                       <span className="text-rose-900">

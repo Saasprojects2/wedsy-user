@@ -160,7 +160,7 @@ export default function DecorPackagesList({
                     </button>
                   </div>
                 </div>
-                <div className="flex flex-col md:w-1/2 md:ml-auto">
+                <div className="flex flex-col md:w-1/3 md:ml-auto">
                   <p className="font-medium text-sm md:text-lg mt-auto text-right px-10">
                     {/* Price for{" "} */}
                     <span className="text-rose-900">
