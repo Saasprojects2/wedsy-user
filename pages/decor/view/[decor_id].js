@@ -361,7 +361,7 @@ function DecorListing({
           </h3>
         </Modal.Header>
         <Modal.Body>
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-3">
             <TextInput
               type="text"
               placeholder="EVENT NAME"
