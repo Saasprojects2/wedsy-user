@@ -73,11 +73,11 @@ export default function EventTool({ userLoggedIn, setOpenLoginModal }) {
       <div className="hidden md:block bg-gradient-to-b from-[#948A72] to-white">
         <div className="grid grid-cols-3 relative gap-12 pb-24">
           <div className="pl-32 flex flex-col gap-8 pt-24 col-span-2">
-            <div className="text-black text-6xl font-medium">MY EVENTS</div>
-            <div className="text-xl">
+            <div className="text-black text-6xl font-semibold">MY EVENTS</div>
+            <div className="text-xl font-light">
               Explore the ease of planning with our event tool at Wedsy.
             </div>
-            <div className="text-xl">
+            <div className="text-xl font-light">
               Utilize the tool to shortlist and choose your decorations
               effortlessly - all in one place, at Wedsy.
             </div>
@@ -187,10 +187,10 @@ export default function EventTool({ userLoggedIn, setOpenLoginModal }) {
         <div className="grid grid-cols-3 gap-6">
           <div className="flex flex-col gap-1 col-span-2">
             <p className="text-xl font-semibold">EVENT TOOL</p>
-            <p className="text-sm">
+            <p className="text-sm font-light">
               Explore the ease of planning with our event tool at Wedsy.
             </p>
-            <p className="text-sm">
+            <p className="text-sm font-light">
               Utilize the tool to shortlist and choose your decorations
               effortlessly - all in one place, at Wedsy.
             </p>
