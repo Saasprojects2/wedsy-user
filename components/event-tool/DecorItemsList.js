@@ -4,6 +4,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
 import ImageCard from "../cards/ImageCard";
+import ImageFillCard from "../cards/ImageFillCard";
 
 export default function DecorItemsList({
   decorItems,
@@ -61,22 +62,11 @@ export default function DecorItemsList({
                       )}
                     </p>
                     <div className={`relative pt-[56.25%]`}>
-                      <Image
+                      <ImageFillCard
                         src={item.decor?.image}
-                        alt="Decor"
-                        // width={0}
-                        // height={0}
-                        sizes="100%"
-                        layout={"fill"}
                         objectFit="cover"
                         className="rounded-xl"
-                        // className="rounded-xl w-auto !h-96"
                       />
-                      {/* <ImageCard
-                        src={item.decor?.image}
-                        // className={`relative pt-[70%]`}
-                        className={"rounded-xl"}
-                      /> */}
                     </div>
                   </div>
                   {item.platform && item.flooring && (

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { AiOutlinePlus } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
+import ImageFillCard from "../cards/ImageFillCard";
 
 export default function DecorPackagesList({
   packages,
@@ -43,20 +44,11 @@ export default function DecorPackagesList({
                         <p className="text-base font-semibold flex flex-row items-center gap-2 mb-2">
                           <span>{rec.decor?.name}</span>
                         </p>
-                        <div
-                          className={`relative pt-[70%]`}
-                          // lassName={`relative pt-[56.25%]`}
-                        >
-                          <Image
+                        <div className={`relative pt-[70%]`}>
+                          <ImageFillCard
                             src={rec.decor?.image}
-                            alt="Decor"
-                            // width={0}
-                            // height={0}
-                            sizes="100%"
-                            layout={"fill"}
                             objectFit="cover"
                             className="rounded-xl"
-                            // className="rounded-xl w-auto !h-96"
                           />
                         </div>
                       </div>
