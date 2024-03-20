@@ -23,6 +23,7 @@ import Link from "next/link";
 import { toProperCase } from "@/utils/text";
 import Head from "next/head";
 import DecorDisclaimer from "@/components/marquee/DecorDisclaimer";
+import ImageFillCard from "@/components/cards/ImageFillCard";
 
 function DecorListing({
   similarDecor,
@@ -927,16 +928,10 @@ function DecorListing({
               </Rating>
             </div>
             <div className={`relative pt-[56.25%] md:mb-10`}>
-              <Image
-                src={`${decor.image}`}
-                alt="Decor"
-                // width={0}
-                // height={0}
-                sizes="100%"
-                layout={"fill"}
+              <ImageFillCard
+                src={decor?.image}
                 objectFit="contain"
-                // style={{ width: "100%", height: "auto" }}
-                className="rounded-xl "
+                className="rounded-xl"
               />
             </div>
             <div className="flex flex-row flex-wrap gap-4 items-center mt-4 md:mt-0">
