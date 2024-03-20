@@ -138,7 +138,7 @@ export default function Payments({ user }) {
   }, [payments, paymentPage, paymentPageSize, paymentType]);
   return (
     <>
-      <div className="flex flex-col bg-gray-100">
+      <div className="flex flex-col bg-gray-100 min-h-[85vh]">
         <UserProfileHeader display={"my-payments"} />
         <div className="flex flex-col gap-3 px-8 md:px-36 mb-12 md:my-12">
           <div className="flex flex-row justify-center items-center bg-white p-1 text-black mx-auto rounded-xl">
