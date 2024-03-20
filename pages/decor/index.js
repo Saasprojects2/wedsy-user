@@ -7,7 +7,7 @@ import { Spinner } from "flowbite-react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { FaInfinity } from "react-icons/fa";
@@ -17,6 +17,9 @@ import DecorDisclaimer from "@/components/marquee/DecorDisclaimer";
 
 function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
   const [spotlightIndex, setSpotlightIndex] = useState(0);
+  const spotlightRef = useRef(null);
+  const spotlightHorizontalRef = useRef(null);
+  const [spotlightSwipe, setSpotlightSwipe] = useState(null);
   const [enquiryForm, setEnquiryForm] = useState({
     phone: "",
     name: "",
@@ -145,6 +148,43 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
       }
     };
   }, [spotlightIndex]);
+
+  useEffect(() => {
+    const handleTouchStart = (e) => {
+      spotlightHorizontalRef.current = e.touches[0].clientX;
+    };
+    const handleTouchMove = (e) => {
+      if (!spotlightHorizontalRef.current) return;
+      const deltaX = e.touches[0].clientX - spotlightHorizontalRef.current;
+      let sensitivity = 100;
+      let l = spotlightList.length;
+      if (deltaX > sensitivity) {
+        setSpotlightSwipe("right");
+        if (spotlightSwipe) {
+          setSpotlightIndex(spotlightIndex === 0 ? l - 1 : spotlightIndex - 1);
+        }
+      } else if (deltaX < -1 * sensitivity) {
+        setSpotlightSwipe("left");
+        if (spotlightSwipe === null) {
+          setSpotlightIndex(spotlightIndex === l - 1 ? 0 : spotlightIndex + 1);
+        }
+      }
+    };
+    const handleTouchEnd = () => {
+      setSpotlightSwipe(null);
+      spotlightHorizontalRef.current = null;
+    };
+    const div = spotlightRef.current;
+    div.addEventListener("touchstart", handleTouchStart);
+    div.addEventListener("touchmove", handleTouchMove);
+    div.addEventListener("touchend", handleTouchEnd);
+
+    return () => {
+      div.removeEventListener("touchstart", handleTouchStart);
+      div.removeEventListener("touchmove", handleTouchMove);
+      div.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [spotlightRef, spotlightList, spotlightIndex, spotlightSwipe]);
 
   return (
     <>
@@ -447,89 +487,93 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
         <p className="text-black text-lg md:text-2xl font-normal font-light leading-normal uppercase text-center mt-6">
           {'"Decorating your love story, one beautiful detail at a time"'}
         </p>
-        {spotlightList.length > 0 && spotlightList[spotlightIndex]._id && (
-          <div
-            className={`grid grid-cols-1 md:grid-cols-2 m-6 mt-10 md:gap-8 bg-[${spotlightList[spotlightIndex].spotlightColor}]`}
-            style={{
-              backgroundColor: spotlightList[spotlightIndex].spotlightColor,
-            }}
-          >
-            <div className="relative h-72 md:hidden">
-              <Image
-                src={spotlightList[spotlightIndex].thumbnail}
-                alt="Decor Image"
-                width={0}
-                height={0}
-                sizes="100%"
-                // fill="cover"
-                // layout={"fill"}
-                // objectFit="cover"
-                layout={"fill"}
-                objectFit="cover"
-                className="w-full"
-              />
-            </div>
-            <div className=" flex flex-col p-6 justify-between md:py-8 order-last md:order-first gap-4 md:gap-4">
-              <p className="text-xl md:text-3xl font-semibold">
-                {spotlightList[spotlightIndex].name}
-              </p>
-              <p className="hidden md:block">
-                {spotlightList[spotlightIndex].description}
-              </p>
-              <div className="flex flex-col">
-                <p className="font-medium text-lg md:text-2xl">
-                  Can be used for
+        <div ref={spotlightRef}>
+          {spotlightList.length > 0 && spotlightList[spotlightIndex]._id && (
+            <div
+              className={`grid grid-cols-1 md:grid-cols-2 m-6 mt-10 md:gap-8 bg-[${spotlightList[spotlightIndex].spotlightColor}]`}
+              style={{
+                backgroundColor: spotlightList[spotlightIndex].spotlightColor,
+              }}
+            >
+              <div className="relative h-72 md:hidden">
+                <Image
+                  src={spotlightList[spotlightIndex].thumbnail}
+                  alt="Decor Image"
+                  width={0}
+                  height={0}
+                  sizes="100%"
+                  // fill="cover"
+                  // layout={"fill"}
+                  // objectFit="cover"
+                  layout={"fill"}
+                  objectFit="cover"
+                  className="w-full"
+                />
+              </div>
+              <div className=" flex flex-col p-6 justify-between md:py-8 order-last md:order-first gap-4 md:gap-4">
+                <p className="text-xl md:text-3xl font-semibold">
+                  {spotlightList[spotlightIndex].name}
                 </p>
-                {spotlightList[spotlightIndex].productVariation?.occassion?.map(
-                  (item, index) => (
+                <p className="hidden md:block">
+                  {spotlightList[spotlightIndex].description}
+                </p>
+                <div className="flex flex-col">
+                  <p className="font-medium text-lg md:text-2xl">
+                    Can be used for
+                  </p>
+                  {spotlightList[
+                    spotlightIndex
+                  ].productVariation?.occassion?.map((item, index) => (
                     <p key={index} className="text-sm md:text-base">
                       {toProperCase(item)}
                     </p>
-                  )
-                )}
+                  ))}
+                </div>
+                <div className="flex flex-col">
+                  <p className="font-medium text-lg md:text-2xl">Included</p>
+                  {spotlightList[spotlightIndex].productInfo.included.map(
+                    (item, index) => (
+                      <p key={index} className="text-sm md:text-base">
+                        {toProperCase(item)}
+                      </p>
+                    )
+                  )}
+                </div>
+                <div className="flex flex-row justify-between mt-auto">
+                  <p className="text-xl md:text-3xl font-semibold text-right md:text-left">
+                    ₹{" "}
+                    {spotlightList[spotlightIndex].productInfo.variant
+                      .artificialFlowers.sellingPrice ||
+                      spotlightList[spotlightIndex].productInfo.variant
+                        .mixedFlowers.sellingPrice ||
+                      spotlightList[spotlightIndex].productInfo.variant
+                        .naturalFlowers.sellingPrice}
+                  </p>
+                  <Link
+                    href={`/decor/view/${spotlightList[spotlightIndex]._id}`}
+                  >
+                    <button className="mt-0 bg-black text-white py-2 px-4 md:px-8 rounded-lg">
+                      View More
+                    </button>
+                  </Link>
+                </div>
               </div>
-              <div className="flex flex-col">
-                <p className="font-medium text-lg md:text-2xl">Included</p>
-                {spotlightList[spotlightIndex].productInfo.included.map(
-                  (item, index) => (
-                    <p key={index} className="text-sm md:text-base">
-                      {toProperCase(item)}
-                    </p>
-                  )
-                )}
-              </div>
-              <div className="flex flex-row justify-between mt-auto">
-                <p className="text-xl md:text-3xl font-semibold text-right md:text-left">
-                  ₹{" "}
-                  {spotlightList[spotlightIndex].productInfo.variant
-                    .artificialFlowers.sellingPrice ||
-                    spotlightList[spotlightIndex].productInfo.variant
-                      .mixedFlowers.sellingPrice ||
-                    spotlightList[spotlightIndex].productInfo.variant
-                      .naturalFlowers.sellingPrice}
-                </p>
-                <Link href={`/decor/view/${spotlightList[spotlightIndex]._id}`}>
-                  <button className="mt-0 bg-black text-white py-2 px-4 md:px-8 rounded-lg">
-                    View More
-                  </button>
-                </Link>
+              <div className="relative h-full hidden md:block w-full">
+                <Image
+                  src={spotlightList[spotlightIndex].thumbnail}
+                  alt="Decor"
+                  // width={0}
+                  // height={0}
+                  sizes="100%"
+                  // fill="cover"
+                  layout={"fill"}
+                  objectFit="cover"
+                  // style={{ width: "100%", height: "auto" }}
+                />
               </div>
             </div>
-            <div className="relative h-full hidden md:block w-full">
-              <Image
-                src={spotlightList[spotlightIndex].thumbnail}
-                alt="Decor"
-                // width={0}
-                // height={0}
-                sizes="100%"
-                // fill="cover"
-                layout={"fill"}
-                objectFit="cover"
-                // style={{ width: "100%", height: "auto" }}
-              />
-            </div>
-          </div>
-        )}
+          )}
+        </div>
         {spotlightList.length > 0 && (
           <div className="flex flex-row gap-2 md:gap-4 items-center justify-center">
             {spotlightList.map((item, index) => (
