@@ -3,6 +3,9 @@ import { Label, Modal, Radio, TextInput } from "flowbite-react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import paymentSuccessGif from "@/public/assets/gif/payment-success.gif";
+import paymentFailureGif from "@/public/assets/gif/payment-failure.gif";
+import Link from "next/link";
 
 export default function EventTool({ user }) {
   const router = useRouter();
@@ -10,6 +13,7 @@ export default function EventTool({ user }) {
   const [event, setEvent] = useState({});
   const [paymentAmount, setPaymentAmount] = useState(0);
   const [paymentOption, setPaymentOption] = useState("advance-payment");
+  const [paymentStatus, setPaymentStatus] = useState(null);
   const [eventInfo, setEventInfo] = useState({
     allowAdvancePayment: true,
     earliestDate: "",
@@ -98,15 +102,20 @@ export default function EventTool({ user }) {
       order_id: order_id,
       description: "Your Event Payment",
       handler: function (response) {
+        setPaymentStatus("success");
         UpdatePayment({ order_id, response });
       },
       prefill: {
         name: user.name,
         email: user.email || addEmail.email,
-        contact: user.phone,
+        contact: user.phonbasee,
       },
     };
     const paymentObject = new window.Razorpay(options);
+    paymentObject.on("payment.failed", function (response) {
+      setPaymentStatus("failure");
+      UpdatePayment({ order_id, response: response.error });
+    });
     paymentObject.open();
   };
   const CreatePayment = () => {
@@ -225,7 +234,7 @@ export default function EventTool({ user }) {
           </div>
         </Modal.Body>
       </Modal>
-      <div className="flex flex-col gap-8 px-6 md:px-24 py-6 md:py-12">
+      <div className="relative flex flex-col gap-8 px-6 md:px-24 py-6 md:py-12 min-h-screen">
         <div className="flex flex-row justify-between">
           <Image
             src={"/assets/images/buyer_protection.png"}
@@ -247,142 +256,199 @@ export default function EventTool({ user }) {
         <p className="flex flex-row justify-between pb-2 font-semibold text-2xl">
           Payment page
         </p>
-        <p className="flex flex-row justify-between pb-2 font-medium text-xl">
-          Choose payment method style
-        </p>
-        <div className="flex flex-col gap-6 border-b border-b-black pb-4">
-          {event?.amount?.paid === 0 && (
-            <div>
-              <div className="flex flex-col md:flex-row md:items-center gap-2 text-lg">
-                <div className="flex items-center gap-2">
-                  <Radio
-                    id="advance-payment"
-                    name="advance-payment"
-                    value="advance-payment"
-                    checked={paymentOption === "advance-payment"}
-                    onChange={(e) => {
-                      setPaymentOption(e.target.value);
-                      setPaymentAmount(Math.ceil(event?.amount?.total * 0.2));
-                    }}
-                    disabled={!eventInfo.allowAdvancePayment}
-                  />
-                  <Label htmlFor="advance-payment">
-                    Booking amount ( 20% of Total Bill ){" "}
-                    {!eventInfo.allowAdvancePayment && (
+        {paymentStatus === null ? (
+          <>
+            <p className="flex flex-row justify-between pb-2 font-medium text-xl">
+              Choose payment method style
+            </p>
+            <div className="flex flex-col gap-6 border-b border-b-black pb-4">
+              {event?.amount?.paid === 0 && (
+                <div>
+                  <div className="flex flex-col md:flex-row md:items-center gap-2 text-lg">
+                    <div className="flex items-center gap-2">
+                      <Radio
+                        id="advance-payment"
+                        name="advance-payment"
+                        value="advance-payment"
+                        checked={paymentOption === "advance-payment"}
+                        onChange={(e) => {
+                          setPaymentOption(e.target.value);
+                          setPaymentAmount(
+                            Math.ceil(event?.amount?.total * 0.2)
+                          );
+                        }}
+                        disabled={!eventInfo.allowAdvancePayment}
+                      />
+                      <Label htmlFor="advance-payment">
+                        Booking amount ( 20% of Total Bill ){" "}
+                        {!eventInfo.allowAdvancePayment && (
+                          <span className="text-rose-900">
+                            Not Allowed as event date is near.
+                          </span>
+                        )}
+                        <br />
+                        <span>
+                          <span className="text-rose-900">
+                            ₹{Math.ceil(event?.amount?.total * 0.2)}
+                          </span>{" "}
+                          to be paid
+                        </span>
+                      </Label>
+                    </div>
+                    <Label className="md:ml-auto">
+                      Remaining amount payable:{" "}
                       <span className="text-rose-900">
-                        Not Allowed as event date is near.
+                        ₹
+                        {event?.amount?.total -
+                          Math.ceil(event?.amount?.total * 0.2)}
                       </span>
-                    )}
-                    <br />
-                    <span>
-                      <span className="text-rose-900">
-                        ₹{Math.ceil(event?.amount?.total * 0.2)}
-                      </span>{" "}
-                      to be paid
-                    </span>
-                  </Label>
+                    </Label>
+                  </div>
                 </div>
-                <Label className="md:ml-auto">
-                  Remaining amount payable:{" "}
-                  <span className="text-rose-900">
-                    ₹
-                    {event?.amount?.total -
-                      Math.ceil(event?.amount?.total * 0.2)}
-                  </span>
-                </Label>
-              </div>
-            </div>
-          )}
-          {event?.amount?.paid != 0 && (
-            <div>
-              <div className="flex flex-col md:flex-row md:items-center gap-2 text-lg">
-                <div className="flex items-center gap-2">
+              )}
+              {event?.amount?.paid != 0 && (
+                <div>
+                  <div className="flex flex-col md:flex-row md:items-center gap-2 text-lg">
+                    <div className="flex items-center gap-2">
+                      <Radio
+                        id="variable-payment"
+                        name="variable-payment"
+                        value="variable-payment"
+                        checked={paymentOption === "variable-payment"}
+                        onChange={(e) => {
+                          setPaymentOption(e.target.value);
+                          setPaymentAmount(event?.amount?.due);
+                        }}
+                      />
+                      <Label htmlFor="advance-payment">
+                        Enter amount:
+                        <br />
+                        <TextInput
+                          type="number"
+                          max={event?.amount?.due}
+                          value={paymentAmount.toString()}
+                          onChange={(e) => {
+                            setPaymentAmount(
+                              (parseInt(e.target.value) || 0) > 0
+                                ? parseInt(e.target.value) > event?.amount?.due
+                                  ? event?.amount?.due
+                                  : parseInt(e.target.value)
+                                : 0
+                            );
+                          }}
+                          disabled={paymentOption !== "variable-payment"}
+                        />
+                      </Label>
+                    </div>
+                    <Label className="md:ml-auto">
+                      Remaining amount payable:{" "}
+                      <span className="text-rose-900">
+                        ₹{event?.amount?.due - paymentAmount}
+                      </span>
+                    </Label>
+                  </div>
+                </div>
+              )}
+              <div>
+                <div className="flex items-center gap-2 text-lg">
                   <Radio
-                    id="variable-payment"
-                    name="variable-payment"
-                    value="variable-payment"
-                    checked={paymentOption === "variable-payment"}
+                    id="full-payment"
+                    name="full-payment"
+                    value="full-payment"
+                    checked={paymentOption === "full-payment"}
                     onChange={(e) => {
                       setPaymentOption(e.target.value);
-                      setPaymentAmount(event?.amount?.due);
+                      setPaymentAmount(
+                        event?.amount?.paid === 0
+                          ? event?.amount.total
+                          : event?.amount?.due
+                      );
                     }}
                   />
-                  <Label htmlFor="advance-payment">
-                    Enter amount:
-                    <br />
-                    <TextInput
-                      type="number"
-                      max={event?.amount?.due}
-                      value={paymentAmount.toString()}
-                      onChange={(e) => {
-                        setPaymentAmount(
-                          (parseInt(e.target.value) || 0) > 0
-                            ? parseInt(e.target.value) > event?.amount?.due
-                              ? event?.amount?.due
-                              : parseInt(e.target.value)
-                            : 0
-                        );
-                      }}
-                      disabled={paymentOption !== "variable-payment"}
-                    />
+                  <Label htmlFor="full-payment">
+                    {event?.amount?.paid === 0
+                      ? "Full Payment"
+                      : `Pending Amount: ${(
+                          event?.amount?.due || 0
+                        ).toLocaleString("en-IN", {
+                          maximumFractionDigits: 2,
+                          style: "currency",
+                          currency: "INR",
+                        })}`}
                   </Label>
                 </div>
-                <Label className="md:ml-auto">
-                  Remaining amount payable:{" "}
-                  <span className="text-rose-900">
-                    ₹{event?.amount?.due - paymentAmount}
-                  </span>
-                </Label>
               </div>
             </div>
-          )}
-          <div>
-            <div className="flex items-center gap-2 text-lg">
-              <Radio
-                id="full-payment"
-                name="full-payment"
-                value="full-payment"
-                checked={paymentOption === "full-payment"}
-                onChange={(e) => {
-                  setPaymentOption(e.target.value);
-                  setPaymentAmount(
-                    event?.amount?.paid === 0
-                      ? event?.amount.total
-                      : event?.amount?.due
-                  );
-                }}
+            <button
+              className="font-semibold bg-rose-900 rounded-full p-2 px-16 text-white w-max mx-auto"
+              onClick={() => {
+                if (user.email) {
+                  CreatePayment();
+                } else {
+                  setAddEmail({ display: true });
+                }
+              }}
+            >
+              Pay Now
+            </button>
+            <p className="text-center">
+              Please do not close the window or refresh the page till the
+              transaction is complete
+            </p>
+          </>
+        ) : paymentStatus === "success" ? (
+          <div className="flex flex-col items-center">
+            <p className="text-center pb-2 font-medium text-base">
+              Congratulations
+            </p>
+            <p className="text-center pb-2 font-medium text-sm">
+              Your payment has been done successfully!
+            </p>
+            <div className="">
+              <Image
+                src={paymentSuccessGif}
+                alt="Success"
+                width={0}
+                height={0}
+                sizes="100%"
+                className="h-48 w-48"
               />
-              <Label htmlFor="full-payment">
-                {event?.amount?.paid === 0
-                  ? "Full Payment"
-                  : `Pending Amount: ${(event?.amount?.due || 0).toLocaleString(
-                      "en-IN",
-                      {
-                        maximumFractionDigits: 2,
-                        style: "currency",
-                        currency: "INR",
-                      }
-                    )}`}
-              </Label>
             </div>
+            <Link href={"/"}>
+              <button className="font-semibold bg-rose-900 rounded-lg p-2 px-16 text-white w-max mx-auto">
+                Back to home screen
+              </button>
+            </Link>
+            <div class="h-16" />
+            <div class="-z-10 h-32 w-full bg-gradient-to-t from-[#81FF34] to-white absolute bottom-0" />
           </div>
-        </div>
-        <button
-          className="font-semibold bg-rose-900 rounded-full p-2 px-16 text-white w-max mx-auto"
-          onClick={() => {
-            if (user.email) {
-              CreatePayment();
-            } else {
-              setAddEmail({ display: true });
-            }
-          }}
-        >
-          Pay Now
-        </button>
-        <p className="text-center">
-          Please do not close the window or refresh the page till the trsaction
-          is complete
-        </p>
+        ) : paymentStatus === "failure" ? (
+          <div className="flex flex-col items-center">
+            <p className="text-center pb-2 font-medium text-base">
+              Transaction Failed!
+            </p>
+            <p className="text-center pb-2 font-medium text-sm">
+              Please retry payment again
+            </p>
+            <div className="">
+              <Image
+                src={paymentFailureGif}
+                alt="Success"
+                width={0}
+                height={0}
+                sizes="100%"
+                className="h-48 w-48"
+              />
+            </div>
+            <Link href={`/event/${event_id}/payment`}>
+              <button className="font-semibold bg-rose-900 rounded-lg p-2 px-16 text-white w-max mx-auto">
+                Back to payment screen
+              </button>
+            </Link>
+            <div class="h-16" />
+            <div class="-z-10 h-32 w-full bg-gradient-to-t from-[#FF8A00] to-white absolute bottom-0" />
+          </div>
+        ) : null}
       </div>
     </>
   );
