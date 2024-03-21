@@ -41,7 +41,7 @@ export default function Header({ userLoggedIn, user, Logout }) {
       setDisplayHeaderLinks(false);
     }
   }, [router?.pathname]);
-  return (
+  return router?.pathname === `/my-payments/[paymentId]/invoice` ? null : (
     <>
       <Navbar
         fluid

@@ -10,7 +10,8 @@ export default function FooterComponent() {
     if (
       router?.pathname === "/weddings-made-easy" ||
       router?.pathname === "/decor/view" ||
-      router?.pathname?.startsWith("/event")
+      router?.pathname?.startsWith("/event") ||
+      router.pathname === "/my-payments/[paymentId]/invoice"
     ) {
       setDisplayFooter(false);
     }
