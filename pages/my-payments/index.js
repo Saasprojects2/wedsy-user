@@ -41,72 +41,6 @@ export default function Payments({ user }) {
         console.error("There was a problem with the fetch operation:", error);
       });
   };
-  const initializeRazorpay = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-
-      script.onload = () => {
-        resolve(true);
-      };
-      script.onerror = () => {
-        resolve(false);
-      };
-
-      document.body.appendChild(script);
-    });
-  };
-  const makePayment = async ({ order_id, amount }) => {
-    const res = await initializeRazorpay();
-    if (!res) {
-      alert("Razorpay SDK Failed to load");
-      return;
-    }
-    var options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY, // Enter the Key ID generated from the Dashboard
-      name: "Wedsy",
-      currency: "INR",
-      amount: amount,
-      order_id: order_id,
-      description: "Your Event Payment",
-      // image: "https://manuarora.in/logo.png",
-      handler: function (response) {
-        // Validate payment at server - using webhooks is a better idea.
-        // console.log(response);
-        // alert(response.razorpay_payment_id);
-        // alert(response.razorpay_order_id);
-        // alert(response.razorpay_signature);
-        UpdatePayment({ order_id, response });
-      },
-      prefill: {
-        name: user.name,
-        email: user.email,
-        contact: user.phone,
-      },
-    };
-
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
-  };
-  const UpdatePayment = ({ response, order_id }) => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/${order_id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify({ response }),
-    })
-      .then((response) => (response.ok ? response.json() : null))
-      .then((response) => {
-        if (response.message === "success") {
-          fetchPayments();
-        }
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-      });
-  };
   useEffect(() => {
     fetchPayments();
   }, []);
@@ -126,14 +60,15 @@ export default function Payments({ user }) {
           : false
       );
       let temp_total = temp_payment.length;
-      let temp_total_pages = temp_total / paymentPageSize;
-      let temp_page = paymentPage < temp_total_pages ? paymentPage : 1;
+      let temp_total_pages = Math.ceil(temp_total / paymentPageSize);
+      let temp_page = paymentPage <= temp_total_pages ? paymentPage : 1;
       let s = (temp_page - 1) * paymentPageSize;
       let e = temp_page * paymentPageSize;
       let temp_list = temp_payment.filter(
         (_, index) => index >= s && index < e
       );
       setPaymentList(temp_list);
+      setPaymentTotalPages(temp_total_pages);
     }
   }, [payments, paymentPage, paymentPageSize, paymentType]);
   return (
@@ -237,16 +172,13 @@ export default function Payments({ user }) {
           <BsBell />
           <span>
             Last Payment made on{" "}
-            {new Date(payments?.reverse()[0]?.createdAt).toLocaleDateString(
-              "en-GB",
-              {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-              }
-            ) || ""}
+            {new Date(payments[0]?.createdAt).toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            }) || ""}
             <span className="font-semibold ml-6">
-              {(payments.reverse()[0]?.amount / 100).toLocaleString("en-IN", {
+              {(payments[0]?.amount / 100).toLocaleString("en-IN", {
                 maximumFractionDigits: 2,
                 style: "currency",
                 currency: "INR",
@@ -314,7 +246,17 @@ export default function Payments({ user }) {
                       <Table.Cell className="">
                         {toProperCase(item.status.split("_").join(" "))}
                       </Table.Cell>
-                      <Table.Cell></Table.Cell>
+                      <Table.Cell>
+                        {item.status === "paid" && (
+                          <Link
+                            href={`/my-payments/${item._id}/invoice`}
+                            className="text-black font-medium hover:text-blue-500"
+                            target="_blank"
+                          >
+                            Invoice
+                          </Link>
+                        )}
+                      </Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
