@@ -82,10 +82,10 @@ export default function Payments({ user }) {
             </span>
             {/* <span className="uppercase px-8 py-2">Makeup</span> */}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y-2 md:divide-y-0 divide-black md:divide-x-2 mt-8 py-2 border-b-2 bg-white rounded-2xl px-8 py-6 mx-auto">
-            <div className="flex flex-col items-center justify-center gap-2 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y-2 md:divide-y-0 divide-black md:divide-x-2 mt-8 border-b-2 bg-white rounded-2xl px-8 py-4 mx-auto">
+            <div className="flex flex-col items-center justify-center gap-2 px-4 py-2">
               <p className="text-lg font-medium uppercase text-black">
-                Total Bills
+                Total Bill
               </p>
               <p className="text-3xl font-medium">
                 {paymentStats?.totalAmount?.toLocaleString("en-IN", {
@@ -95,7 +95,7 @@ export default function Payments({ user }) {
                 })}
               </p>
             </div>
-            <div className="flex flex-col items-center justify-center gap-2 text-green-500 p-4">
+            <div className="flex flex-col items-center justify-center gap-2 text-green-500 px-4 py-2">
               <p className="text-lg font-medium uppercase text-black">
                 Amount Paid
               </p>
@@ -107,7 +107,7 @@ export default function Payments({ user }) {
                 })}
               </p>
             </div>
-            <div className="flex flex-col items-center justify-center gap-2 text-rose-900 p-4">
+            <div className="flex flex-col items-center justify-center gap-2 text-rose-900 px-4 py-2">
               <p className="text-lg font-medium uppercase text-black">
                 Balance Amount
               </p>
@@ -186,13 +186,13 @@ export default function Payments({ user }) {
             </span>
           </span>
         </div>
-        <div className="hidden md:flex flex-col gap-3 px-8 md:px-36 mb-12 md:my-12">
-          <p className="text-md">Payment History</p>
-          <div className="flex flex-row gap-6 items-center">
+        <div className="flex flex-col gap-3 px-8 md:px-36 mb-12 my-6 md:my-12">
+          <p className="text-lg md:text-md">Payment History</p>
+          <div className="flex flex-row gap-2 md:gap-6 items-center flex-wrap">
             {["All", "Complete", "Pending", "Rejected"].map((i) => (
               <div
                 key={i}
-                className={`rounded-full border bg-white py-2 px-8 cursor-pointer ${
+                className={`text-xs md:text-base rounded-full border bg-white py-1 px-3 md:py-2 md:px-8 cursor-pointer ${
                   paymentType == i ? "border-black" : "border-white"
                 }`}
                 onClick={() => {
@@ -204,16 +204,31 @@ export default function Payments({ user }) {
               </div>
             ))}
           </div>
-          <div className="bg-white rounded-2xl flex-col flex gap-3 shadow-xl overflow-hidden">
-            <div className="width-full overflow-x-auto">
-              <Table hoverable className="width-full overflow-x-auto">
+          <div className="bg-white rounded-2xl flex-col flex gap-3 shadow-xl md:overflow-hidden">
+            <div className="w-full md:overflow-x-auto">
+              <Table
+                hoverable
+                className="w-full md:overflow-x-auto text-sm md:text-md"
+              >
                 <Table.Head>
-                  <Table.HeadCell>Payment ID</Table.HeadCell>
-                  <Table.HeadCell>Date</Table.HeadCell>
-                  <Table.HeadCell>Amount</Table.HeadCell>
-                  <Table.HeadCell>Payment Mode</Table.HeadCell>
-                  <Table.HeadCell>Status</Table.HeadCell>
-                  <Table.HeadCell>Invoice</Table.HeadCell>
+                  <Table.HeadCell className="hidden md:table-cell">
+                    Payment ID
+                  </Table.HeadCell>
+                  <Table.HeadCell className="py-1 px-2 md:px-6 md:py-3">
+                    Date
+                  </Table.HeadCell>
+                  <Table.HeadCell className="py-1 px-2 md:px-6 md:py-3">
+                    Amount
+                  </Table.HeadCell>
+                  <Table.HeadCell className="py-1 px-2 md:px-6 md:py-3">
+                    Payment Mode
+                  </Table.HeadCell>
+                  <Table.HeadCell className="py-1 px-2 md:px-6 md:py-3">
+                    Status
+                  </Table.HeadCell>
+                  <Table.HeadCell className="py-1 px-2 md:px-6 md:py-3 hidden md:table-cell">
+                    Invoice
+                  </Table.HeadCell>
                 </Table.Head>
                 <Table.Body className="divide-y">
                   {paymentList?.map((item, index) => (
@@ -221,20 +236,33 @@ export default function Payments({ user }) {
                       className="bg-white dark:border-gray-700 dark:bg-gray-800"
                       key={item._id}
                     >
-                      <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      <Table.Cell className="hidden md:table-cell whitespace-nowrap font-medium text-gray-900 dark:text-white">
                         {item.razporPayId || item._id}
                       </Table.Cell>
-                      <Table.Cell>
+                      <Table.Cell className="py-1 px-2 md:px-6 md:py-4">
                         {new Date(item.createdAt).toLocaleDateString("en-US", {
                           day: "numeric",
                           month: "short",
                           year: "numeric",
                         })}
                       </Table.Cell>
-                      <Table.Cell className="font-medium">
+                      <Table.Cell className="font-medium py-1 px-2 md:px-6 md:py-4 hidden md:table-cell">
                         ₹{item.amount / 100}
+                      </Table.Cell>{" "}
+                      <Table.Cell className="font-medium py-1 px-2 md:px-6 md:py-4  md:hidden">
+                        {item.status === "paid" ? (
+                          <Link
+                            href={`/my-payments/${item._id}/invoice`}
+                            className="text-black font-medium hover:text-blue-500"
+                            target="_blank"
+                          >
+                            {`₹${item.amount / 100}`}
+                          </Link>
+                        ) : (
+                          `₹${item.amount / 100}`
+                        )}
                       </Table.Cell>
-                      <Table.Cell className="">
+                      <Table.Cell className="py-1 px-2 md:px-6 md:py-4">
                         {toProperCase(
                           item?.paymentMethod === "cash"
                             ? "cash"
@@ -243,10 +271,10 @@ export default function Payments({ user }) {
                                 .join(" ") || ""
                         )}
                       </Table.Cell>
-                      <Table.Cell className="">
+                      <Table.Cell className="py-1 px-2 md:px-6 md:py-4">
                         {toProperCase(item.status.split("_").join(" "))}
                       </Table.Cell>
-                      <Table.Cell>
+                      <Table.Cell className="py-1 px-2 md:px-6 md:py-4 hidden md:table-cell">
                         {item.status === "paid" && (
                           <Link
                             href={`/my-payments/${item._id}/invoice`}
