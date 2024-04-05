@@ -80,6 +80,38 @@ export default function Home() {
             satisfaction. We are committed to addressing your concerns and
             finding a resolution that aligns with our high standards of service.
           </p>
+          <p>
+            6.7. Incase of changes in the event date, Wedsy will make the best
+            effort possible to accommodate the new event. Client must understand
+            that last-minute changes can affect the quality of the final event
+            and these changes are not necessarily the fault of the event
+            planners.
+          </p>
+          <p>
+            6.8. In case of cancellation of event, client has to notify Wedsy no
+            later than 15 days prior to the scheduled date for all the services
+            availed from Wedsy, failing which refund will not be processed.
+          </p>
+          <p>
+            6.9. Incase any venue booking is done through us, we shall abide by
+            the T&Cs put forth by the Venue Management and Wedsy will not be
+            held responsible at any given point of time unless any commitment is
+            given in writing/email.
+          </p>
+          <p>
+            6.10. Based on the preliminary discussions with the client, Wedsy
+            coordinator will compile a checklist and verify the same with the
+            client before execution.
+          </p>
+          <p>
+            6.11. Any commitment mentioned in the checklist will be fulfilled by
+            Wedsy followed by a pre-function check.
+          </p>
+          <p>
+            6.12. If any of the commitment made that has been paid for by the
+            client could not be fulfilled by Wedsy, then the refund for the same
+            will be made post discussion with the client.
+          </p>
         </div>
         <div>
           <p className="text-xl font-semibold">7. User Accounts</p>
