@@ -19,7 +19,6 @@ import {
   BsInfoCircle,
 } from "react-icons/bs";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { toProperCase } from "@/utils/text";
 import Head from "next/head";
 import DecorDisclaimer from "@/components/marquee/DecorDisclaimer";
@@ -37,9 +36,7 @@ function DecorListing({
   const [isAddedToWishlist, setIsAddedToWishlist] = useState(false);
   const [eventList, setEventList] = useState([]);
   const [variant, setVariant] = useState(
-    decor.productInfo.variant.artificialFlowers.sellingPrice > 0
-      ? "artificialFlowers"
-      : "naturalFlowers"
+    decor.productTypes.length > 0 ? decor.productTypes[0]?.name : ""
   );
   const [addOns, setAddOns] = useState({
     open: false,
@@ -52,6 +49,9 @@ function DecorListing({
     baseCost: 0,
     quantity: 1,
     unit: decor.unit,
+    platformRate: 0,
+    flooringRate: 0,
+    decorPrice: 0,
   });
   const [quantity, setQuantiy] = useState({
     open: false,
@@ -70,6 +70,52 @@ function DecorListing({
     venue: "",
   });
   const { decor_id } = router.query;
+  const [loading, setLoading] = useState(false);
+  const [platformPrice, setPlatformPrice] = useState({ price: 0, image: "" });
+  const [flooringPrice, setFlooringPrice] = useState([]);
+  const fetchPlatformInfo = () => {
+    setLoading(true);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/config?code=platform`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setLoading(false);
+        setPlatformPrice({
+          image: "",
+          ...response?.data,
+          price: parseInt(response?.data?.price),
+        });
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
+  const fetchFlooringInfo = () => {
+    setLoading(true);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/config?code=flooring`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setLoading(false);
+        setFlooringPrice(
+          response?.data?.flooringList?.map((i) => ({
+            ...i,
+            price: parseInt(i.price),
+          })) || []
+        );
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   const fetchEvents = () => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/event`, {
       method: "GET",
@@ -189,6 +235,12 @@ function DecorListing({
           variant,
           quantity,
           unit,
+          platformRate: platform ? platformPrice?.price : 0,
+          flooringRate: flooring
+            ? flooringPrice.find((i) => i.title === flooring)?.price || 0
+            : 0,
+          decorPrice: decor?.productTypes?.find((i) => i.name === variant)
+            ?.sellingPrice,
         }),
       }
     )
@@ -231,6 +283,8 @@ function DecorListing({
   useEffect(() => {
     if (decor_id && userLoggedIn) {
       fetchEvents();
+      fetchFlooringInfo();
+      fetchPlatformInfo();
       fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/user/is-added-to-wishlist?product=decor&_id=${decor_id}`,
         {
@@ -330,7 +384,8 @@ function DecorListing({
                   },
                   price:
                     quantity.quantity *
-                    decor.productInfo.variant[variant].sellingPrice,
+                    decor?.productTypes?.find((i) => i.name === variant)
+                      ?.sellingPrice,
                 });
               }}
             >
@@ -455,6 +510,9 @@ function DecorListing({
             eventDayId: "",
             flooring: "",
             baseCost: 0,
+            platformRate: 0,
+            flooringRate: 0,
+            decorPrice: 0,
           })
         }
       >
@@ -506,6 +564,9 @@ function DecorListing({
                         eventDayId: "",
                         flooring: "",
                         baseCost: 0,
+                        platformRate: 0,
+                        flooringRate: 0,
+                        decorPrice: 0,
                       });
                       AddToEvent({
                         quantity: 1,
@@ -519,7 +580,9 @@ function DecorListing({
                           breadth: 0,
                           height: 0,
                         },
-                        price: decor.productInfo.variant[variant].sellingPrice,
+                        price: decor?.productTypes?.find(
+                          (i) => i.name === variant
+                        )?.sellingPrice,
                       });
                     }}
                   >
@@ -598,7 +661,7 @@ function DecorListing({
                               let b = parseFloat(addOns.dimensions.breadth);
                               let h = parseFloat(addOns.dimensions.height);
                               if (l > 0 && b > 0 && h > 0) {
-                                let cost = l * b * 25;
+                                let cost = l * b * platformPrice.price;
                                 let baseCost = (l + h) * (b + h);
                                 setAddOns({
                                   ...addOns,
@@ -652,107 +715,46 @@ function DecorListing({
               </>
             ) : (
               <div className="flex flex-col gap-4">
-                <div className="font-medium flex flex-row gap-4 items-center justify-between">
-                  <Image
-                    src="/assets/images/carpet.png"
-                    alt="Platform"
-                    width={0}
-                    height={0}
-                    sizes="100%"
-                    style={{ width: "30%", height: "auto" }}
-                  />
-                  <p className="font-medium flex flex-col items-center">
-                    <span>Carpet</span>
-                    <span className="text-rose-900 font-semibold">
-                      ₹{addOns.baseCost * 8}
-                    </span>
-                  </p>
-                  <div className="flex flex-col">
-                    <button
-                      className={`${
-                        addOns.flooring === "Carpet"
-                          ? "text-white bg-rose-900"
-                          : "bg-white text-rose-900"
-                      } hover:text-white border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
-                      onClick={() => {
-                        setAddOns({
-                          ...addOns,
-                          flooring: "Carpet",
-                        });
-                      }}
-                    >
-                      {addOns.flooring === "Carpet" ? "Selected" : "Select"}
-                    </button>
+                {flooringPrice?.map((item) => (
+                  <div
+                    className="font-medium flex flex-row gap-4 items-center justify-between"
+                    key={item.title}
+                  >
+                    {item.image && (
+                      <Image
+                        src={item.image}
+                        alt="Platform"
+                        width={0}
+                        height={0}
+                        sizes="100%"
+                        style={{ width: "30%", height: "auto" }}
+                      />
+                    )}
+                    <p className="font-medium flex flex-col items-center">
+                      <span>{item.title}</span>
+                      <span className="text-rose-900 font-semibold">
+                        ₹{addOns.baseCost * item.price}
+                      </span>
+                    </p>
+                    <div className="flex flex-col">
+                      <button
+                        className={`${
+                          addOns.flooring === item.title
+                            ? "text-white bg-rose-900"
+                            : "bg-white text-rose-900"
+                        } hover:text-white border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
+                        onClick={() => {
+                          setAddOns({
+                            ...addOns,
+                            flooring: item.title,
+                          });
+                        }}
+                      >
+                        {addOns.flooring === item.title ? "Selected" : "Select"}
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="font-medium flex flex-row gap-4 items-center justify-between">
-                  <Image
-                    src="/assets/images/flex.png"
-                    alt="Platform"
-                    width={0}
-                    height={0}
-                    sizes="100%"
-                    style={{ width: "30%", height: "auto" }}
-                  />
-                  <p className="font-medium flex flex-col items-center">
-                    <span>Flex</span>
-                    <span className="text-rose-900 font-semibold">
-                      ₹{addOns.baseCost * 10}
-                    </span>
-                  </p>
-                  <div className="flex flex-col">
-                    <button
-                      className={`${
-                        addOns.flooring === "Flex"
-                          ? "text-white bg-rose-900"
-                          : "bg-white text-rose-900"
-                      } hover:text-white border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
-                      onClick={() => {
-                        setAddOns({
-                          ...addOns,
-                          flooring: "Flex",
-                        });
-                      }}
-                    >
-                      {addOns.flooring === "Flex" ? "Selected" : "Select"}
-                    </button>
-                  </div>
-                </div>
-                <div className="font-medium flex flex-row gap-4 items-center justify-between">
-                  <Image
-                    src="/assets/images/printedFlex.png"
-                    alt="Platform"
-                    width={0}
-                    height={0}
-                    sizes="100%"
-                    style={{ width: "30%", height: "auto" }}
-                  />
-                  <p className="font-medium flex flex-col items-center">
-                    <span>Printed Flex</span>
-                    <span className="text-rose-900 font-semibold">
-                      ₹{addOns.baseCost * 15}
-                    </span>
-                  </p>
-                  <div className="flex flex-col">
-                    <button
-                      className={`${
-                        addOns.flooring === "PrintedFlex"
-                          ? "text-white bg-rose-900"
-                          : "bg-white text-rose-900"
-                      } hover:text-white border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
-                      onClick={() => {
-                        setAddOns({
-                          ...addOns,
-                          flooring: "PrintedFlex",
-                        });
-                      }}
-                    >
-                      {addOns.flooring === "PrintedFlex"
-                        ? "Selected"
-                        : "Select"}
-                    </button>
-                  </div>
-                </div>
+                ))}
                 {addOns.flooring && (
                   <div className="flex flex-row items-center justify-between">
                     <p className="font-medium flex flex-col">
@@ -760,15 +762,13 @@ function DecorListing({
                         Total Price:{" "}
                         <Tooltip
                           content={`${
-                            decor.productInfo.variant[variant].sellingPrice
+                            decor?.productTypes?.find((i) => i.name === variant)
+                              ?.sellingPrice
                           } + ${addOns.price} + ${
-                            addOns.flooring === "Carpet"
-                              ? addOns.baseCost * 8
-                              : addOns.flooring === "Flex"
-                              ? addOns.baseCost * 10
-                              : addOns.flooring === "PrintedFlex"
-                              ? addOns.baseCost * 15
-                              : 0
+                            addOns.baseCost *
+                              flooringPrice.find(
+                                (i) => i.title === addOns.flooring
+                              )?.price || 0
                           }`}
                           trigger="hover"
                         >
@@ -777,15 +777,13 @@ function DecorListing({
                       </span>
                       <span className="text-rose-900 font-semibold">
                         ₹
-                        {decor.productInfo.variant[variant].sellingPrice +
+                        {decor?.productTypes?.find((i) => i.name === variant)
+                          ?.sellingPrice +
                           addOns.price +
-                          (addOns.flooring === "Carpet"
-                            ? addOns.baseCost * 8
-                            : addOns.flooring === "Flex"
-                            ? addOns.baseCost * 10
-                            : addOns.flooring === "PrintedFlex"
-                            ? addOns.baseCost * 15
-                            : 0)}
+                          (addOns.baseCost *
+                            flooringPrice.find(
+                              (i) => i.title === addOns.flooring
+                            )?.price || 0)}
                       </span>
                     </p>
                     <button
@@ -801,6 +799,9 @@ function DecorListing({
                           eventDayId: "",
                           flooring: "",
                           baseCost: 0,
+                          platformRate: 0,
+                          flooringRate: 0,
+                          decorPrice: 0,
                         });
                         AddToEvent({
                           quantity: 1,
@@ -811,15 +812,13 @@ function DecorListing({
                           flooring: addOns.flooring,
                           dimensions: addOns.dimensions,
                           price:
-                            decor.productInfo.variant[variant].sellingPrice +
+                            decor?.productTypes?.find((i) => i.name === variant)
+                              ?.sellingPrice +
                             addOns.price +
-                            (addOns.flooring === "Carpet"
-                              ? addOns.baseCost * 8
-                              : addOns.flooring === "Flex"
-                              ? addOns.baseCost * 10
-                              : addOns.flooring === "PrintedFlex"
-                              ? addOns.baseCost * 15
-                              : 0),
+                            (addOns.baseCost *
+                              flooringPrice.find(
+                                (i) => i.title === addOns.flooring
+                              )?.price || 0),
                         });
                       }}
                     >
@@ -942,54 +941,31 @@ function DecorListing({
                     inline
                     renderTrigger={() => (
                       <span className="font-semibold text-rose-900 cursor-pointer flex items-center gap-1">
-                        {variant === "artificialFlowers"
-                          ? "Artificial"
-                          : variant === "naturalFlowers"
-                          ? "Natural"
-                          : variant === "mixedFlowers"
-                          ? "Mixed"
-                          : ""}{" "}
-                        Flowers <BsChevronDown />
+                        {variant} <BsChevronDown />
                       </span>
                     )}
                     className="text-rose-900"
                   >
-                    {decor.productInfo.variant.artificialFlowers.sellingPrice >
-                      0 &&
-                      variant !== "artificialFlowers" && (
+                    {decor.productTypes
+                      .filter((i) => i.name != variant)
+                      .map((item) => (
                         <Dropdown.Item
                           onClick={() => {
-                            setVariant("artificialFlowers");
+                            setVariant(item.name);
                           }}
+                          key={item.name}
                         >
-                          Artifical Flowers
+                          {item.name}
                         </Dropdown.Item>
-                      )}
-                    {decor.productInfo.variant.naturalFlowers.sellingPrice >
-                      0 &&
-                      variant !== "naturalFlowers" && (
-                        <Dropdown.Item
-                          onClick={() => {
-                            setVariant("naturalFlowers");
-                          }}
-                        >
-                          Natural Flowers
-                        </Dropdown.Item>
-                      )}
-                    {decor.productInfo.variant.mixedFlowers.sellingPrice > 0 &&
-                      variant !== "mixedFlowers" && (
-                        <Dropdown.Item
-                          onClick={() => {
-                            setVariant("mixedFlowers");
-                          }}
-                        >
-                          Mixed Flowers
-                        </Dropdown.Item>
-                      )}
+                      ))}
                   </Dropdown>
                 </p>
                 <p className="font-semibold text-xl">
-                  ₹ {decor.productInfo.variant[variant].sellingPrice}{" "}
+                  ₹{" "}
+                  {
+                    decor.productTypes.find((i) => i.name === variant)
+                      ?.sellingPrice
+                  }{" "}
                   {decor.category === "Pathway" && `/ ${decor.unit}`}
                 </p>
               </div>
@@ -1034,7 +1010,8 @@ function DecorListing({
                             rec.decorItems.filter((i) => i.decor === decor_id)
                               .length > 0
                           }
-                          disabled={rec.status.finalized}
+                          className={item.status.finalized ? "sr-only" : ""}
+                          disabled={item.status.finalized}
                           onChange={(e) => {
                             if (e.target.checked) {
                               if (
@@ -1056,6 +1033,9 @@ function DecorListing({
                                   eventId: item._id,
                                   flooring: undefined,
                                   baseCost: 0,
+                                  platformRate: 0,
+                                  flooringRate: 0,
+                                  decorPrice: 0,
                                 });
                               } else if (decor.category === "Pathway") {
                                 setQuantiy({
@@ -1078,9 +1058,9 @@ function DecorListing({
                                     breadth: 0,
                                     height: 0,
                                   },
-                                  price:
-                                    decor.productInfo.variant[variant]
-                                      .sellingPrice,
+                                  price: decor.productTypes.find(
+                                    (i) => i.name === variant
+                                  )?.sellingPrice,
                                 });
                               }
                             } else {

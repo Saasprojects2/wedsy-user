@@ -175,13 +175,7 @@ export default function DecorItemsList({
                           <div className="flex flex-col gap-1">
                             <div className="flex flex-row justify-between gap-2">
                               <span>{item.category}:</span>
-                              <span>
-                                ₹
-                                {
-                                  item.decor.productInfo.variant[item.variant]
-                                    .sellingPrice
-                                }
-                              </span>
+                              <span>₹{item.decorPrice}</span>
                             </div>
                             {item.platform && (
                               <div className="flex flex-row justify-between gap-2">
@@ -190,7 +184,7 @@ export default function DecorItemsList({
                                   ₹
                                   {item.dimensions.length *
                                     item.dimensions.breadth *
-                                    25}
+                                    item.platformRate}
                                 </span>
                               </div>
                             )}
@@ -203,13 +197,7 @@ export default function DecorItemsList({
                                     item.dimensions.height) *
                                     (item.dimensions.breadth +
                                       item.dimensions.height) *
-                                    (item.flooring === "Carpet"
-                                      ? 8
-                                      : item.flooring === "Flex"
-                                      ? 10
-                                      : item.flooring === "PrintedFlex"
-                                      ? 15
-                                      : 0)}
+                                    item.flooringRate}
                                 </span>
                               </div>
                             )}
