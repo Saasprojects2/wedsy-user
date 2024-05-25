@@ -155,18 +155,8 @@ export default function DecorItemsList({
                     </div>
                   </div>
                   <div className="flex flex-col md:w-1/3 md:ml-auto justify-end">
-                    <p className="font-medium text-sm md:text-lg mt-auto text-right px-10">
-                      {/* Price for{" "} */}
-                      <span className="text-rose-900">
-                        {item.variant === "artificialFlowers"
-                          ? "Artificial"
-                          : item.variant === "naturalFlowers"
-                          ? "Natural"
-                          : item.variant === "mixedFlowers"
-                          ? "Mixed"
-                          : ""}{" "}
-                        Flowers
-                      </span>
+                    <p className="text-rose-900 font-medium text-sm md:text-lg mt-auto text-right px-10 ">
+                      {item.variant}
                     </p>
                     <div className="flex flex-row items-center justify-end gap-2 text-lg text-white font-medium bg-gradient-to-l from-rose-900 to-white py-2 px-10">
                       ₹ {item.price}{" "}

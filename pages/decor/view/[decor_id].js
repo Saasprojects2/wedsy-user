@@ -834,7 +834,21 @@ function DecorListing({
       <div className="md:p-8 grid grid-cols-1 md:grid-cols-4 md:gap-8 decor-bg-image">
         <div className="order-last md:order-first border-t md:border-t-0 md:border-r-0 border-black flex flex-col md:divide-y gap-4 md:divide-black md:pr-6">
           <p className="text-xl font-medium hidden md:block">Description</p>
-          {decor.category !== "Mandap" && (
+          {decor.attributes.map((item, index) => (
+            <div className="flex flex-col pt-4 px-4 md:px-0 gap-2" key={index}>
+              <p className="text-lg flex flex-row justify-between">
+                {item.name}
+              </p>
+              <ul className="list-disc pl-4 flex flex-col gap-3">
+                {item.list.map((rec, index) => (
+                  <li className="" key={index}>
+                    {toProperCase(rec)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          {/* {decor.category !== "Mandap" && (
             <div className="flex flex-col pt-4 px-4 md:px-0 gap-2">
               <p className="text-lg flex flex-row justify-between">
                 Can be used for
@@ -857,7 +871,7 @@ function DecorListing({
                 {toProperCase(item)}
               </p>
             ))}
-          </div>
+          </div> */}
           {/* {decor.productVariation.flowers.length > 0 && (
             <div className="flex flex-col pt-4 px-4 md:px-0">
               <p className="text-lg flex flex-row justify-between">Flowers</p>
@@ -902,9 +916,9 @@ function DecorListing({
               )}
             </ul>
           </div>
-          <div className="flex flex-col pt-4 md:border-b md:border-black px-4 md:px-0">
-            {/* <p className="text-lg flex flex-row justify-between">Placement</p> */}
-          </div>
+          {/* <div className="flex flex-col pt-4 md:border-b md:border-black px-4 md:px-0"> */}
+          {/* <p className="text-lg flex flex-row justify-between">Placement</p> */}
+          {/* </div> */}
         </div>
         <div className="md:col-span-3 py-3 px-4 md:px-0 md:py-6">
           <div className="md:px-10 relative">
