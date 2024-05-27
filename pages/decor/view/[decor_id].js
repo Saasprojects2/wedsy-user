@@ -36,7 +36,7 @@ function DecorListing({
   const [isAddedToWishlist, setIsAddedToWishlist] = useState(false);
   const [eventList, setEventList] = useState([]);
   const [variant, setVariant] = useState(
-    decor.productTypes.length > 0 ? decor.productTypes[0]?.name : ""
+    decor?.productTypes?.length > 0 ? decor?.productTypes[0]?.name : ""
   );
   const [addOns, setAddOns] = useState({
     open: false,
