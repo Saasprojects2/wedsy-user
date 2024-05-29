@@ -125,6 +125,7 @@ export default function EventTool({ user }) {
       <NotesModal notes={notes} setNotes={setNotes} allowEdit={false} />
       <div className="flex flex-col overflow-hidden hide-scrollbar">
         <EventToolHeader
+          fetchEvent={fetchEvent}
           event={event}
           setEventDay={setEventDay}
           eventDay={eventDay}

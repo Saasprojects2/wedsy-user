@@ -245,6 +245,7 @@ export default function EventTool({ user }) {
       />
       <div className="flex flex-col overflow-hidden hide-scrollbar">
         <EventToolHeader
+          fetchEvent={fetchEvent}
           event={event}
           setEventDay={setEventDay}
           eventDay={eventDay}
