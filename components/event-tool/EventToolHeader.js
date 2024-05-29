@@ -3,8 +3,10 @@ import { BsArrowLeft } from "react-icons/bs";
 import EventToolShareButton from "./EventToolShareButton";
 import { BiEditAlt } from "react-icons/bi";
 import { AiOutlinePlusSquare } from "react-icons/ai";
+import EventToolAccessModal from "./EventToolAccessModal";
 
 export default function EventToolHeader({
+  fetchEvent,
   event,
   setEventDay,
   eventDay,
@@ -30,7 +32,19 @@ export default function EventToolHeader({
               <BiEditAlt size={20} />
             </Link>
           )}
-          <EventToolShareButton eventName={event?.name} eventId={event?._id} />
+          {allowEdit ? (
+            <EventToolAccessModal
+              eventName={event?.name}
+              eventId={event?._id}
+              accessList={event.eventAccess || []}
+              fetchEvent={fetchEvent}
+            />
+          ) : (
+            <EventToolShareButton
+              eventName={event?.name}
+              eventId={event?._id}
+            />
+          )}
         </div>
         <div className="hidden md:flex md:flex-row gap-6 mx-auto">
           {event?.eventDays?.map((item, index) => (
