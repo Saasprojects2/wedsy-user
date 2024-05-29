@@ -127,7 +127,7 @@ function DecorListing({ data }) {
           filters.stageHeightRange.filter((item) => item > 0).length > 0
             ? `&stageHeightLower=${filters.stageHeightRange[0]}&stageHeightHigher=${filters.stageHeightRange[1]}`
             : ""
-        }`
+        }&displayVisible=true&displayAvailable=true`
       );
       const tempData = await response.json();
       if (page === 1 && filters.sort.length <= 0) {
@@ -1248,8 +1248,10 @@ export async function getServerSideProps(context) {
   try {
     let { query } = context;
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/decor${
-        query.category ? `?category=${query.category}` : ""
+      `${
+        process.env.NEXT_PUBLIC_API_URL
+      }/decor?displayVisible=true&displayAvailable=true${
+        query.category ? `&category=${query.category}` : ""
       }`
     );
     const data = await response.json();
