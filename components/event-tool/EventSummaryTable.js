@@ -48,7 +48,8 @@ export default function EventSummaryTable({ tempEventDay }) {
                   </Table.Cell>
                 </Table.Row>
               ))}
-              {tempEventDay.customItems.length > 0 && (
+              {tempEventDay.customItems.filter((i) => !i.includeInTotalSummary)
+                .length > 0 && (
                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                   <Table.Cell className="p-2">
                     {tempEventDay?.decorItems.length +
@@ -60,18 +61,17 @@ export default function EventSummaryTable({ tempEventDay }) {
                   </Table.Cell>
                   <Table.Cell className="p-1 text-rose-900 text-right">
                     {toPriceString(
-                      tempEventDay?.customItems.reduce(
-                        (accumulator, currentValue) => {
+                      tempEventDay?.customItems
+                        .filter((i) => !i.includeInTotalSummary)
+                        .reduce((accumulator, currentValue) => {
                           return accumulator + currentValue.price;
-                        },
-                        0
-                      )
+                        }, 0)
                     )}
                   </Table.Cell>
                 </Table.Row>
               )}
               {tempEventDay?.mandatoryItems
-                .filter((i) => i.itemRequired)
+                .filter((i) => i.itemRequired && !i.includeInTotalSummary)
                 ?.map((item, index) => (
                   <Table.Row
                     className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -80,7 +80,11 @@ export default function EventSummaryTable({ tempEventDay }) {
                     <Table.Cell className="p-2">
                       {tempEventDay?.decorItems.length +
                         tempEventDay?.packages.length +
-                        (tempEventDay.customItems.length ? 1 : 0) +
+                        (tempEventDay.customItems.filter(
+                          (i) => !i.includeInTotalSummary
+                        ).length
+                          ? 1
+                          : 0) +
                         index +
                         1}
                     </Table.Cell>
@@ -111,18 +115,18 @@ export default function EventSummaryTable({ tempEventDay }) {
                         },
                         0
                       ) +
-                      tempEventDay?.customItems.reduce(
-                        (accumulator, currentValue) => {
+                      tempEventDay?.customItems
+                        .filter((i) => !i.includeInTotalSummary)
+                        .reduce((accumulator, currentValue) => {
                           return accumulator + currentValue.price;
-                        },
-                        0
-                      ) +
-                      tempEventDay?.mandatoryItems.reduce(
-                        (accumulator, currentValue) => {
+                        }, 0) +
+                      tempEventDay?.mandatoryItems
+                        ?.filter(
+                          (i) => i.itemRequired && !i.includeInTotalSummary
+                        )
+                        .reduce((accumulator, currentValue) => {
                           return accumulator + currentValue.price;
-                        },
-                        0
-                      )
+                        }, 0)
                   )}
                 </Table.Cell>
               </Table.Row>

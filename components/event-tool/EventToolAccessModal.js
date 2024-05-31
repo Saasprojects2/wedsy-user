@@ -153,7 +153,7 @@ export default function EventToolAccessModal({
                 <Button
                   onClick={handleAddPhoneNumber}
                   className="bg-blue-700 hover:bg-blue-700 enabled:hover:bg-blue-700 px-4"
-                  disabled={phoneNumber}
+                  disabled={!phoneNumber}
                 >
                   Add
                 </Button>

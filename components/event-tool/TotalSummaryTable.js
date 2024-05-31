@@ -35,21 +35,60 @@ export default function TotalSummaryTable({ event }) {
                         item?.packages.reduce((accumulator, currentValue) => {
                           return accumulator + currentValue.price;
                         }, 0) +
-                        item?.customItems.reduce(
-                          (accumulator, currentValue) => {
+                        item?.customItems
+                          .filter((i) => !i.includeInTotalSummary)
+                          .reduce((accumulator, currentValue) => {
                             return accumulator + currentValue.price;
-                          },
-                          0
-                        ) +
-                        item?.mandatoryItems.reduce(
-                          (accumulator, currentValue) => {
+                          }, 0) +
+                        item?.mandatoryItems
+                          ?.filter(
+                            (i) => i.itemRequired && !i.includeInTotalSummary
+                          )
+                          .reduce((accumulator, currentValue) => {
                             return accumulator + currentValue.price;
-                          },
-                          0
-                        )
+                          }, 0) +
+                        0
                     )}
                   </Table.Cell>
                 </Table.Row>
+              ))}
+              {event.eventDays?.map((tempEventDay, index) => (
+                <>
+                  {tempEventDay.customItems
+                    .filter((i) => i.includeInTotalSummary)
+                    ?.map((item, index) => (
+                      <Table.Row
+                        className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                        key={index}
+                      >
+                        <Table.Cell className="p-2" />
+                        <Table.Cell className="font-medium text-gray-900 dark:text-white p-1">
+                          {item.name}
+                        </Table.Cell>
+                        <Table.Cell className="p-1 text-rose-900 text-right">
+                          ₹{item.price}
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  {tempEventDay?.mandatoryItems
+                    .filter(
+                      (i) => !(i.itemRequired && !i.includeInTotalSummary)
+                    )
+                    ?.map((item, index) => (
+                      <Table.Row
+                        className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                        key={index}
+                      >
+                        <Table.Cell className="p-2" />
+                        <Table.Cell className="font-medium text-gray-900 dark:text-white p-1">
+                          {item.description}
+                        </Table.Cell>
+                        <Table.Cell className="p-1 text-rose-900 text-right">
+                          ₹{item.price}
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                </>
               ))}
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                 <Table.Cell className="p-2" />
