@@ -20,7 +20,7 @@ export function toProperCase(inputString) {
 }
 
 export function toPriceString(amount) {
-  return amount
+  return amount || amount === 0
     ? amount.toLocaleString("en-IN", {
         maximumFractionDigits: 2,
         style: "currency",
