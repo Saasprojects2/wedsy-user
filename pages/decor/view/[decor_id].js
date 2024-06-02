@@ -933,11 +933,9 @@ function DecorListing({
                 </span>
               </p>
               <Rating size={"md"}>
-                <Rating.Star />
-                <Rating.Star />
-                <Rating.Star />
-                <Rating.Star />
-                <Rating.Star filled={false} />
+                {[null, null, null, null, null].map((i, index) => (
+                  <Rating.Star key={index} filled={index + 1 <= decor.rating} />
+                ))}
               </Rating>
             </div>
             <div className={`relative pt-[56.25%] md:mb-10`}>
