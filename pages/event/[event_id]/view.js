@@ -33,6 +33,47 @@ export default function EventTool({ user }) {
     admin_notes: "",
     user_notes: "",
   });
+  const [platformPrice, setPlatformPrice] = useState({ price: 0, image: "" });
+  const [flooringPrice, setFlooringPrice] = useState([]);
+  const fetchPlatformInfo = () => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/config?code=platform`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setPlatformPrice({
+          image: "",
+          ...response?.data,
+          price: parseInt(response?.data?.price),
+        });
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
+  const fetchFlooringInfo = () => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/config?code=flooring`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setFlooringPrice(
+          response?.data?.flooringList?.map((i) => ({
+            ...i,
+            price: parseInt(i.price),
+          })) || []
+        );
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   const fetchEvent = () => {
     fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}?populate=true&display=true`,
@@ -72,6 +113,8 @@ export default function EventTool({ user }) {
   useEffect(() => {
     if (event_id) {
       fetchEvent();
+      fetchFlooringInfo();
+      fetchPlatformInfo();
     }
   }, [router, event_id]);
   useEffect(() => {
@@ -159,6 +202,8 @@ export default function EventTool({ user }) {
                     event_id={event_id}
                     eventDay={eventDay}
                     allowEdit={false}
+                    platformPrice={platformPrice}
+                    flooringPrice={flooringPrice}
                   />
                   <DecorPackagesList
                     packages={tempEventDay?.packages}

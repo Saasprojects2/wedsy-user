@@ -36,6 +36,51 @@ export default function EventTool({ user }) {
     user_notes: "",
   });
   const [addEventDayModalOpen, setAddEventDayModalOpen] = useState(false);
+  const [platformPrice, setPlatformPrice] = useState({ price: 0, image: "" });
+  const [flooringPrice, setFlooringPrice] = useState([]);
+  const fetchPlatformInfo = () => {
+    setLoading(true);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/config?code=platform`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setLoading(false);
+        setPlatformPrice({
+          image: "",
+          ...response?.data,
+          price: parseInt(response?.data?.price),
+        });
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
+  const fetchFlooringInfo = () => {
+    setLoading(true);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/config?code=flooring`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setLoading(false);
+        setFlooringPrice(
+          response?.data?.flooringList?.map((i) => ({
+            ...i,
+            price: parseInt(i.price),
+          })) || []
+        );
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   const fetchEvent = () => {
     fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}?populate=true`,
@@ -130,6 +175,8 @@ export default function EventTool({ user }) {
   };
   useEffect(() => {
     fetchEvent();
+    fetchFlooringInfo();
+    fetchPlatformInfo();
   }, []);
   useEffect(() => {
     const handleResize = () => {
@@ -281,6 +328,8 @@ export default function EventTool({ user }) {
                     event_id={event_id}
                     eventDay={eventDay}
                     allowEdit={true}
+                    platformPrice={platformPrice}
+                    flooringPrice={flooringPrice}
                   />
                   <DecorPackagesList
                     packages={tempEventDay?.packages}

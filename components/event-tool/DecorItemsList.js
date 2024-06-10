@@ -3,7 +3,6 @@ import Image from "next/image";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsInfoCircle } from "react-icons/bs";
 import { MdDelete } from "react-icons/md";
-import ImageCard from "../cards/ImageCard";
 import ImageFillCard from "../cards/ImageFillCard";
 
 export default function DecorItemsList({
@@ -14,6 +13,8 @@ export default function DecorItemsList({
   event_id,
   eventDay,
   allowEdit,
+  platformPrice,
+  flooringPrice,
 }) {
   return (
     <>
@@ -78,7 +79,10 @@ export default function DecorItemsList({
                       <div className="flex flex-row md:flex-col gap-4 w-full md:w-auto justify-between items-end">
                         <div>
                           <Image
-                            src={"/assets/images/platform.png"}
+                            src={
+                              platformPrice.image ||
+                              "/assets/images/platform.png"
+                            }
                             alt="Platform"
                             width={0}
                             height={0}
@@ -94,7 +98,13 @@ export default function DecorItemsList({
                         <div>
                           <Image
                             src={
-                              item.flooring === "Carpet"
+                              flooringPrice.find(
+                                (i) => i.title === item.flooring
+                              )?.image
+                                ? flooringPrice.find(
+                                    (i) => i.title === item.flooring
+                                  )?.image
+                                : item.flooring === "Carpet"
                                 ? "/assets/images/carpet.png"
                                 : item.flooring === "Flex"
                                 ? "/assets/images/flex.png"
@@ -102,7 +112,7 @@ export default function DecorItemsList({
                                 ? "/assets/images/printedFlex.png"
                                 : "/assets/images/carpet.png"
                             }
-                            alt="Platform"
+                            alt="Flooring"
                             width={0}
                             height={0}
                             sizes="100%"
