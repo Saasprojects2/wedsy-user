@@ -23,14 +23,16 @@ export default function DecorCard({ decor, className }) {
             className="rounded-xl"
           />
         </div>
-        <p className="mt-3 pl-2 font-semibold">{name}</p>
-        <p className="pl-2  font-semibold">
-          ₹{" "}
-          {decor.productInfo.variant.artificialFlowers.sellingPrice ||
-            decor.productInfo.variant.mixedFlowers.sellingPrice ||
-            decor.productInfo.variant.naturalFlowers.sellingPrice}{" "}
-          {decor.category === "Pathway" && `/ ${decor.unit}`}
-        </p>
+        <div className="flex flex-row items-center justify-between flex-wrap bg-white px-6 py-2 rounded-full mt-3">
+          <p className="font-semibold">{name}</p>
+          <p className="font-semibold text-rose-900">
+            ₹{" "}
+            {decor.productInfo.variant.artificialFlowers.sellingPrice ||
+              decor.productInfo.variant.mixedFlowers.sellingPrice ||
+              decor.productInfo.variant.naturalFlowers.sellingPrice}{" "}
+            {decor.category === "Pathway" && `/ ${decor.unit}`}
+          </p>
+        </div>
       </Link>
     </>
   );
