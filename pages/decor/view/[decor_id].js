@@ -1,5 +1,6 @@
-import { AiFillHeart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import {
+  Button,
   Checkbox,
   Dropdown,
   Label,
@@ -9,70 +10,56 @@ import {
   TextInput,
   Tooltip,
 } from "flowbite-react";
-import DecorCard from "@/components/cards/DecorCard";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import {
-  BsArrowLeftShort,
-  BsArrowRightShort,
-  BsChevronDown,
-  BsInfoCircle,
-} from "react-icons/bs";
+import { BsChevronDown, BsInfoCircle } from "react-icons/bs";
 import { useRouter } from "next/router";
 import { toProperCase } from "@/utils/text";
 import Head from "next/head";
 import DecorDisclaimer from "@/components/marquee/DecorDisclaimer";
 import ImageFillCard from "@/components/cards/ImageFillCard";
+import SimilarDecor from "@/components/screens/SimilarDecor";
+import CreateEventModal from "@/components/modal/CreateEventModal";
+import Link from "next/link";
 
 function DecorListing({
   similarDecor,
   decor,
+  category,
   userLoggedIn,
   setOpenLoginModal,
+  categoryList,
 }) {
   const router = useRouter();
-  const [showDescription, setShowDescription] = useState(false);
-  const [similarIndex, setSimilarIndex] = useState([0, 1, 2]);
+  const { decor_id } = router.query;
+  const [loading, setLoading] = useState(false);
+  const [displayImage, setDisplayImage] = useState(decor.image);
   const [isAddedToWishlist, setIsAddedToWishlist] = useState(false);
   const [eventList, setEventList] = useState([]);
   const [variant, setVariant] = useState(
     decor?.productTypes?.length > 0 ? decor?.productTypes[0]?.name : ""
   );
-  const [addOns, setAddOns] = useState({
+  const [productVariant, setProductVariant] = useState(
+    decor?.productVariants?.length > 0 ? decor?.productVariants[0]?.name : ""
+  );
+  const [cart, setCart] = useState({
     open: false,
+    quantity: 1,
     platform: false,
-    dimensions: { length: 0, breadth: 0, height: 0 },
+    flooring: "",
+    dimensions: {
+      length: 0,
+      breadth: 0,
+      height: 0,
+    },
     price: 0,
     eventId: "",
     eventDayId: "",
-    flooring: "",
-    baseCost: 0,
-    quantity: 1,
-    unit: decor.unit,
-    platformRate: 0,
-    flooringRate: 0,
-    decorPrice: 0,
-  });
-  const [quantity, setQuantiy] = useState({
-    open: false,
-    eventId: "",
-    eventDayId: "",
-    quantity: 1,
-    unit: "",
   });
   const [showEventModal, setShowEventModal] = useState(false);
-  const [eventData, setEventData] = useState({
-    name: "",
-    community: "",
-    eventDay: "",
-    time: "",
-    date: "",
-    venue: "",
-  });
-  const { decor_id } = router.query;
-  const [loading, setLoading] = useState(false);
   const [platformPrice, setPlatformPrice] = useState({ price: 0, image: "" });
   const [flooringPrice, setFlooringPrice] = useState([]);
+
   const fetchPlatformInfo = () => {
     setLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/config?code=platform`, {
@@ -134,39 +121,6 @@ function DecorListing({
         console.error("There was a problem with the fetch operation:", error);
       });
   };
-  const createEvent = () => {
-    if (!userLoggedIn) {
-      setOpenLoginModal(true);
-    } else {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/event`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(eventData),
-      })
-        .then((response) => response.json())
-        .then((response) => {
-          if (response._id) {
-            setShowEventModal(false);
-            setEventData({
-              name: "",
-              community: "",
-              eventDay: "",
-              time: "",
-              date: "",
-              venue: "",
-            });
-            fetchEvents();
-            alert("Event Created Successfully!");
-          }
-        })
-        .catch((error) => {
-          console.error("There was a problem with the fetch operation:", error);
-        });
-    }
-  };
   const AddToWishlist = () => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/wishlist/decor`, {
       method: "POST",
@@ -215,7 +169,6 @@ function DecorListing({
     dimensions,
     price,
     quantity,
-    unit,
   }) => {
     fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/event/${eventId}/decor/${eventDayId}`,
@@ -233,14 +186,20 @@ function DecorListing({
           price,
           category: decor.category,
           variant,
+          productVariant,
+          priceModifier: productVariant
+            ? decor.productVariants.find((i) => i.name === productVariant)
+                ?.priceModifier
+            : 0,
           quantity,
-          unit,
+          unit: decor.unit,
           platformRate: platform ? platformPrice?.price : 0,
           flooringRate: flooring
             ? flooringPrice.find((i) => i.title === flooring)?.price || 0
             : 0,
           decorPrice: decor?.productTypes?.find((i) => i.name === variant)
             ?.sellingPrice,
+          included: decor?.productInfo?.included || [],
         }),
       }
     )
@@ -248,6 +207,18 @@ function DecorListing({
       .then((response) => {
         if (response.message === "success") {
           fetchEvents();
+          if (category.platformAllowed || category.flooringAllowed) {
+            setCart({
+              ...cart,
+              open: false,
+              platform: false,
+              flooring: "",
+              dimensions: { length: 0, breadth: 0, height: 0 },
+              price: 0,
+              eventId: "",
+              eventDayId: "",
+            });
+          }
           alert("Item added to event!");
         }
       })
@@ -280,6 +251,7 @@ function DecorListing({
         console.error("There was a problem with the fetch operation:", error);
       });
   };
+
   useEffect(() => {
     if (decor_id && userLoggedIn) {
       fetchEvents();
@@ -306,6 +278,145 @@ function DecorListing({
         });
     }
   }, [decor_id, userLoggedIn]);
+
+  // UI Components
+  function AddToEventButton({}) {
+    return (
+      <Dropdown
+        inline
+        arrowIcon={false}
+        dismissOnClick={false}
+        label={
+          <Button
+            onClick={() => {
+              if (!userLoggedIn) {
+                setOpenLoginModal(true);
+              }
+            }}
+            className="bg-black enabled:hover:bg-black md:bg-rose-900 md:enabled:hover:bg-rose-900 text-white text-center w-full"
+            disabled={loading}
+          >
+            ADD TO EVENT
+          </Button>
+        }
+        className="border border-black rounded-lg bg-black"
+      >
+        <Dropdown.Item className="text-white bg-black">
+          Event List
+        </Dropdown.Item>
+        {eventList?.map((item) => (
+          <>
+            <Dropdown.Divider className="bg-black h-[1px] my-0" />
+            <Dropdown.Item className="bg-white flex flex-row gap-4" as="p">
+              <Label className="flex">{item.name}</Label>
+            </Dropdown.Item>
+            {item.eventDays.map((rec) => (
+              <Dropdown.Item
+                key={rec._id}
+                className="bg-white flex flex-row gap-4"
+                onClick={() => {}}
+                as={Label}
+              >
+                <Checkbox
+                  checked={
+                    rec.decorItems.filter((i) => i.decor === decor_id).length >
+                    0
+                  }
+                  className={item.status.finalized ? "sr-only" : ""}
+                  disabled={item.status.finalized}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      if (
+                        category.flooringAllowed ||
+                        category.platformAllowed
+                      ) {
+                        setCart({
+                          ...cart,
+                          open: true,
+                          platform: undefined,
+                          flooring: undefined,
+                          dimensions: {
+                            length: 0,
+                            breadth: 0,
+                            height: 0,
+                          },
+                          price: 0,
+                          eventDayId: rec._id,
+                          eventId: item._id,
+                        });
+                      } else {
+                        AddToEvent({
+                          quantity: cart.quantity,
+                          unit: decor.unit,
+                          eventDayId: rec._id,
+                          eventId: item._id,
+                          platform: false,
+                          flooring: "",
+                          dimensions: {
+                            length: 0,
+                            breadth: 0,
+                            height: 0,
+                          },
+                          price:
+                            (decor.productTypes.find((i) => i.name === variant)
+                              ?.sellingPrice +
+                              (productVariant
+                                ? decor.productVariants.find(
+                                    (i) => i.name === productVariant
+                                  )?.priceModifier
+                                : 0)) *
+                            cart.quantity,
+                        });
+                      }
+                    } else {
+                      RemoveFromEvent({
+                        eventDayId: rec._id,
+                        eventId: item._id,
+                      });
+                    }
+                  }}
+                />
+                {rec.name}
+              </Dropdown.Item>
+            ))}
+          </>
+        ))}
+        <Dropdown.Divider className="bg-black h-[1px] my-0" />
+        <Dropdown.Item
+          onClick={() => {
+            setShowEventModal(true);
+          }}
+          className="bg-white text-cyan-600"
+        >
+          + Create New Event
+        </Dropdown.Item>
+      </Dropdown>
+    );
+  }
+
+  function WishlistButton({}) {
+    return (
+      <Button
+        className={`focus:outline-none focus:ring-0 outline-none bg-white enabled:hover:bg-white text-black `}
+        onClick={() => {
+          if (userLoggedIn) {
+            isAddedToWishlist ? RemoveFromWishList() : AddToWishlist();
+          } else {
+            setOpenLoginModal(true);
+          }
+        }}
+        disabled={loading}
+      >
+        REMOVE FROM FAVORITES &nbsp;
+        {isAddedToWishlist ? (
+          <AiFillHeart size={20} className="text-rose-900" />
+        ) : (
+          <AiOutlineHeart size={20} className="text-rose-900" />
+        )}
+      </Button>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -315,204 +426,29 @@ function DecorListing({
         <meta property="og:description" content={decor?.seoTags?.description} />
         <meta property="og:image" content={decor?.seoTags?.image} />
       </Head>
+      <CreateEventModal
+        showEventModal={showEventModal}
+        setShowEventModal={setShowEventModal}
+        userLoggedIn={userLoggedIn}
+        setOpenLoginModal={setOpenLoginModal}
+        fetchEvents={fetchEvents}
+      />
       <DecorDisclaimer />
-      {/* Pathway Quantity Model */}
+      {/* Cart Model */}
       <Modal
-        show={quantity.open}
+        show={cart.open}
         size="lg"
         popup
         onClose={() =>
-          setQuantiy({
-            open: false,
-            eventId: "",
-            eventDayId: "",
-            quantity: 1,
-            unit: "",
-          })
-        }
-      >
-        <Modal.Header>
-          <h3 className="text-xl font-medium text-gray-900 dark:text-white px-4">
-            Setect Pathway Quantity (Unit: {quantity.unit})
-          </h3>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="flex flex-row gap-6">
-            {/* <TextInput
-              type="Number"
-              value={quantity.quantity}
-              onChange={(e) => {
-                setQuantiy({ ...quantity, quantity: parseInt(e.target.value) });
-              }}
-            /> */}
-            <Select
-              value={quantity.quantity}
-              onChange={(e) => {
-                setQuantiy({ ...quantity, quantity: parseInt(e.target.value) });
-              }}
-            >
-              {Array.from({ length: 25 }, (_, index) => index + 1).map(
-                (value) => (
-                  <option key={value} value={value}>
-                    {value}
-                  </option>
-                )
-              )}
-            </Select>
-            <button
-              className={`text-white bg-rose-900  border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
-              onClick={() => {
-                // setAddOns({ ...addOns, platform: true });
-                setQuantiy({
-                  open: false,
-                  eventId: "",
-                  eventDayId: "",
-                  quantity: 1,
-                  unit: "",
-                });
-                AddToEvent({
-                  quantity: quantity.quantity,
-                  unit: decor.unit,
-                  eventDayId: quantity.eventDayId,
-                  eventId: quantity.eventId,
-                  platform: false,
-                  flooring: "",
-                  dimensions: {
-                    length: 0,
-                    breadth: 0,
-                    height: 0,
-                  },
-                  price:
-                    quantity.quantity *
-                    decor?.productTypes?.find((i) => i.name === variant)
-                      ?.sellingPrice,
-                });
-              }}
-            >
-              Add to Event
-            </button>
-          </div>
-        </Modal.Body>
-      </Modal>
-      {/* Event Modal */}
-      <Modal
-        show={showEventModal}
-        size="lg"
-        popup
-        onClose={() => {
-          setShowEventModal(false);
-          setEventData({
-            name: "",
-            community: "",
-            eventDay: "",
-            time: "",
-            date: "",
-            venue: "",
-          });
-        }}
-      >
-        <Modal.Header>
-          <h3 className="text-xl font-medium text-gray-900 dark:text-white px-4">
-            Create New Event
-          </h3>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="flex flex-col gap-3">
-            <TextInput
-              type="text"
-              placeholder="EVENT NAME"
-              value={eventData.name}
-              onChange={(e) =>
-                setEventData({ ...eventData, name: e.target.value })
-              }
-            />
-            <TextInput
-              type="text"
-              name="eventDay"
-              placeholder="EVENT DAY (eg: Reception)"
-              value={eventData.eventDay}
-              onChange={(e) =>
-                setEventData({ ...eventData, eventDay: e.target.value })
-              }
-            />
-            <TextInput
-              type="text"
-              name="community"
-              placeholder="COMMUNITY"
-              value={eventData.community}
-              onChange={(e) =>
-                setEventData({ ...eventData, community: e.target.value })
-              }
-            />
-            <TextInput
-              type="date"
-              name="date"
-              placeholder="DATE"
-              value={eventData.date}
-              onChange={(e) => {
-                if (new Date(e.target.value) > new Date()) {
-                  setEventData({ ...eventData, date: e.target.value });
-                } else {
-                  alert("Please enter a future date.");
-                }
-              }}
-            />
-            <TextInput
-              type="time"
-              name="time"
-              placeholder="START TIME"
-              value={eventData.time}
-              onChange={(e) =>
-                setEventData({ ...eventData, time: e.target.value })
-              }
-            />
-            <TextInput
-              type="text"
-              name="venue"
-              placeholder="VENUE"
-              value={eventData.venue}
-              onChange={(e) =>
-                setEventData({ ...eventData, venue: e.target.value })
-              }
-            />
-            <button
-              className={`text-white bg-rose-900 border border-rose-900 hover:bg-rose-900 hover:text-white disabled:bg-rose-800 font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
-              disabled={
-                !eventData.name ||
-                !eventData.community ||
-                !eventData.eventDay ||
-                !eventData.time ||
-                !eventData.date ||
-                !eventData.venue
-              }
-              onClick={() => {
-                createEvent();
-              }}
-            >
-              Create Event
-            </button>
-          </div>
-        </Modal.Body>
-      </Modal>
-      {/* Addons Model */}
-      <Modal
-        show={addOns.open}
-        size="lg"
-        popup
-        onClose={() =>
-          setAddOns({
-            ...addOns,
+          setCart({
+            ...cart,
             open: false,
             platform: false,
+            flooring: "",
             dimensions: { length: 0, breadth: 0, height: 0 },
             price: 0,
             eventId: "",
             eventDayId: "",
-            flooring: "",
-            baseCost: 0,
-            platformRate: 0,
-            flooringRate: 0,
-            decorPrice: 0,
           })
         }
       >
@@ -523,7 +459,7 @@ function DecorListing({
         </Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
-            {addOns.flooring === undefined ? (
+            {cart.flooring === undefined ? (
               <>
                 <Image
                   src="/assets/images/platform.png"
@@ -537,42 +473,27 @@ function DecorListing({
                   <p>Do you want to add a platform?</p>
                   <button
                     className={`${
-                      addOns.platform
+                      cart.platform
                         ? "text-white bg-rose-900"
                         : "bg-white text-rose-900"
                     }  border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
                     onClick={() => {
-                      setAddOns({ ...addOns, platform: true });
+                      setCart({ ...cart, platform: true });
                     }}
                   >
                     Yes
                   </button>
                   <button
                     className={`${
-                      !addOns.platform && addOns.platform !== undefined
+                      !cart.platform && cart.platform !== undefined
                         ? "text-white bg-rose-900"
                         : "bg-white text-rose-900"
                     } border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-1.5 focus:outline-none`}
                     onClick={() => {
-                      setAddOns({
-                        ...addOns,
-                        open: false,
-                        platform: false,
-                        dimensions: { length: 0, breadth: 0, height: 0 },
-                        price: 0,
-                        eventId: "",
-                        eventDayId: "",
-                        flooring: "",
-                        baseCost: 0,
-                        platformRate: 0,
-                        flooringRate: 0,
-                        decorPrice: 0,
-                      });
                       AddToEvent({
-                        quantity: 1,
-                        unit: decor.unit,
-                        eventDayId: addOns.eventDayId,
-                        eventId: addOns.eventId,
+                        quantity: cart.quantity,
+                        eventDayId: cart.eventDayId,
+                        eventId: cart.eventId,
                         platform: false,
                         flooring: "",
                         dimensions: {
@@ -580,16 +501,22 @@ function DecorListing({
                           breadth: 0,
                           height: 0,
                         },
-                        price: decor?.productTypes?.find(
-                          (i) => i.name === variant
-                        )?.sellingPrice,
+                        price:
+                          (decor?.productTypes?.find((i) => i.name === variant)
+                            ?.sellingPrice +
+                            (productVariant
+                              ? decor.productVariants.find(
+                                  (i) => i.name === productVariant
+                                )?.priceModifier
+                              : 0)) *
+                          cart.quantity,
                       });
                     }}
                   >
                     No
                   </button>
                 </div>
-                {addOns.platform && (
+                {cart.platform && (
                   <div className="border-t border-t-black pt-2 flex flex-col gap-2">
                     <p className="font-medium">
                       Dimensions for platform (in feet)
@@ -601,17 +528,17 @@ function DecorListing({
                           type="number"
                           placeholder="length"
                           required
-                          value={addOns.dimensions.length}
+                          value={cart.dimensions.length}
                           onChange={(e) => {
-                            setAddOns({
-                              ...addOns,
+                            setCart({
+                              ...cart,
                               dimensions: {
-                                ...addOns.dimensions,
+                                ...cart.dimensions,
                                 length: e.target.value,
                               },
                             });
                           }}
-                          disabled={addOns.price > 0}
+                          disabled={cart.price > 0}
                         />
                       </div>
                       <div className="flex flex-col">
@@ -620,17 +547,17 @@ function DecorListing({
                           type="number"
                           placeholder="breadth"
                           required
-                          value={addOns.dimensions.breadth}
+                          value={cart.dimensions.breadth}
                           onChange={(e) => {
-                            setAddOns({
-                              ...addOns,
+                            setCart({
+                              ...cart,
                               dimensions: {
-                                ...addOns.dimensions,
+                                ...cart.dimensions,
                                 breadth: e.target.value,
                               },
                             });
                           }}
-                          disabled={addOns.price > 0}
+                          disabled={cart.price > 0}
                         />
                       </div>
                       <div className="flex flex-col">
@@ -639,17 +566,17 @@ function DecorListing({
                           type="number"
                           placeholder="height"
                           required
-                          value={addOns.dimensions.height}
+                          value={cart.dimensions.height}
                           onChange={(e) => {
-                            setAddOns({
-                              ...addOns,
+                            setCart({
+                              ...cart,
                               dimensions: {
-                                ...addOns.dimensions,
+                                ...cart.dimensions,
                                 height: e.target.value,
                               },
                             });
                           }}
-                          disabled={addOns.price > 0}
+                          disabled={cart.price > 0}
                         />
                       </div>
                       <div className="flex flex-col">
@@ -657,14 +584,14 @@ function DecorListing({
                           className={`mt-auto text-white bg-rose-900 border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
                           onClick={() => {
                             try {
-                              let l = parseFloat(addOns.dimensions.length);
-                              let b = parseFloat(addOns.dimensions.breadth);
-                              let h = parseFloat(addOns.dimensions.height);
+                              let l = parseFloat(cart.dimensions.length);
+                              let b = parseFloat(cart.dimensions.breadth);
+                              let h = parseFloat(cart.dimensions.height);
                               if (l > 0 && b > 0 && h > 0) {
                                 let cost = l * b * platformPrice.price;
                                 let baseCost = (l + h) * (b + h);
-                                setAddOns({
-                                  ...addOns,
+                                setCart({
+                                  ...cart,
                                   dimensions: {
                                     length: l,
                                     breadth: b,
@@ -681,9 +608,9 @@ function DecorListing({
                             }
                           }}
                           disabled={
-                            !addOns.dimensions.length ||
-                            !addOns.dimensions.breadth ||
-                            !addOns.dimensions.height
+                            !cart.dimensions.length ||
+                            !cart.dimensions.breadth ||
+                            !cart.dimensions.height
                           }
                         >
                           Calculate
@@ -692,19 +619,19 @@ function DecorListing({
                     </div>
                   </div>
                 )}
-                {addOns.price > 0 && (
+                {cart.price > 0 && (
                   <div className="border-t border-t-black pt-2 flex flex-row gap-2">
                     <p className="font-medium flex flex-col">
                       <span>Platform Price: </span>
                       <span className="text-rose-900 font-semibold">
-                        ₹{addOns.price}
+                        ₹{cart.price}
                       </span>
                     </p>
                     <div className="flex flex-col ml-auto">
                       <button
                         className={`mt-auto text-white bg-rose-900 border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
                         onClick={() => {
-                          setAddOns({ ...addOns, flooring: "" });
+                          setCart({ ...cart, flooring: "" });
                         }}
                       >
                         Select Flooring Type
@@ -733,41 +660,48 @@ function DecorListing({
                     <p className="font-medium flex flex-col items-center">
                       <span>{item.title}</span>
                       <span className="text-rose-900 font-semibold">
-                        ₹{addOns.baseCost * item.price}
+                        ₹{cart.baseCost * item.price}
                       </span>
                     </p>
                     <div className="flex flex-col">
                       <button
                         className={`${
-                          addOns.flooring === item.title
+                          cart.flooring === item.title
                             ? "text-white bg-rose-900"
                             : "bg-white text-rose-900"
                         } hover:text-white border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
                         onClick={() => {
-                          setAddOns({
-                            ...addOns,
+                          setCart({
+                            ...cart,
                             flooring: item.title,
                           });
                         }}
                       >
-                        {addOns.flooring === item.title ? "Selected" : "Select"}
+                        {cart.flooring === item.title ? "Selected" : "Select"}
                       </button>
                     </div>
                   </div>
                 ))}
-                {addOns.flooring && (
+                {cart.flooring && (
                   <div className="flex flex-row items-center justify-between">
                     <p className="font-medium flex flex-col">
                       <span className="flex flex-row gap-2 items-center">
                         Total Price:{" "}
                         <Tooltip
                           content={`${
-                            decor?.productTypes?.find((i) => i.name === variant)
-                              ?.sellingPrice
-                          } + ${addOns.price} + ${
-                            addOns.baseCost *
+                            (decor?.productTypes?.find(
+                              (i) => i.name === variant
+                            )?.sellingPrice +
+                              (productVariant
+                                ? decor.productVariants.find(
+                                    (i) => i.name === productVariant
+                                  )?.priceModifier
+                                : 0)) *
+                            cart.quantity
+                          } + ${cart.price} + ${
+                            cart.baseCost *
                               flooringPrice.find(
-                                (i) => i.title === addOns.flooring
+                                (i) => i.title === cart.flooring
                               )?.price || 0
                           }`}
                           trigger="hover"
@@ -777,47 +711,44 @@ function DecorListing({
                       </span>
                       <span className="text-rose-900 font-semibold">
                         ₹
-                        {decor?.productTypes?.find((i) => i.name === variant)
+                        {(decor?.productTypes?.find((i) => i.name === variant)
                           ?.sellingPrice +
-                          addOns.price +
-                          (addOns.baseCost *
-                            flooringPrice.find(
-                              (i) => i.title === addOns.flooring
-                            )?.price || 0)}
+                          (productVariant
+                            ? decor.productVariants.find(
+                                (i) => i.name === productVariant
+                              )?.priceModifier
+                            : 0)) *
+                          cart.quantity +
+                          cart.price +
+                          (cart.baseCost *
+                            flooringPrice.find((i) => i.title === cart.flooring)
+                              ?.price || 0)}
                       </span>
                     </p>
                     <button
                       className={`text-white bg-rose-900 border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-3 py-2.5 focus:outline-none`}
                       onClick={() => {
-                        setAddOns({
-                          ...addOns,
-                          open: false,
-                          platform: false,
-                          dimensions: { length: 0, breadth: 0, height: 0 },
-                          price: 0,
-                          eventId: "",
-                          eventDayId: "",
-                          flooring: "",
-                          baseCost: 0,
-                          platformRate: 0,
-                          flooringRate: 0,
-                          decorPrice: 0,
-                        });
                         AddToEvent({
-                          quantity: 1,
-                          unit: decor.unit,
-                          eventDayId: addOns.eventDayId,
-                          eventId: addOns.eventId,
+                          quantity: cart.quantity,
+                          eventDayId: cart.eventDayId,
+                          eventId: cart.eventId,
                           platform: true,
-                          flooring: addOns.flooring,
-                          dimensions: addOns.dimensions,
+                          flooring: cart.flooring,
+                          dimensions: cart.dimensions,
                           price:
-                            decor?.productTypes?.find((i) => i.name === variant)
-                              ?.sellingPrice +
-                            addOns.price +
-                            (addOns.baseCost *
+                            (decor?.productTypes?.find(
+                              (i) => i.name === variant
+                            )?.sellingPrice +
+                              (productVariant
+                                ? decor.productVariants.find(
+                                    (i) => i.name === productVariant
+                                  )?.priceModifier
+                                : 0)) *
+                              cart.quantity +
+                            cart.price +
+                            (cart.baseCost *
                               flooringPrice.find(
-                                (i) => i.title === addOns.flooring
+                                (i) => i.title === cart.flooring
                               )?.price || 0),
                         });
                       }}
@@ -831,364 +762,407 @@ function DecorListing({
           </div>
         </Modal.Body>
       </Modal>
-      <div className="md:p-8 grid grid-cols-1 md:grid-cols-4 md:gap-8 decor-bg-image">
-        <div className="order-last md:order-first border-t md:border-t-0 md:border-r-0 border-black flex flex-col md:divide-y gap-4 md:divide-black md:pr-6">
-          <p className="text-xl font-medium hidden md:block">Description</p>
-          {decor.attributes.map((item, index) => (
-            <div className="flex flex-col pt-4 px-4 md:px-0 gap-2" key={index}>
-              <p className="text-lg flex flex-row justify-between">
-                {item.name}
-              </p>
-              <ul className="list-disc pl-4 flex flex-col gap-3">
-                {item.list.map((rec, index) => (
-                  <li className="" key={index}>
-                    {toProperCase(rec)}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-          {/* {decor.category !== "Mandap" && (
-            <div className="flex flex-col pt-4 px-4 md:px-0 gap-2">
-              <p className="text-lg flex flex-row justify-between">
-                Can be used for
-              </p>
-              <ul className="list-disc pl-4 flex flex-col gap-3">
-                {decor.productVariation.occassion.map((item, index) => (
-                  <li className="" key={index}>
-                    {toProperCase(item)}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <div className="flex flex-col pt-4 px-4 md:px-0 gap-3">
-            <p className="text-lg flex flex-row justify-between">
-              Colour Theme
-            </p>
-            {decor.productVariation.colors.map((item, index) => (
-              <p className="" key={index}>
-                {toProperCase(item)}
-              </p>
-            ))}
-          </div> */}
-          {/* {decor.productVariation.flowers.length > 0 && (
-            <div className="flex flex-col pt-4 px-4 md:px-0">
-              <p className="text-lg flex flex-row justify-between">Flowers</p>
-              {decor.productVariation.flowers.map((item, index) => (
-                <p className="" key={index}>
-                  {toProperCase(item)}
-                </p>
-              ))}
-            </div>
-          )} */}
-          {/* {decor.productVariation.fabric.length > 0 && (
-            <div className="flex flex-col pt-4 px-4 md:px-0">
-              <p className="text-lg flex flex-row justify-between">Fabric</p>
-              {decor.productVariation.fabric.map((item, index) => (
-                <p className="" key={index}>
-                  {toProperCase(item)}
-                </p>
-              ))}
-            </div>
-          )} */}
-          <div className="flex flex-col pt-4 px-4 md:px-0 gap-2">
-            <p className="text-lg flex flex-row justify-between">Included</p>
-            <ul className="list-disc pl-4 flex flex-col gap-3">
-              {decor.productInfo.included.map((item, index) => (
-                <li className="" key={index}>
-                  {toProperCase(item)}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="flex flex-col pt-4 px-4 md:px-0 gap-2">
-            <p className="text-lg flex flex-row justify-between">Sizes:</p>
-            <ul className="list-disc pl-4 flex flex-col gap-3">
-              {decor.productInfo.measurements.length > 0 && (
-                <li>Length: {decor.productInfo.measurements.length} ft.</li>
-              )}
-              {decor.productInfo.measurements.width > 0 && (
-                <li>Width: {decor.productInfo.measurements.width} ft.</li>
-              )}
-              {decor.productInfo.measurements.height > 0 && (
-                <li>Height: {decor.productInfo.measurements.height} ft.</li>
-              )}
-            </ul>
-          </div>
-          {/* <div className="flex flex-col pt-4 md:border-b md:border-black px-4 md:px-0"> */}
-          {/* <p className="text-lg flex flex-row justify-between">Placement</p> */}
-          {/* </div> */}
-        </div>
-        <div className="md:col-span-3 py-3 px-4 md:px-0 md:py-6">
-          <div className="md:px-10 relative">
-            {/* <div className="w-full md:w-1/2 mb-4">
-              <SearchBar />
-            </div> */}
-            <div className="flex flex-col md:flex-row justify-between mb-6">
-              <p className="font-semibold text-2xl">
-                {decor.name}{" "}
-                <span className="text-lg font-normal">
-                  ({decor?.productInfo.id})
-                </span>
-              </p>
-              <Rating size={"md"}>
-                {[null, null, null, null, null].map((i, index) => (
-                  <Rating.Star key={index} filled={index + 1 <= decor.rating} />
-                ))}
-              </Rating>
-            </div>
-            <div className={`relative pt-[56.25%] md:mb-10`}>
-              <ImageFillCard
-                src={decor?.image}
-                objectFit="contain"
-                className="rounded-xl"
-              />
-            </div>
-            <div className="flex flex-row flex-wrap gap-4 items-center mt-4 md:mt-0">
-              <div className="mr-auto flex flex-col w-full md:w-auto">
-                <p className="flex">
-                  Price for &nbsp;
-                  <Dropdown
-                    inline
-                    renderTrigger={() => (
-                      <span className="font-semibold text-rose-900 cursor-pointer flex items-center gap-1">
-                        {variant} <BsChevronDown />
-                      </span>
-                    )}
-                    className="text-rose-900"
+      {category.websiteView === "multiple" && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 py-8 md:pt-3 decor-bg-image">
+            <div className="hidden md:flex col-span-5 flex-row gap-4 -mb-8 translate-x-1/3">
+              {categoryList
+                ?.filter((i) => i.name !== category.name)
+                ?.map((item) => (
+                  <div
+                    className="bg-white rounded-full font-medium py-2 px-4 text-sm"
+                    key={item._id}
                   >
-                    {decor.productTypes
-                      .filter((i) => i.name != variant)
-                      .map((item) => (
-                        <Dropdown.Item
-                          onClick={() => {
-                            setVariant(item.name);
-                          }}
-                          key={item.name}
-                        >
-                          {item.name}
-                        </Dropdown.Item>
-                      ))}
-                  </Dropdown>
+                    <Link
+                      href={`/decor/view?category=${item.name}`}
+                      target="_blank"
+                    >
+                      {item.name}
+                    </Link>
+                  </div>
+                ))}
+            </div>
+            <div className="hidden md:flex flex-col gap-6">
+              <p className="text-xl font-medium text-center">DESCRIPTION</p>
+              <div className="rounded-r-3xl bg-white shadow-md flex flex-col gap-2 p-4 px-6">
+                <p className="text-lg font-medium">Backdrop size (ft)</p>
+                <p className="text-sm font-normal flex flex-row justify-around">
+                  {decor.productInfo.measurements.length > 0 && (
+                    <span>L: {decor.productInfo.measurements.length} ft.</span>
+                  )}
+                  {decor.productInfo.measurements.width > 0 && (
+                    <span>W: {decor.productInfo.measurements.width} ft.</span>
+                  )}
+                  {decor.productInfo.measurements.height > 0 && (
+                    <span>H: {decor.productInfo.measurements.height} ft.</span>
+                  )}
                 </p>
-                <p className="font-semibold text-xl">
+              </div>
+              <div className="rounded-r-3xl bg-white shadow-md flex flex-col gap-2 p-4 px-6">
+                <p className="text-lg font-medium">Includes</p>
+                <ul className="list-disc pl-8 flex flex-col text-sm font-normal">
+                  {decor.productInfo.included.map((item, index) => (
+                    <li key={index}>{toProperCase(item)}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="flex flex-col gap-6 md:col-span-3">
+              <p className="hidden md:block text-2xl font-semibold tracking-wide uppercase">
+                {decor.category}
+              </p>
+              <p className="md:hidden text-xl font-semibold mb-2 text-center">
+                {decor.name} ({decor?.productInfo.id})
+              </p>
+              <div className={`relative pt-[56.25%]`}>
+                <ImageFillCard
+                  src={displayImage}
+                  objectFit="cover"
+                  className="md:rounded-xl overflow-hidden"
+                  imageClassName="md:rounded-2xl"
+                />
+              </div>
+              <div className="flex flex-row gap-3 items-center justify-center">
+                {displayImage !== decor?.image && (
+                  <img
+                    src={decor?.image}
+                    className="h-24 w-24 rounded-lg object-cover cursor-pointer"
+                    onClick={() => {
+                      setDisplayImage(decor?.image);
+                    }}
+                  />
+                )}
+                {decor?.additionalImages
+                  ?.filter((i) => i !== displayImage)
+                  ?.map((item, index) => (
+                    <img
+                      src={item}
+                      className="h-24 w-24 rounded-lg object-cover cursor-pointer"
+                      key={index}
+                      onClick={() => {
+                        setDisplayImage(item);
+                      }}
+                    />
+                  ))}
+              </div>
+              <div className="grid grid-cols-2 items-center md:hidden gap-2 px-8">
+                {category?.multipleAllowed && (
+                  <>
+                    <p className="text-sm">Quantity</p>
+                    <Select
+                      value={cart.quantity}
+                      onChange={(e) => {
+                        setCart({ ...cart, quantity: e.target.value });
+                      }}
+                    >
+                      {Array.from({ length: 30 }, (_, index) => index + 1).map(
+                        (value) => (
+                          <option key={value} value={value}>
+                            {value}
+                          </option>
+                        )
+                      )}
+                    </Select>
+                  </>
+                )}
+                <div className="col-span-2 flex flex-col">
+                  <AddToEventButton />
+                </div>
+              </div>
+              <div className="md:bg-white md:rounded-3xl md:shadow-lg p-8 md:px-12 text-sm">
+                {decor.description}
+              </div>
+              <div className="flex md:hidden flex-col gap-2 p-4 ">
+                <p className="text-lg font-medium">Backdrop size (ft)</p>
+                <p className="text-sm font-normal flex flex-row justify-around">
+                  {decor.productInfo.measurements.length > 0 && (
+                    <span>L: {decor.productInfo.measurements.length} ft.</span>
+                  )}
+                  {decor.productInfo.measurements.width > 0 && (
+                    <span>W: {decor.productInfo.measurements.width} ft.</span>
+                  )}
+                  {decor.productInfo.measurements.height > 0 && (
+                    <span>H: {decor.productInfo.measurements.height} ft.</span>
+                  )}
+                </p>
+              </div>
+              <div className="flex md:hidden flex-col gap-2 p-4 ">
+                <p className="text-lg font-medium">Includes</p>
+                <ul className="list-disc pl-8 flex flex-col text-sm font-normal">
+                  {decor.productInfo.included.map((item, index) => (
+                    <li key={index}>{toProperCase(item)}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="fixed z-50 bottom-0 w-full flex md:hidden flex-row justify-between items-center gap-4 bg-white p-4">
+              <Dropdown
+                renderTrigger={() => (
+                  <span className="font-semibold text-rose-900 cursor-pointer flex items-center gap-1 uppercase bg-white w-fit text-sm">
+                    {variant} <BsChevronDown />
+                  </span>
+                )}
+                className="text-rose-900"
+              >
+                {decor.productTypes
+                  .filter((i) => i.name != variant)
+                  .map((item) => (
+                    <Dropdown.Item
+                      onClick={() => {
+                        setVariant(item.name);
+                      }}
+                      key={item.name}
+                    >
+                      {item.name}
+                    </Dropdown.Item>
+                  ))}
+              </Dropdown>
+              <p className="text-xl font-semibold text-right">
+                ₹{" "}
+                {(decor.productTypes.find((i) => i.name === variant)
+                  ?.sellingPrice +
+                  (productVariant
+                    ? decor.productVariants.find(
+                        (i) => i.name === productVariant
+                      )?.priceModifier
+                    : 0)) *
+                  cart.quantity}
+              </p>
+            </div>
+            <div className="hidden md:flex flex-col gap-6">
+              <p className="text-2xl font-semibold tracking-wide">&nbsp;</p>
+              <div className="border-b-2 border-gray-500 pb-4">
+                <p className="text-xl font-semibold mb-2">
+                  {decor.name} ({decor?.productInfo.id})
+                </p>
+                <Rating size={"md"}>
+                  {[null, null, null, null, null].map((i, index) => (
+                    <Rating.Star
+                      key={index}
+                      filled={index + 1 <= decor.rating}
+                    />
+                  ))}
+                </Rating>
+              </div>
+              <div className="border-b-2 border-gray-500 pb-4 flex flex-col gap-2">
+                <p className="text-sm">Price for</p>
+                <Dropdown
+                  renderTrigger={() => (
+                    <span className="font-semibold text-rose-900 cursor-pointer flex items-center gap-1 uppercase bg-white p-3 w-fit text-sm">
+                      {variant} <BsChevronDown />
+                    </span>
+                  )}
+                  className="text-rose-900"
+                >
+                  {decor.productTypes
+                    .filter((i) => i.name != variant)
+                    .map((item) => (
+                      <Dropdown.Item
+                        onClick={() => {
+                          setVariant(item.name);
+                        }}
+                        key={item.name}
+                      >
+                        {item.name}
+                      </Dropdown.Item>
+                    ))}
+                </Dropdown>
+                <p className="text-xl font-semibold">
                   ₹{" "}
                   {
                     decor.productTypes.find((i) => i.name === variant)
                       ?.sellingPrice
-                  }{" "}
-                  {decor.category === "Pathway" && `/ ${decor.unit}`}
+                  }
                 </p>
               </div>
-              <Dropdown
-                inline
-                arrowIcon={false}
-                dismissOnClick={false}
-                label={
-                  <button
-                    type="button"
-                    className="text-white bg-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
-                    onClick={() => {
-                      if (!userLoggedIn) {
-                        setOpenLoginModal(true);
-                      }
+              {category?.multipleAllowed && (
+                <div className="border-b-2 border-gray-500 pb-4 flex flex-col gap-2">
+                  <p className="text-sm">Quantity</p>
+                  <Select
+                    className="w-fit"
+                    value={cart.quantity}
+                    onChange={(e) => {
+                      setCart({ ...cart, quantity: e.target.value });
                     }}
                   >
-                    Add to Event
-                  </button>
-                }
-                className="border border-black rounded-lg bg-black"
-              >
-                <Dropdown.Item className="text-white">Event List</Dropdown.Item>
-                {eventList?.map((item) => (
-                  <>
-                    <Dropdown.Divider className="bg-black h-[1px] my-0" />
-                    <Dropdown.Item
-                      className="bg-white flex flex-row gap-4"
-                      as="p"
-                    >
-                      <Label className="flex">{item.name}</Label>
-                    </Dropdown.Item>
-                    {item.eventDays.map((rec) => (
-                      <Dropdown.Item
-                        key={rec._id}
-                        className="bg-white flex flex-row gap-4"
-                        onClick={() => {}}
-                        as={Label}
-                      >
-                        <Checkbox
-                          checked={
-                            rec.decorItems.filter((i) => i.decor === decor_id)
-                              .length > 0
-                          }
-                          className={item.status.finalized ? "sr-only" : ""}
-                          disabled={item.status.finalized}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              if (
-                                ["Stage", "Photobooth", "Mandap"].includes(
-                                  decor.category
-                                )
-                              ) {
-                                setAddOns({
-                                  ...addOns,
-                                  open: true,
-                                  platform: undefined,
-                                  dimensions: {
-                                    length: 0,
-                                    breadth: 0,
-                                    height: 0,
-                                  },
-                                  price: 0,
-                                  eventDayId: rec._id,
-                                  eventId: item._id,
-                                  flooring: undefined,
-                                  baseCost: 0,
-                                  platformRate: 0,
-                                  flooringRate: 0,
-                                  decorPrice: 0,
-                                });
-                              } else if (decor.category === "Pathway") {
-                                setQuantiy({
-                                  open: true,
-                                  eventDayId: rec._id,
-                                  eventId: item._id,
-                                  quantity: 1,
-                                  unit: decor.unit,
-                                });
-                              } else {
-                                AddToEvent({
-                                  quantity: 1,
-                                  unit: decor.unit,
-                                  eventDayId: rec._id,
-                                  eventId: item._id,
-                                  platform: false,
-                                  flooring: "",
-                                  dimensions: {
-                                    length: 0,
-                                    breadth: 0,
-                                    height: 0,
-                                  },
-                                  price: decor.productTypes.find(
-                                    (i) => i.name === variant
-                                  )?.sellingPrice,
-                                });
-                              }
-                            } else {
-                              RemoveFromEvent({
-                                eventDayId: rec._id,
-                                eventId: item._id,
-                              });
-                            }
-                          }}
-                        />
-                        {rec.name}
-                      </Dropdown.Item>
-                    ))}
-                  </>
-                ))}
-                <Dropdown.Divider className="bg-black h-[1px] my-0" />
-                <Dropdown.Item
-                  // as={Link}
-                  // href="/event"
-                  onClick={() => {
-                    setShowEventModal(true);
-                  }}
-                  className="bg-white text-cyan-600"
-                >
-                  + Create New Event
-                </Dropdown.Item>
-              </Dropdown>
-              <button
-                className={`${
-                  isAddedToWishlist
-                    ? "text-rose-900 bg-white hover-white"
-                    : "text-white bg-rose-900 hover:bg-rose-900"
-                } cursor-pointer px-5 py-2.5 focus:outline-none rounded-lg border-rose-900 border `}
-                onClick={() => {
-                  if (userLoggedIn) {
-                    isAddedToWishlist ? RemoveFromWishList() : AddToWishlist();
-                  } else {
-                    setOpenLoginModal(true);
-                  }
-                }}
-              >
-                <AiFillHeart size={20} />
-              </button>
+                    {Array.from({ length: 30 }, (_, index) => index + 1).map(
+                      (value) => (
+                        <option key={value} value={value}>
+                          {value}
+                        </option>
+                      )
+                    )}
+                  </Select>
+                </div>
+              )}
+              <div className="flex flex-col gap-4 pr-8">
+                <WishlistButton />
+                <AddToEventButton />
+              </div>
             </div>
-            <p className="mt-6 ">
-              <span
-                className={`${
-                  showDescription ? "line-clamp-none" : "line-clamp-2"
-                } md:line-clamp-none`}
-              >
-                {decor.description}
-              </span>
-              <span
-                className=" md:hidden text-rose-900 hover:font-medium underline cursor-pointer"
-                onClick={() => {
-                  setShowDescription(!showDescription);
-                }}
-              >
-                {showDescription ? "view less" : "view more"}
-              </span>
-            </p>
           </div>
-        </div>
-      </div>
-      <div className="border-y border-y-black p-8 decor-bg-image">
-        <p className="text-2xl font-semibold px-12">Similar Decor</p>
-        <div className="flex flex-row md:gap-12 justify-between items-center my-6">
-          <BsArrowLeftShort
-            size={48}
-            className="cursor-pointer scale-[0.5] md:scale-[1]"
-            onClick={() => {
-              let length = similarDecor.length;
-              let prev = similarIndex[0];
-              let mid = similarIndex[1];
-              let next = similarIndex[2];
-              next = mid;
-              mid = prev;
-              if (prev === 0) {
-                prev = length - 1;
-              } else {
-                prev--;
-              }
-              setSimilarIndex([prev, mid, next]);
-            }}
-          />
-          <div className="grid sm:grid-cols-1 md:grid-cols-3 md:gap-12 grow">
-            <DecorCard decor={similarDecor[similarIndex[0]]} />
-            <DecorCard
-              decor={similarDecor[similarIndex[1]]}
-              className="hidden md:inline"
-            />
-            <DecorCard
-              decor={similarDecor[similarIndex[2]]}
-              className="hidden md:inline"
-            />
+        </>
+      )}
+      {category.websiteView === "single" && (
+        <>
+          <div className="relative grid grid-cols-1 md:grid-cols-4 gap-8 py-8 decor-bg-image border-b-2 border-b-white">
+            <div className="hidden md:flex flex-col gap-6">
+              <div className="rounded-r-3xl bg-white shadow-md flex flex-col gap-2 p-8 my-4 ">
+                <p className="text-lg font-medium">About</p>
+                <ul className="list-disc pl-8 flex flex-col gap-2 text-sm font-normal">
+                  <li>{decor.description}</li>
+                </ul>
+              </div>
+            </div>
+            <div className="flex flex-col gap-6 md:col-span-2 md:px-8 md:mx-6 md:border-x-4 md:border-x-white">
+              <p className="text-2xl font-semibold text-center tracking-wide uppercase">
+                {decor.name}
+              </p>
+              <div className={`relative pt-[75%] mx-8 md:mx-16`}>
+                <ImageFillCard
+                  src={decor?.image}
+                  objectFit="cover"
+                  className="rounded-xl overflow-hidden"
+                  imageClassName="rounded-2xl"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 items-center md:hidden gap-2 px-8">
+              {category?.multipleAllowed && (
+                <>
+                  <p className="text-sm">Quantity</p>
+                  <Select
+                    value={cart.quantity}
+                    onChange={(e) => {
+                      setCart({ ...cart, quantity: e.target.value });
+                    }}
+                  >
+                    {Array.from({ length: 30 }, (_, index) => index + 1).map(
+                      (value) => (
+                        <option key={value} value={value}>
+                          {value}
+                        </option>
+                      )
+                    )}
+                  </Select>
+                </>
+              )}
+              <p className="text-sm">Options</p>
+              <Select
+                value={productVariant}
+                onChange={(e) => setProductVariant(e.target.value)}
+              >
+                {decor.productVariants.map((item, index) => (
+                  <option key={index} value={item.name}>
+                    {item.name}
+                  </option>
+                ))}
+              </Select>
+              <div className="col-span-2 flex flex-col">
+                <AddToEventButton />
+              </div>
+            </div>
+            <div className="flex md:hidden flex-col gap-2 mp-4 p-8">
+              <p className="text-lg font-medium">About</p>
+              <ul className="list-disc pl-8 flex flex-col gap-2 text-sm font-normal">
+                <li>{decor.description}</li>
+              </ul>
+            </div>
+            <div className="fixed z-50 bottom-0 w-full grid md:hidden grid-cols-2 gap-4 bg-white p-4">
+              <p className="text-xl font-semibold text-rose-900">
+                ₹{" "}
+                {decor.productTypes.find((i) => i.name === variant)
+                  ?.sellingPrice +
+                  (productVariant
+                    ? decor.productVariants.find(
+                        (i) => i.name === productVariant
+                      )?.priceModifier
+                    : 0)}{" "}
+                <span className="text-sm font-normal">per {decor.unit}</span>
+              </p>
+              <p className="text-xl font-semibold text-right">
+                Total &nbsp;&nbsp;₹{" "}
+                {(decor.productTypes.find((i) => i.name === variant)
+                  ?.sellingPrice +
+                  (productVariant
+                    ? decor.productVariants.find(
+                        (i) => i.name === productVariant
+                      )?.priceModifier
+                    : 0)) *
+                  cart.quantity}
+              </p>
+            </div>
+            <div className="hidden md:flex flex-col gap-6">
+              <div className="rounded-l-3xl bg-white shadow-md flex flex-col gap-2 p-8 my-4 flex flex-col gap-4">
+                <div className="border-b-2 border-gray-500 pb-2">
+                  <p className="text-xl font-semibold">
+                    ₹{" "}
+                    {decor.productTypes.find((i) => i.name === variant)
+                      ?.sellingPrice +
+                      (productVariant
+                        ? decor.productVariants.find(
+                            (i) => i.name === productVariant
+                          )?.priceModifier
+                        : 0)}{" "}
+                    <span className="text-sm font-normal">
+                      per {decor.unit}
+                    </span>
+                  </p>
+                </div>
+                <div className="border-b-2 border-gray-500 pb-2 grid grid-cols-2 items-center">
+                  <p className="text-sm">Options</p>
+                  <Select
+                    value={productVariant}
+                    onChange={(e) => setProductVariant(e.target.value)}
+                  >
+                    {decor.productVariants.map((item, index) => (
+                      <option key={index} value={item.name}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="border-b-2 border-gray-500 pb-2 grid grid-cols-2 items-center gap-y-4">
+                  {category?.multipleAllowed && (
+                    <>
+                      <p className="text-sm">Quantity</p>
+                      <Select
+                        value={cart.quantity}
+                        onChange={(e) => {
+                          setCart({ ...cart, quantity: e.target.value });
+                        }}
+                      >
+                        {Array.from(
+                          { length: 30 },
+                          (_, index) => index + 1
+                        ).map((value) => (
+                          <option key={value} value={value}>
+                            {value}
+                          </option>
+                        ))}
+                      </Select>
+                    </>
+                  )}
+                  <p className="text-sm">Total Price</p>
+                  <p className="text-xl font-semibold">
+                    ₹{" "}
+                    {(decor.productTypes.find((i) => i.name === variant)
+                      ?.sellingPrice +
+                      (productVariant
+                        ? decor.productVariants.find(
+                            (i) => i.name === productVariant
+                          )?.priceModifier
+                        : 0)) *
+                      cart.quantity}
+                  </p>
+                </div>
+                <AddToEventButton />
+              </div>
+            </div>
           </div>
-          <BsArrowRightShort
-            size={48}
-            className="cursor-pointer scale-[0.5] md:scale-[1]"
-            onClick={() => {
-              let length = similarDecor.length;
-              let prev = similarIndex[0];
-              let mid = similarIndex[1];
-              let next = similarIndex[2];
-              prev = mid;
-              mid = next;
-              if (next === length - 1) {
-                next = 0;
-              } else {
-                next++;
-              }
-              setSimilarIndex([prev, mid, next]);
-            }}
-          />
-        </div>
-      </div>
+        </>
+      )}
+      <SimilarDecor similarDecor={similarDecor} />
     </>
   );
 }
@@ -1196,10 +1170,10 @@ function DecorListing({
 export async function getServerSideProps(context) {
   try {
     const { decor_id } = context.params;
-    const response = await fetch(
+    const similarDecorResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/decor?similarDecorFor=${decor_id}`
     );
-    const similarDecor = await response.json();
+    const similarDecor = await similarDecorResponse.json();
     const decorResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/decor/${decor_id}`
     );
@@ -1212,10 +1186,17 @@ export async function getServerSideProps(context) {
         },
       };
     }
+    const categoryResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/category`
+    );
+    const categoryList = await categoryResponse.json();
+    const category = categoryList.find((i) => i.name === decor.category);
     return {
       props: {
         similarDecor: similarDecor.list,
         decor,
+        category,
+        categoryList,
       },
     };
   } catch (error) {
