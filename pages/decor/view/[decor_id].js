@@ -407,7 +407,8 @@ function DecorListing({
         }}
         disabled={loading}
       >
-        REMOVE FROM FAVORITES &nbsp;
+        {isAddedToWishlist ? "REMOVE FROM FAVORITES" : "ADD TO FAVOURITES"}
+        &nbsp;
         {isAddedToWishlist ? (
           <AiFillHeart size={20} className="text-rose-900" />
         ) : (
@@ -765,7 +766,7 @@ function DecorListing({
       {category.websiteView === "multiple" && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 py-8 md:pt-3 decor-bg-image">
-            <div className="hidden md:flex col-span-5 flex-row gap-4 -mb-8 translate-x-1/3">
+            <div className="hidden md:flex col-span-5 flex-row gap-4 -mb-8 translate-x-1/2 w-2/3">
               {categoryList
                 ?.filter((i) => i.name !== category.name)
                 ?.map((item) => (
@@ -817,7 +818,7 @@ function DecorListing({
               <div className={`relative pt-[56.25%]`}>
                 <ImageFillCard
                   src={displayImage}
-                  objectFit="cover"
+                  objectFit="contain"
                   className="md:rounded-xl overflow-hidden"
                   imageClassName="md:rounded-2xl"
                 />
