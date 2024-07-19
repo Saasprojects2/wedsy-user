@@ -188,7 +188,8 @@ function App({ Component, pageProps }) {
                 router.pathname !== "/event/[event_id]/planner" &&
                 router.pathname !== "/my-account" &&
                 router.pathname !== "/my-payments" &&
-                router.pathname !== "/my-orders"
+                router.pathname !== "/my-orders" &&
+                !router.pathname.includes("/decor/view")
               ) {
                 // Initialize Kiwi SDK after script is loaded
                 kiwi.init("", "YSNtpXF4Dmqafpa8XeSZzWfcawpPm4QP", {});
