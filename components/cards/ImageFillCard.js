@@ -1,6 +1,11 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
-export default function ImageFillCard({ src, className, objectFit }) {
+export default function ImageFillCard({
+  src,
+  className,
+  objectFit,
+  imageClassName,
+}) {
   const [isEnlarged, setIsEnlarged] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
@@ -39,7 +44,7 @@ export default function ImageFillCard({ src, className, objectFit }) {
         layout={"fill"}
         objectFit={objectFit}
         sizes="100%"
-        className={`cursor-pointer w-full h-full transition-all duration-75 ease-in-out`}
+        className={`cursor-pointer w-full h-full transition-all duration-75 ease-in-out ${imageClassName}`}
         onClick={handleImageClick}
       />
       {isEnlarged && (
