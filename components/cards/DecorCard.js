@@ -26,10 +26,7 @@ export default function DecorCard({ decor, className }) {
         <div className="flex flex-row items-center justify-between flex-wrap bg-white px-6 py-2 rounded-full mt-3">
           <p className="font-semibold">{name}</p>
           <p className="font-semibold text-rose-900">
-            ₹{" "}
-            {decor.productInfo.variant.artificialFlowers.sellingPrice ||
-              decor.productInfo.variant.mixedFlowers.sellingPrice ||
-              decor.productInfo.variant.naturalFlowers.sellingPrice}{" "}
+            ₹ {decor.productTypes[0]?.sellingPrice}{" "}
             {decor.category === "Pathway" && `/ ${decor.unit}`}
           </p>
         </div>
