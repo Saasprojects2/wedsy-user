@@ -40,7 +40,8 @@ function DecorListing({
     decor?.productTypes?.length > 0 ? decor?.productTypes[0]?.name : ""
   );
   const [productVariant, setProductVariant] = useState(
-    decor?.productVariants?.length > 0 ? decor?.productVariants[0]?.name : ""
+    ""
+    // decor?.productVariants?.length > 0 ? decor?.productVariants[0]?.name : ""
   );
   const [cart, setCart] = useState({
     open: false,
@@ -55,6 +56,23 @@ function DecorListing({
     price: 0,
     eventId: "",
     eventDayId: "",
+  });
+  const [productAddOnsCart, setProductAddOnsCart] = useState({
+    open: false,
+    displayIndex: -1,
+    quantity: 1,
+    productAddOns: [],
+    platform: false,
+    flooring: "",
+    dimensions: {
+      length: 0,
+      breadth: 0,
+      height: 0,
+    },
+    eventId: "",
+    eventDayId: "",
+    tempQuantity: 1,
+    productVariant: "",
   });
   const [showEventModal, setShowEventModal] = useState(false);
   const [platformPrice, setPlatformPrice] = useState({ price: 0, image: "" });
@@ -207,6 +225,22 @@ function DecorListing({
       .then((response) => {
         if (response.message === "success") {
           fetchEvents();
+          if (decor.productAddOns.length > 0) {
+            setProductAddOnsCart({
+              ...productAddOnsCart,
+              displayIndex: 0,
+              open: true,
+              quantity,
+              productAddOns: [],
+              platform,
+              flooring,
+              dimensions,
+              eventId,
+              eventDayId,
+              tempQuantity: quantity,
+              productVariant: "",
+            });
+          }
           if (category.platformAllowed || category.flooringAllowed) {
             setCart({
               ...cart,
@@ -225,6 +259,84 @@ function DecorListing({
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
       });
+  };
+  const AddProductAddOnsToEvent = ({ tempCart }) => {
+    if (tempCart.productAddOns.length > 0) {
+      Promise.all(
+        tempCart.productAddOns?.map((item) => {
+          fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/event/${tempCart.eventId}/decor/${tempCart.eventDayId}`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: JSON.stringify({
+                decor: item._id,
+                platform: tempCart.platform,
+                flooring: tempCart.flooring,
+                dimensions: tempCart.dimensions,
+                price:
+                  (item.decor.productTypes[0]?.sellingPrice +
+                    (item.productVariant
+                      ? item.decor.productVariants.find(
+                          (i) => i.name === item.productVariant
+                        )?.priceModifier
+                      : 0)) *
+                  item.quantity,
+                category: item.decor.category,
+                variant: item.decor?.productTypes[0]?.name,
+                productVariant: item.productVariant,
+                priceModifier: item.productVariant
+                  ? item.decor.productVariants.find(
+                      (i) => i.name === item.productVariant
+                    )?.priceModifier
+                  : 0,
+                quantity: item.quantity,
+                unit: item.decor.unit,
+                platformRate: tempCart.platform ? platformPrice?.price : 0,
+                flooringRate: tempCart.flooring
+                  ? flooringPrice.find((i) => i.title === tempCart.flooring)
+                      ?.price || 0
+                  : 0,
+                decorPrice: item.decor?.productTypes[0]?.sellingPrice,
+                included: item.decor?.productInfo?.included || [],
+              }),
+            }
+          )
+            .then((response) => (response.ok ? response.json() : null))
+            .catch((error) => {
+              console.error(
+                "There was a problem with the fetch operation:",
+                error
+              );
+            });
+        })
+      )
+        .then((result) => {
+          setProductAddOnsCart({
+            ...productAddOnsCart,
+            displayIndex: -1,
+            open: false,
+            quantity: 1,
+            productAddOns: [],
+            platform: false,
+            flooring: "",
+            dimensions: {
+              length: 0,
+              breadth: 0,
+              height: 0,
+            },
+            eventId: "",
+            eventDayId: "",
+          });
+          alert("Addons added to event!");
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    }
   };
   const RemoveFromEvent = ({ eventId, eventDayId }) => {
     fetch(
@@ -435,6 +547,202 @@ function DecorListing({
         fetchEvents={fetchEvents}
       />
       <DecorDisclaimer />
+      <Modal
+        show={productAddOnsCart.open}
+        size="lg"
+        popup
+        onClose={() =>
+          setProductAddOnsCart({
+            ...productAddOnsCart,
+            displayIndex: -1,
+            open: false,
+            quantity: 1,
+            productAddOns: [],
+            platform: false,
+            flooring: "",
+            dimensions: {
+              length: 0,
+              breadth: 0,
+              height: 0,
+            },
+            eventId: "",
+            eventDayId: "",
+          })
+        }
+      >
+        <Modal.Header>
+          <h3 className="text-xl font-medium text-gray-900 dark:text-white px-4">
+            Add-ons &nbsp;
+            <span className="text-sm">
+              ({productAddOnsCart.displayIndex + 1}/{decor.productAddOns.length}
+              )
+            </span>
+          </h3>
+        </Modal.Header>
+        <Modal.Body>
+          {decor.productAddOns[productAddOnsCart.displayIndex]?._id &&
+            decor.productAddOns
+              ?.filter((_, i) => i === productAddOnsCart.displayIndex)
+              ?.map((item, index) => (
+                <div className="space-y-6" key={item._id}>
+                  <p>
+                    {item.name}: &nbsp;{" "}
+                    <span className="text-rose-900">
+                      ₹{" "}
+                      {item.productTypes[0]?.sellingPrice +
+                        (productAddOnsCart.productVariant
+                          ? item.productVariants.find(
+                              (i) => i.name === productAddOnsCart.productVariant
+                            )?.priceModifier
+                          : 0)}
+                    </span>
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <img
+                      src={
+                        productAddOnsCart.productVariant
+                          ? item.productVariants.find(
+                              (i) => i.name === productAddOnsCart.productVariant
+                            )?.image
+                          : item?.image
+                      }
+                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <p className="text-right">Variant</p>
+                      <Select
+                        value={productAddOnsCart.productVariant}
+                        onChange={(e) =>
+                          setProductAddOnsCart({
+                            ...productAddOnsCart,
+                            productVariant: e.target.value,
+                          })
+                        }
+                      >
+                        <option value={""}>Select</option>
+                        {item.productVariants.map((item, index) => (
+                          <option key={index} value={item.name}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </Select>
+                      <p className="text-right">Quantity</p>
+                      <Select
+                        value={productAddOnsCart.tempQuantity}
+                        onChange={(e) => {
+                          setProductAddOnsCart({
+                            ...productAddOnsCart,
+                            tempQuantity: e.target.value,
+                          });
+                        }}
+                      >
+                        {Array.from(
+                          { length: 30 },
+                          (_, index) => index + 1
+                        ).map((value) => (
+                          <option key={value} value={value}>
+                            {value}
+                          </option>
+                        ))}
+                      </Select>
+                      <div className="col-span-2 border-t border-t-rose-900 grid grid-cols-2 gap-2">
+                        <p className="text-right">Total</p>
+                        <p className="text-rose-900">
+                          ₹{" "}
+                          {(item.productTypes[0]?.sellingPrice +
+                            (productAddOnsCart.productVariant
+                              ? item.productVariants.find(
+                                  (i) =>
+                                    i.name === productAddOnsCart.productVariant
+                                )?.priceModifier
+                              : 0)) *
+                            productAddOnsCart.tempQuantity}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          <div className="border-t mt-6 pt-3 flex flex-row gap-4 justify-center items-center">
+            <button
+              className={`text-rose-900 bg-white border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-6 py-1 focus:outline-none`}
+              onClick={() => {
+                if (
+                  productAddOnsCart.displayIndex + 1 ===
+                  decor.productAddOns.length
+                ) {
+                  AddProductAddOnsToEvent({
+                    tempCart: {
+                      ...productAddOnsCart,
+                      displayIndex: productAddOnsCart.displayIndex + 1,
+                      tempQuantity: productAddOnsCart.quantity,
+                      productVariant: "",
+                    },
+                  });
+                } else {
+                  setProductAddOnsCart({
+                    ...productAddOnsCart,
+                    displayIndex: productAddOnsCart.displayIndex + 1,
+                    tempQuantity: productAddOnsCart.quantity,
+                    productVariant: "",
+                  });
+                }
+              }}
+            >
+              Skip
+            </button>
+            <button
+              className={`text-white bg-rose-900 border border-rose-900 hover:bg-rose-900 hover:text-white font-medium rounded-lg text-sm px-6 py-1 focus:outline-none`}
+              onClick={() => {
+                if (
+                  productAddOnsCart.displayIndex + 1 ===
+                  decor.productAddOns.length
+                ) {
+                  AddProductAddOnsToEvent({
+                    tempCart: {
+                      ...productAddOnsCart,
+                      displayIndex: productAddOnsCart.displayIndex + 1,
+                      productAddOns: [
+                        ...productAddOnsCart.productAddOns,
+                        {
+                          _id: decor.productAddOns[
+                            productAddOnsCart.displayIndex
+                          ]?._id,
+                          decor:
+                            decor.productAddOns[productAddOnsCart.displayIndex],
+                          quantity: productAddOnsCart.tempQuantity,
+                          productVariant: productAddOnsCart.productVariant,
+                        },
+                      ],
+                      tempQuantity: productAddOnsCart.quantity,
+                      productVariant: "",
+                    },
+                  });
+                } else {
+                  setProductAddOnsCart({
+                    ...productAddOnsCart,
+                    displayIndex: productAddOnsCart.displayIndex + 1,
+                    productAddOns: [
+                      ...productAddOnsCart.productAddOns,
+                      {
+                        _id: decor.productAddOns[productAddOnsCart.displayIndex]
+                          ?._id,
+                        decor:
+                          decor.productAddOns[productAddOnsCart.displayIndex],
+                        quantity: productAddOnsCart.tempQuantity,
+                        productVariant: productAddOnsCart.productVariant,
+                      },
+                    ],
+                    tempQuantity: productAddOnsCart.quantity,
+                    productVariant: "",
+                  });
+                }
+              }}
+            >
+              Add
+            </button>
+          </div>
+        </Modal.Body>
+      </Modal>
       {/* Cart Model */}
       <Modal
         show={cart.open}
@@ -1021,7 +1329,13 @@ function DecorListing({
               </p>
               <div className={`relative pt-[75%] mx-8 md:mx-16`}>
                 <ImageFillCard
-                  src={decor?.image}
+                  src={
+                    productVariant
+                      ? decor.productVariants.find(
+                          (i) => i.name === productVariant
+                        )?.image
+                      : decor?.image
+                  }
                   objectFit="cover"
                   className="rounded-xl overflow-hidden"
                   imageClassName="rounded-2xl"
@@ -1053,6 +1367,7 @@ function DecorListing({
                 value={productVariant}
                 onChange={(e) => setProductVariant(e.target.value)}
               >
+                <option value={""}>Select</option>
                 {decor.productVariants.map((item, index) => (
                   <option key={index} value={item.name}>
                     {item.name}
@@ -1116,6 +1431,7 @@ function DecorListing({
                     value={productVariant}
                     onChange={(e) => setProductVariant(e.target.value)}
                   >
+                    <option value={""}>Select</option>
                     {decor.productVariants.map((item, index) => (
                       <option key={index} value={item.name}>
                         {item.name}
@@ -1176,7 +1492,7 @@ export async function getServerSideProps(context) {
     );
     const similarDecor = await similarDecorResponse.json();
     const decorResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/decor/${decor_id}`
+      `${process.env.NEXT_PUBLIC_API_URL}/decor/${decor_id}?populate=productAddOns`
     );
     const decor = await decorResponse.json();
     if (!decor || decorResponse.status !== 200) {
