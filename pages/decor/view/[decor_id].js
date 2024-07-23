@@ -1336,7 +1336,7 @@ function DecorListing({
                         )?.image
                       : decor?.image
                   }
-                  objectFit="cover"
+                  objectFit="contain"
                   className="rounded-xl overflow-hidden"
                   imageClassName="rounded-2xl"
                 />
