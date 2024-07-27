@@ -662,14 +662,46 @@ function DecorListing({
                           });
                         }}
                       >
-                        {Array.from(
-                          { length: 30 },
-                          (_, index) => index + 1
-                        ).map((value) => (
-                          <option key={value} value={value}>
-                            {value}
+                        {item?.productInfo?.minimumOrderQuantity &&
+                        item?.productInfo?.maximumOrderQuantity &&
+                        (item?.productInfo?.minimumOrderQuantity >
+                          productAddOnsCart.tempQuantity ||
+                          item?.productInfo?.maximumOrderQuantity <
+                            productAddOnsCart.tempQuantity) ? (
+                          <option
+                            key={productAddOnsCart.tempQuantity}
+                            value={productAddOnsCart.tempQuantity}
+                          >
+                            {productAddOnsCart.tempQuantity}
                           </option>
-                        ))}
+                        ) : (
+                          productAddOnsCart.tempQuantity > 30 && (
+                            <option
+                              key={productAddOnsCart.tempQuantity}
+                              value={productAddOnsCart.tempQuantity}
+                            >
+                              {productAddOnsCart.tempQuantity}
+                            </option>
+                          )
+                        )}
+                        {item?.productInfo?.minimumOrderQuantity &&
+                        item?.productInfo?.maximumOrderQuantity ? (
+                          <QuantityOptions
+                            max={item?.productInfo?.maximumOrderQuantity}
+                            min={item?.productInfo?.minimumOrderQuantity}
+                          />
+                        ) : (
+                          <>
+                            {Array.from(
+                              { length: 30 },
+                              (_, index) => index + 1
+                            ).map((value) => (
+                              <option key={value} value={value}>
+                                {value}
+                              </option>
+                            ))}
+                          </>
+                        )}
                       </Select>
                       <div className="col-span-2 border-t border-t-rose-900 grid grid-cols-2 gap-2">
                         <p className="text-right">Total</p>
