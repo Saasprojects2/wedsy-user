@@ -45,7 +45,11 @@ function DecorListing({
   );
   const [cart, setCart] = useState({
     open: false,
-    quantity: 1,
+    quantity:
+      decor?.productInfo?.minimumOrderQuantity &&
+      decor?.productInfo?.maximumOrderQuantity
+        ? decor?.productInfo?.minimumOrderQuantity
+        : 1,
     platform: false,
     flooring: "",
     dimensions: {
@@ -439,6 +443,12 @@ function DecorListing({
                   onChange={(e) => {
                     if (e.target.checked) {
                       if (
+                        category.websiteView === "single" &&
+                        decor.productVariants.length > 0 &&
+                        !productVariant
+                      ) {
+                        alert("Select Option(variant)");
+                      } else if (
                         category.flooringAllowed ||
                         category.platformAllowed
                       ) {
@@ -527,6 +537,23 @@ function DecorListing({
           <AiOutlineHeart size={20} className="text-rose-900" />
         )}
       </Button>
+    );
+  }
+
+  function QuantityOptions({ min, max }) {
+    const listItems = [];
+    for (let i = min; i <= max; i++) {
+      listItems.push(i);
+    }
+
+    return (
+      <>
+        {listItems.map((number) => (
+          <option key={number} value={number}>
+            {number}
+          </option>
+        ))}
+      </>
     );
   }
 
@@ -1164,12 +1191,23 @@ function DecorListing({
                         setCart({ ...cart, quantity: e.target.value });
                       }}
                     >
-                      {Array.from({ length: 30 }, (_, index) => index + 1).map(
-                        (value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        )
+                      {decor?.productInfo?.minimumOrderQuantity &&
+                      decor?.productInfo?.maximumOrderQuantity ? (
+                        <QuantityOptions
+                          max={decor?.productInfo?.maximumOrderQuantity}
+                          min={decor?.productInfo?.minimumOrderQuantity}
+                        />
+                      ) : (
+                        <>
+                          {Array.from(
+                            { length: 30 },
+                            (_, index) => index + 1
+                          ).map((value) => (
+                            <option key={value} value={value}>
+                              {value}
+                            </option>
+                          ))}
+                        </>
                       )}
                     </Select>
                   </>
@@ -1294,12 +1332,23 @@ function DecorListing({
                       setCart({ ...cart, quantity: e.target.value });
                     }}
                   >
-                    {Array.from({ length: 30 }, (_, index) => index + 1).map(
-                      (value) => (
-                        <option key={value} value={value}>
-                          {value}
-                        </option>
-                      )
+                    {decor?.productInfo?.minimumOrderQuantity &&
+                    decor?.productInfo?.maximumOrderQuantity ? (
+                      <QuantityOptions
+                        max={decor?.productInfo?.maximumOrderQuantity}
+                        min={decor?.productInfo?.minimumOrderQuantity}
+                      />
+                    ) : (
+                      <>
+                        {Array.from(
+                          { length: 30 },
+                          (_, index) => index + 1
+                        ).map((value) => (
+                          <option key={value} value={value}>
+                            {value}
+                          </option>
+                        ))}
+                      </>
                     )}
                   </Select>
                 </div>
@@ -1319,7 +1368,9 @@ function DecorListing({
               <div className="rounded-r-3xl bg-white shadow-md flex flex-col gap-2 p-8 my-4 ">
                 <p className="text-lg font-medium">About</p>
                 <ul className="list-disc pl-8 flex flex-col gap-2 text-sm font-normal">
-                  <li>{decor.description}</li>
+                  {decor.description.split("\n").map((i, index) => (
+                    <li key={index}>{i}</li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -1352,28 +1403,43 @@ function DecorListing({
                       setCart({ ...cart, quantity: e.target.value });
                     }}
                   >
-                    {Array.from({ length: 30 }, (_, index) => index + 1).map(
-                      (value) => (
-                        <option key={value} value={value}>
-                          {value}
-                        </option>
-                      )
+                    {decor?.productInfo?.minimumOrderQuantity &&
+                    decor?.productInfo?.maximumOrderQuantity ? (
+                      <QuantityOptions
+                        max={decor?.productInfo?.maximumOrderQuantity}
+                        min={decor?.productInfo?.minimumOrderQuantity}
+                      />
+                    ) : (
+                      <>
+                        {Array.from(
+                          { length: 30 },
+                          (_, index) => index + 1
+                        ).map((value) => (
+                          <option key={value} value={value}>
+                            {value}
+                          </option>
+                        ))}
+                      </>
                     )}
                   </Select>
                 </>
               )}
-              <p className="text-sm">Options</p>
-              <Select
-                value={productVariant}
-                onChange={(e) => setProductVariant(e.target.value)}
-              >
-                <option value={""}>Select</option>
-                {decor.productVariants.map((item, index) => (
-                  <option key={index} value={item.name}>
-                    {item.name}
-                  </option>
-                ))}
-              </Select>
+              {decor.productVariants.length > 0 && (
+                <>
+                  <p className="text-sm">Options</p>
+                  <Select
+                    value={productVariant}
+                    onChange={(e) => setProductVariant(e.target.value)}
+                  >
+                    <option value={""}>Select</option>
+                    {decor.productVariants.map((item, index) => (
+                      <option key={index} value={item.name}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </Select>
+                </>
+              )}
               <div className="col-span-2 flex flex-col">
                 <AddToEventButton />
               </div>
@@ -1425,20 +1491,22 @@ function DecorListing({
                     </span>
                   </p>
                 </div>
-                <div className="border-b-2 border-gray-500 pb-2 grid grid-cols-2 items-center">
-                  <p className="text-sm">Options</p>
-                  <Select
-                    value={productVariant}
-                    onChange={(e) => setProductVariant(e.target.value)}
-                  >
-                    <option value={""}>Select</option>
-                    {decor.productVariants.map((item, index) => (
-                      <option key={index} value={item.name}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
+                {decor.productVariants.length > 0 && (
+                  <div className="border-b-2 border-gray-500 pb-2 grid grid-cols-2 items-center">
+                    <p className="text-sm">Options</p>
+                    <Select
+                      value={productVariant}
+                      onChange={(e) => setProductVariant(e.target.value)}
+                    >
+                      <option value={""}>Select</option>
+                      {decor.productVariants.map((item, index) => (
+                        <option key={index} value={item.name}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </Select>
+                  </div>
+                )}
                 <div className="border-b-2 border-gray-500 pb-2 grid grid-cols-2 items-center gap-y-4">
                   {category?.multipleAllowed && (
                     <>
@@ -1449,14 +1517,24 @@ function DecorListing({
                           setCart({ ...cart, quantity: e.target.value });
                         }}
                       >
-                        {Array.from(
-                          { length: 30 },
-                          (_, index) => index + 1
-                        ).map((value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        ))}
+                        {decor?.productInfo?.minimumOrderQuantity &&
+                        decor?.productInfo?.maximumOrderQuantity ? (
+                          <QuantityOptions
+                            max={decor?.productInfo?.maximumOrderQuantity}
+                            min={decor?.productInfo?.minimumOrderQuantity}
+                          />
+                        ) : (
+                          <>
+                            {Array.from(
+                              { length: 30 },
+                              (_, index) => index + 1
+                            ).map((value) => (
+                              <option key={value} value={value}>
+                                {value}
+                              </option>
+                            ))}
+                          </>
+                        )}
                       </Select>
                     </>
                   )}
