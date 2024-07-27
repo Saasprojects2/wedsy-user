@@ -264,8 +264,10 @@ export default function Payments({ user }) {
                       </Table.Cell>
                       <Table.Cell className="py-1 px-2 md:px-6 md:py-4">
                         {toProperCase(
-                          item?.paymentMethod === "cash"
-                            ? "cash"
+                          ["cash", "upi", "bank-transfer"].includes(
+                            item.paymentMethod
+                          )
+                            ? item?.paymentMethod.replace("-", " ")
                             : item?.transactions[0]?.method
                                 ?.split("_")
                                 .join(" ") || ""
