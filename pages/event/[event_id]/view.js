@@ -7,6 +7,7 @@ import EventToolHeader from "@/components/event-tool/EventToolHeader";
 import EventToolSidebar from "@/components/event-tool/EventToolSidebar";
 import MandatoryItemsList from "@/components/event-tool/MandatoryItemsList";
 import NotesModal from "@/components/event-tool/NotesModal";
+import SetupLocationImageModal from "@/components/event-tool/SetupLocationImageModal";
 import TotalSummaryTable from "@/components/event-tool/TotalSummaryTable";
 import { toPriceString } from "@/utils/text";
 import Link from "next/link";
@@ -22,6 +23,10 @@ export default function EventTool({ user }) {
   const [event, setEvent] = useState({});
   const [eventDay, setEventDay] = useState();
   const { event_id } = router.query;
+  const [setupLocationImage, setSetupLocationImage] = useState({
+    open: false,
+    image: "",
+  });
   const [notes, setNotes] = useState({
     open: false,
     edit: false,
@@ -35,6 +40,25 @@ export default function EventTool({ user }) {
   });
   const [platformPrice, setPlatformPrice] = useState({ price: 0, image: "" });
   const [flooringPrice, setFlooringPrice] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
+  const fetchCategoryList = () => {
+    setLoading(true);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/category`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setLoading(false);
+        setCategoryList(response);
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   const fetchPlatformInfo = () => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/config?code=platform`, {
       method: "GET",
@@ -113,6 +137,7 @@ export default function EventTool({ user }) {
   useEffect(() => {
     if (event_id) {
       fetchEvent();
+      fetchCategoryList();
       fetchFlooringInfo();
       fetchPlatformInfo();
     }
@@ -166,7 +191,11 @@ export default function EventTool({ user }) {
   return (
     <>
       <NotesModal notes={notes} setNotes={setNotes} allowEdit={false} />
-      <div className="flex flex-col overflow-hidden hide-scrollbar">
+      <SetupLocationImageModal
+        setSetupLocationImage={setSetupLocationImage}
+        setupLocationImage={setupLocationImage}
+      />
+      <div className="flex flex-col overflow-hidden hide-scrollbar bg-gray-100">
         <EventToolHeader
           fetchEvent={fetchEvent}
           event={event}
@@ -186,7 +215,7 @@ export default function EventTool({ user }) {
             handlePlannerClick={handlePlannerClick}
           />
           <div
-            className="overflow-y-auto hide-scrollbar col-span-3 flex flex-col px-6 md:px-0"
+            className="overflow-y-auto hide-scrollbar col-span-3 flex flex-col md:px-6 md:px-0"
             ref={plannerRef}
             onScroll={handlePlannerScroll}
           >
@@ -194,10 +223,16 @@ export default function EventTool({ user }) {
               ?.filter((i) => i._id === eventDay)
               ?.map((tempEventDay, tempIndex) => (
                 <>
-                  <EventDayInfo tempEventDay={tempEventDay} />
+                  <EventDayInfo
+                    tempEventDay={tempEventDay}
+                    status={event?.status}
+                  />
                   <DecorItemsList
+                    setSetupLocationImage={setSetupLocationImage}
+                    setupLocationImage={setupLocationImage}
                     decorItems={tempEventDay?.decorItems}
-                    status={tempEventDay?.status}
+                    categoryList={categoryList}
+                    status={event?.status}
                     setNotes={setNotes}
                     event_id={event_id}
                     eventDay={eventDay}

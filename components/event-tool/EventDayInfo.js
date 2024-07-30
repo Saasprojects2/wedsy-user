@@ -1,7 +1,9 @@
-export default function EventDayInfo({ tempEventDay }) {
+import { Badge } from "flowbite-react";
+
+export default function EventDayInfo({ tempEventDay, status }) {
   return (
     <>
-      <div className="flex flex-col md:flex-row justify-between md:pr-8 mb-4 text-sm md:text-base font-normal md:font-medium">
+      <div className="px-4 md:px-0 flex flex-col md:flex-row justify-between md:pr-8 mb-4 text-sm md:text-base font-normal md:font-medium">
         <div className="flex flex-col justify-between">
           <span className="flex flex-row justify-between">
             <span>
@@ -28,10 +30,35 @@ export default function EventDayInfo({ tempEventDay }) {
           </span>
           <span>{tempEventDay.venue}</span>
         </div>
-        <span className="italic hidden md:block">
-          Designated Planner : &nbsp;
-          <span className="text-rose-900 font-semibold">Rohaan Saleem</span>
-        </span>
+        <div className="hidden md:block">
+          <span className="italic hidden md:block">
+            Designated Planner : &nbsp;
+            <span className="text-rose-900 font-semibold">Rohaan Saleem</span>
+          </span>
+          <span>
+            {status.lost ? (
+              <Badge color="failure" className="max-w-max ml-auto">
+                Lost
+              </Badge>
+            ) : status.completed ? (
+              <Badge color="gray" className="max-w-max ml-auto">
+                Completed
+              </Badge>
+            ) : status.paymentDone ? (
+              <Badge color="success" className="max-w-max ml-auto">
+                Payment Completed
+              </Badge>
+            ) : status.approved ? (
+              <Badge color="indigo" className="max-w-max ml-auto">
+                Approved
+              </Badge>
+            ) : status.finalized ? (
+              <Badge color="purple" className="max-w-max ml-auto">
+                Finalized
+              </Badge>
+            ) : null}
+          </span>
+        </div>
       </div>
     </>
   );

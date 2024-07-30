@@ -8,6 +8,7 @@ import EventToolHeader from "@/components/event-tool/EventToolHeader";
 import EventToolSidebar from "@/components/event-tool/EventToolSidebar";
 import MandatoryItemsList from "@/components/event-tool/MandatoryItemsList";
 import NotesModal from "@/components/event-tool/NotesModal";
+import SetupLocationImageModal from "@/components/event-tool/SetupLocationImageModal";
 import TotalSummaryTable from "@/components/event-tool/TotalSummaryTable";
 import { toPriceString } from "@/utils/text";
 import Link from "next/link";
@@ -24,6 +25,10 @@ export default function EventTool({ user }) {
   const [eventDay, setEventDay] = useState();
   const { event_id } = router.query;
   const [loading, setLoading] = useState(false);
+  const [setupLocationImage, setSetupLocationImage] = useState({
+    open: false,
+    image: "",
+  });
   const [notes, setNotes] = useState({
     open: false,
     edit: false,
@@ -38,6 +43,25 @@ export default function EventTool({ user }) {
   const [addEventDayModalOpen, setAddEventDayModalOpen] = useState(false);
   const [platformPrice, setPlatformPrice] = useState({ price: 0, image: "" });
   const [flooringPrice, setFlooringPrice] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
+  const fetchCategoryList = () => {
+    setLoading(true);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/category`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setLoading(false);
+        setCategoryList(response);
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   const fetchPlatformInfo = () => {
     setLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/config?code=platform`, {
@@ -135,6 +159,72 @@ export default function EventTool({ user }) {
         console.error("There was a problem with the fetch operation:", error);
       });
   };
+  const UpdateDecorItemInEvent = ({
+    decor_id,
+    platform,
+    platformRate,
+    flooring,
+    flooringRate,
+    decorPrice,
+    dimensions,
+    quantity,
+    variant,
+    category,
+    unit,
+    addOns,
+    productVariant,
+    priceModifier,
+    event_id,
+    eventDay,
+  }) => {
+    setLoading(true);
+    fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}/decor/${eventDay}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          decor_id,
+          platform,
+          flooring,
+          dimensions,
+          category,
+          variant,
+          quantity,
+          unit,
+          decorPrice,
+          platformRate,
+          flooringRate,
+          price:
+            quantity * (decorPrice + priceModifier) +
+            (platform
+              ? dimensions.length * dimensions.breadth * platformPrice.price
+              : 0) +
+            (dimensions.length + dimensions.height) *
+              (dimensions.breadth + dimensions.height) *
+              (flooringPrice.find((i) => i.title === flooring)?.price || 0) +
+            addOns?.reduce((accumulator, currentValue) => {
+              return accumulator + currentValue.price;
+            }, 0),
+          productVariant,
+          priceModifier,
+        }),
+      }
+    )
+      .then((response) => (response.ok ? response.json() : null))
+      .then((response) => {
+        if (response.message === "success") {
+          setLoading(false);
+          fetchEvent();
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   const UpdateNotes = () => {
     fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/event/${event_id}/eventDay/${eventDay}/notes`,
@@ -175,6 +265,7 @@ export default function EventTool({ user }) {
   };
   useEffect(() => {
     fetchEvent();
+    fetchCategoryList();
     fetchFlooringInfo();
     fetchPlatformInfo();
   }, []);
@@ -282,6 +373,10 @@ export default function EventTool({ user }) {
         UpdateNotes={UpdateNotes}
         allowEdit={true}
       />
+      <SetupLocationImageModal
+        setSetupLocationImage={setSetupLocationImage}
+        setupLocationImage={setupLocationImage}
+      />
       <AddEventDayModal
         fetchEvent={fetchEvent}
         show={addEventDayModalOpen}
@@ -290,7 +385,7 @@ export default function EventTool({ user }) {
         setLoading={setLoading}
         event_id={event_id}
       />
-      <div className="flex flex-col overflow-hidden hide-scrollbar">
+      <div className="flex flex-col overflow-hidden hide-scrollbar bg-gray-100">
         <EventToolHeader
           fetchEvent={fetchEvent}
           event={event}
@@ -311,7 +406,7 @@ export default function EventTool({ user }) {
             handlePlannerClick={handlePlannerClick}
           />
           <div
-            className="overflow-y-auto hide-scrollbar col-span-3 flex flex-col px-6 md:px-0"
+            className="overflow-y-auto hide-scrollbar col-span-3 flex flex-col md:px-0"
             ref={plannerRef}
             onScroll={handlePlannerScroll}
           >
@@ -319,10 +414,17 @@ export default function EventTool({ user }) {
               ?.filter((i) => i._id === eventDay)
               ?.map((tempEventDay, tempIndex) => (
                 <>
-                  <EventDayInfo tempEventDay={tempEventDay} />
+                  <EventDayInfo
+                    tempEventDay={tempEventDay}
+                    status={event?.status}
+                  />
                   <DecorItemsList
+                    setSetupLocationImage={setSetupLocationImage}
+                    setupLocationImage={setupLocationImage}
+                    UpdateDecorItemInEvent={UpdateDecorItemInEvent}
                     decorItems={tempEventDay?.decorItems}
-                    status={tempEventDay?.status}
+                    categoryList={categoryList}
+                    status={event?.status}
                     RemoveDecorFromEvent={RemoveDecorFromEvent}
                     setNotes={setNotes}
                     event_id={event_id}
