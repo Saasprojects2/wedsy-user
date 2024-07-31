@@ -42,7 +42,6 @@ export default function EventTool({ user }) {
   const [flooringPrice, setFlooringPrice] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const fetchCategoryList = () => {
-    setLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/category`, {
       method: "GET",
       headers: {
@@ -52,7 +51,6 @@ export default function EventTool({ user }) {
     })
       .then((response) => response.json())
       .then((response) => {
-        setLoading(false);
         setCategoryList(response);
       })
       .catch((error) => {
