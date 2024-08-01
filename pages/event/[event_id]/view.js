@@ -209,6 +209,7 @@ export default function EventTool({ user }) {
         >
           <EventToolSidebar
             tempEventDay={event.eventDays?.filter((i) => i._id === eventDay)[0]}
+            categoryList={categoryList}
             displayKey={displayKey}
             handlePlannerClick={handlePlannerClick}
           />
@@ -247,6 +248,8 @@ export default function EventTool({ user }) {
                     allowEdit={false}
                   />
                   <CustomItemsTable
+                    setSetupLocationImage={setSetupLocationImage}
+                    setupLocationImage={setupLocationImage}
                     customItems={tempEventDay?.customItems || []}
                     customItemsTitle={tempEventDay?.customItemsTitle || ""}
                   />

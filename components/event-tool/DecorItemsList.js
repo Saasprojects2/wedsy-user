@@ -367,202 +367,209 @@ export default function DecorItemsList({
                 </div>
               </div>
             ))}
-          <p className="text-xl mt-4 font-medium px-4">Furniture</p>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 py-3 px-6 md:px-0">
-            {decorItems
-              ?.filter(
-                (i) =>
-                  categoryList?.find((r) => r.name === i.category)
-                    ?.adminEventToolView === "group"
-              )
-              ?.map((item, index) => (
-                <>
-                  <div
-                    className="flex flex-col gap-3 rounded-lg border-2 px-4 py-2"
-                    key={item._id}
-                    data-key={`decor-${item.decor._id}`}
-                  >
-                    <div className="flex flex-row items-center justify-between">
-                      <p className="text-sm flex">
-                        <MdOutlineImage
-                          cursor={"pointer"}
-                          className={`text-gray-600 font-bold text-xl mr-2 `}
-                          onClick={() => {
-                            setSetupLocationImage({
-                              ...setupLocationImage,
-                              image: item.setupLocationImage,
-                              open: true,
-                            });
-                          }}
-                        />
-                        {item?.decor?.name}
-                      </p>
-                      {!status.finalized && allowEdit && (
-                        <MdDelete
-                          cursor={"pointer"}
-                          className={`text-red-600 font-bold text-2xl`}
-                          onClick={() => {
-                            if (!loading) {
-                              if (
-                                confirm(
-                                  "Do you want to delete the item from the event?"
-                                )
-                              ) {
-                                RemoveDecorFromEvent({
-                                  decor_id: item.decor._id,
-                                });
-                              }
-                            }
-                          }}
-                        />
-                      )}
-                    </div>
-                    <div className="relative pt-[100%]">
-                      <Image
-                        src={item.decor?.thumbnail}
-                        alt="Decor"
-                        sizes="100%"
-                        layout={"fill"}
-                        objectFit="cover"
-                        className="rounded-xl "
-                      />
-                    </div>
-                    {categoryList?.find((i) => i.name === item.category)
-                      ?.multipleAllowed && (
-                      <div className="flex flex-row items-center gap-2">
-                        <Label value="Qt." />
-                        <Select
-                          value={item.quantity.toString()}
-                          disabled={status.finalized || !allowEdit}
-                          sizing={"sm"}
-                          onChange={(e) => {
-                            let {
-                              platform,
-                              platformRate,
-                              flooring,
-                              flooringRate,
-                              dimensions,
-                              category,
-                              unit,
-                              addOns,
-                              variant,
-                              decorPrice,
-                              productVariant,
-                              priceModifier,
-                            } = item;
-                            UpdateDecorItemInEvent({
-                              event_id,
-                              eventDay,
-                              decor_id: item.decor?._id,
-                              platform,
-                              platformRate,
-                              flooring,
-                              flooringRate,
-                              decorPrice,
-                              dimensions,
-                              quantity: parseInt(e.target.value),
-                              variant,
-                              category,
-                              unit,
-                              addOns,
-                              productVariant,
-                              priceModifier,
-                            });
-                          }}
-                        >
-                          <option value={item.quantity}>{item.quantity}</option>
-                          {item?.decor?.productInfo?.minimumOrderQuantity &&
-                          item?.decor?.productInfo?.maximumOrderQuantity ? (
-                            <QuantityOptions
-                              max={
-                                item?.decor?.productInfo?.maximumOrderQuantity
-                              }
-                              min={
-                                item?.decor?.productInfo?.minimumOrderQuantity
-                              }
-                            />
-                          ) : (
-                            <>
-                              {Array.from(
-                                { length: 30 },
-                                (_, index) => index + 1
-                              ).map((value) => (
-                                <option key={value} value={value}>
-                                  {value}
-                                </option>
-                              ))}
-                            </>
-                          )}
-                        </Select>
-                      </div>
-                    )}
-                    <div className="flex flex-row items-center justify-between">
-                      <p className="font-medium text-rose-900">
-                        {toPriceString(item.price)}
-                      </p>
-                      <p
-                        className="underline text-base flex items-center cursor-pointer"
-                        onClick={() => {
-                          setNotes({
-                            open: true,
-                            edit: false,
-                            loading: false,
-                            event_id: event_id,
-                            eventDay: eventDay,
-                            decor_id: item.decor._id,
-                            package_id: "",
-                            admin_notes: item.admin_notes,
-                            user_notes: item.user_notes,
-                            notes: item.notes || [],
-                          });
-                        }}
-                      >
-                        <MdNotes /> Notes
-                      </p>
-                    </div>
-                  </div>
-                </>
-              ))}
-          </div>
-          <div className=" md:rounded-tl-full flex flex-row items-center md:w-1/2 md:ml-auto justify-end py-2 md:px-10 font-medium bg-rose-900 text-white">
-            <div className="flex flex-row items-center justify-end gap-2 mr-6 md:mr-0 text-lg text-white  ">
-              ₹{" "}
-              {decorItems
-                ?.filter(
-                  (i) =>
-                    categoryList?.find((r) => r.name === i.category)
-                      ?.adminEventToolView === "group"
-                )
-                ?.reduce((accumulator, currentValue) => {
-                  return accumulator + currentValue.price;
-                }, 0)}{" "}
-              <Tooltip
-                content={
-                  <div className="flex flex-col gap-1">
-                    {decorItems
-                      ?.filter(
-                        (i) =>
-                          categoryList?.find((r) => r.name === i.category)
-                            ?.adminEventToolView === "group"
-                      )
-                      ?.map((i, index) => (
+          {categoryList
+            ?.filter((r) => r.adminEventToolView === "group")
+            .filter(
+              (r) => decorItems?.filter((i) => i.category === r.name).length > 0
+            )
+            .map((rec, index) => (
+              <>
+                <p
+                  className="text-xl mt-4 font-medium px-4"
+                  data-key={`category-${rec.name}`}
+                >
+                  {rec.name}
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 py-3 px-6 md:px-0">
+                  {decorItems
+                    ?.filter((i) => i.category === rec.name)
+                    ?.map((item, index) => (
+                      <>
                         <div
-                          className="flex flex-row justify-between gap-2"
-                          key={index}
+                          className="flex flex-col gap-3 rounded-lg border-2 px-4 py-2"
+                          key={item._id}
                         >
-                          <span>{i?.decor?.name}:</span>
-                          <span>₹{i?.price}</span>
+                          <div className="flex flex-row items-center justify-between">
+                            <p className="text-sm flex">
+                              <MdOutlineImage
+                                cursor={"pointer"}
+                                className={`text-gray-600 font-bold text-xl mr-2 `}
+                                onClick={() => {
+                                  setSetupLocationImage({
+                                    ...setupLocationImage,
+                                    image: item.setupLocationImage,
+                                    open: true,
+                                  });
+                                }}
+                              />
+                              {item?.decor?.name}
+                            </p>
+                            {!status.finalized && allowEdit && (
+                              <MdDelete
+                                cursor={"pointer"}
+                                className={`text-red-600 font-bold text-2xl`}
+                                onClick={() => {
+                                  if (!loading) {
+                                    if (
+                                      confirm(
+                                        "Do you want to delete the item from the event?"
+                                      )
+                                    ) {
+                                      RemoveDecorFromEvent({
+                                        decor_id: item.decor._id,
+                                      });
+                                    }
+                                  }
+                                }}
+                              />
+                            )}
+                          </div>
+                          <div className="relative pt-[100%]">
+                            <Image
+                              src={item.decor?.thumbnail}
+                              alt="Decor"
+                              sizes="100%"
+                              layout={"fill"}
+                              objectFit="cover"
+                              className="rounded-xl "
+                            />
+                          </div>
+                          {rec?.multipleAllowed && (
+                            <div className="flex flex-row items-center gap-2">
+                              <Label value="Qt." />
+                              <Select
+                                value={item.quantity.toString()}
+                                disabled={status.finalized || !allowEdit}
+                                sizing={"sm"}
+                                onChange={(e) => {
+                                  let {
+                                    platform,
+                                    platformRate,
+                                    flooring,
+                                    flooringRate,
+                                    dimensions,
+                                    category,
+                                    unit,
+                                    addOns,
+                                    variant,
+                                    decorPrice,
+                                    productVariant,
+                                    priceModifier,
+                                  } = item;
+                                  UpdateDecorItemInEvent({
+                                    event_id,
+                                    eventDay,
+                                    decor_id: item.decor?._id,
+                                    platform,
+                                    platformRate,
+                                    flooring,
+                                    flooringRate,
+                                    decorPrice,
+                                    dimensions,
+                                    quantity: parseInt(e.target.value),
+                                    variant,
+                                    category,
+                                    unit,
+                                    addOns,
+                                    productVariant,
+                                    priceModifier,
+                                  });
+                                }}
+                              >
+                                <option value={item.quantity}>
+                                  {item.quantity}
+                                </option>
+                                {item?.decor?.productInfo
+                                  ?.minimumOrderQuantity &&
+                                item?.decor?.productInfo
+                                  ?.maximumOrderQuantity ? (
+                                  <QuantityOptions
+                                    max={
+                                      item?.decor?.productInfo
+                                        ?.maximumOrderQuantity
+                                    }
+                                    min={
+                                      item?.decor?.productInfo
+                                        ?.minimumOrderQuantity
+                                    }
+                                  />
+                                ) : (
+                                  <>
+                                    {Array.from(
+                                      { length: 30 },
+                                      (_, index) => index + 1
+                                    ).map((value) => (
+                                      <option key={value} value={value}>
+                                        {value}
+                                      </option>
+                                    ))}
+                                  </>
+                                )}
+                              </Select>
+                            </div>
+                          )}
+                          <div className="flex flex-row items-center justify-between">
+                            <p className="font-medium text-rose-900">
+                              {toPriceString(item.price)}
+                            </p>
+                            <p
+                              className="underline text-base flex items-center cursor-pointer"
+                              onClick={() => {
+                                setNotes({
+                                  open: true,
+                                  edit: false,
+                                  loading: false,
+                                  event_id: event_id,
+                                  eventDay: eventDay,
+                                  decor_id: item.decor._id,
+                                  package_id: "",
+                                  admin_notes: item.admin_notes,
+                                  user_notes: item.user_notes,
+                                  notes: item.notes || [],
+                                });
+                              }}
+                            >
+                              <MdNotes /> Notes
+                            </p>
+                          </div>
                         </div>
-                      ))}
+                      </>
+                    ))}
+                </div>
+                <div className=" md:rounded-tl-full flex flex-row items-center md:w-1/2 md:ml-auto justify-end py-2 md:px-10 font-medium bg-rose-900 text-white">
+                  <div className="flex flex-row items-center justify-end gap-2 mr-6 md:mr-0 text-lg text-white  ">
+                    ₹{" "}
+                    {decorItems
+                      ?.filter((i) => rec.name === i.category)
+                      ?.reduce((accumulator, currentValue) => {
+                        return accumulator + currentValue.price;
+                      }, 0)}{" "}
+                    <Tooltip
+                      content={
+                        <div className="flex flex-col gap-1">
+                          {decorItems
+                            ?.filter((i) => rec.name === i.category)
+                            ?.map((i, index) => (
+                              <div
+                                className="flex flex-row justify-between gap-2"
+                                key={index}
+                              >
+                                <span>{i?.decor?.name}:</span>
+                                <span>₹{i?.price}</span>
+                              </div>
+                            ))}
+                        </div>
+                      }
+                      trigger="hover"
+                      style="light"
+                    >
+                      <BsInfoCircle size={16} />
+                    </Tooltip>
                   </div>
-                }
-                trigger="hover"
-                style="light"
-              >
-                <BsInfoCircle size={16} />
-              </Tooltip>
-            </div>
-          </div>
+                </div>
+                <div className="border-b border-black" />
+              </>
+            ))}
         </>
       )}
     </>

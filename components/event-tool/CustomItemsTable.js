@@ -1,8 +1,14 @@
 import { toPriceString } from "@/utils/text";
 import { Table } from "flowbite-react";
 import ImageCard from "../cards/ImageCard";
+import { MdOutlineImage } from "react-icons/md";
 
-export default function CustomItemsTable({ customItems, customItemsTitle }) {
+export default function CustomItemsTable({
+  customItems,
+  customItemsTitle,
+  setSetupLocationImage,
+  setupLocationImage,
+}) {
   return (
     <>
       {customItems.length > 0 && (
@@ -36,7 +42,20 @@ export default function CustomItemsTable({ customItems, customItemsTitle }) {
                         {index + 1}
                       </Table.Cell>
                       <Table.Cell className="font-medium text-gray-900 dark:text-white flex flex-col md:flex-row justify-between">
-                        <p>{item.name}</p>
+                        <p className="mr-auto">{item.name}</p>
+                        {item.setupLocationImage && (
+                          <MdOutlineImage
+                            cursor={"pointer"}
+                            className={`text-gray-600 font-bold text-xl mr-2 `}
+                            onClick={() => {
+                              setSetupLocationImage({
+                                ...setupLocationImage,
+                                image: item.setupLocationImage,
+                                open: true,
+                              });
+                            }}
+                          />
+                        )}
                         {item.image && (
                           <ImageCard
                             src={item?.image}

@@ -2,6 +2,7 @@ export default function EventToolSidebar({
   tempEventDay,
   displayKey,
   handlePlannerClick,
+  categoryList,
 }) {
   return (
     <>
@@ -12,27 +13,81 @@ export default function EventToolSidebar({
               Decor
             </p>
             <div className="flex flex-col gap-2">
-              {tempEventDay?.decorItems.map((item, index) =>
-                displayKey === `decor-${item.decor._id}` ? (
-                  <div
-                    className="font-medium text-lg flex flex-row gap-2 items-center pl-2"
-                    key={index}
-                  >
-                    {item.category}
-                    <span className="h-px flex-grow bg-black"></span>
-                  </div>
-                ) : (
-                  <div
-                    className="text-gray-700 cursor-pointer"
-                    key={index}
-                    onClick={() =>
-                      handlePlannerClick(`decor-${item.decor._id}`)
-                    }
-                  >
-                    {item.category}
-                  </div>
+              {tempEventDay?.decorItems
+                ?.filter(
+                  (i) =>
+                    categoryList?.find((r) => r.name === i.category)
+                      ?.adminEventToolView === "single"
                 )
-              )}
+                ?.sort(
+                  (a, b) =>
+                    [
+                      "Nameboard",
+                      "Entrance",
+                      "Pathway",
+                      "Photobooth",
+                      "Stage",
+                      "Mandap",
+                    ].indexOf(a.category) -
+                    [
+                      "Nameboard",
+                      "Entrance",
+                      "Pathway",
+                      "Photobooth",
+                      "Stage",
+                      "Mandap",
+                    ].indexOf(b.category)
+                )
+                .map((item, index) =>
+                  displayKey === `decor-${item.decor._id}` ? (
+                    <div
+                      className="font-medium text-lg flex flex-row gap-2 items-center pl-2"
+                      key={index}
+                    >
+                      {item.category}
+                      <span className="h-px flex-grow bg-black"></span>
+                    </div>
+                  ) : (
+                    <div
+                      className="text-gray-700 cursor-pointer"
+                      key={index}
+                      onClick={() =>
+                        handlePlannerClick(`decor-${item.decor._id}`)
+                      }
+                    >
+                      {item.category}
+                    </div>
+                  )
+                )}
+              {categoryList
+                ?.filter((r) => r.adminEventToolView === "group")
+                .filter(
+                  (r) =>
+                    tempEventDay?.decorItems?.filter(
+                      (i) => i.category === r.name
+                    ).length > 0
+                )
+                .map((item, index) =>
+                  displayKey === `category-${item.name}` ? (
+                    <div
+                      className="font-medium text-lg flex flex-row gap-2 items-center pl-2"
+                      key={index}
+                    >
+                      {item.name}
+                      <span className="h-px flex-grow bg-black"></span>
+                    </div>
+                  ) : (
+                    <div
+                      className="text-gray-700 cursor-pointer"
+                      key={index}
+                      onClick={() =>
+                        handlePlannerClick(`category-${item.name}`)
+                      }
+                    >
+                      {item.name}
+                    </div>
+                  )
+                )}
             </div>
           </div>
         )}
