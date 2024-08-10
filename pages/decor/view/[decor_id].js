@@ -1275,27 +1275,34 @@ function DecorListing({
               </div>
             </div>
             <div className="fixed z-50 bottom-0 w-full flex md:hidden flex-row justify-between items-center gap-4 bg-white p-4">
-              <Dropdown
-                renderTrigger={() => (
-                  <span className="font-semibold text-rose-900 cursor-pointer flex items-center gap-1 uppercase bg-white w-fit text-sm">
-                    {variant} <BsChevronDown />
-                  </span>
-                )}
-                className="text-rose-900"
-              >
-                {decor.productTypes
-                  .filter((i) => i.name != variant)
-                  .map((item) => (
-                    <Dropdown.Item
-                      onClick={() => {
-                        setVariant(item.name);
-                      }}
-                      key={item.name}
-                    >
-                      {item.name}
-                    </Dropdown.Item>
-                  ))}
-              </Dropdown>
+              {decor.productTypes.filter((i) => i.name != variant).length ==
+              0 ? (
+                <span className="font-semibold text-rose-900 cursor-pointer flex items-center gap-1 uppercase bg-white w-fit text-sm">
+                  {variant}
+                </span>
+              ) : (
+                <Dropdown
+                  renderTrigger={() => (
+                    <span className="font-semibold text-rose-900 cursor-pointer flex items-center gap-1 uppercase bg-white w-fit text-sm">
+                      {variant} <BsChevronDown />
+                    </span>
+                  )}
+                  className="text-rose-900"
+                >
+                  {decor.productTypes
+                    .filter((i) => i.name != variant)
+                    .map((item) => (
+                      <Dropdown.Item
+                        onClick={() => {
+                          setVariant(item.name);
+                        }}
+                        key={item.name}
+                      >
+                        {item.name}
+                      </Dropdown.Item>
+                    ))}
+                </Dropdown>
+              )}
               <p className="text-xl font-semibold text-right">
                 ₹{" "}
                 {(decor.productTypes.find((i) => i.name === variant)
@@ -1306,6 +1313,7 @@ function DecorListing({
                       )?.priceModifier
                     : 0)) *
                   cart.quantity}
+                {category?.multipleAllowed && `/${decor.unit}`}
               </p>
             </div>
             <div className="hidden md:flex flex-col gap-6">
@@ -1325,33 +1333,41 @@ function DecorListing({
               </div>
               <div className="border-b-2 border-gray-500 pb-4 flex flex-col gap-2">
                 <p className="text-sm">Price for</p>
-                <Dropdown
-                  renderTrigger={() => (
-                    <span className="font-semibold text-rose-900 cursor-pointer flex items-center gap-1 uppercase bg-white p-3 w-fit text-sm">
-                      {variant} <BsChevronDown />
-                    </span>
-                  )}
-                  className="text-rose-900"
-                >
-                  {decor.productTypes
-                    .filter((i) => i.name != variant)
-                    .map((item) => (
-                      <Dropdown.Item
-                        onClick={() => {
-                          setVariant(item.name);
-                        }}
-                        key={item.name}
-                      >
-                        {item.name}
-                      </Dropdown.Item>
-                    ))}
-                </Dropdown>
+                {decor.productTypes.filter((i) => i.name != variant).length ==
+                0 ? (
+                  <span className="font-semibold text-rose-900 cursor-pointer flex items-center gap-1 uppercase bg-white p-3 w-fit text-sm">
+                    {variant}
+                  </span>
+                ) : (
+                  <Dropdown
+                    renderTrigger={() => (
+                      <span className="font-semibold text-rose-900 cursor-pointer flex items-center gap-1 uppercase bg-white p-3 w-fit text-sm">
+                        {variant} <BsChevronDown />
+                      </span>
+                    )}
+                    className="text-rose-900"
+                  >
+                    {decor.productTypes
+                      .filter((i) => i.name != variant)
+                      .map((item) => (
+                        <Dropdown.Item
+                          onClick={() => {
+                            setVariant(item.name);
+                          }}
+                          key={item.name}
+                        >
+                          {item.name}
+                        </Dropdown.Item>
+                      ))}
+                  </Dropdown>
+                )}
                 <p className="text-xl font-semibold">
                   ₹{" "}
                   {
                     decor.productTypes.find((i) => i.name === variant)
                       ?.sellingPrice
-                  }
+                  }{" "}
+                  {category?.multipleAllowed && `/${decor.unit}`}
                 </p>
               </div>
               {category?.multipleAllowed && (
