@@ -1424,7 +1424,7 @@ function DecorListing({
             </div>
             <div className="flex flex-col gap-6 md:col-span-2 md:px-8 md:mx-6 md:border-x-4 md:border-x-white">
               <p className="text-2xl font-semibold text-center tracking-wide uppercase">
-                {decor.name}
+                {decor.name} ({decor?.productInfo.id})
               </p>
               <div className={`relative pt-[75%] mx-8 md:mx-16`}>
                 <ImageFillCard
