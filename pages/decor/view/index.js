@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import DecorDisclaimer from "@/components/marquee/DecorDisclaimer";
 
-function DecorListing({ data }) {
+function DecorListing({ data, categoryList }) {
   const divRef = useRef(null);
   const [divSize, setDivSize] = useState({ width: 0, height: 0 });
   const router = useRouter();
@@ -29,14 +29,15 @@ function DecorListing({ data }) {
       stageSize: false,
     },
     category: router.query.category || "",
-    categoryList: [
-      "Stage",
-      "Pathway",
-      "Entrance",
-      "Photobooth",
-      "Mandap",
-      "Nameboard",
-    ],
+    // categoryList: [
+    //   "Stage",
+    //   "Pathway",
+    //   "Entrance",
+    //   "Photobooth",
+    //   "Mandap",
+    //   "Nameboard",
+    // ],
+    categoryList,
     style: [],
     styleList: ["Modern", "Traditional", "Both"],
     priceRange: [0, 115000],
@@ -83,53 +84,140 @@ function DecorListing({ data }) {
   const [page, setPage] = useState(2);
   const [loading, setLoading] = useState(false);
   const containerRef = useRef(null);
+  // const fetchList = async () => {
+  //   if (loading) return;
+  //   setLoading(true);
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_API_URL}/decor?page=${page}${
+  //         filters.category || router.query.category
+  //           ? `&category=${
+  //               filters.category ? filters.category : router.query.category
+  //             }`
+  //           : ""
+  //       }${
+  //         filters.occasion.length > 0
+  //           ? `&occassion=${filters.occasion.join("|")}`
+  //           : ""
+  //       }${
+  //         filters.colours.length > 0
+  //           ? `&color=${filters.colours.join("|")}`
+  //           : ""
+  //       }${filters.style.length > 0 ? `&style=${filters.style[0]}` : ""}${
+  //         filters.search.length > 0 ? `&search=${filters.search}` : ""
+  //       }${filters.sort.length > 0 ? `&sort=${filters.sort}` : ""}${
+  //         filters.applyPriceFilter && filters.priceRange
+  //           ? `&priceLower=${filters.priceRange[0]}&priceHigher=${filters.priceRange[1]}`
+  //           : ""
+  //         // }${
+  //         //   filters.applySizeFilter && filters.stageSizeRange
+  //         //     ? `&stageSizeLower=${filters.stageSizeRange[0]}&stageSizeHigher=${filters.stageSizeRange[1]}`
+  //         //     : ""
+  //       }${
+  //         filters.applySizeFilter &&
+  //         filters.stageLengthRange.filter((item) => item > 0).length > 0
+  //           ? `&stageLengthLower=${filters.stageLengthRange[0]}&stageLengthHigher=${filters.stageLengthRange[1]}`
+  //           : ""
+  //       }${
+  //         filters.applySizeFilter &&
+  //         filters.stageWidthRange.filter((item) => item > 0).length > 0
+  //           ? `&stageWidthLower=${filters.stageWidthRange[0]}&stageWidthHigher=${filters.stageWidthRange[1]}`
+  //           : ""
+  //       }${
+  //         filters.applySizeFilter &&
+  //         filters.stageHeightRange.filter((item) => item > 0).length > 0
+  //           ? `&stageHeightLower=${filters.stageHeightRange[0]}&stageHeightHigher=${filters.stageHeightRange[1]}`
+  //           : ""
+  //       }&displayVisible=true&displayAvailable=true`
+  //     );
+  //     const tempData = await response.json();
+  //     if (page === 1 && filters.sort.length <= 0) {
+  //       setList([
+  //         ...list,
+  //         ...tempData.list.sort((a, b) => 0.5 - Math.random()),
+  //       ]);
+  //     } else {
+  //       setList([...list, ...tempData.list]);
+  //     }
+  //     if (tempData.totalPages === 0) {
+  //       setPage(0);
+  //     } else {
+  //       setPage(page + 1);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching products:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const fetchList = async () => {
     if (loading) return;
     setLoading(true);
+
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/decor?page=${page}${
-          filters.category || router.query.category
-            ? `&category=${
-                filters.category ? filters.category : router.query.category
-              }`
-            : ""
-        }${
-          filters.occasion.length > 0
-            ? `&occassion=${filters.occasion.join("|")}`
-            : ""
-        }${
-          filters.colours.length > 0
-            ? `&color=${filters.colours.join("|")}`
-            : ""
-        }${filters.style.length > 0 ? `&style=${filters.style[0]}` : ""}${
-          filters.search.length > 0 ? `&search=${filters.search}` : ""
-        }${filters.sort.length > 0 ? `&sort=${filters.sort}` : ""}${
-          filters.applyPriceFilter && filters.priceRange
-            ? `&priceLower=${filters.priceRange[0]}&priceHigher=${filters.priceRange[1]}`
-            : ""
-          // }${
-          //   filters.applySizeFilter && filters.stageSizeRange
-          //     ? `&stageSizeLower=${filters.stageSizeRange[0]}&stageSizeHigher=${filters.stageSizeRange[1]}`
-          //     : ""
-        }${
-          filters.applySizeFilter &&
-          filters.stageLengthRange.filter((item) => item > 0).length > 0
-            ? `&stageLengthLower=${filters.stageLengthRange[0]}&stageLengthHigher=${filters.stageLengthRange[1]}`
-            : ""
-        }${
-          filters.applySizeFilter &&
-          filters.stageWidthRange.filter((item) => item > 0).length > 0
-            ? `&stageWidthLower=${filters.stageWidthRange[0]}&stageWidthHigher=${filters.stageWidthRange[1]}`
-            : ""
-        }${
-          filters.applySizeFilter &&
-          filters.stageHeightRange.filter((item) => item > 0).length > 0
-            ? `&stageHeightLower=${filters.stageHeightRange[0]}&stageHeightHigher=${filters.stageHeightRange[1]}`
-            : ""
-        }&displayVisible=true&displayAvailable=true`
-      );
+      // Create an object to hold the query parameters
+      const params = {
+        page: page,
+        displayVisible: true,
+        displayAvailable: true,
+      };
+
+      // Conditionally add filters to the query parameters
+      if (filters.category || router.query.category) {
+        params.category = filters.category || router.query.category;
+      }
+      if (filters.occasion.length > 0) {
+        params.occassion = filters.occasion.join("|");
+      }
+      if (filters.colours.length > 0) {
+        params.color = filters.colours.join("|");
+      }
+      if (filters.style.length > 0) {
+        params.style = filters.style[0];
+      }
+      if (filters.search.length > 0) {
+        params.search = filters.search;
+      }
+      if (filters.sort.length > 0) {
+        params.sort = filters.sort;
+      }
+      if (filters.applyPriceFilter && filters.priceRange) {
+        params.priceLower = filters.priceRange[0];
+        params.priceHigher = filters.priceRange[1];
+      }
+      if (
+        filters.applySizeFilter &&
+        filters.stageLengthRange.filter((item) => item > 0).length > 0
+      ) {
+        params.stageLengthLower = filters.stageLengthRange[0];
+        params.stageLengthHigher = filters.stageLengthRange[1];
+      }
+      if (
+        filters.applySizeFilter &&
+        filters.stageWidthRange.filter((item) => item > 0).length > 0
+      ) {
+        params.stageWidthLower = filters.stageWidthRange[0];
+        params.stageWidthHigher = filters.stageWidthRange[1];
+      }
+      if (
+        filters.applySizeFilter &&
+        filters.stageHeightRange.filter((item) => item > 0).length > 0
+      ) {
+        params.stageHeightLower = filters.stageHeightRange[0];
+        params.stageHeightHigher = filters.stageHeightRange[1];
+      }
+
+      // Create the URLSearchParams object from the params object
+      const queryString = new URLSearchParams(params).toString();
+
+      // Construct the full URL
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/decor?${queryString}`;
+
+      // Fetch the data
+      const response = await fetch(url);
       const tempData = await response.json();
+
+      // Process the data
       if (page === 1 && filters.sort.length <= 0) {
         setList([
           ...list,
@@ -138,6 +226,7 @@ function DecorListing({ data }) {
       } else {
         setList([...list, ...tempData.list]);
       }
+
       if (tempData.totalPages === 0) {
         setPage(0);
       } else {
@@ -1145,18 +1234,18 @@ function DecorListing({ data }) {
                   <Dropdown.Item
                     key={index}
                     onClick={() => {
-                      if (item === "Mandap") {
+                      if (item.name === "Mandap") {
                         setFilters({
                           ...filters,
-                          category: item,
+                          category: item.name,
                           occasion: [],
                         });
                       } else {
-                        setFilters({ ...filters, category: item });
+                        setFilters({ ...filters, category: item.name });
                       }
                     }}
                   >
-                    {item}
+                    {item.name}
                   </Dropdown.Item>
                 ))}
               </Dropdown>
@@ -1193,10 +1282,10 @@ function DecorListing({ data }) {
                   <Dropdown.Item
                     key={index}
                     onClick={() => {
-                      setFilters({ ...filters, category: item });
+                      setFilters({ ...filters, category: item.name });
                     }}
                   >
-                    {item}
+                    {item.name}
                   </Dropdown.Item>
                 ))}
               </Dropdown>
@@ -1255,9 +1344,14 @@ export async function getServerSideProps(context) {
       }`
     );
     const data = await response.json();
+    let categoryQuery = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/category`
+    );
+    const categoryList = await categoryQuery.json();
     return {
       props: {
         data: data.list.sort((a, b) => 0.5 - Math.random()),
+        categoryList,
       },
     };
   } catch (error) {
@@ -1266,6 +1360,7 @@ export async function getServerSideProps(context) {
     return {
       props: {
         data: [],
+        categoryList: [],
       },
     };
   }
