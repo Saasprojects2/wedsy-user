@@ -1230,7 +1230,7 @@ function DecorListing({
                       }}
                     />
                   ))}
-                {displayImage && (
+                {displayImage && decor?.video && (
                   <div
                     className="relative h-24 w-24 cursor-pointer"
                     onClick={() => {
