@@ -185,7 +185,10 @@ export default function DecorItemsList({
                               item.flooring !== "PrintedFlex"
                                 ? item.flooring
                                 : "Printed Flex"
-                            }`}
+                            } `}
+                            (
+                            {`${item.dimensions.length} x ${item.dimensions.breadth}`}
+                            )
                           </p>
                         </div>
                       </div>
@@ -321,7 +324,7 @@ export default function DecorItemsList({
                         <div className="flex flex-col gap-1">
                           <div className="flex flex-row justify-between gap-2">
                             <span>{item.category}:</span>
-                            <span>₹{item.decorPrice}</span>
+                            <span>₹{item.decorPrice * item.quantity}</span>
                           </div>
                           {item.platform && (
                             <div className="flex flex-row justify-between gap-2">
