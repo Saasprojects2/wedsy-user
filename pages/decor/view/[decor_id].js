@@ -21,6 +21,7 @@ import ImageFillCard from "@/components/cards/ImageFillCard";
 import SimilarDecor from "@/components/screens/SimilarDecor";
 import CreateEventModal from "@/components/modal/CreateEventModal";
 import Link from "next/link";
+import { MdOutlinePlayCircle } from "react-icons/md";
 
 function DecorListing({
   similarDecor,
@@ -34,6 +35,7 @@ function DecorListing({
   const { decor_id } = router.query;
   const [loading, setLoading] = useState(false);
   const [displayImage, setDisplayImage] = useState(decor.image);
+  const [displayVideo, setDisplayVideo] = useState("");
   const [isAddedToWishlist, setIsAddedToWishlist] = useState(false);
   const [eventList, setEventList] = useState([]);
   const [variant, setVariant] = useState(
@@ -1183,12 +1185,26 @@ function DecorListing({
                 {decor.name} ({decor?.productInfo.id})
               </p>
               <div className={`relative pt-[56.25%]`}>
-                <ImageFillCard
-                  src={displayImage}
-                  objectFit="contain"
-                  className="md:rounded-xl overflow-hidden"
-                  imageClassName="md:rounded-2xl"
-                />
+                {displayImage && (
+                  <ImageFillCard
+                    src={displayImage}
+                    objectFit="contain"
+                    className="md:rounded-xl overflow-hidden"
+                    imageClassName="md:rounded-2xl"
+                  />
+                )}
+                {displayVideo && (
+                  <video
+                    src={displayVideo}
+                    className="md:rounded-xl w-full h-full object-contain overflow-hidden absolute top-0"
+                    controls
+                    autoPlay
+                    muted
+                    loop
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                )}
               </div>
               <div className="flex flex-row gap-3 items-center justify-center">
                 {displayImage !== decor?.image && (
@@ -1197,6 +1213,7 @@ function DecorListing({
                     className="h-24 w-24 rounded-lg object-cover cursor-pointer"
                     onClick={() => {
                       setDisplayImage(decor?.image);
+                      setDisplayVideo("");
                     }}
                   />
                 )}
@@ -1209,9 +1226,25 @@ function DecorListing({
                       key={index}
                       onClick={() => {
                         setDisplayImage(item);
+                        setDisplayVideo("");
                       }}
                     />
                   ))}
+                {displayImage && (
+                  <div
+                    className="relative h-24 w-24 cursor-pointer"
+                    onClick={() => {
+                      setDisplayImage("");
+                      setDisplayVideo(decor?.video);
+                    }}
+                  >
+                    <img
+                      src={decor?.thumbnail}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                    <MdOutlinePlayCircle className="h-8 w-8 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                  </div>
+                )}
               </div>
               <div className="grid grid-cols-2 items-center md:hidden gap-2 px-8">
                 {category?.multipleAllowed && (
