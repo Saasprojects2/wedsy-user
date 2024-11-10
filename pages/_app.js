@@ -145,6 +145,10 @@ function App({ Component, pageProps }) {
             content="6NQH3LHjenBtdQYZzStAqCj51nFRb1P4Pb5jhIdugB0"
           />
         )}
+        <meta
+          name="google-site-verification"
+          content="0rZGstdf8ZBfbVvggmIOXJAq-5kDHnKwFM8bRpUnRKU"
+        />
       </Head>
       {/* <!-- Google tag (gtag.js) --> */}
       <Script
