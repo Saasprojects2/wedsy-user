@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.8",
     "autoprefixer": "10.4.15",
+    "date-fns": "^4.1.0",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "flowbite": "^1.8.1",
