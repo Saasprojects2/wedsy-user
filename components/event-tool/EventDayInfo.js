@@ -1,6 +1,6 @@
 import { Badge } from "flowbite-react";
 
-export default function EventDayInfo({ tempEventDay, status }) {
+export default function EventDayInfo({ eventPlanner, tempEventDay, status }) {
   return (
     <>
       <div className="px-4 md:px-0 flex flex-col md:flex-row justify-between md:pr-8 mb-4 text-sm md:text-base font-normal md:font-medium">
@@ -33,7 +33,7 @@ export default function EventDayInfo({ tempEventDay, status }) {
         <div className="hidden md:block">
           <span className="italic hidden md:block">
             Designated Planner : &nbsp;
-            <span className="text-rose-900 font-semibold">Rohaan Saleem</span>
+            <span className="text-rose-900 font-semibold">{eventPlanner || ""}</span>
           </span>
           <span>
             {status.lost ? (

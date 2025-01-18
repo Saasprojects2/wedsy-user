@@ -75,7 +75,9 @@ export default function DecorItemsList({
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:px-4">
                   <div className="relative md:col-span-2">
                     <p className="px-4 md:px-0 text-base font-semibold flex flex-row items-center gap-2 mb-2.5">
-                      <span>{item.decor?.name}</span>
+                      <span>
+                        {item.decor?.name} ({item?.decor?.productInfo?.id})
+                      </span>
                       {allowEdit && !status.finalized && (
                         <MdDelete
                           size={24}
@@ -91,7 +93,7 @@ export default function DecorItemsList({
                     <div className={`relative pt-[56.25%]`}>
                       <ImageFillCard
                         src={item.decor?.image}
-                        objectFit="cover"
+                        objectFit="contain"
                         className="rounded-xl"
                       />
                     </div>
@@ -135,62 +137,69 @@ export default function DecorItemsList({
                         View Notes
                       </Button>
                     </div>
-                    {item.platform && item.flooring && (
+                    {(item.platform || item.flooring) && (
                       <div className="flex flex-row mt-4 gap-4 px-4 md:px-0 w-full md:w-auto justify-between items-center">
-                        <div>
-                          <Image
-                            src={
-                              platformPrice.image ||
-                              "/assets/images/platform.png"
-                            }
-                            alt="Platform"
-                            width={0}
-                            height={0}
-                            sizes="100%"
-                            style={{ width: "100%", height: "auto" }}
-                          />
-                          <p className="font-medium text-center mt-2 text-sm md:text-base">
-                            Platform (
-                            {`${item.dimensions.length} x ${item.dimensions.breadth} x ${item.dimensions.height}`}
-                            )
-                          </p>
-                        </div>
-                        <AiOutlinePlus size={24} className="md:mx-3" />
-                        <div>
-                          <Image
-                            src={
-                              flooringPrice.find(
-                                (i) => i.title === item.flooring
-                              )?.image
-                                ? flooringPrice.find(
-                                    (i) => i.title === item.flooring
-                                  )?.image
-                                : item.flooring === "Carpet"
-                                ? "/assets/images/carpet.png"
-                                : item.flooring === "Flex"
-                                ? "/assets/images/flex.png"
-                                : item.flooring === "PrintedFlex"
-                                ? "/assets/images/printedFlex.png"
-                                : "/assets/images/carpet.png"
-                            }
-                            alt="Flooring"
-                            width={0}
-                            height={0}
-                            sizes="100%"
-                            style={{ width: "100%", height: "auto" }}
-                          />
-                          <p className="font-medium text-center mt-2 text-sm md:text-base">
-                            Flooring:
-                            {` ${
-                              item.flooring !== "PrintedFlex"
-                                ? item.flooring
-                                : "Printed Flex"
-                            } `}
-                            (
-                            {`${item.dimensions.length} x ${item.dimensions.breadth}`}
-                            )
-                          </p>
-                        </div>
+                        {item?.platform && (
+                          <div>
+                            <Image
+                              src={
+                                platformPrice.image ||
+                                "/assets/images/platform.png"
+                              }
+                              alt="Platform"
+                              width={0}
+                              height={0}
+                              sizes="100%"
+                              style={{ width: "100%", height: "auto" }}
+                              className="max-w-xs max-h-xs"
+                            />
+                            <p className="font-medium text-center mt-2 text-sm md:text-base">
+                              Platform (
+                              {`${item.dimensions.length} x ${item.dimensions.breadth} x ${item.dimensions.height}`}
+                              )
+                            </p>
+                          </div>
+                        )}
+                        {item?.platform && item?.flooring && (
+                          <AiOutlinePlus size={24} className="md:mx-3" />
+                        )}
+                        {item?.flooring && (
+                          <div>
+                            <Image
+                              src={
+                                flooringPrice.find(
+                                  (i) => i.title === item.flooring
+                                )?.image
+                                  ? flooringPrice.find(
+                                      (i) => i.title === item.flooring
+                                    )?.image
+                                  : item.flooring === "Carpet"
+                                  ? "/assets/images/carpet.png"
+                                  : item.flooring === "Flex"
+                                  ? "/assets/images/flex.png"
+                                  : item.flooring === "PrintedFlex"
+                                  ? "/assets/images/printedFlex.png"
+                                  : "/assets/images/carpet.png"
+                              }
+                              alt="Flooring"
+                              width={0}
+                              height={0}
+                              sizes="100%"
+                              style={{ width: "100%", height: "auto" }}className="max-w-xs max-h-xs"
+                            />
+                            <p className="font-medium text-center mt-2 text-sm md:text-base">
+                              Flooring:
+                              {` ${
+                                item.flooring !== "PrintedFlex"
+                                  ? item.flooring
+                                  : "Printed Flex"
+                              } `}
+                              (
+                              {`${item.dimensions.length} x ${item.dimensions.breadth}`}
+                              )
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -218,7 +227,12 @@ export default function DecorItemsList({
                     <div className="p-4 px-6 rounded-lg bg-white hidden md:block  w-full">
                       <p>
                         Quantity:{" "}
-                        <span className="font-medium">{item.quantity}</span>
+                        <span className="font-medium">
+                          {item.quantity}{" "}
+                          {item?.decor?.category === "Pathway" && (
+                            <> / {item?.decor?.unit}</>
+                          )}
+                        </span>
                       </p>
                     </div>
                     <Button
@@ -405,7 +419,8 @@ export default function DecorItemsList({
                                   });
                                 }}
                               />
-                              {item?.decor?.name}
+                              {item?.decor?.name} (
+                              {item?.decor?.productInfo?.id})
                             </p>
                             {!status.finalized && allowEdit && (
                               <MdDelete
@@ -433,7 +448,7 @@ export default function DecorItemsList({
                               alt="Decor"
                               sizes="100%"
                               layout={"fill"}
-                              objectFit="cover"
+                              objectFit="contain"
                               className="rounded-xl "
                             />
                           </div>

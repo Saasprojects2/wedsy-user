@@ -59,7 +59,7 @@ export default function CustomItemsTable({
                         {item.image && (
                           <ImageCard
                             src={item?.image}
-                            className="rounded-xl w-24 h-24 overflow-hidden"
+                            className="rounded-lg w-24 h-24 overflow-hidden"
                           />
                         )}
                       </Table.Cell>

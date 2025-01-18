@@ -47,7 +47,7 @@ export default function DecorPackagesList({
                         <div className={`relative pt-[70%]`}>
                           <ImageFillCard
                             src={rec.decor?.image}
-                            objectFit="cover"
+                            objectFit="contain"
                             className="rounded-xl"
                           />
                         </div>
