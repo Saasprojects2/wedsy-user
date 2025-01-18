@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Script from "next/script";
 import LoginModal from "@/components/layout/LoginModal";
 import Head from "next/head";
+import LoginModalv2 from "@/components/layout/LoginModalv2";
 
 function App({ Component, pageProps }) {
   const router = useRouter();
@@ -14,12 +15,17 @@ function App({ Component, pageProps }) {
   const [logIn, setLogIn] = useState(false);
   const [user, setUser] = useState({});
   const [openLoginModal, setOpenLoginModal] = useState(false);
+  const [openLoginModalv2, setOpenLoginModalv2] = useState(false);
+  const [loginSource, setLoginSource] = useState("");
   const restrictedPaths = [
     "/wishlist",
     "/my-account",
     "/event",
     "/payments",
     "/my-orders",
+    "/my-bids",
+    "/chat",
+    "/makeup-and-beauty/wedsy-packages/checkout",
   ];
   const isPathRestricted = () => {
     return router.pathname === "/event" ||
@@ -78,6 +84,7 @@ function App({ Component, pageProps }) {
       CheckLogin();
     }
   }, []);
+
   useEffect(() => {
     import("react-facebook-pixel")
       .then((x) => x.default)
@@ -122,10 +129,14 @@ function App({ Component, pageProps }) {
           property="og:description"
           content="Elevate your wedding experience with Wedsy - your affordable Wedtech partner. Explore stunning flower decor, captivating stage setups, and budget-friendly planning. Discover the best-in-town service, making your dream wedding a seamless and affordable reality."
         />
-        <meta
-          property="og:image"
-          content="https://wedsy.vercel.app/wedsy-logo.jpg"
-        />
+        {/* Open Graph Image Tag */}
+        {router.pathname !== "/decor/view/[decor_id]" &&
+          router.pathname !== "/makeup-and-beauty/artists/[vendorId]" && (
+            <meta
+              property="og:image"
+              content="https://wedsy.vercel.app/wedsy-logo.jpg"
+            />
+          )}
         <meta property="og:url" content="https://www.wedsy.in/" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="Wedsy | Weddings Made Easy" />
@@ -222,7 +233,8 @@ function App({ Component, pageProps }) {
                 router.pathname !== "/my-account" &&
                 router.pathname !== "/my-payments" &&
                 router.pathname !== "/my-orders" &&
-                !router.pathname.includes("/decor/view")
+                !router.pathname.includes("/decor/view") &&
+                !router.pathname.includes("/chats")
               ) {
                 // Initialize Kiwi SDK after script is loaded
                 kiwi.init("", "YSNtpXF4Dmqafpa8XeSZzWfcawpPm4QP", {});
@@ -238,12 +250,23 @@ function App({ Component, pageProps }) {
             setLogIn={setLogIn}
             CheckLogin={CheckLogin}
           />
+          <LoginModalv2
+            openLoginModal={openLoginModalv2}
+            setOpenLoginModal={setOpenLoginModalv2}
+            user={user}
+            logIn={logIn}
+            setLogIn={setLogIn}
+            CheckLogin={CheckLogin}
+            source={loginSource}
+          />
           <Component
             {...pageProps}
             userLoggedIn={!logIn}
             user={user}
             setOpenLoginModal={setOpenLoginModal}
+            setOpenLoginModalv2={setOpenLoginModalv2}
             CheckLogin={CheckLogin}
+            setSource={setLoginSource}
           />
           <Footer />
         </>
