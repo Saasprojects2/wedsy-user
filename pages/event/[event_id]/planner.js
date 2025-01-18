@@ -418,6 +418,7 @@ export default function EventTool({ user }) {
                   <EventDayInfo
                     tempEventDay={tempEventDay}
                     status={event?.status}
+                    eventPlanner={event?.eventPlanner}
                   />
                   <DecorItemsList
                     setSetupLocationImage={setSetupLocationImage}
