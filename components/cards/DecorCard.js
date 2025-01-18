@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function DecorCard({ decor, className }) {
+export default function DecorCard({ decor, className, hideInfo }) {
   const { _id, thumbnail, name } = decor;
   return (
     <>
@@ -23,13 +23,15 @@ export default function DecorCard({ decor, className }) {
             className="rounded-xl"
           />
         </div>
-        <div className="flex flex-row items-center justify-between flex-wrap bg-white px-6 py-2 rounded-full mt-3">
-          <p className="font-semibold">{name}</p>
-          <p className="font-semibold text-rose-900">
-            ₹ {decor.productTypes[0]?.sellingPrice}{" "}
-            {decor.category === "Pathway" && `/ ${decor.unit}`}
-          </p>
-        </div>
+        {!hideInfo && (
+          <div className="flex flex-row items-center justify-between flex-wrap bg-white px-6 py-2 rounded-full mt-3">
+            <p className="font-semibold">{name}</p>
+            <p className="font-semibold text-rose-900">
+              ₹ {decor.productTypes[0]?.sellingPrice}{" "}
+              {decor.category === "Pathway" && `/ ${decor.unit}`}
+            </p>
+          </div>
+        )}
       </Link>
     </>
   );
