@@ -1,13 +1,34 @@
 import UserProfileHeader from "@/components/layout/UserProfileHeader";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { MdChevronRight, MdExpandLess, MdExpandMore } from "react-icons/md";
 
 export default function Orders({ user }) {
+  const router = useRouter();
   const [events, setEvents] = useState([]);
   const [event, setEvent] = useState({});
   const [loading, setLoading] = useState(false);
   const [eventId, setEventId] = useState("");
   const [eventDayId, setEventDayId] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const fetchOrders = () => {
+    setLoading(true);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/order`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        setLoading(false);
+        setOrders(response);
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   const fetchEvents = () => {
     setLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/event`, {
@@ -52,6 +73,7 @@ export default function Orders({ user }) {
 
   useEffect(() => {
     fetchEvents();
+    fetchOrders();
   }, []);
   useEffect(() => {
     if (eventId && !loading) {
@@ -61,7 +83,12 @@ export default function Orders({ user }) {
   return (
     <>
       <div className="flex flex-col bg-gray-100 min-h-[70vh]">
-        <UserProfileHeader display={"my-orders"} />
+        {/* <UserProfileHeader display={"my-orders"} /> */}
+        <div className="flex flex-row justify-around items-center bg-[#2B2B2B] px-4 md:px-24 py-4 text-white">
+          <p className="border-b border-b-[#2B2B2B]">MY BIDS</p>
+          <p className="border-b border-b-white">ORDERS</p>
+          <p className="border-b border-b-[#2B2B2B]">ACCOUNT</p>
+        </div>
         <div className="flex flex-col gap-3 px-8 md:px-36 mb-12 md:my-12">
           {eventId && event?._id ? (
             <div className="flex flex-col gap-4">
@@ -278,8 +305,8 @@ export default function Orders({ user }) {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-4 mt-6 border-b border-b-black pb-4">
-              <p className="text-xl font-medium">Decor</p>
+            <div className="flex flex-col gap-4 mt-6 bg-white md:bg-gray-100 p-4 md:p-0 rounded-lg md:border-b md:border-b-black pb-4">
+              <p className="text-xl font-medium">DECOR</p>
               {events.map((item, index) => (
                 <div
                   className="flex flex-row justify-between items-center px-4 font-medium text-lg"
@@ -299,6 +326,17 @@ export default function Orders({ user }) {
               ))}
             </div>
           )}
+          <div className="flex flex-col gap-4 mt-6 bg-white md:bg-gray-100 p-4 md:p-0 rounded-lg md:border-b md:border-b pb-4">
+            <div
+              className="flex flex-row justify-between items-center px-4 pl-0 font-medium text-lg cursor-pointer"
+              onClick={() => {
+                router.push("/my-orders/makeup-and-beauty");
+              }}
+            >
+              <p className="text-xl font-medium">MAKEUP & BEAUTY</p>
+              <MdChevronRight cursor={"pointer"} />
+            </div>
+          </div>
         </div>
       </div>
     </>
