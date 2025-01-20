@@ -22,6 +22,10 @@ export default function DecorCard({ decor, className, hideInfo }) {
             // style={{ width: "100%", height: "auto" }}
             className="rounded-xl"
           />
+          <div className="md:hidden bg-black/70 text-white p-2 rounded-lg absolute bottom-0 right-0">
+            ₹ {decor.productTypes[0]?.sellingPrice}{" "}
+            {decor.category === "Pathway" && `/ ${decor.unit}`}
+          </div>
         </div>
         {!hideInfo && (
           <div className="flex flex-row items-center justify-between flex-wrap bg-white px-6 py-2 rounded-full mt-3">
