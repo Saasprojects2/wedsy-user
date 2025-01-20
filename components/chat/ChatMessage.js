@@ -258,7 +258,7 @@ export default function ChatMessage({ chat, index, user, fetchChatMessages }) {
         )}
         <div class="p-2 bg-[#F5F5F5] shadow self-start px-6 underline cursor-pointer">
           View details
-          {/* Pending */}
+          {/* --PendingWork-- */}
         </div>
         <div class="p-2 bg-[#F5F5F5] rounded-xl rounded-bl-none shadow self-start px-6">
           Package price
@@ -318,7 +318,7 @@ export default function ChatMessage({ chat, index, user, fetchChatMessages }) {
         )}
         <div class="p-2 bg-[#F5F5F5] shadow self-start px-6 underline cursor-pointer">
           View details
-          {/* Pending */}
+          {/* --PendingWork-- */}
         </div>
         <div class="p-2 bg-[#F5F5F5] rounded-xl rounded-bl-none shadow self-start px-6">
           Offer received
@@ -377,7 +377,7 @@ export default function ChatMessage({ chat, index, user, fetchChatMessages }) {
         )}
         <div class="p-2 bg-[#F5F5F5] shadow self-start px-6 underline cursor-pointer">
           View details
-          {/* Pending */}
+          {/* --PendingWork-- */}
         </div>
         <div class="p-2 bg-[#F5F5F5] rounded-xl rounded-bl-none shadow self-start px-6">
           Offer received
