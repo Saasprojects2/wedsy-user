@@ -74,6 +74,16 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
     return result;
   };
 
+  const CheckIfAllEventData = () => {
+    let tempEvents = events?.filter(
+      (item) =>
+        !item?.eventName || !item?.date || !item?.time || !item?.location
+    );
+    console.log(tempEvents);
+
+    return !(tempEvents.length > 0);
+  };
+
   useEffect(() => {
     const initializeAutocomplete = async () => {
       try {
@@ -133,8 +143,10 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
         console.error("Error loading Google Maps:", error);
       }
     };
-    initializeAutocomplete();
-  }, [eventIndex]);
+    if (display === "Makeup") {
+      initializeAutocomplete();
+    }
+  }, [eventIndex, display]);
   useEffect(() => {
     const initializeAutocomplete = async () => {
       try {
@@ -254,6 +266,13 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
       document.body.classList.add("relative");
     }
   }, []);
+
+  useEffect(() => {
+    if (eventIndex > events.length - 1) {
+      setEventIndex(0);
+    }
+  }, [eventIndex, events]);
+
   const handleSubmit = () => {
     setLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/bidding`, {
@@ -340,13 +359,34 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
           <div className="relative overflow-hidden w-full">
             <div className="w-full sticky top-0 bg-white flex flex-row items-center">
               <div className="hidden md:block my-4 mx-3">
-                <BsArrowLeft size={20} cursor={"pointer"} />
+                <BsArrowLeft
+                  size={20}
+                  cursor={"pointer"}
+                  onClick={() => {
+                    //  HowItWorks, Events, Makeup,  Complete, Success
+                    if (display === "Events") {
+                      setDisplay("HowItWorks");
+                    } else if (display === "Makeup") {
+                      setDisplay("Events");
+                    } else if (display === "Complete") {
+                      setDisplay("Makeup");
+                    }
+                  }}
+                />
               </div>
               <div className="grid grid-cols-3 grow items-start">
                 <div
                   className={`h-full p-2 md:p-4 ${
                     display === "Events" ? "border-b-[#840032]" : "border-white"
                   } border-b-2`}
+                  onClick={() => {
+                    //  HowItWorks, Events, Makeup,  Complete, Success
+                    if (display === "Makeup") {
+                      setDisplay("Events");
+                    } else if (display === "Complete") {
+                      setDisplay("Events");
+                    }
+                  }}
                 >
                   <div className="flex flex-row gap-2 items-center justify-center">
                     <MdCalendarToday size={20} className="text-gray-500" />
@@ -359,6 +399,14 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
                   className={`h-full p-2 md:p-4 ${
                     display === "Makeup" ? "border-b-[#840032]" : "border-white"
                   } border-b-2`}
+                  onClick={() => {
+                    //  HowItWorks, Events, Makeup,  Complete, Success
+                    if (display === "Events" && events.length > 0) {
+                      setDisplay("Makeup");
+                    } else if (display === "Complete") {
+                      setDisplay("Makeup");
+                    }
+                  }}
                 >
                   <div className="flex flex-row gap-2 items-center justify-center">
                     <FaRegEdit
@@ -382,6 +430,16 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
                       ? "border-b-[#840032]"
                       : "border-white"
                   } border-b-2`}
+                  onClick={() => {
+                    //  HowItWorks, Events, Makeup,  Complete, Success
+                    if (CheckIfAllEventData()) {
+                      if (display === "Events" && events.length > 0) {
+                        setDisplay("Complete");
+                      } else if (display === "Makeup") {
+                        setDisplay("Complete");
+                      }
+                    }
+                  }}
                 >
                   <div className="flex flex-row gap-2 items-center justify-center">
                     <MdDone size={24} className="text-gray-500" />
@@ -397,7 +455,18 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
                 </div>
               </div>
               <div className="hidden md:block my-4 mx-3">
-                <BsArrowRight size={20} cursor={"pointer"} />
+                <BsArrowRight
+                  size={20}
+                  cursor={"pointer"}
+                  onClick={() => {
+                    //  HowItWorks, Events, Makeup,  Complete, Success
+                    if (display === "Events" && eventsCount) {
+                      setDisplay("Makeup");
+                    } else if (display === "Makeup" && CheckIfAllEventData()) {
+                      setDisplay("Complete");
+                    }
+                  }}
+                />
               </div>
             </div>
             {display === "Events" && (
@@ -777,10 +846,10 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
                   <button
                     className="bg-[#840032] text-white rounded-lg px-16 py-2 text-lg font-medium m-4 mb-8"
                     onClick={() => {
-                      if (events.length > 0) {
+                      if (events.length > 0 && CheckIfAllEventData()) {
                         setDisplay("Complete");
                       } else {
-                        alert("Enter number of events");
+                        alert("Enter complete information of events");
                       }
                     }}
                   >
@@ -860,271 +929,306 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
                       + Add
                     </div>
                   </div>
-                  <div className="flex flex-col gap-4 col-span-3 py-4 self-start">
-                    <div className="grid grid-cols-5 gap-4">
-                      <div>
-                        <Label value="Event Name" />
-                        <TextInput
-                          value={events[eventIndex]?.eventName}
-                          onChange={(e) => {
-                            setEvents(
-                              events?.map((rec, recIndex) =>
-                                recIndex === eventIndex
-                                  ? { ...rec, eventName: e.target.value }
-                                  : rec
-                              )
-                            );
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <Label value="Date" />
-                        <TextInput
-                          type="date"
-                          value={events[eventIndex]?.date}
-                          onChange={(e) => {
-                            setEvents(
-                              events?.map((rec, recIndex) =>
-                                recIndex === eventIndex
-                                  ? { ...rec, date: e.target.value }
-                                  : rec
-                              )
-                            );
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <Label value="Time" />
-                        <TextInput
-                          type="time"
-                          value={events[eventIndex]?.time}
-                          onChange={(e) => {
-                            setEvents(
-                              events?.map((rec, recIndex) =>
-                                recIndex === eventIndex
-                                  ? { ...rec, time: e.target.value }
-                                  : rec
-                              )
-                            );
-                          }}
-                        />
-                      </div>
-                      <div className="col-span-2">
-                        <Label value="Location" />
-                        <TextInput
-                          ref={inputRef}
-                          value={events[eventIndex]?.location}
-                          onChange={(e) => {
-                            setEvents(
-                              events?.map((rec, recIndex) =>
-                                recIndex === eventIndex
-                                  ? { ...rec, location: e.target.value }
-                                  : rec
-                              )
-                            );
-                          }}
-                        />
-                      </div>
-                    </div>
-                    {events[eventIndex]?.peoples?.map((item, index) => (
-                      <div key={index} className="grid grid-cols-5 gap-4">
-                        <div>
-                          <Label value="No. of People" />
-                          <TextInput
-                            value={item?.noOfPeople}
-                            onChange={(e) => {
-                              setEvents((prev) => {
-                                const updated = [...prev];
-                                updated[eventIndex] = {
-                                  ...updated[eventIndex],
-                                  peoples: updated[eventIndex]?.peoples.map(
-                                    (person, i) =>
-                                      i === index
-                                        ? {
-                                            ...person,
-                                            noOfPeople: e.target.value,
-                                          }
-                                        : person
-                                  ),
-                                };
-                                return updated;
-                              });
-                            }}
-                          />
-                        </div>
-                        <div className="col-span-4 grid grid-cols-3 gap-4">
-                          <div>
-                            <Label value="Makeup Style" />
-                            <Select
-                              value={item?.makeupStyle}
-                              onChange={(e) => {
-                                setEvents((prev) => {
-                                  const updated = [...prev];
-                                  updated[eventIndex] = {
-                                    ...updated[eventIndex],
-                                    peoples: updated[eventIndex]?.peoples.map(
-                                      (person, i) =>
-                                        i === index
-                                          ? {
-                                              ...person,
-                                              makeupStyle: e.target.value,
-                                            }
-                                          : person
-                                    ),
-                                  };
-                                  return updated;
-                                });
-                              }}
+                  {eventIndex < events.length &&
+                    events?.map(
+                      (tEvent, tIndex) =>
+                        tIndex === eventIndex && (
+                          <div
+                            className="flex flex-col gap-4 col-span-3 py-4 self-start"
+                            key={tIndex}
+                          >
+                            <div
+                              className="grid grid-cols-5 gap-4"
+                              key={tIndex}
                             >
-                              <option value={""}>Select Makeup Style</option>
-                              {makeupStyle?.map((r, i) => (
-                                <option value={r?.title} key={i}>
-                                  {r.title}
-                                </option>
-                              ))}
-                            </Select>
-                          </div>
-                          <div>
-                            <Label value="Preferred Look" />
-                            <Select
-                              value={item?.preferredLook}
-                              onChange={(e) => {
-                                setEvents((prev) => {
-                                  const updated = [...prev];
-                                  updated[eventIndex] = {
-                                    ...updated[eventIndex],
-                                    peoples: updated[eventIndex]?.peoples.map(
-                                      (person, i) =>
-                                        i === index
+                              <div>
+                                <Label value="Event Name" />
+                                <TextInput
+                                  value={events[eventIndex]?.eventName}
+                                  onChange={(e) => {
+                                    setEvents(
+                                      events?.map((rec, recIndex) =>
+                                        recIndex === eventIndex
                                           ? {
-                                              ...person,
-                                              preferredLook: e.target.value,
+                                              ...rec,
+                                              eventName: e.target.value,
                                             }
-                                          : person
-                                    ),
-                                  };
-                                  return updated;
-                                });
-                              }}
-                            >
-                              <option value={""}>Select Preferred Look</option>
-                              {preferredLook?.map((r, i) => (
-                                <option value={r?.title} key={i}>
-                                  {r.title}
-                                </option>
-                              ))}
-                            </Select>
+                                          : rec
+                                      )
+                                    );
+                                  }}
+                                />
+                              </div>
+                              <div>
+                                <Label value="Date" />
+                                <TextInput
+                                  type="date"
+                                  value={events[eventIndex]?.date}
+                                  onChange={(e) => {
+                                    setEvents(
+                                      events?.map((rec, recIndex) =>
+                                        recIndex === eventIndex
+                                          ? { ...rec, date: e.target.value }
+                                          : rec
+                                      )
+                                    );
+                                  }}
+                                />
+                              </div>
+                              <div>
+                                <Label value="Time" />
+                                <TextInput
+                                  type="time"
+                                  value={events[eventIndex]?.time}
+                                  onChange={(e) => {
+                                    setEvents(
+                                      events?.map((rec, recIndex) =>
+                                        recIndex === eventIndex
+                                          ? { ...rec, time: e.target.value }
+                                          : rec
+                                      )
+                                    );
+                                  }}
+                                />
+                              </div>
+                              <div className="col-span-2">
+                                <Label value="Location" />
+                                <TextInput
+                                  ref={inputRef}
+                                  value={events[eventIndex]?.location}
+                                  onChange={(e) => {
+                                    setEvents(
+                                      events?.map((rec, recIndex) =>
+                                        recIndex === eventIndex
+                                          ? { ...rec, location: e.target.value }
+                                          : rec
+                                      )
+                                    );
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            {events[eventIndex]?.peoples?.map((item, index) => (
+                              <div
+                                key={index}
+                                className="grid grid-cols-5 gap-4"
+                              >
+                                <div>
+                                  <Label value="No. of People" />
+                                  <TextInput
+                                    value={item?.noOfPeople}
+                                    onChange={(e) => {
+                                      setEvents((prev) => {
+                                        const updated = [...prev];
+                                        updated[eventIndex] = {
+                                          ...updated[eventIndex],
+                                          peoples: updated[
+                                            eventIndex
+                                          ]?.peoples.map((person, i) =>
+                                            i === index
+                                              ? {
+                                                  ...person,
+                                                  noOfPeople: e.target.value,
+                                                }
+                                              : person
+                                          ),
+                                        };
+                                        return updated;
+                                      });
+                                    }}
+                                  />
+                                </div>
+                                <div className="col-span-4 grid grid-cols-3 gap-4">
+                                  <div>
+                                    <Label value="Makeup Style" />
+                                    <Select
+                                      value={item?.makeupStyle}
+                                      onChange={(e) => {
+                                        setEvents((prev) => {
+                                          const updated = [...prev];
+                                          updated[eventIndex] = {
+                                            ...updated[eventIndex],
+                                            peoples: updated[
+                                              eventIndex
+                                            ]?.peoples.map((person, i) =>
+                                              i === index
+                                                ? {
+                                                    ...person,
+                                                    makeupStyle: e.target.value,
+                                                  }
+                                                : person
+                                            ),
+                                          };
+                                          return updated;
+                                        });
+                                      }}
+                                    >
+                                      <option value={""}>
+                                        Select Makeup Style
+                                      </option>
+                                      {makeupStyle?.map((r, i) => (
+                                        <option value={r?.title} key={i}>
+                                          {r.title}
+                                        </option>
+                                      ))}
+                                    </Select>
+                                  </div>
+                                  <div>
+                                    <Label value="Preferred Look" />
+                                    <Select
+                                      value={item?.preferredLook}
+                                      onChange={(e) => {
+                                        setEvents((prev) => {
+                                          const updated = [...prev];
+                                          updated[eventIndex] = {
+                                            ...updated[eventIndex],
+                                            peoples: updated[
+                                              eventIndex
+                                            ]?.peoples.map((person, i) =>
+                                              i === index
+                                                ? {
+                                                    ...person,
+                                                    preferredLook:
+                                                      e.target.value,
+                                                  }
+                                                : person
+                                            ),
+                                          };
+                                          return updated;
+                                        });
+                                      }}
+                                    >
+                                      <option value={""}>
+                                        Select Preferred Look
+                                      </option>
+                                      {preferredLook?.map((r, i) => (
+                                        <option value={r?.title} key={i}>
+                                          {r.title}
+                                        </option>
+                                      ))}
+                                    </Select>
+                                  </div>
+                                  <div>
+                                    <Label value="Add Ons" />
+                                    <Select
+                                      value={item?.addOns}
+                                      onChange={(e) => {
+                                        setEvents((prev) => {
+                                          const updated = [...prev];
+                                          updated[eventIndex] = {
+                                            ...updated[eventIndex],
+                                            peoples: updated[
+                                              eventIndex
+                                            ]?.peoples.map((person, i) =>
+                                              i === index
+                                                ? {
+                                                    ...person,
+                                                    addOns: e.target.value,
+                                                  }
+                                                : person
+                                            ),
+                                          };
+                                          return updated;
+                                        });
+                                      }}
+                                    >
+                                      <option value={""}>Select AddOns</option>
+                                      {addOns?.map((r, i) => (
+                                        <option value={r?.title} key={i}>
+                                          {r.title}
+                                        </option>
+                                      ))}
+                                    </Select>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                            {events[eventIndex]?.notes?.length > 0 && (
+                              <>
+                                <div>
+                                  <Label value="Notes" />
+                                  {events[eventIndex]?.notes?.map(
+                                    (item, index) => (
+                                      <TextInput
+                                        key={index}
+                                        className="mb-2"
+                                        value={item}
+                                        onChange={(e) => {
+                                          setEvents((prev) => {
+                                            const updated = [...prev];
+                                            updated[eventIndex] = {
+                                              ...updated[eventIndex],
+                                              notes: updated[
+                                                eventIndex
+                                              ]?.notes.map((rec, i) =>
+                                                i === index
+                                                  ? e.target.value
+                                                  : rec
+                                              ),
+                                            };
+                                            return updated;
+                                          });
+                                        }}
+                                      />
+                                    )
+                                  )}
+                                </div>
+                              </>
+                            )}
+                            <div className="grid grid-cols-4 gap-4">
+                              <button
+                                onClick={() => {
+                                  setEvents((prev) => {
+                                    const updated = [...prev];
+                                    updated[eventIndex] = {
+                                      ...updated[eventIndex],
+                                      peoples: [
+                                        ...updated[eventIndex]?.peoples,
+                                        {
+                                          noOfPeople: "",
+                                          makeupStyle: "",
+                                          preferredLook: "",
+                                          addOns: "",
+                                        },
+                                      ],
+                                    };
+                                    return updated;
+                                  });
+                                }}
+                                className={`py-2 px-4 rounded-lg font-medium text-center bg-[#2B3F6C] text-white cursor-pointer`}
+                              >
+                                + Add more people
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setEvents((prev) => {
+                                    const updated = [...prev];
+                                    updated[eventIndex] = {
+                                      ...updated[eventIndex],
+                                      notes: [
+                                        ...updated[eventIndex]?.notes,
+                                        "",
+                                      ],
+                                    };
+                                    return updated;
+                                  });
+                                }}
+                                className={`py-2 px-4 rounded-lg font-medium text-center bg-[#FFC700] text-[#2B3F6C] cursor-pointer`}
+                              >
+                                + Add Notes
+                              </button>
+                            </div>
                           </div>
-                          <div>
-                            <Label value="Add Ons" />
-                            <Select
-                              value={item?.addOns}
-                              onChange={(e) => {
-                                setEvents((prev) => {
-                                  const updated = [...prev];
-                                  updated[eventIndex] = {
-                                    ...updated[eventIndex],
-                                    peoples: updated[eventIndex]?.peoples.map(
-                                      (person, i) =>
-                                        i === index
-                                          ? {
-                                              ...person,
-                                              addOns: e.target.value,
-                                            }
-                                          : person
-                                    ),
-                                  };
-                                  return updated;
-                                });
-                              }}
-                            >
-                              <option value={""}>Select AddOns</option>
-                              {addOns?.map((r, i) => (
-                                <option value={r?.title} key={i}>
-                                  {r.title}
-                                </option>
-                              ))}
-                            </Select>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                    {events[eventIndex]?.notes?.length > 0 && (
-                      <>
-                        <div>
-                          <Label value="Notes" />
-                          {events[eventIndex]?.notes?.map((item, index) => (
-                            <TextInput
-                              key={index}
-                              className="mb-2"
-                              value={item}
-                              onChange={(e) => {
-                                setEvents((prev) => {
-                                  const updated = [...prev];
-                                  updated[eventIndex] = {
-                                    ...updated[eventIndex],
-                                    notes: updated[eventIndex]?.notes.map(
-                                      (rec, i) =>
-                                        i === index ? e.target.value : rec
-                                    ),
-                                  };
-                                  return updated;
-                                });
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </>
+                        )
                     )}
-                    <div className="grid grid-cols-4 gap-4">
-                      <button
-                        onClick={() => {
-                          setEvents((prev) => {
-                            const updated = [...prev];
-                            updated[eventIndex] = {
-                              ...updated[eventIndex],
-                              peoples: [
-                                ...updated[eventIndex]?.peoples,
-                                {
-                                  noOfPeople: "",
-                                  makeupStyle: "",
-                                  preferredLook: "",
-                                  addOns: "",
-                                },
-                              ],
-                            };
-                            return updated;
-                          });
-                        }}
-                        className={`py-2 px-4 rounded-lg font-medium text-center bg-[#2B3F6C] text-white cursor-pointer`}
-                      >
-                        + Add more people
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEvents((prev) => {
-                            const updated = [...prev];
-                            updated[eventIndex] = {
-                              ...updated[eventIndex],
-                              notes: [...updated[eventIndex]?.notes, ""],
-                            };
-                            return updated;
-                          });
-                        }}
-                        className={`py-2 px-4 rounded-lg font-medium text-center bg-[#FFC700] text-[#2B3F6C] cursor-pointer`}
-                      >
-                        + Add Notes
-                      </button>
-                    </div>
-                  </div>
                   <div className="col-span-4 flex flex-col items-center justify-center">
                     <button
                       className="bg-[#840032] text-white rounded-lg px-16 py-2 text-lg font-medium"
                       onClick={() => {
-                        if (events.length > 0) {
+                        if (events.length > 0 && CheckIfAllEventData()) {
                           setDisplay("Complete");
                         } else {
-                          alert("Enter number of events");
+                          alert("Enter complete information of events");
                         }
                       }}
                     >
