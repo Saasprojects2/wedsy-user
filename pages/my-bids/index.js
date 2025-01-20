@@ -38,12 +38,35 @@ export default function Orders({ user }) {
     <>
       <div className="flex flex-col bg-gray-100 min-h-[70vh]">
         <div className="flex flex-row justify-around items-center bg-[#2B2B2B] px-4 md:px-24 py-4 text-white">
-          <p className="border-b border-b-white">MY BIDS</p>
-          <p className="border-b border-b-[#2B2B2B]">ORDERS</p>
-          <p className="border-b border-b-[#2B2B2B]">ACCOUNT</p>
+          <p
+            className="border-b border-b-white cursor-pointer"
+            onClick={() => {
+              router.push("/my-bids");
+            }}
+          >
+            MY BIDS
+          </p>
+          <p
+            className="border-b border-b-[#2B2B2B] cursor-pointer"
+            onClick={() => {
+              router.push("/my-orders");
+            }}
+          >
+            ORDERS
+          </p>
+          <p
+            className="border-b border-b-[#2B2B2B] cursor-pointer"
+            onClick={() => {
+              router.push("/my-account");
+            }}
+          >
+            ACCOUNT
+          </p>
         </div>
         <div className="px-4 md:px-24 py-6 md:py-12 flex flex-col gap-6">
-          <p className="font-medium text-xl md:text-3xl text-center">MAKEUP & BEAUTY</p>
+          <p className="font-medium text-xl md:text-3xl text-center">
+            MAKEUP & BEAUTY
+          </p>
           <div className="md:py-6 md:px-12 flex flex-col gap-4">
             {bidding?.map((item, index) => (
               <div
