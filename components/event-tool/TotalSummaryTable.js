@@ -71,9 +71,7 @@ export default function TotalSummaryTable({ event }) {
                       </Table.Row>
                     ))}
                   {tempEventDay?.mandatoryItems
-                    .filter(
-                      (i) => !(i.itemRequired && !i.includeInTotalSummary)
-                    )
+                    .filter((i) => i.itemRequired && i.includeInTotalSummary)
                     ?.map((item, index) => (
                       <Table.Row
                         className="bg-white dark:border-gray-700 dark:bg-gray-800"
