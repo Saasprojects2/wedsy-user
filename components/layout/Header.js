@@ -1,6 +1,6 @@
 import { Dropdown, Navbar } from "flowbite-react";
 import { FaRegUserCircle } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./Header.module.css";
 import Link from "next/link";
 import { BiLogIn, BiLogOut, BiLogout } from "react-icons/bi";
@@ -10,6 +10,8 @@ export default function Header({ userLoggedIn, user, Logout }) {
   const router = useRouter();
   const [variant, setVariant] = useState("light");
   const [displayHeaderLinks, setDisplayHeaderLinks] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const navbarRef = useRef();
   useEffect(() => {
     const myElement = document.getElementById("mainDiv");
     const isElementVisible = () => {
@@ -41,15 +43,46 @@ export default function Header({ userLoggedIn, user, Logout }) {
       setDisplayHeaderLinks(false);
     }
   }, [router?.pathname]);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+        document.getElementById("nav-div").classList.add("hidden");
+        setIsExpanded(false);
+      }
+    };
+
+    if (isExpanded) {
+      document.body.addEventListener("click", handleClickOutside);
+      document.body.addEventListener("touchstart", handleClickOutside);
+    }
+    return () => {
+      document.body.removeEventListener("click", handleClickOutside);
+      document.body.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isExpanded]);
   return router?.pathname === `/my-payments/[paymentId]/invoice` ? null : (
-    <>
+    <div ref={navbarRef} className="sticky top-0 z-50 w-full shadow-md">
       <Navbar
         fluid
         className={`${
           variant === "dark" ? "bg-[#1B1B1B]" : "bg-[#FFFFFF]"
-        } md:px-12 [font-family:'Montserrat-Medium',Helvetica] sticky top-0 z-50 w-full shadow-md`}
+        } md:px-12 [font-family:'Montserrat-Medium',Helvetica]`}
       >
-        {displayHeaderLinks && <Navbar.Toggle />}
+        {displayHeaderLinks && (
+          <Navbar.Toggle
+            onClick={() => {
+              if (
+                document.getElementById("nav-div")?.classList.contains("hidden")
+              ) {
+                document.getElementById("nav-div").classList.remove("hidden");
+                setIsExpanded(true);
+              } else {
+                document.getElementById("nav-div").classList.add("hidden");
+                setIsExpanded(false);
+              }
+            }}
+          />
+        )}
         <Navbar.Brand
           href="/"
           className={`${displayHeaderLinks ? "" : "mx-auto my-2"}`}
@@ -103,7 +136,7 @@ export default function Header({ userLoggedIn, user, Logout }) {
           </div>
         )}
         {displayHeaderLinks && (
-          <Navbar.Collapse className={`${styles.navbar__links}`}>
+          <Navbar.Collapse className={`${styles.navbar__links}`} id="nav-div">
             <Navbar.Link
               href="/decor"
               className={`font-medium text-${
@@ -139,6 +172,6 @@ export default function Header({ userLoggedIn, user, Logout }) {
           </Navbar.Collapse>
         )}
       </Navbar>
-    </>
+    </div>
   );
 }
