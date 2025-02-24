@@ -219,6 +219,25 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
         console.error("There was a problem with the fetch operation:", error);
       });
   };
+  const AddStatLog = (statType, onSuccess) => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/stats?key=vendor-${statType}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ vendor: vendorId }),
+    })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((response) => {
+        if (response.message === "success") {
+          onSuccess();
+        }
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
+  };
   const fetchTaxationData = () => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/config?code=MUA-Taxation`, {
       method: "GET",
@@ -465,7 +484,9 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
                 setSource(`Makeup Artist [${vendor.name}]`);
                 setOpenLoginModalv2(true);
               } else {
-                window.open(`tel:${vendor.phone}`, "_blank");
+                AddStatLog("chat", () => {
+                  window.open(`tel:${vendor.phone}`, "_blank");
+                });
               }
             }}
           >
@@ -506,7 +527,9 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
                 setSource(`Makeup Artist [${vendor.name}]`);
                 setOpenLoginModalv2(true);
               } else {
-                window.open(`tel:${vendor.phone}`, "_blank");
+                AddStatLog("call", () => {
+                  window.open(`tel:${vendor.phone}`, "_blank");
+                });
               }
             }}
           >
@@ -704,7 +727,9 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
                   setSource(`Makeup Artist [${vendor.name}]`);
                   setOpenLoginModalv2(true);
                 } else {
-                  window.open(`tel:${vendor.phone}`, "_blank");
+                  AddStatLog("chat", () => {
+                    window.open(`tel:${vendor.phone}`, "_blank");
+                  });
                 }
               }}
             >
@@ -718,7 +743,9 @@ function MakeupAndBeauty({ userLoggedIn, setOpenLoginModalv2, setSource }) {
                   setSource(`Makeup Artist [${vendor.name}]`);
                   setOpenLoginModalv2(true);
                 } else {
-                  window.open(`tel:${vendor.phone}`, "_blank");
+                  AddStatLog("call", () => {
+                    window.open(`tel:${vendor.phone}`, "_blank");
+                  });
                 }
               }}
             >
