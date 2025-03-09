@@ -241,21 +241,25 @@ function Home({ packages }) {
     <>
       <Head>
         <title>
-          Top Wedding Planner in bangalore | Event Decorators in Bangalore |
-          Wedsy
+          Affordable Wedding Packages in Bangalore - Best Planners in Bangalore
         </title>
         <meta
           name="description"
-          content="Discover expert event decorators in Bangalore with Wedsy. Renowned as the best wedding planners, our team creates memorable event decorations for your special occasions"
+          content="Find affordable wedding planners in Bangalore. Explore budget-friendly wedding, event, and destination packages in India. Tailored solutions for your perfect day!"
         />
         <meta
           name="keywords"
           content="event planners in bangalore,wedding planners in bangalore,event decorators in bangalore,best wedding planners in bangalore,top wedding planners in bangalore"
         />
+        <link rel="canonical" href="https://www.wedsy.in/"/>
         <meta name="robots" content="index, follow" />
         <meta name="copyright" content="Wedsy" />
         <meta name="language" content="EN" />
       </Head>
+      <div className="hidden">
+        <h1>Affordable & Best Wedding Planner in Bangalore</h1>
+        <h2>Best Budget-Friendly Wedding & Destination Packages in India</h2>
+      </div>
       <main
         className={`${styles.main__div} flex flex-col justify-around gap-6 md:gap-12 `}
         id="mainDiv"

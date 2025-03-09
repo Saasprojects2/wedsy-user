@@ -194,20 +194,26 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
           content="6NQH3LHjenBtdQYZzStAqCj51nFRb1P4Pb5jhIdugB0"
         />
         <title>
-          Wedding & Hall Decoration | Flower Decorators in Bangalore | Wedsy
+          Premium Wedding Decor Services | Wedding Stage Decoration in
+          Bangalore
         </title>
         <meta
           name="description"
-          content="Turn your dream wedding into reality with Wedsy's exquisite wedding decorations. From vibrant wedding flowers to elegant hall designs, our decorators in Bangalore craft unforgettable moments."
+          content="Transform your wedding with Wedsy's premium decor services. Discover exquisite themes, floral arrangements, and custom setups designed to bring your dream wedding to life. Book now for a seamless experience."
         />
         <meta
           name="keywords"
           content="wedding decorations,wedding flower decoration,wedding hall decoration,flower decorators in bangalore,decorators in bangalore,wedding decorators in bangalore"
         />
+        <link rel="canonical" href="https://www.wedsy.in/decor" />
         <meta name="robots" content="index, follow" />
         <meta name="copyright" content="Wedsy" />
         <meta name="language" content="EN" />
       </Head>
+      <div className="hidden">
+        <h1>Wedding Decoration Packages - Wedsy&apos;s</h1>
+        <h2>Wedding Stage Decoration in Bangalore</h2>
+      </div>
       <DecorDisclaimer />
       <main className="relative" id="mainDiv">
         <Image
