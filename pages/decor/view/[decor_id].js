@@ -567,6 +567,10 @@ function DecorListing({
         <meta property="og:title" content={decor.name} />
         <meta property="og:description" content={decor?.seoTags?.description} />
         <meta property="og:image" content={decor?.seoTags?.image} />
+        <link
+          rel="canonical"
+          href={`https://www.wedsy.in/decor/view/${decor_id}`}
+        />
       </Head>
       <CreateEventModal
         showEventModal={showEventModal}

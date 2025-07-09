@@ -103,20 +103,62 @@ function App({ Component, pageProps }) {
       <Head>
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
-        {/* Title Tag */}
-        <title>Wedsy | Weddings Made Easy</title>
-        {/* Meta Description Tag */}
-        <meta
-          name="description"
-          content="Elevate your wedding experience with Wedsy - your affordable Wedtech partner. Explore stunning flower decor, captivating stage setups, and budget-friendly planning. Discover the best-in-town service, making your dream wedding a seamless and affordable reality."
+        {/* Other Meta Title & Description for Some Pages */}
+        {router.pathname !== "/" && router.pathname !== "/decor" && (
+          <>
+            {/* Title Tag */}
+            <title>Wedsy | Weddings Made Easy</title>
+            {/* Meta Description Tag */}
+            <meta
+              name="description"
+              content="Elevate your wedding experience with Wedsy - your affordable Wedtech partner. Explore stunning flower decor, captivating stage setups, and budget-friendly planning. Discover the best-in-town service, making your dream wedding a seamless and affordable reality."
+            />
+            {/* Meta Keywords Tag */}
+            <meta
+              name="keywords"
+              content="Wedding planner, wedding decor, stage decorations, flower decor, reception decor, engagement decor, mandap decoration, decorators, wedding planner, Haldi decor, Mehendi decor, nikah decor, valima decor, best wedding planners, best decorators"
+            />
+          </>
+        )}
+        {router.pathname === "/" && (
+          <>
+            <title>
+              Affordable Wedding Packages in Bangalore - Best Planners in
+              Bangalore
+            </title>
+            <meta
+              name="description"
+              content="Find affordable wedding planners in Bangalore. Explore budget-friendly wedding, event, and destination packages in India. Tailored solutions for your perfect day!"
+            />
+            <meta
+              name="keywords"
+              content="event planners in bangalore,wedding planners in bangalore,event decorators in bangalore,best wedding planners in bangalore,top wedding planners in bangalore"
+            />
+          </>
+        )}
+        {router.pathname === "/decor" && (
+          <>
+            <title>
+              Premium Wedding Decor Services | Wedding Stage Decoration in
+              Bangalore
+            </title>
+            <meta
+              name="description"
+              content="Transform your wedding with Wedsy's premium decor services. Discover exquisite themes, floral arrangements, and custom setups designed to bring your dream wedding to life. Book now for a seamless experience."
+            />
+            <meta
+              name="keywords"
+              content="wedding decorations,wedding flower decoration,wedding hall decoration,flower decorators in bangalore,decorators in bangalore,wedding decorators in bangalore"
+            />
+          </>
+        )}
+        {/* Dynamic Canonical Tag */}
+        <link
+          rel="canonical"
+          href={`https://www.wedsy.in${
+            router.asPath === "/" ? "" : router.asPath.split("?")[0]
+          }`}
         />
-        {/* Meta Keywords Tag */}
-        <meta
-          name="keywords"
-          content="Wedding planner, wedding decor, stage decorations, flower decor, reception decor, engagement decor, mandap decoration, decorators, wedding planner, Haldi decor, Mehendi decor, nikah decor, valima decor, best wedding planners, best decorators"
-        />
-        {/* Canonical Tag */}
-        <link rel="canonical" href="https://www.wedsy.in/" />
         {/* Viewport & Other Important Meta Tag */}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta httpEquiv="content-language" content="en-us" />
@@ -208,6 +250,25 @@ function App({ Component, pageProps }) {
           style={{ display: "none", visibility: "hidden" }}
         ></iframe>
       </noscript>
+      {/* Hidden H1 & H2 for SEO */}
+      {router.pathname === "/" && (
+        <>
+          <div className="hidden">
+            <h1>Affordable & Best Wedding Planner in Bangalore</h1>
+            <h2>
+              Best Budget-Friendly Wedding & Destination Packages in India
+            </h2>
+          </div>
+        </>
+      )}
+      {router.pathname === "/decor" && (
+        <>
+          <div className="hidden">
+            <h1>Wedding Decoration Packages - Wedsy&apos;s</h1>
+            <h2>Wedding Stage Decoration in Bangalore</h2>
+          </div>
+        </>
+      )}
       {/* <!-- End Google Tag Manager (noscript) --> */}
       {loading ? (
         <div className="grid place-content-center h-screen ">
