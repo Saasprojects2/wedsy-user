@@ -37,9 +37,28 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
     "Photobooth",
     "Mandap",
     "Nameboard",
+    "Furniture",
+    "Sound & Light",
+    "Entry Ideas",
+    "Props"
   ]);
-  const [bestSellerIndex, setBestSellerIndex] = useState([0, 1]);
+  const [showAllCategories, setShowAllCategories] = useState(false);
+  const [bestSellerIndex, setBestSellerIndex] = useState([0, 1, 2, 3]);
   const [popularIndex, setPopularIndex] = useState([0, 1]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [slideOffset, setSlideOffset] = useState(0);
+
+  // Separate state for each section
+  const [bestSellerSlideOffset, setBestSellerSlideOffset] = useState(0);
+  const [grandEntrySlideOffset, setGrandEntrySlideOffset] = useState(0);
+  const [mandapsSlideOffset, setMandapsSlideOffset] = useState(0);
+  const [furnitureSlideOffset, setFurnitureSlideOffset] = useState(0);
+
+  // Separate indices for each section
+  const [grandEntryIndex, setGrandEntryIndex] = useState([0, 1, 2, 3]);
+  const [mandapsIndex, setMandapsIndex] = useState([0, 1, 2, 3]);
+  const [furnitureIndex, setFurnitureIndex] = useState([0, 1, 2, 3]);
+
   const handleEnquiry = () => {
     setEnquiryForm({
       ...enquiryForm,
@@ -119,6 +138,82 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
     } else {
       alert("Please enter valid mobile number");
     }
+  };
+
+  // Best Seller handlers
+  const handleBestSellerPrev = () => {
+    const length = bestSeller.length;
+    const newIndices = bestSellerIndex.map(index =>
+      (index - 1 + length) % length
+    );
+    setBestSellerIndex(newIndices);
+    setBestSellerSlideOffset(prev => prev + 457);
+  };
+
+  const handleBestSellerNext = () => {
+    const length = bestSeller.length;
+    const newIndices = bestSellerIndex.map(index =>
+      (index + 1) % length
+    );
+    setBestSellerIndex(newIndices);
+    setBestSellerSlideOffset(prev => prev - 457);
+  };
+
+  // Grand Entry handlers
+  const handleGrandEntryPrev = () => {
+    const length = bestSeller.length;
+    const newIndices = grandEntryIndex.map(index =>
+      (index - 1 + length) % length
+    );
+    setGrandEntryIndex(newIndices);
+    setGrandEntrySlideOffset(prev => prev + 457);
+  };
+
+  const handleGrandEntryNext = () => {
+    const length = bestSeller.length;
+    const newIndices = grandEntryIndex.map(index =>
+      (index + 1) % length
+    );
+    setGrandEntryIndex(newIndices);
+    setGrandEntrySlideOffset(prev => prev - 457);
+  };
+
+  // Mandaps handlers
+  const handleMandapsPrev = () => {
+    const length = bestSeller.length;
+    const newIndices = mandapsIndex.map(index =>
+      (index - 1 + length) % length
+    );
+    setMandapsIndex(newIndices);
+    setMandapsSlideOffset(prev => prev + 457);
+  };
+
+  const handleMandapsNext = () => {
+    const length = bestSeller.length;
+    const newIndices = mandapsIndex.map(index =>
+      (index + 1) % length
+    );
+    setMandapsIndex(newIndices);
+    setMandapsSlideOffset(prev => prev - 457);
+  };
+
+  // Furniture handlers
+  const handleFurniturePrev = () => {
+    const length = bestSeller.length;
+    const newIndices = furnitureIndex.map(index =>
+      (index - 1 + length) % length
+    );
+    setFurnitureIndex(newIndices);
+    setFurnitureSlideOffset(prev => prev + 457);
+  };
+
+  const handleFurnitureNext = () => {
+    const length = bestSeller.length;
+    const newIndices = furnitureIndex.map(index =>
+      (index + 1) % length
+    );
+    setFurnitureIndex(newIndices);
+    setFurnitureSlideOffset(prev => prev - 457);
   };
 
   useEffect(() => {
@@ -210,230 +305,607 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
         <meta name="copyright" content="Wedsy" />
         <meta name="language" content="EN" />
       </Head>
-      <div className="hidden">
+      {/* <div className="hidden">
         <h1>Wedding Decoration Packages - Wedsy&apos;s</h1>
         <h2>Wedding Stage Decoration in Bangalore</h2>
       </div>
-      <DecorDisclaimer />
-      <main className="relative" id="mainDiv">
-        <Image
-          src="/assets/images/decor-1.png"
-          alt="Decor"
-          width={0}
-          height={0}
-          sizes="100vw"
-          style={{ width: "100%", height: "auto" }}
-          className="hidden md:block"
+      <DecorDisclaimer /> */}
+      {/* MAIN SECTION (Tailwind version) */}
+      <div className="w-full relative overflow-hidden hidden md:block mb-[56px]">
+        <img
+          src="/assets/decor/decor-home.png"
+          alt="Decor Hero"
+          className="w-full h-auto block filter brightness-[80%]"
         />
-        <Image
-          src="/assets/images/decor-1-mobile.png"
-          alt="Decor"
-          width={0}
-          height={0}
-          sizes="100vw"
-          style={{ width: "100%", height: "auto" }}
-          className="md:hidden"
-        />
-        {/* Enquiry Form */}
-        <div className="hidden md:flex absolute top-2/3 left-2/3 w-1/4 flex-col gap-3 text-center">
-          {enquiryForm.success ? (
-            <p className="text-white">
-              Your Wedsy Wedding Manager will contact you and assist you in
-              choosing the best!
-            </p>
-          ) : (
-            <>
+
+        <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center z-10">
+          <h1 className="text-white text-[65px] font-medium tracking-[2px] text-center drop-shadow-lg">
+            MAKE IT UNIQUE<br />MAKE IT YOURS
+          </h1>
+        </div>
+      </div>
+
+      {/* Enquiry Form (commented out as per new design) */}
+      {/**
+      <div className="hidden md:flex absolute top-2/3 left-2/3 w-1/4 flex-col gap-3 text-center">
+        {enquiryForm.success ? (
+          <p className="text-white">
+            Your Wedsy Wedding Manager will contact you and assist you in
+            choosing the best!
+          </p>
+        ) : (
+          <>
+            <input
+              type="text"
+              placeholder="NAME"
+              value={enquiryForm.name}
+              onChange={(e) =>
+                setEnquiryForm({ ...enquiryForm, name: e.target.value })
+              }
+              name="name"
+              className="text-center text-white bg-transparent border-0 border-b-white/80 outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-white focus:ring-0  placeholder:text-white"
+            />
+            <input
+              type="text"
+              placeholder="PHONE NO."
+              value={enquiryForm.phone}
+              onChange={(e) =>
+                setEnquiryForm({
+                  ...enquiryForm,
+                  phone: e.target.value,
+                })
+              }
+              name="phone"
+              disabled={enquiryForm.otpSent}
+              className="text-center text-white bg-transparent border-0 border-b-white/80 outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-white focus:ring-0  placeholder:text-white"
+            />
+            {enquiryForm.otpSent && (
               <input
                 type="text"
-                placeholder="NAME"
-                value={enquiryForm.name}
-                onChange={(e) =>
-                  setEnquiryForm({ ...enquiryForm, name: e.target.value })
-                }
-                name="name"
-                className="text-center text-white bg-transparent border-0 border-b-white/80 outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-white focus:ring-0  placeholder:text-white"
-              />
-              <input
-                type="text"
-                placeholder="PHONE NO."
-                value={enquiryForm.phone}
+                placeholder="OTP"
+                value={enquiryForm.Otp}
                 onChange={(e) =>
                   setEnquiryForm({
                     ...enquiryForm,
-                    phone: e.target.value,
+                    Otp: e.target.value,
                   })
                 }
-                name="phone"
-                disabled={enquiryForm.otpSent}
+                name="otp"
                 className="text-center text-white bg-transparent border-0 border-b-white/80 outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-white focus:ring-0  placeholder:text-white"
               />
-              {enquiryForm.otpSent && (
-                <input
-                  type="text"
-                  placeholder="OTP"
-                  value={enquiryForm.Otp}
-                  onChange={(e) =>
-                    setEnquiryForm({
-                      ...enquiryForm,
-                      Otp: e.target.value,
-                    })
-                  }
-                  name="otp"
-                  className="text-center text-white bg-transparent border-0 border-b-white/80 outline-0 focus:outline-none focus:border-0 border-b focus:border-b focus:border-b-white focus:ring-0  placeholder:text-white"
-                />
+            )}
+            {enquiryForm.message && (
+              <p className="text-red-500">{enquiryForm.message}</p>
+            )}
+            <button
+              type="submit"
+              className="rounded-full bg-white text-black py-2 disabled:bg-white/50"
+              disabled={
+                !enquiryForm.name ||
+                !enquiryForm.phone ||
+                enquiryForm.loading ||
+                (enquiryForm.otpSent ? !enquiryForm.Otp : false)
+              }
+              onClick={() => {
+                enquiryForm.otpSent ? handleEnquiry() : SendOTP();
+              }}
+            >
+              {enquiryForm.loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-3">Loading...</span>
+                </>
+              ) : (
+                <>SUBMIT</>
               )}
-              {enquiryForm.message && (
-                <p className="text-red-500">{enquiryForm.message}</p>
-              )}
-              <button
-                type="submit"
-                className="rounded-full bg-white text-black py-2 disabled:bg-white/50"
-                disabled={
-                  !enquiryForm.name ||
-                  !enquiryForm.phone ||
-                  // !/^\d{10}$/.test(enquiryForm.phone) ||
-                  // processMobileNumber(enquiryForm.phone) ||
-                  enquiryForm.loading ||
-                  (enquiryForm.otpSent ? !enquiryForm.Otp : false)
-                }
-                onClick={() => {
-                  enquiryForm.otpSent ? handleEnquiry() : SendOTP();
-                }}
-              >
-                {enquiryForm.loading ? (
-                  <>
-                    <Spinner size="sm" />
-                    <span className="pl-3">Loading...</span>
-                  </>
-                ) : (
-                  <>SUBMIT</>
-                )}
-              </button>
-            </>
-          )}
+            </button>
+          </>
+        )}
+      </div>
+      */}
+
+      {/* Categories Grid (redesigned) */}
+      <section className="flex flex-col items-center mt-[56px] px-4">
+        <div className="w-full flex justify-center mb-8">
+          <h2
+            className="w-[338px] h-[24px] sm:w-auto sm:h-[37px] text-[20px] sm:text-[32px] font-normal text-center tracking-[1px] opacity-100"
+          >
+            THE <span className="font-bold">WEDDING</span> STORE
+          </h2>
         </div>
-      </main>{" "}
-      {/* Categories Grid*/}
-      <section className="py-8 md:py-16 px-6 md:px-24">
-        <p className="md:mt-6 text-2xl md:text-4xl mb-4 md:mb-8 font-semibold text-center text-rose-900 md:text-black">
-          CATEGORIES
-        </p>
-        <div className="grid grid-cols-3 gap-6 md:gap-16">
-          {categoryList.map((item, index) => (
-            <div className="flex flex-col gap-2" key={index}>
-              <div key={index} className="relative overflow-hidden rounded-xl">
-                <Link
-                  href={`/decor/view?category=${item}`}
-                  className="hover:z-40 transition-all overflow-hidden"
-                >
-                  <Image
-                    src={`/assets/images/${item.toLowerCase()}-desktop-sq.png`}
-                    alt="Decor"
-                    width={0}
-                    height={0}
-                    sizes="100%"
-                    style={{ width: "100%", height: "auto" }}
-                    className="hover:scale-125 transition-all duration-500 hidden md:inline"
-                  />
-                  <Image
-                    src={`/assets/images/${item.toLowerCase()}-mobile-sq.png`}
-                    alt="Decor"
-                    width={0}
-                    height={0}
-                    sizes="100%"
-                    style={{ width: "100%", height: "auto" }}
-                    className="hover:scale-125 transition-all duration-500 md:hidden"
-                  />
-                  <div className="hidden md:block absolute bottom-0 py-6 w-full">
-                    <p className="text-center text-lg font-semibold">
-                      {item.toUpperCase()}
-                    </p>
-                  </div>
-                </Link>
-              </div>
-              <Link
-                href={`/decor/view?category=${item}`}
-                className="text-center text-sm font-medium md:hidden"
-              >
-                {item.toUpperCase()}
+
+        <div className="grid grid-cols-2 gap-4 sm:gap-6 md:gap-8 justify-center w-full max-w-7xl">
+          {categoryList.slice(0, showAllCategories ? categoryList.length : 8).map((item, index) => (
+            <div
+              key={index}
+              className="w-full h-[80px] sm:h-[100px] relative rounded-md overflow-hidden opacity-100 shadow-md transform transition duration-300 hover:scale-[1.03]"
+            >
+              <Link href={`/decor/view?category=${item}`} className="block w-full h-full">
+                <img
+                  src={`/assets/decor/categories-img/${item.toLowerCase()}.jpg`}
+                  alt={item}
+                  className="w-full h-full object-cover brightness-75 transition duration-300 hover:brightness-100"
+                />
+                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                  <span className="text-white text-[16px] sm:text-[24px] md:text-[28px] font-normal tracking-[2px] text-shadow-lg uppercase">
+                    {item.toUpperCase()}
+                  </span>
+                </div>
               </Link>
             </div>
           ))}
         </div>
+
+        {/* View More/Less Button */}
+        {categoryList.length > 8 && (
+          <div className="flex justify-start md:justify-center w-full max-w-7xl mt-4 sm:mt-6 md:mt-8  sm:px-0">
+            <div
+              onClick={() => setShowAllCategories(!showAllCategories)}
+              className="w-[calc(50%-0.5rem)] sm:max-w-[calc(50%-1.5rem)] md:max-w-[calc(50%-2rem)] h-[35px] sm:h-[100px] relative rounded-md overflow-hidden opacity-100 shadow-md transform transition duration-300 hover:scale-[1.03] bg-black flex items-center justify-start sm:justify-center cursor-pointer"
+            >
+              <div className="flex items-center gap-2 text-white px-3 sm:px-0">
+                <span className="text-[10px] sm:text-[24px] md:text-[28px] font-normal tracking-[2px] uppercase">
+                  {showAllCategories ? 'VIEW LESS' : 'VIEW MORE'}
+                </span>
+                <svg
+                  className={`w-4 h-4 md:w-6 md:h-6 transition-transform duration-300 ${showAllCategories ? 'rotate-180' : ''}`}
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M7 14l5-5 5 5z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
-      {/* BestSellers */}
-      <section className="px-4 md:px-24 py-8 md:mt-8">
-        <div className="flex justify-between relative">
-          <h2 className="font-medium text-2xl md:text-4xl">
-            Our <span className="text-[#840032] font-medium">BESTSELLERS!</span>
-          </h2>
-          <Link
-            href="/decor/view"
-            className="px-12 py-2 bg-[#840032] text-white rounded-lg hidden md:inline mr-20 z-40"
-          >
-            View More
-          </Link>
-          <div className="hidden md:block absolute top-5 md:-top-12 right-0 md:-right-12 leading-[36px] md:leading-[120px] text-white text-opacity-0 text-[36px] md:text-[120px] font-normal font-['Maitree'] font-outline-1">
-            DECORE
-          </div>
+
+      {/*margin*/}
+      {/* <div class="w-[1200px] h-[1px] bg-[#D9D9D9] mt-[96px] mx-auto"></div> */}
+
+      {/* Spotlight Section  */}
+      <section className="px-6 md:px-24 mt-[60px]" id="spotlight">
+        <p className="text-black text-[20px] md:text-4xl font-medium font-light leading-normal uppercase text-center mt-6">
+          SPOTLIGHT
+        </p>
+
+        <div
+          ref={spotlightRef}
+          className="w-full max-w-[1200px] h-auto md:h-[301px] mt-[30px] md:mt-[65px] mb-[30px] mx-auto relative flex items-center justify-center"
+        >
+
+          {spotlightList.length > 0 && spotlightList[spotlightIndex]._id && (
+            <div
+              className="grid grid-cols-1 md:grid-cols-2 w-full h-full m-4 md:m-6 gap-4 md:gap-8"
+              style={{
+                backgroundColor: spotlightList[spotlightIndex].spotlightColor,
+                borderRadius: 0,
+                boxShadow: '0 2px 24px rgba(0,0,0,0.08)',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Mobile-only thumbnail */}
+              <div className="relative w-full h-48 sm:h-60 md:hidden">
+                <Image
+                  src={spotlightList[spotlightIndex].thumbnail}
+                  alt="Decor Image"
+                  layout="fill"
+                  objectFit="cover"
+                  className="brightness-75"
+                />
+              </div>
+
+              {/* Text Content */}
+              <div className="flex flex-col p-4 sm:p-6 justify-between order-last md:order-first gap-2 sm:gap-4">
+                <p className="text-xl md:text-3xl font-semibold">
+                  {spotlightList[spotlightIndex].name}
+                </p>
+                <p className="hidden md:block font-medium">
+                  {spotlightList[spotlightIndex].description}
+                </p>
+                <div className="flex justify-between items-center mt-4">
+                  <p className="text-xl md:text-3xl font-semibold">
+                    ₹{' '}
+                    {
+                      spotlightList[spotlightIndex].productInfo.variant
+                        .artificialFlowers.sellingPrice ||
+                      spotlightList[spotlightIndex].productInfo.variant
+                        .mixedFlowers.sellingPrice ||
+                      spotlightList[spotlightIndex].productInfo.variant
+                        .naturalFlowers.sellingPrice
+                    }
+                  </p>
+                  <Link href={`/decor/view/${spotlightList[spotlightIndex]._id}`}>
+                    <button className="bg-black text-white py-2 px-4 md:px-8 rounded-lg">
+                      View Details
+                    </button>
+                  </Link>
+                </div>
+              </div>
+
+              {/* Desktop-only thumbnail */}
+              <div className="relative w-full hidden md:block h-full">
+                <Image
+                  src={spotlightList[spotlightIndex].thumbnail}
+                  alt="Decor"
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
+            </div>
+          )}
         </div>
-        {/* BestSeller Desktop */}
-        <div className="hidden md:flex flex-row md:gap-12 justify-between items-center my-6">
-          <BsArrowLeftShort
-            size={48}
-            className="cursor-pointer scale-[0.5] md:scale-[1]"
-            onClick={() => {
-              let length = bestSeller.length;
-              let prev = bestSellerIndex[0];
-              let next = bestSellerIndex[1];
-              next = prev;
-              if (prev === 0) {
-                prev = length - 1;
-              } else {
-                prev--;
-              }
-              setBestSellerIndex([prev, next]);
-            }}
-          />
-          <div className="grid sm:grid-cols-1 md:grid-cols-2 md:gap-12 grow">
-            {bestSeller[bestSellerIndex[0]] && (
-              <DecorCard decor={bestSeller[bestSellerIndex[0]]} />
-            )}
-            {bestSeller[bestSellerIndex[1]] && (
-              <DecorCard
-                decor={bestSeller[bestSellerIndex[1]]}
-                className="hidden md:inline"
+
+        {spotlightList.length > 0 && (
+          <div className="flex gap-2 md:gap-3 items-center justify-center">
+            {spotlightList.map((_, i) => (
+              <span
+                key={i}
+                className={`cursor-pointer rounded-full transition-colors h-2 md:h-3 w-2 md:w-3 ${i === spotlightIndex ? 'bg-black' : 'bg-gray-400'
+                  }`}
+                onClick={() => setSpotlightIndex(i)}
               />
-            )}
+            ))}
           </div>
-          <BsArrowRightShort
-            size={48}
-            className="cursor-pointer scale-[0.5] md:scale-[1]"
-            onClick={() => {
-              let length = bestSeller.length;
-              let prev = bestSellerIndex[0];
-              let next = bestSellerIndex[1];
-              prev = next;
-              if (next === length - 1) {
-                next = 0;
-              } else {
-                next++;
-              }
-              setBestSellerIndex([prev, next]);
-            }}
+        )}
+      </section>
+
+
+      {/* BestSellers section */}
+      <section className="py-8 md:mt-8">
+        {/* Heading */}
+        <div className="w-full flex items-center justify-center relative py-8 bg-white">
+          <div className="w-full max-w-[1180px] flex items-center justify-center relative px-4">
+            <h2 className="flex items-center justify-center text-[20px] sm:text-[26px] md:text-[30px] font-medium font-['Montserrat'] tracking-[0.1em] text-center m-auto opacity-100 whitespace-nowrap">
+              <span>BEST SELLING</span>
+              <span className="text-[#8B0034] font-semibold ml-2 font-['Montserrat']">
+                BACKDROPS
+              </span>
+            </h2>
+            <a
+              href="/decor/view"
+              className="hidden md:block absolute right-4 text-[14px] sm:text-[16px] underline text-black font-medium font-['Montserrat'] cursor-pointer"
+            >
+              see more
+            </a>
+          </div>
+        </div>
+
+
+        {/* Desktop Slider */}
+        <div className="hidden md:flex relative w-full justify-center items-center my-6">
+          <img
+            src="/assets/decor/icons/left-arrow.png"
+            alt="Previous"
+            className="cursor-pointer absolute left-16 z-10 top-1/2 -translate-y-1/2 scale-[0.5] md:scale-[1] w-12 h-12"
+            onClick={handleBestSellerPrev}
+          />
+          <div className="flex gap-6 justify-center w-full overflow-hidden">
+            <div
+              className="flex gap-6 transition-transform duration-500 ease-in-out"
+              style={{
+                transform: `translateX(-${bestSellerSlideOffset}px)`
+              }}
+            >
+              {bestSellerIndex.map((index, idx) =>
+                bestSeller[index] ? (
+                  <div key={`${index}-${bestSellerSlideOffset}`} className="relative group w-[451px] h-[241px] rounded-[30px] overflow-hidden">
+                    <div className="w-full h-full transition-transform duration-300 group-hover:scale-105">
+                      <DecorCard
+                        decor={bestSeller[index]}
+                        className="w-full h-full rounded-[30px] overflow-hidden"
+                        hideInfo={true}
+                      />
+                    </div>
+                    {/* Hover overlay for name and price */}
+                    <div className="hidden md:flex flex-col justify-end absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6">
+                      <h3 className="text-lg font-semibold text-white mb-1">{bestSeller[index].name}</h3>
+                      <p className="text-base font-semibold text-white">₹ {bestSeller[index].productTypes?.[0]?.sellingPrice}</p>
+                    </div>
+                  </div>
+                ) : null
+              )}
+            </div>
+          </div>
+          <img
+            src="/assets/decor/icons/right-arrow.png"
+            alt="Next"
+            className="cursor-pointer absolute right-16 z-10 top-1/2 -translate-y-1/2 scale-[0.5] md:scale-[1] w-12 h-12"
+            onClick={handleBestSellerNext}
           />
         </div>
-        {/* BestSeller Mobile */}
-        <div className="hide-scrollbar flex md:hidden flex-row gap-8 flex-nowrap items-center my-6 overflow-x-auto">
-          {bestSeller.map((item, index) => (
-            <div className="min-w-[75vw] w-[80vw]" key={index}>
-              <DecorCard decor={item} />
+
+
+        {/* Mobile Slider - 4 boxes per slide */}
+        <div className="md:hidden px-4">
+          <div
+            className="flex gap-4 overflow-x-auto snap-x scroll-smooth hide-scrollbar mobile-slider"
+            onScroll={(e) => {
+              const scrollLeft = e.target.scrollLeft;
+              const slideWidth = e.target.scrollWidth / Math.ceil(bestSeller.length / 4);
+              const newSlide = Math.round(scrollLeft / slideWidth);
+              setCurrentSlide(newSlide);
+            }}
+          >
+            {Array.from({ length: Math.ceil(bestSeller.length / 4) }, (_, groupIndex) => (
+              <div
+                key={groupIndex}
+                className="min-w-full snap-start grid grid-cols-2 gap-4"
+              >
+                {bestSeller
+                  .slice(groupIndex * 4, groupIndex * 4 + 4)
+                  .map((item, index) => (
+                    <div key={index}>
+                      <DecorCard
+                        decor={item}
+                        hideInfo={true}
+                        className="[&>div]:pt-[100%]" // Makes it square
+                      />
+                    </div>
+                  ))}
+              </div>
+            ))}
+          </div>
+
+          {/* Dots below slider*/}
+          <div className="flex gap-2 items-center justify-center mt-4">
+            {Array.from({ length: Math.ceil(bestSeller.length / 4) }, (_, i) => (
+              <span
+                key={i}
+                className={`rounded-full h-2 w-2 cursor-pointer transition-colors duration-300 ${i === currentSlide ? 'bg-black' : 'bg-gray-400'
+                  }`}
+                onClick={() => {
+                  const slider = document.querySelector('.overflow-x-auto');
+                  if (slider) {
+                    const slideWidth = slider.scrollWidth / Math.ceil(bestSeller.length / 4);
+                    slider.scrollTo({
+                      left: i * slideWidth,
+                      behavior: 'smooth'
+                    });
+                    setCurrentSlide(i);
+                  }
+                }}
+              ></span>
+            ))}
+          </div>
+
+          {/* See More Button */}
+          <div className="flex justify-center mt-4">
+            <a
+              href="/decor/view"
+              className="text-[16px] underline text-black font-medium font-['Montserrat']"
+            >
+              See More
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Ideas for your grand entry section*/}
+      <section className="py-8 md:mt-0">
+        {/* Heading */}
+        <div className="w-full flex items-center justify-center relative py-8 bg-white">
+          <div className="w-full max-w-[1180px] flex items-center justify-center relative px-4">
+            <h2 className="flex items-center justify-center text-[20px] sm:text-[26px] md:text-[30px] font-medium font-['Montserrat'] tracking-[0.1em] text-center m-auto opacity-100 flex-wrap md:flex-nowrap">
+              <span>IDEAS FOR YOUR</span>
+              <span className="text-[#8B0034] font-semibold ml-2 font-['Montserrat']">
+                GRAND ENTRY
+              </span>
+            </h2>
+            <a
+              href="/decor/view"
+              className="hidden md:block absolute right-4 text-[14px] sm:text-[16px] underline text-black font-medium font-['Montserrat'] cursor-pointer"
+            >
+              see more
+            </a>
+          </div>
+        </div>
+
+
+        {/* Desktop Slider */}
+        <div className="hidden md:flex relative w-full justify-center items-center my-6">
+          <img
+            src="/assets/decor/icons/left-arrow.png"
+            alt="Previous"
+            className="cursor-pointer absolute left-16 z-10 top-1/2 -translate-y-1/2 scale-[0.5] md:scale-[1] w-12 h-12"
+            onClick={handleGrandEntryPrev}
+          />
+          <div className="flex gap-6 justify-center w-full overflow-hidden">
+            <div
+              className="flex gap-6 transition-transform duration-500 ease-in-out"
+              style={{
+                transform: `translateX(-${grandEntrySlideOffset}px)`
+              }}
+            >
+              {grandEntryIndex.map((index, idx) =>
+                bestSeller[index] ? (
+                  <div key={`${index}-${grandEntrySlideOffset}`} className="relative group w-[451px] h-[241px] rounded-[30px] overflow-hidden">
+                    <div className="w-full h-full transition-transform duration-300 group-hover:scale-105">
+                      <DecorCard
+                        decor={bestSeller[index]}
+                        className="w-full h-full rounded-[30px] overflow-hidden"
+                        hideInfo={true}
+                      />
+                    </div>
+                    {/* Hover overlay for name and price */}
+                    <div className="hidden md:flex flex-col justify-end absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6">
+                      <h3 className="text-lg font-semibold text-white mb-1">{bestSeller[index].name}</h3>
+                      <p className="text-base font-semibold text-white">₹ {bestSeller[index].productTypes?.[0]?.sellingPrice}</p>
+                    </div>
+                  </div>
+                ) : null
+              )}
+            </div>
+          </div>
+          <img
+            src="/assets/decor/icons/right-arrow.png"
+            alt="Next"
+            className="cursor-pointer absolute right-16 z-10 top-1/2 -translate-y-1/2 scale-[0.5] md:scale-[1] w-12 h-12"
+            onClick={handleGrandEntryNext}
+          />
+        </div>
+
+
+        {/* Mobile Slider - 4 boxes per slide */}
+        <div className="md:hidden px-4">
+          <div
+            className="flex gap-4 overflow-x-auto snap-x scroll-smooth hide-scrollbar mobile-slider"
+            onScroll={(e) => {
+              const scrollLeft = e.target.scrollLeft;
+              const slideWidth = e.target.scrollWidth / Math.ceil(bestSeller.length / 4);
+              const newSlide = Math.round(scrollLeft / slideWidth);
+              setCurrentSlide(newSlide);
+            }}
+          >
+            {Array.from({ length: Math.ceil(bestSeller.length / 4) }, (_, groupIndex) => (
+              <div
+                key={groupIndex}
+                className="min-w-full snap-start grid grid-cols-2 gap-4"
+              >
+                {bestSeller
+                  .slice(groupIndex * 4, groupIndex * 4 + 4)
+                  .map((item, index) => (
+                    <div key={index}>
+                      <DecorCard
+                        decor={item}
+                        hideInfo={true}
+                        className="[&>div]:pt-[100%]" // Makes it square
+                      />
+                    </div>
+                  ))}
+              </div>
+            ))}
+          </div>
+
+          {/* Dots below slider*/}
+          <div className="flex gap-2 items-center justify-center mt-4">
+            {Array.from({ length: Math.ceil(bestSeller.length / 4) }, (_, i) => (
+              <span
+                key={i}
+                className={`rounded-full h-2 w-2 cursor-pointer transition-colors duration-300 ${i === currentSlide ? 'bg-black' : 'bg-gray-400'
+                  }`}
+                onClick={() => {
+                  const slider = document.querySelector('.overflow-x-auto');
+                  if (slider) {
+                    const slideWidth = slider.scrollWidth / Math.ceil(bestSeller.length / 4);
+                    slider.scrollTo({
+                      left: i * slideWidth,
+                      behavior: 'smooth'
+                    });
+                    setCurrentSlide(i);
+                  }
+                }}
+              ></span>
+            ))}
+          </div>
+
+          {/* See More Button */}
+          <div className="flex justify-center mt-4">
+            <a
+              href="/decor/view"
+              className="text-[16px] underline text-black font-medium font-['Montserrat']"
+            >
+              See More
+            </a>
+          </div>
+        </div>
+      </section>
+
+
+
+      {/* PACKAGES SECTION  */}
+      <section className="flex flex-col items-center pt-10 md:pt-20 pb-6 md:pb-10 bg-[#fafafa] px-4">
+        <h2
+          className="text-[24px] md:text-[30px] font-medium font-['Montserrat'] tracking-[0.05em] text-center uppercase mb-6 md:mb-10 opacity-100"
+          style={{ letterSpacing: '5%' }}
+        >
+          PACKAGES
+        </h2>
+        <div className="grid grid-cols-2 gap-3 md:gap-8 mb-6 md:mb-8 w-full max-w-6xl">
+          {/* Package Items */}
+          {[
+            { label: "NORTH INDIAN", image: "north-indian.jpg" },
+            { label: "SOUTH INDIAN", image: "south indian.jpg" },
+            { label: "MUSLIM", image: "muslim.jpg" },
+            { label: "RECEPTION", image: "reception.jpg" },
+            { label: "ADD ONS", image: "add ons.jpg" },
+          ].map((pkg, index) => (
+            <div
+              key={index}
+              className="w-full h-[60px] md:h-[100px] relative rounded-md overflow-hidden opacity-100 shadow-md transform transition duration-300 hover:scale-[1.03]"
+            >
+              <a href="#" className="block w-full h-full">
+                <img
+                  src={`/assets/decor/packages-img/${pkg.image}`}
+                  alt={pkg.label}
+                  className="w-full h-full object-cover brightness-75 transition duration-300 hover:brightness-100"
+                />
+                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                  <span className="text-white text-[12px] md:text-[32px] font-normal tracking-[0.5px] md:tracking-[2px] text-shadow-lg uppercase text-center px-1 md:px-0">
+                    {pkg.label}
+                  </span>
+                </div>
+              </a>
             </div>
           ))}
+
+          {/* View More */}
+          <div className="w-full h-[60px] md:h-[100px] relative rounded-md overflow-hidden opacity-100 shadow-md bg-black flex items-center justify-center transform transition duration-300 hover:scale-[1.03]">
+            <a href="#" className="block w-full h-full flex items-center justify-center">
+              <span className="text-white text-[12px] md:text-[32px] font-normal tracking-[0.5px] md:tracking-[2px] text-shadow-lg uppercase">
+                VIEW MORE
+              </span>
+            </a>
+          </div>
         </div>
       </section>
+
+      {/* Feature Highlights Section  */}
+      <div className="w-full flex flex-col items-center bg-[#fafafa] px-4">
+        <hr className="w-full max-w-6xl border-t border-[#C6C6C6] mb-4 md:mb-6" />
+        <div className="w-full max-w-6xl grid grid-cols-2 md:flex md:flex-row md:justify-between items-center py-4 md:py-6 gap-4 md:gap-0">
+          {/* Exclusive Designs */}
+          <div className="flex flex-row items-center gap-2 md:gap-4">
+            {/* Rainbow Icon */}
+            <img src="/assets/decor/icons/exclusive designs.png" alt="Rainbow" className="w-8 h-8 md:w-12 md:h-12" />
+            <div className="flex flex-col text-left">
+              <span className="font-semibold text-sm md:text-lg leading-tight">EXCLUSIVE</span>
+              <span className="font-semibold text-sm md:text-lg leading-tight">DESIGNS</span>
+            </div>
+          </div>
+          {/* Customization Options */}
+          <div className="flex flex-row items-center gap-2 md:gap-4">
+            {/* Sliders Icon */}
+            <img src="/assets/decor/icons/customization options.png" alt="Sliders" className="w-8 h-8 md:w-12 md:h-12" />
+            <div className="flex flex-col text-left">
+              <span className="font-semibold text-sm md:text-lg leading-tight">CUSTOMIZATION</span>
+              <span className="font-semibold text-sm md:text-lg leading-tight">OPTIONS</span>
+            </div>
+          </div>
+          {/* Exceptional Customer Service */}
+          <div className="flex flex-row items-center gap-2 md:gap-4">
+            {/* Headset Icon */}
+            <img src="/assets/decor/icons/exceptional customer service.png" alt="Headset" className="w-8 h-8 md:w-12 md:h-12" />
+            <div className="flex flex-col text-left">
+              <span className="font-semibold text-sm md:text-lg leading-tight">EXCEPTIONAL</span>
+              <span className="font-semibold text-sm md:text-lg leading-tight">CUSTOMER SERVICE</span>
+            </div>
+          </div>
+          {/* Competitive Pricing */}
+          <div className="flex flex-row items-center gap-2 md:gap-4">
+            {/* Badge Icon */}
+            <img src="/assets/decor/icons/competetive pricing.png" alt="Badge" className="w-8 h-8 md:w-12 md:h-12" />
+            <div className="flex flex-col text-left">
+              <span className="font-semibold text-sm md:text-lg leading-tight">COMPETETIVE</span>
+              <span className="font-semibold text-sm md:text-lg leading-tight">PRICING</span>
+            </div>
+          </div>
+        </div>
+        <hr className="w-full max-w-6xl border-t border-[#C6C6C6] mt-4 md:mt-6" />
+      </div>
+
       {/* MARQUEE FOR CATEGORIES NAMES */}
-      <section className="bg-[#840032] text-white font-semibold">
+      {/* <section className="bg-[#840032] text-white font-semibold">
         <div className="relative flex overflow-x-hidden">
           <div className="py-4 animate-marquee whitespace-nowrap">
             <span className="mx-8 text-xl text-white">PATHWAY</span>
@@ -488,115 +960,494 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
             <span className="mx-0 text-xl text-white">&#x2022;</span>
           </div>
         </div>
-      </section>
-      <section className="px-6 md:px-24 md:py-12" id="spotlight">
-        <p className="text-black text-lg md:text-2xl font-normal font-light leading-normal uppercase text-center mt-6">
-          {'"Decorating your love story, one beautiful detail at a time"'}
-        </p>
-        <div ref={spotlightRef}>
-          {spotlightList.length > 0 && spotlightList[spotlightIndex]._id && (
+      </section> */}
+
+      {/* Best selling mandaps section */}
+      <section className="py-8 md:mt-4">
+        {/* Heading */}
+        <div className="w-full flex items-center justify-center relative py-8 bg-white">
+          <div className="w-full max-w-[1180px] flex items-center justify-center relative px-4">
+            <h2 className="flex items-center justify-center text-[20px] sm:text-[26px] md:text-[30px] font-medium font-['Montserrat'] tracking-[0.1em] text-center m-auto opacity-100 flex-wrap md:flex-nowrap">
+              <span>BEST SELLING</span>
+              <span className="text-[#8B0034] font-semibold ml-2 font-['Montserrat']">
+                MANDAPS
+              </span>
+            </h2>
+            <a
+              href="/decor/view"
+              className="hidden md:block absolute right-4 text-[14px] sm:text-[16px] underline text-black font-medium font-['Montserrat'] cursor-pointer"
+            >
+              see more
+            </a>
+          </div>
+        </div>
+
+
+        {/* Desktop Slider */}
+        <div className="hidden md:flex relative w-full justify-center items-center my-6">
+          <img
+            src="/assets/decor/icons/left-arrow.png"
+            alt="Previous"
+            className="cursor-pointer absolute left-16 z-10 top-1/2 -translate-y-1/2 scale-[0.5] md:scale-[1] w-12 h-12"
+            onClick={handleMandapsPrev}
+          />
+          <div className="flex gap-6 justify-center w-full overflow-hidden">
             <div
-              className={`grid grid-cols-1 md:grid-cols-2 m-6 mt-10 md:gap-8 bg-[${spotlightList[spotlightIndex].spotlightColor}]`}
+              className="flex gap-6 transition-transform duration-500 ease-in-out"
               style={{
-                backgroundColor: spotlightList[spotlightIndex].spotlightColor,
+                transform: `translateX(-${mandapsSlideOffset}px)`
               }}
             >
-              <div className="relative h-72 md:hidden">
-                <Image
-                  src={spotlightList[spotlightIndex].thumbnail}
-                  alt="Decor Image"
-                  width={0}
-                  height={0}
-                  sizes="100%"
-                  // fill="cover"
-                  // layout={"fill"}
-                  // objectFit="cover"
-                  layout={"fill"}
-                  objectFit="cover"
-                  className="w-full"
-                />
-              </div>
-              <div className=" flex flex-col p-6 justify-between md:py-8 order-last md:order-first gap-4 md:gap-4">
-                <p className="text-xl md:text-3xl font-semibold">
-                  {spotlightList[spotlightIndex].name}
-                </p>
-                <p className="hidden md:block">
-                  {spotlightList[spotlightIndex].description}
-                </p>
-                <div className="flex flex-col">
-                  <p className="font-medium text-lg md:text-2xl">
-                    Can be used for
-                  </p>
-                  {spotlightList[
-                    spotlightIndex
-                  ].productVariation?.occassion?.map((item, index) => (
-                    <p key={index} className="text-sm md:text-base">
-                      {toProperCase(item)}
-                    </p>
-                  ))}
-                </div>
-                <div className="flex flex-col">
-                  <p className="font-medium text-lg md:text-2xl">Included</p>
-                  {spotlightList[spotlightIndex].productInfo.included.map(
-                    (item, index) => (
-                      <p key={index} className="text-sm md:text-base">
-                        {toProperCase(item)}
-                      </p>
-                    )
-                  )}
-                </div>
-                <div className="flex flex-row justify-between mt-auto">
-                  <p className="text-xl md:text-3xl font-semibold text-right md:text-left">
-                    ₹{" "}
-                    {spotlightList[spotlightIndex].productInfo.variant
-                      .artificialFlowers.sellingPrice ||
-                      spotlightList[spotlightIndex].productInfo.variant
-                        .mixedFlowers.sellingPrice ||
-                      spotlightList[spotlightIndex].productInfo.variant
-                        .naturalFlowers.sellingPrice}
-                  </p>
-                  <Link
-                    href={`/decor/view/${spotlightList[spotlightIndex]._id}`}
-                  >
-                    <button className="mt-0 bg-black text-white py-2 px-4 md:px-8 rounded-lg">
-                      View More
-                    </button>
-                  </Link>
-                </div>
-              </div>
-              <div className="relative h-full hidden md:block w-full">
-                <Image
-                  src={spotlightList[spotlightIndex].thumbnail}
-                  alt="Decor"
-                  // width={0}
-                  // height={0}
-                  sizes="100%"
-                  // fill="cover"
-                  layout={"fill"}
-                  objectFit="cover"
-                  // style={{ width: "100%", height: "auto" }}
-                />
-              </div>
+              {mandapsIndex.map((index, idx) =>
+                bestSeller[index] ? (
+                  <div key={`${index}-${mandapsSlideOffset}`} className="relative group w-[451px] h-[241px] rounded-[30px] overflow-hidden">
+                    <div className="w-full h-full transition-transform duration-300 group-hover:scale-105">
+                      <DecorCard
+                        decor={bestSeller[index]}
+                        className="w-full h-full rounded-[30px] overflow-hidden"
+                        hideInfo={true}
+                      />
+                    </div>
+                    {/* Hover overlay for name and price */}
+                    <div className="hidden md:flex flex-col justify-end absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6">
+                      <h3 className="text-lg font-semibold text-white mb-1">{bestSeller[index].name}</h3>
+                      <p className="text-base font-semibold text-white">₹ {bestSeller[index].productTypes?.[0]?.sellingPrice}</p>
+                    </div>
+                  </div>
+                ) : null
+              )}
             </div>
-          )}
+          </div>
+          <img
+            src="/assets/decor/icons/right-arrow.png"
+            alt="Next"
+            className="cursor-pointer absolute right-16 z-10 top-1/2 -translate-y-1/2 scale-[0.5] md:scale-[1] w-12 h-12"
+            onClick={handleMandapsNext}
+          />
         </div>
-        {spotlightList.length > 0 && (
-          <div className="flex flex-row gap-2 md:gap-4 items-center justify-center">
-            {spotlightList.map((item, index) => (
+
+
+        {/* Mobile Slider - 4 boxes per slide */}
+        <div className="md:hidden px-4">
+          <div
+            className="flex gap-4 overflow-x-auto snap-x scroll-smooth hide-scrollbar mobile-slider"
+            onScroll={(e) => {
+              const scrollLeft = e.target.scrollLeft;
+              const slideWidth = e.target.scrollWidth / Math.ceil(bestSeller.length / 4);
+              const newSlide = Math.round(scrollLeft / slideWidth);
+              setCurrentSlide(newSlide);
+            }}
+          >
+            {Array.from({ length: Math.ceil(bestSeller.length / 4) }, (_, groupIndex) => (
+              <div
+                key={groupIndex}
+                className="min-w-full snap-start grid grid-cols-2 gap-4"
+              >
+                {bestSeller
+                  .slice(groupIndex * 4, groupIndex * 4 + 4)
+                  .map((item, index) => (
+                    <div key={index}>
+                      <DecorCard
+                        decor={item}
+                        hideInfo={true}
+                        className="[&>div]:pt-[100%]" // Makes it square
+                      />
+                    </div>
+                  ))}
+              </div>
+            ))}
+          </div>
+
+          {/* Dots below slider*/}
+          <div className="flex gap-2 items-center justify-center mt-4">
+            {Array.from({ length: Math.ceil(bestSeller.length / 4) }, (_, i) => (
               <span
-                key={index}
-                className={`cursor-pointer rounded-full h-2 md:h-4 w-2 md:w-4 ${
-                  index === spotlightIndex ? "bg-black" : "bg-gray-400"
-                }`}
+                key={i}
+                className={`rounded-full h-2 w-2 cursor-pointer transition-colors duration-300 ${i === currentSlide ? 'bg-black' : 'bg-gray-400'
+                  }`}
                 onClick={() => {
-                  setSpotlightIndex(index);
+                  const slider = document.querySelector('.overflow-x-auto');
+                  if (slider) {
+                    const slideWidth = slider.scrollWidth / Math.ceil(bestSeller.length / 4);
+                    slider.scrollTo({
+                      left: i * slideWidth,
+                      behavior: 'smooth'
+                    });
+                    setCurrentSlide(i);
+                  }
                 }}
               ></span>
             ))}
           </div>
-        )}
+
+          {/* See More Button */}
+          <div className="flex justify-center mt-4">
+            <a
+              href="/decor/view"
+              className="text-[16px] underline text-black font-medium font-['Montserrat']"
+            >
+              See More
+            </a>
+          </div>
+        </div>
       </section>
-      <section className="px-6 md:px-24 py-8 md:mt-8">
+
+      {/* Furniture section */}
+      <section className="py-8 md:mt-0">
+        {/* Heading */}
+        <div className="w-full flex items-center justify-center relative py-8 bg-white">
+          <div className="w-full max-w-[1180px] flex items-center justify-center relative px-4">
+            <h2 className="flex items-center justify-center text-[20px] sm:text-[26px] md:text-[30px] font-medium font-['Montserrat'] tracking-[0.1em] text-center m-auto opacity-100 flex-wrap md:flex-nowrap">
+              <span>BROWSE FROM A VARIETY OF</span>
+              <span className="text-[#8B0034] font-semibold ml-2 font-['Montserrat']">
+                FURNITURE
+              </span>
+            </h2>
+            <a
+              href="/decor/view"
+              className="hidden md:block absolute right-4 text-[14px] sm:text-[16px] underline text-black font-medium font-['Montserrat'] cursor-pointer"
+            >
+              see more
+            </a>
+          </div>
+        </div>
+
+
+        {/* Desktop Slider */}
+        <div className="hidden md:flex relative w-full justify-center items-center my-6">
+          <img
+            src="/assets/decor/icons/left-arrow.png"
+            alt="Previous"
+            className="cursor-pointer absolute left-16 z-10 top-1/2 -translate-y-1/2 scale-[0.5] md:scale-[1] w-12 h-12"
+            onClick={handleFurniturePrev}
+          />
+          <div className="flex gap-6 justify-center w-full overflow-hidden">
+            <div
+              className="flex gap-6 transition-transform duration-500 ease-in-out"
+              style={{
+                transform: `translateX(-${furnitureSlideOffset}px)`
+              }}
+            >
+              {furnitureIndex.map((index, idx) =>
+                bestSeller[index] ? (
+                  <div key={`${index}-${furnitureSlideOffset}`} className="relative group w-[451px] h-[241px] rounded-[30px] overflow-hidden">
+                    <div className="w-full h-full transition-transform duration-300 group-hover:scale-105">
+                      <DecorCard
+                        decor={bestSeller[index]}
+                        className="w-full h-full rounded-[30px] overflow-hidden"
+                        hideInfo={true}
+                      />
+                    </div>
+                    {/* Hover overlay for name and price */}
+                    <div className="hidden md:flex flex-col justify-end absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-6">
+                      <h3 className="text-lg font-semibold text-white mb-1">{bestSeller[index].name}</h3>
+                      <p className="text-base font-semibold text-white">₹ {bestSeller[index].productTypes?.[0]?.sellingPrice}</p>
+                    </div>
+                  </div>
+                ) : null
+              )}
+            </div>
+          </div>
+          <img
+            src="/assets/decor/icons/right-arrow.png"
+            alt="Next"
+            className="cursor-pointer absolute right-16 z-10 top-1/2 -translate-y-1/2 scale-[0.5] md:scale-[1] w-12 h-12"
+            onClick={handleFurnitureNext}
+          />
+        </div>
+
+
+        {/* Mobile Slider - 4 boxes per slide */}
+        <div className="md:hidden px-4">
+          <div
+            className="flex gap-4 overflow-x-auto snap-x scroll-smooth hide-scrollbar mobile-slider"
+            onScroll={(e) => {
+              const scrollLeft = e.target.scrollLeft;
+              const slideWidth = e.target.scrollWidth / Math.ceil(bestSeller.length / 4);
+              const newSlide = Math.round(scrollLeft / slideWidth);
+              setCurrentSlide(newSlide);
+            }}
+          >
+            {Array.from({ length: Math.ceil(bestSeller.length / 4) }, (_, groupIndex) => (
+              <div
+                key={groupIndex}
+                className="min-w-full snap-start grid grid-cols-2 gap-4"
+              >
+                {bestSeller
+                  .slice(groupIndex * 4, groupIndex * 4 + 4)
+                  .map((item, index) => (
+                    <div key={index}>
+                      <DecorCard
+                        decor={item}
+                        hideInfo={true}
+                        className="[&>div]:pt-[100%]" // Makes it square
+                      />
+                    </div>
+                  ))}
+              </div>
+            ))}
+          </div>
+
+          {/* Dots below slider*/}
+          <div className="flex gap-2 items-center justify-center mt-4">
+            {Array.from({ length: Math.ceil(bestSeller.length / 4) }, (_, i) => (
+              <span
+                key={i}
+                className={`rounded-full h-2 w-2 cursor-pointer transition-colors duration-300 ${i === currentSlide ? 'bg-black' : 'bg-gray-400'
+                  }`}
+                onClick={() => {
+                  const slider = document.querySelector('.overflow-x-auto');
+                  if (slider) {
+                    const slideWidth = slider.scrollWidth / Math.ceil(bestSeller.length / 4);
+                    slider.scrollTo({
+                      left: i * slideWidth,
+                      behavior: 'smooth'
+                    });
+                    setCurrentSlide(i);
+                  }
+                }}
+              ></span>
+            ))}
+          </div>
+
+          {/* See More Button */}
+          <div className="flex justify-center mt-4">
+            <a
+              href="/decor/view"
+              className="text-[16px] underline text-black font-medium font-['Montserrat']"
+            >
+              See More
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Photobooth section */}
+      <section className="py-8 md:mt-0">
+        {/* Heading */}
+        <div className="w-full flex items-center justify-center relative py-8 bg-white">
+          <div className="w-full max-w-[1180px] flex items-center justify-center relative px-4">
+            <h2 className="flex items-center justify-center text-[20px] sm:text-[26px] md:text-[30px] font-medium font-['Montserrat'] tracking-[0.1em] text-center m-auto opacity-100 flex-wrap md:flex-nowrap">
+              <span className="text-[#8B0034] font-semibold ml-2 font-['Montserrat']">
+                PHOTOBOOTH
+              </span>
+              <span className="ml-1">DESIGNS</span>
+            </h2>
+            <a
+              href="/decor/view"
+              className="hidden md:block absolute right-4 text-[14px] sm:text-[16px] underline text-black font-medium font-['Montserrat'] cursor-pointer"
+            >
+              see more
+            </a>
+          </div>
+        </div>
+
+        {/* Desktop Grid Layout */}
+        <div className="hidden md:block max-w-[1180px] mx-auto px-4">
+          <div className="grid grid-cols-3 gap-6">
+            {/* Large image on the left */}
+            <div className="col-span-1">
+              <div className="relative group cursor-pointer overflow-hidden rounded-[20px] shadow-lg hover:shadow-xl transition-all duration-300">
+                <img
+                  src="/assets/decor/photobooth-img/pb1.png"
+                  alt="Photobooth Design 1"
+                  className="w-full h-[400px] object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <h3 className="text-lg font-semibold">Elegant Floral</h3>
+                  <p className="text-sm">Premium Design</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Two medium images on the right */}
+            <div className="col-span-2 space-y-6">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="relative group cursor-pointer overflow-hidden rounded-[20px] shadow-lg hover:shadow-xl transition-all duration-300">
+                  <img
+                    src="/assets/decor/photobooth-img/pb2.jpg"
+                    alt="Photobooth Design 2"
+                    className="w-full h-[190px] object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <h3 className="text-lg font-semibold">Modern Minimal</h3>
+                    <p className="text-sm">Contemporary Style</p>
+                  </div>
+                </div>
+
+                <div className="relative group cursor-pointer overflow-hidden rounded-[20px] shadow-lg hover:shadow-xl transition-all duration-300">
+                  <img
+                    src="/assets/decor/photobooth-img/pb3.png"
+                    alt="Photobooth Design 3"
+                    className="w-full h-[190px] object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <h3 className="text-lg font-semibold">Royal Gold</h3>
+                    <p className="text-sm">Luxury Theme</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom row with two images */}
+              <div className="grid grid-cols-2 gap-6">
+                <div className="relative group cursor-pointer overflow-hidden rounded-[20px] shadow-lg hover:shadow-xl transition-all duration-300">
+                  <img
+                    src="/assets/decor/photobooth-img/pb4.jpg"
+                    alt="Photobooth Design 4"
+                    className="w-full h-[190px] object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <h3 className="text-lg font-semibold">Vintage Charm</h3>
+                    <p className="text-sm">Classic Elegance</p>
+                  </div>
+                </div>
+
+                <div className="relative group cursor-pointer overflow-hidden rounded-[20px] shadow-lg hover:shadow-xl transition-all duration-300">
+                  <img
+                    src="/assets/decor/photobooth-img/pb5.jpg"
+                    alt="Photobooth Design 5"
+                    className="w-full h-[190px] object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <h3 className="text-lg font-semibold">Nature Inspired</h3>
+                    <p className="text-sm">Organic Beauty</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Grid Layout */}
+        <div className="md:hidden px-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="relative group cursor-pointer overflow-hidden rounded-[15px] shadow-lg hover:shadow-xl transition-all duration-300">
+              <img
+                src="/assets/decor/photobooth-img/pb1.png"
+                alt="Photobooth Design 1"
+                className="w-full h-[200px] object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-3 left-3 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 className="text-sm font-semibold">Elegant Floral</h3>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer overflow-hidden rounded-[15px] shadow-lg hover:shadow-xl transition-all duration-300">
+              <img
+                src="/assets/decor/photobooth-img/pb2.jpg"
+                alt="Photobooth Design 2"
+                className="w-full h-[200px] object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-3 left-3 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 className="text-sm font-semibold">Modern Minimal</h3>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer overflow-hidden rounded-[15px] shadow-lg hover:shadow-xl transition-all duration-300">
+              <img
+                src="/assets/decor/photobooth-img/pb3.png"
+                alt="Photobooth Design 3"
+                className="w-full h-[200px] object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-3 left-3 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 className="text-sm font-semibold">Royal Gold</h3>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer overflow-hidden rounded-[15px] shadow-lg hover:shadow-xl transition-all duration-300">
+              <img
+                src="/assets/decor/photobooth-img/pb4.jpg"
+                alt="Photobooth Design 4"
+                className="w-full h-[200px] object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-3 left-3 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 className="text-sm font-semibold">Vintage Charm</h3>
+              </div>
+            </div>
+
+            <div className="relative group cursor-pointer overflow-hidden rounded-[15px] shadow-lg hover:shadow-xl transition-all duration-300 col-span-2">
+              <img
+                src="/assets/decor/photobooth-img/pb5.jpg"
+                alt="Photobooth Design 5"
+                className="w-full h-[200px] object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute bottom-3 left-3 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 className="text-sm font-semibold">Nature Inspired</h3>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center mt-4">
+            <a
+              href="/decor/view"
+              className="text-[16px] underline text-black font-medium font-['Montserrat']"
+            >
+              See More
+            </a>
+          </div>
+        </div>
+      </section>
+
+
+      {/* Instagram Section */}
+      <div className="flex flex-col items-center py-6 md:py-8 px-4">
+        <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-4">
+          <div className="w-6 h-6 md:w-8 md:h-8 bg-[#8B0034] rounded flex items-center justify-center">
+            <svg className="w-4 h-4 md:w-5 md:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
+          </div>
+          <span className="text-black text-xl md:text-3xl font-medium">@wedsy.in</span>
+        </div>
+        <p className="text-black text-center text-sm md:text-xl w-full max-w-4xl leading-relaxed">
+          "Looking for wedding inspirations? Visit our Instagram page to have a glimpse into the latest trends, stunning bridal looks, and real wedding stories."
+        </p>
+      </div>
+
+      {/* Instagram Grid Placeholder */}
+      <div className="w-full max-w-4xl mx-auto px-4 mb-8">
+        <div className="grid grid-cols-3 md:grid-cols-5">
+          {[
+            'https://hub.wedsy.in/wp-content/uploads/2025/02/1640848248851.jpeg',
+            'https://hub.wedsy.in/wp-content/uploads/2025/02/1640848248766.jpg',
+            'https://hub.wedsy.in/wp-content/uploads/2025/02/IMG_1480-scaled.jpg',
+            'https://hub.wedsy.in/wp-content/uploads/2025/02/FullSizeRender12-scaled.jpg',
+            'https://hub.wedsy.in/wp-content/uploads/2025/02/1640848248866.jpeg',
+            'https://hub.wedsy.in/wp-content/uploads/2025/02/1640848248557.jpg',
+            'https://hub.wedsy.in/wp-content/uploads/2025/02/1640848248453.jpg',
+            'https://hub.wedsy.in/wp-content/uploads/2024/10/2020-11-05.jpg',
+            'https://hub.wedsy.in/wp-content/uploads/2025/02/11ab4f28-5fb3-4ac2-b3b1-03964a5407d3-2.jpg',
+            'https://hub.wedsy.in/wp-content/uploads/2025/02/FullSizeRender15.jpg',
+          ].map((src, index) => (
+            <div
+              key={index}
+              className={`aspect-square ${index >= 9 ? 'hidden md:block' : ''}`}
+            >
+              {src && (
+                <img
+                  src={src}
+                  alt={`image-${index}`}
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+
+
+      {/* Popular searches section */}
+      {/* <section className="px-6 md:px-24 py-8 md:mt-0">
         <div className="flex justify-between">
           <h2 className="font-light text-2xl md:text-4xl">
             <span className="font-medium">POPULAR</span> searches
@@ -607,9 +1458,9 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
           >
             View More
           </Link>
-        </div>
-        {/* Popular Desktop */}
-        <div className="hidden md:flex flex-row md:gap-12 justify-between items-center my-6">
+        </div> */}
+      {/* Popular Desktop */}
+      {/* <div className="hidden md:flex flex-row md:gap-12 justify-between items-center my-6">
           <BsArrowLeftShort
             size={48}
             className="cursor-pointer scale-[0.5] md:scale-[1]"
@@ -653,17 +1504,18 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
               setPopularIndex([prev, next]);
             }}
           />
-        </div>
-        {/* Popular Mobile */}
-        <div className="hide-scrollbar flex md:hidden flex-row gap-8 flex-nowrap items-center my-6 overflow-x-auto">
+        </div> */}
+      {/* Popular Mobile */}
+      {/* <div className="hide-scrollbar flex md:hidden flex-row gap-8 flex-nowrap items-center my-6 overflow-x-auto">
           {popular.map((item, index) => (
             <div className="min-w-[75vw] w-[80vw]" key={index}>
               <DecorCard decor={item} />
             </div>
           ))}
         </div>
-      </section>
-      <div
+      </section> */}
+
+      {/* <div
         className="p-8 flex flex-row justify-around items-center md:px-48"
         style={{
           background:
@@ -687,7 +1539,7 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
             <span className="hidden md:inline">{"HAPPY"}</span> CUSTOMERS
           </span>
         </div>
-      </div>{" "}
+      </div>{" "} */}
       {/* Categories Image Marquee */}
       {/* <div className="py-8">
         <p className="md:mt-6 text-2xl md:text-3xl mb-4 md:mb-8 font-semibold text-center">
@@ -766,9 +1618,9 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
           </div>
         </div>
       </div> */}
-      <PlanYourEvent />
-      <DecorQuotation userLoggedIn={userLoggedIn} user={user} />
-      <div
+      {/* <PlanYourEvent /> */}
+      {/* <DecorQuotation userLoggedIn={userLoggedIn} user={user} /> */}
+      {/* <div
         className={`py-6 md:py-20 px-4 md:px-24 text-center flex flex-col gap-6 ${styles.bg_main_section} mt-8`}
       >
         <h1 className="text-3xl uppercase font-semibold leading-relaxed">
@@ -785,8 +1637,8 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
           your wedding visions to life with elegance. Trust us for unforgettable
           decorations as timeless as your wedding day.
         </p>
-      </div>
-      <div className="py-6 md:py-12 px-4 md:px-24 flex flex-col gap-6 bg-gradient-to-b from-white to-[#CEA15B]">
+      </div> */}
+      {/* <div className="py-6 md:py-12 px-4 md:px-24 flex flex-col gap-6 bg-gradient-to-b from-white to-[#CEA15B]">
         <Image
           src="/assets/images/decor-faq-img.png"
           alt="Decor"
@@ -835,7 +1687,9 @@ function Decor({ bestSeller, popular, userLoggedIn, user, spotlightList }) {
             answer={`At Wedsy, quality is our top priority. Our flower decorators in Bangalore meticulously source the freshest, most vibrant flowers on the day of the event. Our designs are crafted to ensure the flowers maintain their beauty throughout your entire wedding day.`}
           />
         </div>
-      </div>
+      </div> */}
+
+
     </>
   );
 }
